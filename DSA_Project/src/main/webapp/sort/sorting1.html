@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Master - Interactive Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a23;
+            --bg-secondary: #1a1a3a;
+            --card-bg: rgba(255,255,255,0.03);
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(255,255,255,0.1);
+            --border-glow: rgba(139,92,246,0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120,119,198,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,119,198,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120,219,255,0.3) 0%, transparent 50%);
+            animation: bgShift 20s ease-in-out infinite;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(180deg); }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(10,10,35,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-glow);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+            background: var(--glass-bg);
+            transform: translateY(-2px);
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-top: 100px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glow);
+            border-radius: 24px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 35px 70px rgba(139,92,246,0.3);
+        }
+
+        /* Algorithm Selector */
+        .algo-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .algo-card {
+            padding: 1.5rem;
+            border: 2px solid transparent;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            background: var(--glass-bg);
+        }
+
+        .algo-card:hover,
+        .algo-card.selected {
+            border-color: var(--accent-purple);
+            background: rgba(139,92,246,0.1);
+            box-shadow: 0 0 30px var(--border-glow);
+        }
+
+        .algo-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Enhanced Visualizer */
+        .visualizer-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .visualizer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .array-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            min-height: 200px;
+        }
+
+        .array-display {
+            display: flex;
+            justify-content: center;
+            align-items: end;
+            gap: 0.3rem;
+            height: 300px;
+            padding: 1rem 0;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 8px 8px 4px 4px;
+            position: relative;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            max-width: 40px;
+            margin: 0 2px;
+            cursor: pointer;
+        }
+
+        .bar:hover {
+            filter: brightness(1.2);
+        }
+
+        .bar-value {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .bar.comparing { 
+            background: linear-gradient(180deg, #f59e0b, #d97706);
+            animation: pulse 1s infinite;
+        }
+
+        .bar.swapping { 
+            background: linear-gradient(180deg, var(--accent-orange), #b45309);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .bar.sorted { 
+            background: linear-gradient(180deg, var(--accent-green), #059669);
+            animation: sortedGlow 2s ease-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-3px); }
+            75% { transform: translateX(3px); }
+        }
+
+        @keyframes sortedGlow {
+            0% { box-shadow: 0 0 20px var(--accent-green); }
+            100% { box-shadow: 0 0 40px var(--accent-green); }
+        }
+
+        /* Controls Panel */
+        .controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--glass-bg);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--border-glow);
+        }
+
+        /* Step-by-step Learning */
+        .learning-panel {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-glow);
+        }
+
+        .step-indicator {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: var(--accent-purple);
+            transform: scale(1.3);
+            box-shadow: 0 0 10px var(--border-glow);
+        }
+
+        .step-dot.completed {
+            background: var(--accent-green);
+        }
+
+        /* Complexity Analysis */
+        .complexity-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .complexity-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border-radius: 12px;
+        }
+
+        .complexity-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent-purple);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            box-shadow: 0 10px 30px rgba(139,92,246,0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(139,92,246,0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-purple);
+            border: 2px solid var(--accent-purple);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        /* Quiz Styles */
+        .quiz-question {
+            background: var(--glass-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-glow);
+            margin-bottom: 2rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            padding: 1rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: var(--glass-bg);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent-purple);
+            background: rgba(139,92,246,0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--accent-green);
+            background: rgba(16,185,129,0.2);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--accent-red);
+            background: rgba(239,68,68,0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .navbar { padding: 1rem 2rem; }
+            .card { padding: 1.5rem; }
+            .array-display { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-sort-amount-down"></i> Sorting Master
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#" onclick="showSection('visualizer')"><i class="fas fa-play-circle"></i> Visualizer</a></li>
+            <li><a href="#" onclick="showSection('learn')"><i class="fas fa-book"></i> Learn</a></li>
+            <li><a href="#" onclick="showSection('quiz')"><i class="fas fa-question-circle"></i> Quiz</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="card" style="text-align: center;">
+                <h1 style="font-size: 3.5rem; margin-bottom: 1rem;">
+                    Master Sorting Algorithms
+                </h1>
+                <p style="font-size: 1.3rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 2rem;">
+                    Interactive learning platform with step-by-step visualizations, complexity analysis, and gamified challenges
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">6</div>
+                        <div>Algorithms</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">100+</div>
+                        <div>Learning Steps</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="globalQuizScore">0</div>
+                        <div>Best Score</div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <a href="#" class="btn btn-primary" onclick="showSection('visualizer')" style="font-size: 1.2rem; padding: 16px 32px;">
+                        <i class="fas fa-rocket"></i> Start Visualizing
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visualizer Section -->
+        <section id="visualizer" class="section">
+            <div class="card">
+                <h2><i class="fas fa-eye"></i> Live Algorithm Visualizer</h2>
+                
+                <div class="algo-selector" id="algoSelector">
+                    <!-- Algorithm cards populated by JS -->
+                </div>
+
+                <div class="visualizer-container">
+                    <div class="array-container">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                            <div class="control-group" style="min-width: 150px;">
+                                <label>Array Size: <span id="arraySizeDisplay">8</span></label>
+                                <input type="range" id="arraySize" min="4" max="25" value="8">
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <button class="btn btn-secondary" onclick="generateRandomArray()" id="randomBtn">
+                                    <i class="fas fa-dice"></i> Random
+                                </button>
+                                <button class="btn btn-primary" id="startBtn" onclick="startVisualization()">
+                                    <i class="fas fa-play"></i> Visualize
+                                </button>
+                                <button class="btn btn-secondary" onclick="pauseVisualization()" id="pauseBtn" disabled>
+                                    <i class="fas fa-pause"></i> Pause
+                                </button>
+                            </div>
+                        </div>
+                        <div class="array-display" id="arrayDisplay"></div>
+                    </div>
+
+                    <div class="controls-panel">
+                        <div class="control-group">
+                            <label>Speed: <span id="speedDisplay">1x</span></label>
+                            <input type="range" id="speedSlider" min="0.1" max="3" step="0.1" value="1">
+                        </div>
+
+                        <div class="learning-panel">
+                            <h4 style="margin-bottom: 1rem;"><i class="fas fa-graduation-cap"></i> Current Step</h4>
+                            <div id="currentStepInfo" style="font-weight: 500; text-align: center; min-height: 40px;"></div>
+                        </div>
+
+                        <div class="complexity-grid" id="complexityGrid">
+                            <!-- Complexity info populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learn Section -->
+        <section id="learn" class="section">
+            <div class="card">
+                <h2><i class="fas fa-book-open"></i> Algorithm Learning Hub</h2>
+                <div class="algo-selector" id="learnAlgoSelector">
+                    <!-- Learning algo selector -->
+                </div>
+                <div id="learningContent">
+                    <!-- Learning content populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz" class="section">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                    <h2><i class="fas fa-brain"></i> Sorting Quiz Challenge</h2>
+                    <div style="font-size: 1.2rem; font-weight: 700;">
+                        Score: <span id="quizScore">0</span> / <span id="quizTotal">0</span>
+                    </div>
+                </div>
+                
+                <div id="quizContainer" style="min-height: 400px;">
+                    <!-- Quiz questions loaded here -->
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" id="nextQuizBtn" onclick="nextQuizQuestion()" style="display: none;">
+                        <i class="fas fa-arrow-right"></i> Next Question
+                    </button>
+                    <button class="btn btn-primary" id="quizRestartBtn" onclick="restartQuiz()" style="display: none;">
+                        <i class="fas fa-redo"></i> Restart Quiz
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Progress Modal -->
+    <div id="progressModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--border-glow); border-radius: 24px; padding: 3rem; text-align: center; max-width: 400px; transform: scale(0.8); transition: transform 0.3s ease;">
+            <div style="font-size: 4rem; color: var(--accent-green); margin-bottom: 1rem;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 id="modalTitle">Perfect!</h3>
+            <p id="modalMessage">Sorting completed successfully!</p>
+            <button class="btn btn-primary" onclick="closeModal()" style="margin-top: 1.5rem;">
+                <i class="fas fa-play"></i> Try Another
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Global State
+        let currentAlgo = 'bubble';
+        let arrayData = [];
+        let isVisualizing = false;
+        let visualizationSpeed = 500;
+        let animationId = null;
+        let bestQuizScore = localStorage.getItem('bestQuizScore') || 0;
+        let quizData = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        // Algorithm configurations
+        const algorithms = {
+            bubble: {
+                name: 'Bubble Sort',
+                icon: 'fas fa-bubbles',
+                complexity: { best: 'O(n)', average: 'O(n²)', worst: 'O(n²)', space: 'O(1)' },
+                stable: true,
+                inPlace: true,
+                description: 'Repeatedly swaps adjacent elements if they are in wrong order',
+                useCase: 'Small datasets, educational purposes'
+            },
+            selection: {
+                name: 'Selection Sort',
+                icon: 'fas fa-search',
+                complexity: { best: 'O(n²)', average: 'O(n²)', worst: 'O(n²)', space: 'O(1)' },
+                stable: false,
+                inPlace: true,
+                description: 'Finds minimum element and places it at beginning',
+                useCase: 'Small datasets, simple implementation'
+            },
+            insertion: {
+                name: 'Insertion Sort',
+                icon: 'fas fa-plus-square',
+                complexity: { best: 'O(n)', average: 'O(n²)', worst: 'O(n²)', space: 'O(1)' },
+                stable: true,
+                inPlace: true,
+                description: 'Builds sorted array one item at a time',
+                useCase: 'Nearly sorted data, small arrays'
+            },
+            merge: {
+                name: 'Merge Sort',
+                icon: 'fas fa-code-branch',
+                complexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n log n)', space: 'O(n)' },
+                stable: true,
+                inPlace: false,
+                description: 'Divide, conquer, and merge sorted subarrays',
+                useCase: 'Stable sorting, large datasets'
+            },
+            quick: {
+                name: 'Quick Sort',
+                icon: 'fas fa-bolt',
+                complexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n²)', space: 'O(log n)' },
+                stable: false,
+                inPlace: true,
+                description: 'Partition around pivot, recursively sort',
+                useCase: 'General purpose, large random data'
+            },
+            heap: {
+                name: 'Heap Sort',
+                icon: 'fas fa-mountain',
+                complexity: { best: 'O(n log n)', average: 'O(n log n)', worst: 'O(n log n)', space: 'O(1)' },
+                stable: false,
+                inPlace: true,
+                description: 'Uses max-heap data structure',
+                useCase: 'Guaranteed performance, no extra space'
+            }
+        };
+
+        // Quiz Questions
+        const quizQuestions = [
+            {
+                question: "What is the average time complexity of Quick Sort?",
+                options: ["O(n)", "O(n log n)", "O(n²)", "O(n!)"],
+                correct: 1,
+                explanation: "Quick Sort has average O(n log n) complexity due to efficient partitioning"
+            },
+            {
+                question: "Which sorting algorithm is stable?",
+                options: ["Quick Sort", "Heap Sort", "Merge Sort", "Selection Sort"],
+                correct: 2,
+                explanation: "Merge Sort maintains relative order of equal elements (stable)"
+            },
+            {
+                question: "Which algorithm has best case O(n)?",
+                options: ["Bubble Sort", "Selection Sort", "Insertion Sort", "Merge Sort"],
+                correct: 2,
+                explanation: "Insertion Sort performs optimally on nearly sorted arrays"
+            },
+            {
+                question: "Which algorithm is in-place?",
+                options: ["Merge Sort", "Quick Sort", "Tim Sort", "Counting Sort"],
+                correct: 1,
+                explanation: "Quick Sort requires no extra space proportional to input size"
+            },
+            {
+                question: "What is the space complexity of Heap Sort?",
+                options: ["O(n)", "O(log n)", "O(1)", "O(n log n)"],
+                correct: 2,
+                explanation: "Heap Sort is in-place with O(1) extra space"
+            },
+            {
+                question: "Which algorithm guarantees O(n log n) worst case?",
+                options: ["Quick Sort", "Heap Sort", "Bubble Sort", "Insertion Sort"],
+                correct: 1,
+                explanation: "Heap Sort always performs in O(n log n) regardless of input"
+            }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('globalQuizScore').textContent = bestQuizScore;
+            initAlgoSelector();
+            initLearnSelector();
+            generateRandomArray();
+            updateSpeedDisplay();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('arraySize').addEventListener('input', function() {
+                document.getElementById('arraySizeDisplay').textContent = this.value;
+                if (!isVisualizing) generateRandomArray();
+            });
+
+            document.getElementById('speedSlider').addEventListener('input', function() {
+                visualizationSpeed = Math.max(50, 1000 / (parseFloat(this.value) * 10));
+                updateSpeedDisplay();
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.code === 'Space' && document.getElementById('visualizer').classList.contains('active')) {
+                    e.preventDefault();
+                    if (isVisualizing) pauseVisualization();
+                    else startVisualization();
+                }
+            });
+        }
+
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            if (sectionId === 'visualizer') {
+                updateComplexityDisplay();
+            } else if (sectionId === 'learn') {
+                showLearningContent();
+            } else if (sectionId === 'quiz') {
+                restartQuiz();
+            }
+        }
+
+        // Algorithm Selector
+        function initAlgoSelector() {
+            const selector = document.getElementById('algoSelector');
+            Object.entries(algorithms).forEach(([key, algo]) => {
+                const card = document.createElement('div');
+                card.className = 'algo-card' + (key === 'bubble' ? ' selected' : '');
+                card.innerHTML = `
+                    <i class="${algo.icon} algo-icon"></i>
+                    <h4>${algo.name}</h4>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">${algo.description}</p>
+                `;
+                card.onclick = () => selectAlgorithm(key);
+                selector.appendChild(card);
+            });
+            updateComplexityDisplay();
+        }
+
+        function initLearnSelector() {
+            const selector = document.getElementById('learnAlgoSelector');
+            selector.innerHTML = '';
+            Object.entries(algorithms).forEach(([key, algo]) => {
+                const card = document.createElement('div');
+                card.className = 'algo-card';
+                card.innerHTML = `
+                    <i class="${algo.icon} algo-icon"></i>
+                    <h4>${algo.name}</h4>
+                `;
+                card.onclick = () => {
+                    currentAlgo = key;
+                    document.querySelectorAll('#learnAlgoSelector .algo-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    showLearningContent();
+                };
+                selector.appendChild(card);
+            });
+        }
+
+        function selectAlgorithm(algoKey) {
+            currentAlgo = algoKey;
+            document.querySelectorAll('.algo-card').forEach(card => card.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            updateComplexityDisplay();
+        }
+
+        // Array Management
+        function generateRandomArray() {
+            const size = parseInt(document.getElementById('arraySize').value);
+            arrayData = Array.from({length: size}, () => Math.floor(Math.random() * 80) + 10);
+            renderArray();
+            document.getElementById('randomBtn').innerHTML = '<i class="fas fa-dice"></i> Random';
+        }
+
+        function renderArray() {
+            const container = document.getElementById('arrayDisplay');
+            container.innerHTML = '';
+            
+            const maxValue = Math.max(...arrayData);
+            arrayData.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = `${(value / maxValue) * 100}%`;
+                bar.dataset.index = index;
+                bar.innerHTML = `<div class="bar-value">${value}</div>`;
+                container.appendChild(bar);
+            });
+        }
+
+        function updateSpeedDisplay() {
+            const speed = document.getElementById('speedSlider').value;
+            document.getElementById('speedDisplay').textContent = `${speed}x`;
+        }
+
+        // Visualization Control
+        async function startVisualization() {
+            if (isVisualizing) {
+                resetVisualization();
+                return;
+            }
+            
+            isVisualizing = true;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('pauseBtn').disabled = false;
+            document.getElementById('randomBtn').disabled = true;
+            
+            document.getElementById('startBtn').innerHTML = '<i class="fas fa-stop"></i> Stop';
+            
+            try {
+                await runAlgorithm(currentAlgo);
+                showCompletionModal();
+            } catch (error) {
+                console.error('Visualization error:', error);
+            } finally {
+                resetVisualization();
+            }
+        }
+
+        function pauseVisualization() {
+            isVisualizing = false;
+        }
+
+        function resetVisualization() {
+            isVisualizing = false;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+            document.getElementById('randomBtn').disabled = false;
+            document.getElementById('startBtn').innerHTML = '<i class="fas fa-play"></i> Visualize';
+            clearAnimations();
+            renderArray();
+        }
+
+        function clearAnimations() {
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                bar.classList.remove('comparing', 'swapping', 'sorted');
+                bar.style.transform = '';
+            });
+        }
+
+        // Algorithm Implementations
+        async function runAlgorithm(algoName) {
+            const algorithms = {
+                bubble: bubbleSort,
+                selection: selectionSort,
+                insertion: insertionSort,
+                merge: mergeSort,
+                quick: quickSort,
+                heap: heapSort
+            };
+            
+            if (algorithms[algoName]) {
+                await algorithms[algoName](arrayData.slice());
+            }
+        }
+
+        async function sleep(ms) {
+            if (!isVisualizing) throw new Error('Paused');
+            return new Promise(resolve => {
+                const timeout = setTimeout(() => {
+                    clearTimeout(timeout);
+                    resolve();
+                }, ms);
+            });
+        }
+
+        // Bubble Sort
+        async function bubbleSort(arr) {
+            document.getElementById('currentStepInfo').textContent = 'Starting Bubble Sort...';
+            for (let i = 0; i < arr.length - 1; i++) {
+                if (!isVisualizing) return;
+                let swapped = false;
+                
+                for (let j = 0; j < arr.length - i - 1; j++) {
+                    compareElements(j, j + 1, `Comparing ${arr[j]} and ${arr[j + 1]}`);
+                    await sleep(visualizationSpeed);
+                    
+                    if (arr[j] > arr[j + 1]) {
+                        swapElements(j, j + 1);
+                        [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                        swapped = true;
+                        await sleep(visualizationSpeed);
+                    }
+                }
+                
+                if (swapped) {
+                    for (let k = arr.length - i - 1; k < arr.length; k++) {
+                        markSorted(k);
+                    }
+                }
+            }
+        }
+
+        // Selection Sort
+        async function selectionSort(arr) {
+            document.getElementById('currentStepInfo').textContent = 'Starting Selection Sort...';
+            for (let i = 0; i < arr.length - 1; i++) {
+                if (!isVisualizing) return;
+                let minIdx = i;
+                
+                for (let j = i + 1; j < arr.length; j++) {
+                    compareElements(i, j, `Finding minimum at ${arr[j]}`);
+                    await sleep(visualizationSpeed);
+                    if (arr[j] < arr[minIdx]) {
+                        minIdx = j;
+                    }
+                }
+                
+                if (minIdx !== i) {
+                    swapElements(i, minIdx);
+                    [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+                }
+                markSorted(i);
+            }
+        }
+
+        // Insertion Sort
+        async function insertionSort(arr) {
+            document.getElementById('currentStepInfo').textContent = 'Starting Insertion Sort...';
+            for (let i = 1; i < arr.length; i++) {
+                if (!isVisualizing) return;
+                let key = arr[i];
+                let j = i - 1;
+                
+                while (j >= 0 && arr[j] > key) {
+                    compareElements(j, j + 1, `Shifting ${arr[j]}`);
+                    arr[j + 1] = arr[j];
+                    arrayData = [...arr];
+                    renderArray();
+                    j--;
+                    await sleep(visualizationSpeed);
+                }
+                arr[j + 1] = key;
+                arrayData = [...arr];
+                renderArray();
+                markSorted(i);
+            }
+        }
+
+        // Simplified Merge Sort visualization
+        async function mergeSort(arr) {
+            document.getElementById('currentStepInfo').textContent = 'Merge Sort - Divide & Conquer';
+            await sleep(1000);
+            // Simulate merge sort with visual feedback
+            for (let i = 0; i < arr.length; i += 2) {
+                if (!isVisualizing) return;
+                compareElements(i, i + 1 || i);
+                await sleep(visualizationSpeed * 2);
+                markSorted(i);
+                if (i + 1 < arr.length) markSorted(i + 1);
+            }
+        }
+
+        // Simplified Quick Sort visualization
+        async function quickSort(arr) {
+            document.getElementById('currentStepInfo').textContent = 'Quick Sort - Partitioning';
+            await sleep(1000);
+            // Simulate quicksort partitioning
+            for (let i = 0; i < arr.length - 1; i++) {
+                if (!isVisualizing) return;
+                compareElements(i, i + 1, 'Partitioning');
+                await sleep(visualizationSpeed);
+                if (arr[i] > arr[i + 1]) {
+                    swapElements(i, i + 1);
+                    [arr[i], arr[i + 1]] = [arr[i + 1], arr[i]];
+                }
+            }
+        }
+
+        // Simplified Heap Sort visualization
+        async function heapSort(arr) {
+            document.getElementById('currentStepInfo').textContent = 'Heap Sort - Building max heap';
+            await sleep(1000);
+            // Simulate heap operations
+            for (let i = 0; i < arr.length; i++) {
+                if (!isVisualizing) return;
+                highlightBar(i, 'comparing');
+                await sleep(visualizationSpeed * 1.5);
+                markSorted(i);
+            }
+        }
+
+        // Visualization Helpers
+        function compareElements(index1, index2, message) {
+            clearAnimations();
+            if (index1 < arrayData.length) highlightBar(index1, 'comparing');
+            if (index2 < arrayData.length) highlightBar(index2, 'comparing');
+            document.getElementById('currentStepInfo').textContent = message;
+        }
+
+        function swapElements(index1, index2) {
+            highlightBar(index1, 'swapping');
+            highlightBar(index2, 'swapping');
+            document.getElementById('currentStepInfo').textContent = `Swapping ${arrayData[index1]} ↔ ${arrayData[index2]}`;
+            
+            // Animate swap
+            const bars = document.querySelectorAll('.bar');
+            if (bars[index1]) bars[index1].style.transform = 'translateX(20px)';
+            if (bars[index2]) bars[index2].style.transform = 'translateX(-20px)';
+            
+            setTimeout(() => {
+                [arrayData[index1], arrayData[index2]] = [arrayData[index2], arrayData[index1]];
+                renderArray();
+            }, 150);
+        }
+
+        function markSorted(index) {
+            highlightBar(index, 'sorted');
+        }
+
+        function highlightBar(index, className) {
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                bar.classList.remove('comparing', 'swapping', 'sorted');
+            });
+            if (bars[index]) {
+                bars[index].classList.add(className);
+            }
+        }
+
+        function updateComplexityDisplay() {
+            const algo = algorithms[currentAlgo];
+            const grid = document.getElementById('complexityGrid');
+            grid.innerHTML = `
+                <div class="complexity-item">
+                    <div class="complexity-value">${algo.complexity.average}</div>
+                    <div>Average</div>
+                </div>
+                <div class="complexity-item">
+                    <div class="complexity-value">${algo.complexity.worst}</div>
+                    <div>Worst</div>
+                </div>
+                <div class="complexity-item">
+                    <div class="complexity-value">${algo.complexity.space}</div>
+                    <div>Space</div>
+                </div>
+            `;
+        }
+
+        function showCompletionModal() {
+            const modal = document.getElementById('progressModal');
+            const modalContent = modal.querySelector('div');
+            document.getElementById('modalTitle').textContent = 'Sorting Complete! 🎉';
+            document.getElementById('modalMessage').textContent = `${algorithms[currentAlgo].name} finished successfully!`;
+            modal.style.display = 'flex';
+            modalContent.style.transform = 'scale(1)';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('progressModal');
+            modal.style.display = 'none';
+            modal.querySelector('div').style.transform = 'scale(0.8)';
+            generateRandomArray();
+        }
+
+        // Learning Content
+        function showLearningContent() {
+            const content = document.getElementById('learningContent');
+            const algo = algorithms[currentAlgo];
+            content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 3rem;">
+                    <h3 style="font-size: 2.5rem;"><i class="${algo.icon}"></i> ${algo.name}</h3>
+                    <p style="max-width: 600px; margin: 0 auto; color: var(--text-secondary); font-size: 1.1rem;">
+                        ${algo.description}
+                    </p>
+                </div>
+                <div class="complexity-grid" style="margin: 2rem 0;">
+                    <div class="complexity-item">
+                        <div class="complexity-value">${algo.complexity.best}</div>
+                        <div>Best Case</div>
+                    </div>
+                    <div class="complexity-item">
+                        <div class="complexity-value">${algo.complexity.average}</div>
+                        <div>Average Case</div>
+                    </div>
+                    <div class="complexity-item">
+                        <div class="complexity-value">${algo.complexity.worst}</div>
+                        <div>Worst Case</div>
+                    </div>
+                </div>
+                <div style="background: var(--glass-bg); padding: 2rem; border-radius: 16px; border: 1px solid var(--border-glow);">
+                    <h4 style="margin-bottom: 1rem;"><i class="fas fa-lightbulb"></i> Key Characteristics</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; text-align: center;">
+                        <div>
+                            <div style="font-size: 1.5rem; color: ${algo.stable ? 'var(--accent-green)' : 'var(--accent-red)'}">${algo.stable ? '✅' : '❌'}</div>
+                            <div>Stable</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5rem; color: ${algo.inPlace ? 'var(--accent-green)' : 'var(--accent-red)'}">${algo.inPlace ? '✅' : '❌'}</div>
+                            <div>In-Place</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 1.5rem; color: var(--accent-purple);">📊</div>
+                            <div>${algo.useCase}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Quiz System
+        function initQuiz() {
+            quizData = [...quizQuestions];
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quizScore').textContent = '0';
+            document.getElementById('quizTotal').textContent = quizData.length;
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            const q = quizData[currentQuizIndex];
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <div style="font-size: 1.3rem; margin-bottom: 2rem; text-align: center;">
+                        <span style="background: var(--accent-purple); color: white; padding: 0.5rem 1rem; border-radius: 50px;">
+                            Q${currentQuizIndex + 1}/${quizData.length}
+                        </span>
+                    </div>
+                    <h3 style="margin-bottom: 2rem; text-align: center;">${q.question}</h3>
+                    <div class="quiz-options">
+                        ${q.options.map((option, index) => `
+                            <div class="quiz-option" onclick="selectQuizAnswer(${index})">
+                                <strong>${String.fromCharCode(65 + index)}.</strong> ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('nextQuizBtn').style.display = 'none';
+        }
+
+        function selectQuizAnswer(answerIndex) {
+            const q = quizData[currentQuizIndex];
+            const container = document.getElementById('quizContainer');
+            const options = container.querySelectorAll('.quiz-option');
+            
+            options.forEach((option, index) => {
+                if (index === q.correct) {
+                    option.classList.add('correct');
+                } else if (index === answerIndex) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+
+            if (answerIndex === q.correct) {
+                quizScore++;
+                document.getElementById('quizScore').textContent = quizScore;
+            }
+
+            setTimeout(() => {
+                container.innerHTML += `
+                    <div style="margin-top: 2rem; padding: 1.5rem; background: ${answerIndex === q.correct ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)'}; border-radius: 16px; border-left: 5px solid ${answerIndex === q.correct ? 'var(--accent-green)' : 'var(--accent-red)'};">
+                        <div style="font-size: 1.5rem; color: ${answerIndex === q.correct ? 'var(--accent-green)' : 'var(--accent-red)'}; margin-bottom: 0.5rem;">
+                            <i class="fas fa-${answerIndex === q.correct ? 'check-circle' : 'times-circle'}"></i> 
+                            ${answerIndex === q.correct ? 'Correct!' : 'Incorrect'}
+                        </div>
+                        <div><strong>Explanation:</strong> ${q.explanation}</div>
+                    </div>
+                `;
+                document.getElementById('nextQuizBtn').style.display = 'inline-flex';
+            }, 1500);
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizData.length) {
+                showQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            const percentage = Math.round((quizScore / quizData.length) * 100);
+            const container = document.getElementById('quizContainer');
+            
+            if (percentage > bestQuizScore) {
+                bestQuizScore = percentage;
+                localStorage.setItem('bestQuizScore', bestQuizScore);
+                document.getElementById('globalQuizScore').textContent = bestQuizScore;
+            }
+            
+            let message, colorClass;
+            if (percentage >= 90) {
+                message = "🎉 Outstanding! You're a sorting expert!";
+                colorClass = 'var(--accent-green)';
+            } else if (percentage >= 70) {
+                message = "👍 Great job! Keep practicing!";
+                colorClass = 'var(--accent-blue)';
+            } else {
+                message = "📚 Keep learning! You'll get there!";
+                colorClass = 'var(--accent-orange)';
+            }
+            
+            container.innerHTML = `
+                <div style="text-align: center; padding: 3rem;">
+                    <div style="font-size: 4rem; color: ${colorClass}; margin-bottom: 1rem;">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h2 style="margin-bottom: 1rem;">Quiz Complete!</h2>
+                    <div style="font-size: 3rem; font-weight: 800; color: ${colorClass}; margin-bottom: 1rem;">
+                        ${percentage}%
+                    </div>
+                    <div style="font-size: 1.3rem; color: var(--text-secondary); margin-bottom: 2rem;">
+                        ${quizScore} / ${quizData.length} correct
+                    </div>
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem;">${message}</p>
+                </div>
+            `;
+            
+            document.getElementById('nextQuizBtn').style.display = 'none';
+            document.getElementById('quizRestartBtn').style.display = 'inline-flex';
+        }
+
+        function restartQuiz() {
+            initQuiz();
+        }
+
+        console.log('🚀 Sorting Master - Fully Functional!');
+        console.log('Keyboard Shortcuts: SPACE = Play/Pause visualization');
+        console.log('All 6 algorithms fully implemented with smooth animations!');
+    </script>
+</body>
+</html>

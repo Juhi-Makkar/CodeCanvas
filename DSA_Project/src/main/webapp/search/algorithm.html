@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searching Algorithm - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    
+    <style>
+    /* --- Theme Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --accent-green: #10B981;
+        --accent-orange: #F59E0B;
+        --accent-pink: #EC4899;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --code-bg: #0d1117;
+        --keyword: #c084fc;
+        --function: #38bdf8;
+        --number: #f472b6;
+        --string: #4ade80;
+        --comment: #6b7280;
+        --variable: #fbbf24;
+        --operator: #f472b6;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1100px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .algo-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    /* ===================== LANGUAGE SELECTOR ===================== */
+    .lang-selector {
+        background: var(--bg-secondary);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 2px solid var(--accent-purple);
+        box-shadow: 0 0 20px rgba(139,108,246,0.3);
+    }
+
+    .lang-selector h2 { margin-top: 0; margin-bottom: 10px; border: none; }
+    .lang-selector p { margin-bottom: 20px; }
+
+    .lang-selector select {
+        padding: 12px 25px;
+        border: 2px solid var(--accent-purple);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        min-width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .lang-selector select:hover, .lang-selector select:focus {
+        box-shadow: 0 0 15px rgba(139,108,246,0.5);
+        outline: none;
+    }
+
+    /* ===================== CODE BLOCKS ===================== */
+    .code-block {
+        background: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        border-left: 4px solid var(--accent-blue);
+        margin: 15px 0 25px 0;
+        position: relative;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #e2e8f0;
+        white-space: pre;
+    }
+
+    /* Syntax Highlighting */
+    .keyword { color: var(--keyword); }
+    .function { color: var(--function); }
+    .number { color: var(--number); }
+    .string { color: var(--string); }
+    .comment { color: var(--comment); font-style: italic; }
+    .variable { color: var(--variable); }
+    .operator { color: var(--operator); }
+
+    /* Code Label */
+    .code-label {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: var(--accent-purple);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* ===================== TABS ===================== */
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 10px 20px;
+        background: var(--bg-primary);
+        border: 2px solid var(--accent-purple);
+        color: var(--text-primary);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn.active { background: var(--accent-purple); color: white; }
+    .tab-btn:hover { background: rgba(139,108,246,0.2); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===================== INFO BOXES ===================== */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #F59E0B;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--accent-green);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* ===================== ALGORITHM STEPS ===================== */
+    .steps-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+        background: rgba(139,108,246,0.1);
+        border-radius: 8px;
+        border-left: 3px solid var(--accent-purple);
+    }
+
+    .step-number {
+        background: var(--accent-purple);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step-title {
+        color: var(--accent-blue);
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .step-desc {
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    /* ===================== PSEUDOCODE ===================== */
+    .pseudocode {
+        background: var(--bg-primary);
+        border: 1px solid var(--accent-purple);
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .pseudocode h4 {
+        color: var(--accent-purple);
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .pseudocode pre {
+        font-family: 'Fira Code', monospace;
+        font-size: 13px;
+        line-height: 1.8;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    /* ===================== NAVIGATION ===================== */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+    /* ===================== COMPLEXITY BADGES ===================== */
+    .complexity-badges {
+        display: flex;
+        gap: 15px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .badge-time { background: rgba(79, 195, 247, 0.2); color: var(--accent-blue); }
+    .badge-space { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+    .badge-worst { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+    .badge-best { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <a href="searchGS.html" class="logo">CodeCanvas - Searching</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/searchingGS.html">Back to Search</a></li>
+            <li><a href="../search/theory.html" >Theory</a></li>
+            <li><a href="../search/syntax.html">Syntax</a></li>
+            <li><a href="../search/algorithm.html" class="active">Algorithm</a></li>
+            <li><a href="../search/complexity.html">Complexity</a></li>
+            <li><a href="../search/flowchart.html">Flowchart</a></li>
+            
+        </ul>
+    </nav>
+</header>
+
+<section id="algorithm">
+    <div class="section-content">
+
+        <!-- Language Selector -->
+        <div class="lang-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see the implementation of searching algorithms. The code will update dynamically.</p>
+            <select id="lang-select">
+                <option value="c">C Language</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('linear')">Linear Search</button>
+            <button class="tab-btn" onclick="showTab('binary')">Binary Search</button>
+            <button class="tab-btn" onclick="showTab('advanced')">Advanced</button>
+        </div>
+
+        <!-- ==================== LINEAR SEARCH ==================== -->
+        <div id="linear" class="tab-content active">
+            
+            <div class="algo-card">
+                <h2>1. Linear Search (Sequential Search)</h2>
+                <p>Search for target by sequentially checking each element from start to end.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                    <span class="badge badge-worst">Worst: O(n)</span>
+                    <span class="badge badge-best">Best: O(1)</span>
+                </div>
+
+                <h3>Algorithm Steps</h3>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Start from Beginning</div>
+                            <div class="step-desc">Set index i = 0</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Compare Elements</div>
+                            <div class="step-desc">If arr[i] == target, return i</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Continue Search</div>
+                            <div class="step-desc">Increment i, repeat until end</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Not Found</div>
+                            <div class="step-desc">Return -1 if target not found</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Pseudocode</h3>
+                <div class="pseudocode">
+                    <pre>PROCEDURE linearSearch(arr, target, n)
+    FOR i = 0 TO n-1 DO
+        IF arr[i] == target THEN
+            RETURN i
+        END IF
+    END FOR
+    RETURN -1
+END PROCEDURE</pre>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-linear">C</span>
+                    <code id="code-linear"><span class="keyword">int</span> linearSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {
+        <span class="keyword">if</span>(arr[i] == target) {
+            <span class="keyword">return</span> i;
+        }
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>2. Linear Search (Sentinel Approach)</h2>
+                <p>Optimized linear search by placing target at end as sentinel.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Pseudocode</h3>
+                <div class="pseudocode">
+                    <pre>PROCEDURE sentinelLinearSearch(arr, n, target)
+    temp = arr[n-1]
+    arr[n-1] = target
+    i = 0
+    WHILE arr[i] != target DO
+        i = i + 1
+    END WHILE
+    arr[n-1] = temp
+    IF i < n THEN
+        RETURN i
+    ELSE
+        RETURN -1
+    END IF
+END PROCEDURE</pre>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-sentinel">C</span>
+                    <code id="code-sentinel"><span class="keyword">int</span> sentinelSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">int</span> last = arr[n-<span class="number">1</span>];
+    arr[n-<span class="number">1</span>] = target;
+    
+    <span class="keyword">int</span> i = <span class="number">0</span>;
+    <span class="keyword">while</span>(arr[i] != target)
+        i++;
+    
+    arr[n-<span class="number">1</span>] = last;
+    
+    <span class="keyword">return</span> (i < n-<span class="number">1</span>) ? i : -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== BINARY SEARCH ==================== -->
+        <div id="binary" class="tab-content">
+            
+            <div class="algo-card">
+                <h2>3. Binary Search (Iterative)</h2>
+                <p>Efficient search on sorted array by repeatedly dividing search interval in half.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(log n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                    <span class="badge badge-worst">Worst: O(log n)</span>
+                    <span class="badge badge-best">Best: O(1)</span>
+                </div>
+
+                <h3>Algorithm Steps</h3>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Initialize Bounds</div>
+                            <div class="step-desc">low = 0, high = n-1</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Calculate Mid</div>
+                            <div class="step-desc">mid = (low + high) / 2</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Compare & Adjust</div>
+                            <div class="step-desc">Adjust low/high based on comparison</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Repeat/Terminate</div>
+                            <div class="step-desc">Continue until found or low > high</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Pseudocode</h3>
+                <div class="pseudocode">
+                    <pre>PROCEDURE binarySearch(arr, target, n)
+    low = 0
+    high = n - 1
+    WHILE low <= high DO
+        mid = (low + high) / 2
+        IF arr[mid] == target THEN
+            RETURN mid
+        ELSE IF arr[mid] < target THEN
+            low = mid + 1
+        ELSE
+            high = mid - 1
+        END IF
+    END WHILE
+    RETURN -1
+END PROCEDURE</pre>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-binary-iter">C</span>
+                    <code id="code-binary-iter"><span class="keyword">int</span> binarySearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>;
+    <span class="keyword">while</span>(low <= high) {
+        <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;
+        <span class="keyword">if</span>(arr[mid] == target)
+            <span class="keyword">return</span> mid;
+        <span class="keyword">else if</span>(arr[mid] < target)
+            low = mid + <span class="number">1</span>;
+        <span class="keyword">else</span>
+            high = mid - <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>4. Binary Search (Recursive)</h2>
+                <p>Recursive implementation of binary search algorithm.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(log n)</span>
+                    <span class="badge badge-space">Space: O(log n)</span>
+                </div>
+
+                <h3>Pseudocode</h3>
+                <div class="pseudocode">
+                    <pre>FUNCTION binarySearchRecursive(arr, target, low, high)
+    IF low > high THEN
+        RETURN -1
+    END IF
+    
+    mid = (low + high) / 2
+    
+    IF arr[mid] == target THEN
+        RETURN mid
+    ELSE IF arr[mid] < target THEN
+        RETURN binarySearchRecursive(arr, target, mid+1, high)
+    ELSE
+        RETURN binarySearchRecursive(arr, target, low, mid-1)
+    END IF
+END FUNCTION</pre>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-binary-rec">C</span>
+                    <code id="code-binary-rec"><span class="keyword">int</span> binarySearchRec(<span class="keyword">int</span> arr[], <span class="keyword">int</span> target, <span class="keyword">int</span> low, <span class="keyword">int</span> high) {
+    <span class="keyword">if</span>(low > high)
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    
+    <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;
+    
+    <span class="keyword">if</span>(arr[mid] == target)
+        <span class="keyword">return</span> mid;
+    <span class="keyword">else if</span>(arr[mid] > target)
+        <span class="keyword">return</span> binarySearchRec(arr, target, low, mid - <span class="number">1</span>);
+    <span class="keyword">else</span>
+        <span class="keyword">return</span> binarySearchRec(arr, target, mid + <span class="number">1</span>, high);
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>5. Binary Search First/Last Occurrence</h2>
+                <p>Find first and last occurrence of target in sorted array with duplicates.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(log n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-first-last">C</span>
+                    <code id="code-first-last"><span class="keyword">int</span> firstOccurrence(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>, result = -<span class="number">1</span>;
+    <span class="keyword">while</span>(low <= high) {
+        <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;
+        <span class="keyword">if</span>(arr[mid] == target) {
+            result = mid;
+            high = mid - <span class="number">1</span>; <span class="comment">// Continue searching left</span>
+        } <span class="keyword">else if</span>(arr[mid] < target)
+            low = mid + <span class="number">1</span>;
+        <span class="keyword">else</span>
+            high = mid - <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> result;
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ADVANCED SEARCHING ==================== -->
+        <div id="advanced" class="tab-content">
+            
+            <div class="algo-card">
+                <h2>6. Jump Search</h2>
+                <p>Jump search performs better than linear search on sorted arrays by jumping ahead by fixed steps.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(√n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Algorithm Steps</h3>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Calculate Jump Size</div>
+                            <div class="step-desc">step = √n</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Jump Forward</div>
+                            <div class="step-desc">Jump by step size until overshoot</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Linear Search</div>
+                            <div class="step-desc">Linear search in final block</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-jump">C</span>
+                    <code id="code-jump"><span class="keyword">int</span> jumpSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">int</span> step = <span class="function">sqrt</span>(n);
+    <span class="keyword">int</span> prev = <span class="number">0</span>;
+    
+    <span class="keyword">while</span>(arr[<span class="function">min</span>(step, n)-<span class="number">1</span>] < target) {
+        prev = step;
+        step += <span class="function">sqrt</span>(n);
+        <span class="keyword">if</span>(prev >= n) <span class="keyword">return</span> -<span class="number">1</span>;
+    }
+    
+    <span class="comment">// Linear search in block</span>
+    <span class="keyword">while</span>(prev < <span class="function">min</span>(step, n) && arr[prev] < target)
+        prev++;
+    
+    <span class="keyword">if</span>(prev < n && arr[prev] == target)
+        <span class="keyword">return</span> prev;
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>7. Interpolation Search</h2>
+                <p>Interpolation search estimates position based on value distribution (works on uniformly distributed data).</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(log log n) avg</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                    <span class="badge badge-worst">Worst: O(n)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-interpolation">C</span>
+                    <code id="code-interpolation"><span class="keyword">int</span> interpolationSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>;
+    <span class="keyword">while</span>(low <= high && target >= arr[low] && target <= arr[high]) {
+        <span class="keyword">if</span>(low == high) {
+            <span class="keyword">if</span>(arr[low] == target) <span class="keyword">return</span> low;
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        }
+        
+        <span class="keyword">int</span> pos = low + ((<span class="keyword">double</span>)(high - low) * 
+            (target - arr[low]) / (arr[high] - arr[low]));
+        
+        <span class="keyword">if</span>(arr[pos] == target)
+            <span class="keyword">return</span> pos;
+        <span class="keyword">if</span>(arr[pos] < target)
+            low = pos + <span class="number">1</span>;
+        <span class="keyword">else</span>
+            high = pos - <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>8. Exponential Search</h2>
+                <p>Exponential search finds range first, then performs binary search (good for unbounded arrays).</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(log n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-exponential">C</span>
+                    <code id="code-exponential"><span class="keyword">int</span> exponentialSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">if</span>(arr[<span class="number">0</span>] == target) <span class="keyword">return</span> <span class="number">0</span>;
+    
+    <span class="keyword">int</span> i = <span class="number">1</span>;
+    <span class="keyword">while</span>(i < n && arr[i] <= target)
+        i *= <span class="number">2</span>;
+    
+    <span class="keyword">return</span> binarySearch(arr, i/2, <span class="function">min</span>(i, n), target);
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="../search/syntax.html" class="nav-btn secondary">← Syntax</a>
+            <a href="../search/complexity.html" class="nav-btn">Complexity →</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../search/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Tab functionality
+    function showTab(tabId) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab content
+        document.getElementById(tabId).classList.add('active');
+        
+        // Add active class to clicked button
+        const clickedButton = event ? event.target : document.querySelector(`[onclick="showTab('${tabId}')"]`);
+        if (clickedButton) {
+            clickedButton.classList.add('active');
+        }
+    }
+
+    // Language data
+    const langData = {
+        c: {
+            'label-linear': 'C',
+            'code-linear': '<span class="keyword">int</span> linearSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {\n        <span class="keyword">if</span>(arr[i] == target) {\n            <span class="keyword">return</span> i;\n        }\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-sentinel': 'C',
+            'code-sentinel': '<span class="keyword">int</span> sentinelSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {\n    <span class="keyword">int</span> last = arr[n-<span class="number">1</span>];\n    arr[n-<span class="number">1</span>] = target;\n    <span class="keyword">int</span> i = <span class="number">0</span>;\n    <span class="keyword">while</span>(arr[i] != target) i++;\n    arr[n-<span class="number">1</span>] = last;\n    <span class="keyword">return</span> (i < n-<span class="number">1</span>) ? i : -<span class="number">1</span>;\n}',
+            'label-binary-iter': 'C',
+            'code-binary-iter': '<span class="keyword">int</span> binarySearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {\n    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>;\n    <span class="keyword">while</span>(low <= high) {\n        <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;\n        <span class="keyword">if</span>(arr[mid] == target) <span class="keyword">return</span> mid;\n        <span class="keyword">else if</span>(arr[mid] < target) low = mid + <span class="number">1</span>;\n        <span class="keyword">else</span> high = mid - <span class="number">1</span>;\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-binary-rec': 'C',
+            'code-binary-rec': '<span class="keyword">int</span> binarySearchRec(<span class="keyword">int</span> arr[], <span class="keyword">int</span> target, <span class="keyword">int</span> low, <span class="keyword">int</span> high) {\n    <span class="keyword">if</span>(low > high) <span class="keyword">return</span> -<span class="number">1</span>;\n    <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;\n    <span class="keyword">if</span>(arr[mid] == target) <span class="keyword">return</span> mid;\n    <span class="keyword">else if</span>(arr[mid] > target)\n        <span class="keyword">return</span> binarySearchRec(arr, target, low, mid - <span class="number">1</span>);\n    <span class="keyword">return</span> binarySearchRec(arr, target, mid + <span class="number">1</span>, high);\n}',
+            'label-first-last': 'C',
+            'code-first-last': '<span class="keyword">int</span> firstOccurrence(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {\n    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>, result = -<span class="number">1</span>;\n    <span class="keyword">while</span>(low <= high) {\n        <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;\n        <span class="keyword">if</span>(arr[mid] == target) {\n            result = mid; high = mid - <span class="number">1</span>;\n        } <span class="keyword">else if</span>(arr[mid] < target) low = mid + <span class="number">1</span>;\n        <span class="keyword">else</span> high = mid - <span class="number">1</span>;\n    }\n    <span class="keyword">return</span> result;\n}',
+            'label-jump': 'C',
+            'code-jump': '<span class="keyword">int</span> jumpSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {\n    <span class="keyword">int</span> step = <span class="function">sqrt</span>(n), prev = <span class="number">0</span>;\n    <span class="keyword">while</span>(arr[<span class="function">min</span>(step,n)-<span class="number">1</span>] < target) {\n        prev = step; step += <span class="function">sqrt</span>(n);\n        <span class="keyword">if</span>(prev >= n) <span class="keyword">return</span> -<span class="number">1</span>;\n    }\n    <span class="keyword">while</span>(prev < <span class="function">min</span>(step,n) && arr[prev] < target) prev++;\n    <span class="keyword">if</span>(prev < n && arr[prev] == target) <span class="keyword">return</span> prev;\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-interpolation': 'C',
+            'code-interpolation': '<span class="keyword">int</span> interpolationSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {\n    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>;\n    <span class="keyword">while</span>(low <= high && target >= arr[low] && target <= arr[high]) {\n        <span class="keyword">int</span> pos = low + ((<span class="keyword">double</span>)(high-low)*(target-arr[low]))/(arr[high]-arr[low]);\n        <span class="keyword">if</span>(arr[pos] == target) <span class="keyword">return</span> pos;\n        <span class="keyword">if</span>(arr[pos] < target) low = pos + <span class="number">1</span>;\n        <span class="keyword">else</span> high = pos - <span class="number">1</span>;\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-exponential': 'C',
+            'code-exponential': '<span class="keyword">int</span> exponentialSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {\n    <span class="keyword">if</span>(arr[<span class="number">0</span>] == target) <span class="keyword">return</span> <span class="number">0</span>;\n    <span class="keyword">int</span> i = <span class="number">1</span>;\n    <span class="keyword">while</span>(i < n && arr[i] <= target) i *= <span class="number">2</span>;\n    <span class="keyword">return</span> binarySearch(arr, i/2, <span class="function">min</span>(i,n), target);\n}'
+        },
+        cpp: {
+            'label-linear': 'C++', 'code-linear': '<span class="keyword">int</span> linearSearch(<span class="keyword">vector</span>&lt;<span class="keyword">int</span>&gt;& arr, <span class="keyword">int</span> target) {\n    <span class="keyword">auto</span> it = <span class="function">find</span>(arr.begin(), arr.end(), target);\n    <span class="keyword">return</span> it != arr.end() ? it - arr.begin() : -<span class="number">1</span>;\n}',
+            'label-sentinel': 'C++', 'code-sentinel': '<span class="keyword">int</span> sentinelSearch(<span class="keyword">vector</span>&lt;<span class="keyword">int</span>&gt;& arr, <span class="keyword">int</span> target) {\n    <span class="comment">// Similar to C with vector</span>\n}',
+            'label-binary-iter': 'C++', 'code-binary-iter': '<span class="keyword">auto</span> it = <span class="function">lower_bound</span>(arr.begin(), arr.end(), target);\n<span class="keyword">return</span> (it != arr.end() && *it == target) ? it - arr.begin() : -<span class="number">1</span>;',
+            'label-binary-rec': 'C++', 'code-binary-rec': '<span class="keyword">int</span> binarySearchRec(<span class="keyword">vector</span>&lt;<span class="keyword">int</span>&gt;& arr, <span class="keyword">int</span> target, <span class="keyword">int</span> low, <span class="keyword">int</span> high) {\n    <span class="comment">// Recursive implementation</span>\n}',
+            'label-first-last': 'C++', 'code-first-last': '<span class="keyword">auto</span> first = <span class="function">lower_bound</span>(arr.begin(), arr.end(), target);\n<span class="keyword">auto</span> last = <span class="function">upper_bound</span>(first, arr.end(), target) - <span class="number">1</span>;',
+            'label-jump': 'C++', 'code-jump': '<span class="keyword">int</span> jumpSearch(<span class="keyword">vector</span>&lt;<span class="keyword">int</span>&gt;& arr, <span class="keyword">int</span> target) {\n    <span class="comment">// Jump search implementation</span>\n}',
+            'label-interpolation': 'C++', 'code-interpolation': '<span class="keyword">int</span> interpolationSearch(<span class="keyword">vector</span>&lt;<span class="keyword">int</span>&gt;& arr, <span class="keyword">int</span> target) {\n    <span class="comment">// Interpolation search</span>\n}',
+            'label-exponential': 'C++', 'code-exponential': '<span class="keyword">int</span> exponentialSearch(<span class="keyword">vector</span>&lt;<span class="keyword">int</span>&gt;& arr, <span class="keyword">int</span> target) {\n    <span class="comment">// Exponential search</span>\n}'
+        },
+        java: {
+            'label-linear': 'Java', 'code-linear': '<span class="keyword">int</span> linearSearch(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> target) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < arr.length; i++) {\n        <span class="keyword">if</span>(arr[i] == target) <span class="keyword">return</span> i;\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-binary-iter': 'Java', 'code-binary-iter': '<span class="keyword">int</span> index = <span class="function">Arrays</span>.<span class="function">binarySearch</span>(arr, target);\n<span class="keyword">return</span> (index >= <span class="number">0</span>) ? index : -<span class="number">1</span>;',
+            'label-binary-rec': 'Java', 'code-binary-rec': '<span class="keyword">public static int</span> binarySearchRec(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> target, <span class="keyword">int</span> low, <span class="keyword">int</span> high) {\n    <span class="comment">// Recursive binary search</span>\n}',
+            'label-first-last': 'Java', 'code-first-last': '<span class="keyword">int</span>[] result = <span class="function">searchRange</span>(arr, target);\n<span class="comment">// Returns {first, last} indices</span>',
+            'label-jump': 'Java', 'code-jump': '<span class="keyword">int</span> jumpSearch(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> target) {\n    <span class="comment">// Jump search implementation</span>\n}',
+            'label-interpolation': 'Java', 'code-interpolation': '<span class="keyword">int</span> interpolationSearch(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> target) {\n    <span class="comment">// Interpolation search</span>\n}',
+            'label-exponential': 'Java', 'code-exponential': '<span class="keyword">int</span> exponentialSearch(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> target) {\n    <span class="comment">// Exponential search</span>\n}'
+        },
+        python: {
+            'label-linear': 'Python', 'code-linear': '<span class="keyword">def</span> linear_search(arr, target):\n    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(arr)):\n        <span class="keyword">if</span> arr[i] == target:\n            <span class="keyword">return</span> i\n    <span class="keyword">return</span> -<span class="number">1</span>',
+            'label-sentinel': 'Python', 'code-sentinel': '<span class="keyword">def</span> sentinel_search(arr, target):\n    arr[-<span class="number">1</span>], last = target, arr[-<span class="number">1</span>]\n    i = <span class="number">0</span>\n    <span class="keyword">while</span> arr[i] != target: i += <span class="number">1</span>\n    arr[-<span class="number">1</span>] = last\n    <span class="keyword">return</span> i <span class="keyword">if</span> i < <span class="function">len</span>(arr)-<span class="number">1</span> <span class="keyword">else</span> -<span class="number">1</span>',
+            'label-binary-iter': 'Python', 'code-binary-iter': '<span class="keyword">def</span> binary_search(arr, target):\n    low, high = <span class="number">0</span>, <span class="function">len</span>(arr) - <span class="number">1</span>\n    <span class="keyword">while</span> low <= high:\n        mid = (low + high) // <span class="number">2</span>\n        <span class="keyword">if</span> arr[mid] == target: <span class="keyword">return</span> mid\n        <span class="keyword">elif</span> arr[mid] < target: low = mid + <span class="number">1</span>\n        <span class="keyword">else</span>: high = mid - <span class="number">1</span>\n    <span class="keyword">return</span> -<span class="number">1</span>',
+            'label-binary-rec': 'Python', 'code-binary-rec': '<span class="keyword">def</span> binary_search_rec(arr, target, low, high):\n    <span class="keyword">if</span> low > high: <span class="keyword">return</span> -<span class="number">1</span>\n    mid = (low + high) // <span class="number">2</span>\n    <span class="keyword">if</span> arr[mid] == target: <span class="keyword">return</span> mid\n    <span class="keyword">elif</span> arr[mid] > target:\n        <span class="keyword">return</span> binary_search_rec(arr, target, low, mid - <span class="number">1</span>)\n    <span class="keyword">return</span> binary_search_rec(arr, target, mid + <span class="number">1</span>, high)',
+            'label-first-last': 'Python', 'code-first-last': '<span class="keyword">def</span> first_occurrence(arr, target):\n    low, high, result = <span class="number">0</span>, <span class="function">len</span>(arr)-<span class="number">1</span>, -<span class="number">1</span>\n    <span class="keyword">while</span> low <= high:\n        mid = (low + high) // <span class="number">2</span>\n        <span class="keyword">if</span> arr[mid] == target:\n            result = mid\n            high = mid - <span class="number">1</span>\n        <span class="keyword">elif</span> arr[mid] < target: low = mid + <span class="number">1</span>\n        <span class="keyword">else</span>: high = mid - <span class="number">1</span>\n    <span class="keyword">return</span> result',
+            'label-jump': 'Python', 'code-jump': '<span class="keyword">def</span> jump_search(arr, target):\n    n = <span class="function">len</span>(arr)\n    step = <span class="function">int</span>(<span class="function">math</span>.<span class="function">sqrt</span>(n))\n    prev = <span class="number">0</span>\n    <span class="keyword">while</span> arr[<span class="function">min</span>(step, n)-<span class="number">1</span>] < target:\n        prev = step\n        step += <span class="function">int</span>(<span class="function">math</span>.<span class="function">sqrt</span>(n))\n        <span class="keyword">if</span> prev >= n: <span class="keyword">return</span> -<span class="number">1</span>\n    <span class="keyword">while</span> prev < <span class="function">min</span>(step, n) <span class="keyword">and</span> arr[prev] < target: prev += <span class="number">1</span>\n    <span class="keyword">if</span> prev < n <span class="keyword">and</span> arr[prev] == target: <span class="keyword">return</span> prev\n    <span class="keyword">return</span> -<span class="number">1</span>',
+            'label-interpolation': 'Python', 'code-interpolation': '<span class="keyword">def</span> interpolation_search(arr, target):\n    low, high = <span class="number">0</span>, <span class="function">len</span>(arr) - <span class="number">1</span>\n    <span class="keyword">while</span> low <= high <span class="keyword">and</span> target >= arr[low] <span class="keyword">and</span> target <= arr[high]:\n        pos = low + <span class="keyword">int</span>(((high - low) * (target - arr[low])) / (arr[high] - arr[low]))\n        <span class="keyword">if</span> arr[pos] == target: <span class="keyword">return</span> pos\n        <span class="keyword">if</span> arr[pos] < target: low = pos + <span class="number">1</span>\n        <span class="keyword">else</span>: high = pos - <span class="number">1</span>\n    <span class="keyword">return</span> -<span class="number">1</span>',
+            'label-exponential': 'Python', 'code-exponential': '<span class="keyword">def</span> exponential_search(arr, target):\n    <span class="keyword">if</span> arr[<span class="number">0</span>] == target: <span class="keyword">return</span> <span class="number">0</span>\n    i = <span class="number">1</span>\n    <span class="keyword">while</span> i < <span class="function">len</span>(arr) <span class="keyword">and</span> arr[i] <= target: i *= <span class="number">2</span>\n    <span class="keyword">return</span> binary_search(arr, target, i//<span class="number">2</span>, <span class="function">min</span>(i, <span class="function">len</span>(arr)))'
+        }
+    };
+
+    // Language selector
+    const langSelect = document.getElementById('lang-select');
+
+    function updateCode(lang) {
+        const data = langData[lang] || langData['c']; // Fallback to C
+        Object.entries(data).forEach(([id, code]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.innerHTML = code;
+            }
+        });
+    }
+
+    langSelect.addEventListener('change', function() {
+        updateCode(this.value);
+    });
+
+    // Initialize with C language and ensure first tab is active
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCode('c');
+        // Ensure first tab is active on load
+        const firstTabBtn = document.querySelector('.tab-btn.active');
+        if (firstTabBtn) {
+            firstTabBtn.click();
+        }
+    });
+</script>
+
+</body>
+</html>

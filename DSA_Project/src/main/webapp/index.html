@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<title>CodeCanvas</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" type="image/png" href="/DSA_Project/src/main/webapp/image/CC_fav.png">
+</head>
+
+<body>
+
+<header class="navbar">
+    <h1 class="title">CodeCanvas</h1>
+    <p class="subtitle">Where Code Meets Canvas</p>
+</header>
+
+<main class="container">
+    <div class="card">
+        <h2>Explore Concepts</h2>
+        <div class="grid">
+            <a href="pages/array.html" class="btn">Array</a>
+            <a href="pages/linkedlist.html" class="btn">Linked List</a>
+            <a href="pages/stack.html" class="btn">Stack</a>
+            <a href="pages/queue.html" class="btn">Queue</a>
+            <a href="pages/search.html" class="btn">Searching</a>
+            <a href="pages/sort.html" class="btn">Sorting</a>
+            <a href="#" class="btn" onclick="comingSoon(event)">Tree</a>
+            <a href="#" class="btn" onclick="comingSoon(event)">Graph</a>
+            <a href="#" class="btn" onclick="comingSoon(event)">Hashing</a>
+        </div>
+    </div>
+</main>
+
+<footer class="neon-footer">
+    <div class="footer-line"></div>
+
+    <div class="footer-content">
+        <h3>CodeCanvas</h3>
+
+        <div class="footer-links">
+            <span>Learn Data Structures</span>
+            <span>•</span>
+            <span>Explore Algorithms</span>
+            <span>•</span>
+            <span>Visualize Concepts</span>
+        </div>
+    </div>
+
+    <div class="footer-line"></div>
+</footer>
+<script>
+function comingSoon(event) {
+    event.preventDefault();
+
+    const popup = document.createElement("div");
+    popup.className = "coming-soon-popup";
+    popup.innerHTML = "🚀 Tree, Graph & Hashing Visualizers Coming Soon!";
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+        popup.remove();
+    }, 2500);
+}
+</script>
+</body>
+</html>

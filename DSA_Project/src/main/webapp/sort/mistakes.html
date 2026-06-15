@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common Sorting Algorithm Mistakes - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --accent-red: #EF4444;
+            --accent-green: #10B981;
+            --accent-orange: #F59E0B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+
+        .navbar nav a.active {
+            color: var(--accent-purple);
+            background: rgba(139,108,246,0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 150px 20px 80px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-red);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(245,158,11,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: var(--accent-red);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            background: rgba(245,158,11,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--accent-red);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Mistake Categories */
+        .categories {
+            padding: 80px 20px;
+            background: var(--bg-secondary);
+        }
+
+        .categories-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .categories-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .categories-header h2 {
+            font-size: 36px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .category-tab {
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: 2px solid transparent;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .category-tab:hover {
+            transform: translateY(-2px);
+        }
+
+        .category-tab.active {
+            border-color: var(--accent-red);
+            background: rgba(245,158,11,0.1);
+            color: var(--accent-red);
+        }
+
+        .category-tab.safety { border-color: var(--accent-red); }
+        .category-tab.performance { border-color: var(--accent-orange); }
+        .category-tab.logic { border-color: var(--accent-purple); }
+
+        /* Mistake Cards */
+        .mistake-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .mistake-item {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid var(--accent-red);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .mistake-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(245,158,11,0.2);
+        }
+
+        .mistake-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .mistake-title {
+            color: var(--accent-red);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .mistake-type {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .mistake-type.safety { background: rgba(239,68,68,0.2); color: var(--accent-red); }
+        .mistake-type.performance { background: rgba(245,158,11,0.2); color: var(--accent-orange); }
+        .mistake-type.logic { background: rgba(139,108,246,0.2); color: var(--accent-purple); }
+
+        .mistake-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .mistake-code {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .mistake-code .bad {
+            color: var(--accent-red);
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .mistake-code .good {
+            color: var(--accent-green);
+            font-size: 13px;
+            display: block;
+        }
+
+        .mistake-code code {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+        }
+
+        .tips-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tips-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .tips-header h2 {
+            font-size: 36px;
+            color: var(--accent-green);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-box {
+            background: var(--bg-primary);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(16,185,129,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tip-box:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-3px);
+        }
+
+        .tip-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .tip-box h3 {
+            color: var(--accent-green);
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .tip-box p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            padding: 80px 20px;
+            background: var(--bg-secondary);
+        }
+
+        .comparison-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .comparison-header h2 {
+            font-size: 36px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .comparison-card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .comparison-card.wrong {
+            border: 2px solid var(--accent-red);
+        }
+
+        .comparison-card.right {
+            border: 2px solid var(--accent-green);
+        }
+
+        .comparison-card h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-card.wrong h3 {
+            color: var(--accent-red);
+        }
+
+        .comparison-card.right h3 {
+            color: var(--accent-green);
+        }
+
+        .comparison-card code {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero-badges {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .mistake-list {
+                grid-template-columns: 1fr;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="sortingGS.html" class="logo">CodeCanvas - Sorting</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/sortGS.html">Back to Sorting</a></li>
+            <li><a href="../sort/theory.html">Theory</a></li>
+            <li><a href="../sort/syntax.html">Syntax</a></li>
+            <li><a href="../sort/algorithm.html">Algorithm</a></li>
+            <li><a href="../sort/flowchart.html">Flowchart</a></li>
+            <li><a href="../sort/sorting.html">Sorting</a></li>
+                <li><a href="applications.html">Applications</a></li>
+                <li><a href="mistakes.html" class="active">Mistakes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="section-content">
+            <h1>Common Sorting Mistakes</h1>
+            <p>Master sorting algorithms by avoiding these frequent pitfalls. Learn the right way to implement and use sorting effectively.</p>
+            <div class="hero-badges">
+                <div class="hero-badge">⚠️ 18+ Common Errors</div>
+                <div class="hero-badge">✅ Performance Fixes</div>
+                <div class="hero-badge">🎯 Algorithm Mastery</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mistake Categories -->
+    <section class="categories">
+        <div class="categories-container">
+            <div class="categories-header">
+                <h2>Explore Sorting Mistakes by Category</h2>
+                <p>Click on a category to filter the mistakes</p>
+            </div>
+            <div class="category-tabs">
+                <div class="category-tab active safety" data-filter="all">All Mistakes</div>
+                <div class="category-tab safety" data-filter="safety">Safety</div>
+                <div class="category-tab performance" data-filter="performance">Performance</div>
+                <div class="category-tab logic" data-filter="logic">Logic</div>
+            </div>
+            <div class="mistake-list" id="mistake-list">
+                <!-- Mistake cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section class="tips-section">
+        <div class="tips-container">
+            <div class="tips-header">
+                <h2>Best Practices for Sorting</h2>
+                <p>Follow these guidelines to implement efficient and correct sorting algorithms</p>
+            </div>
+            <div class="tips-grid">
+                <div class="tip-box">
+                    <div class="tip-icon">⚡</div>
+                    <h3>Choose Right Algorithm</h3>
+                    <p>Select sorting algorithm based on data size, stability requirements, and memory constraints.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">🔍</div>
+                    <h3>Handle Edge Cases</h3>
+                    <p>Always test with empty arrays, single elements, and already sorted data.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">📏</div>
+                    <h3>Check Array Bounds</h3>
+                    <p>Validate indices before accessing array elements in custom implementations.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">🛡️</div>
+                    <h3>Use Built-in Sort</h3>
+                    <p>For production code, prefer Array.sort() with custom comparators over manual implementations.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">🎯</div>
+                    <h3>Preserve Stability</h3>
+                    <p>Use stable sorting when equal elements need to maintain relative order.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">📊</div>
+                    <h3>Profile Performance</h3>
+                    <p>Measure actual performance before optimizing sorting algorithms.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <div class="comparison-container">
+            <div class="comparison-header">
+                <h2>Wrong vs Right Approach</h2>
+                <p>See the difference between common mistakes and correct sorting implementations</p>
+            </div>
+            <div class="comparison-grid">
+                <div class="comparison-card wrong">
+                    <h3>❌ Common Mistake</h3>
+                    <code>
+// Bubble Sort - No early termination
+for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length; j++) {
+        if (arr[j] > arr[j + 1]) {
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+        }
+    }
+}
+
+// Wrong comparator
+arr.sort((a, b) => a - b); // Fails with large numbers
+                    </code>
+                    <p style="color: var(--accent-red); font-size: 13px; margin-top: 10px;">
+                        Always swaps and no optimization - O(n²) even for sorted arrays.
+                    </p>
+                </div>
+                <div class="comparison-card right">
+                    <h3>✅ Correct Approach</h3>
+                    <code>
+// Optimized Bubble Sort with early termination
+let swapped;
+for (let i = 0; i < arr.length; i++) {
+    swapped = false;
+    for (let j = 0; j < arr.length - 1 - i; j++) {
+        if (arr[j] > arr[j + 1]) {
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+            swapped = true;
+        }
+    }
+    if (!swapped) break;
+}
+
+// Safe numeric comparator
+arr.sort((a, b) => Number(a) - Number(b));
+                    </code>
+                    <p style="color: var(--accent-green); font-size: 13px; margin-top: 10px;">
+                        Early termination and optimized passes - O(n) for sorted arrays.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../sort/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Common Sorting Algorithm Mistakes Data
+        const mistakes = [
+            {
+                name: "Bubble Sort - No Early Termination",
+                description: "Not breaking early when array is already sorted, causing unnecessary O(n²) operations.",
+                badCode: "for(i=0; i<n; i++) for(j=0; j<n; j++) swap if needed",
+                goodCode: "Add swapped flag and break if no swaps needed",
+                type: "performance"
+            },
+            {
+                name: "Bubble Sort - Wrong Loop Bounds",
+                description: "Using j < n instead of j < n-1-i, causing unnecessary comparisons.",
+                badCode: "for(j=0; j<arr.length; j++)",
+                goodCode: "for(j=0; j<arr.length-1-i; j++)",
+                type: "logic"
+            },
+            {
+                name: "Array Index Out of Bounds",
+                description: "Accessing arr[j+1] without bounds checking in sorting loops.",
+                badCode: "if(arr[j] > arr[j+1]) at j=n-1",
+                goodCode: "Use j < arr.length-1",
+                type: "safety"
+            },
+            {
+                name: "Wrong QuickSort Pivot Selection",
+                description: "Always using first/last element as pivot leads to O(n²) worst case.",
+                badCode: "pivot = arr[0]",
+                goodCode: "Use median-of-three or random pivot",
+                type: "performance"
+            },
+            {
+                name: "QuickSort - No Base Case",
+                description: "Infinite recursion when array size is 1 or 0.",
+                badCode: "No check for arr.length <= 1",
+                goodCode: "if(left >= right) return",
+                type: "safety"
+            },
+            {
+                name: "Merge Sort - Modifying Input",
+                description: "Merge sort should create copies, not modify original array.",
+                badCode: "Directly modify input array",
+                goodCode: "Create temp arrays for merging",
+                type: "logic"
+            },
+            {
+                name: "Insertion Sort - Wrong Direction",
+                description: "Inserting from end instead of beginning breaks the algorithm.",
+                badCode: "for(i=n-1; i>=0; i--)",
+                goodCode: "for(i=1; i<n; i++)",
+                type: "logic"
+            },
+            {
+                name: "Selection Sort - Multiple Passes",
+                description: "Searching minimum multiple times instead of once per pass.",
+                badCode: "Find min in each swap",
+                goodCode: "One pass per position to find min",
+                type: "performance"
+            },
+            {
+                name: "Unstable Sorting",
+                description: "Not preserving relative order of equal elements when stability is needed.",
+                badCode: "QuickSort (unstable)",
+                goodCode: "MergeSort or counting sort for stability",
+                type: "logic"
+            },
+            {
+                name: "Wrong Comparator Function",
+                description: "Incorrect comparison logic causing wrong sort order.",
+                badCode: "return a > b (wrong sign)",
+                goodCode: "return a - b or proper comparator",
+                type: "logic"
+            },
+            {
+                name: "Sorting Non-Comparable Types",
+                description: "Trying to sort arrays with mixed or non-comparable data types.",
+                badCode: "sort mixed numbers/strings",
+                goodCode: "Ensure uniform comparable types",
+                type: "safety"
+            },
+            {
+                name: "Infinite Loop in While Conditions",
+                description: "Wrong termination conditions in partition schemes.",
+                badCode: "while(i <= j) without proper increment",
+                goodCode: "Proper i++, j-- with bounds checking",
+                type: "safety"
+            },
+            {
+                name: "Not Handling Duplicates",
+                description: "Sorting algorithms failing with duplicate elements.",
+                badCode: "Assuming all unique elements",
+                goodCode: "Handle equals case properly",
+                type: "logic"
+            },
+            {
+                name: "Recursive Stack Overflow",
+                description: "Deep recursion in QuickSort causing stack overflow.",
+                badCode: "Worst case O(n) recursion depth",
+                goodCode: "Use iterative QuickSort or tail recursion",
+                type: "safety"
+            },
+            {
+                name: "Using sort() on Large Datasets",
+                description: "Using JavaScript sort() on millions of elements without optimization.",
+                badCode: "arr.sort() on 10M+ elements",
+                goodCode: "Use native sorting or specialized algorithms",
+                type: "performance"
+            },
+            {
+                name: "Wrong Heapify Implementation",
+                description: "Incorrect heap property maintenance in heapsort.",
+                badCode: "Wrong parent/child index calculation",
+                goodCode: "parent = Math.floor((i-1)/2)",
+                type: "logic"
+            },
+            {
+                name: "Not Preserving Original Array",
+                description: "Sorting algorithms modifying input when copy needed.",
+                badCode: "sort original data",
+                goodCode: "[...arr].sort()",
+                type: "logic"
+            },
+            {
+                name: "Ignoring Time Complexity",
+                description: "Using O(n²) algorithms on large datasets.",
+                badCode: "Bubble sort on 100k elements",
+                goodCode: "QuickSort/MergeSort for large data",
+                type: "performance"
+            }
+        ];
+
+        // Helper function to get type class
+        function getTypeClass(type) {
+            if (type === 'safety') return 'safety';
+            if (type === 'performance') return 'performance';
+            if (type === 'logic') return 'logic';
+            return '';
+        }
+
+        // Generate Mistake Cards
+        function generateMistakeCards(filter = 'all') {
+            const list = document.getElementById('mistake-list');
+            list.innerHTML = '';
+            
+            const filteredMistakes = filter === 'all' 
+                ? mistakes 
+                : mistakes.filter(m => m.type === filter);
+            
+            filteredMistakes.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'mistake-item';
+                card.innerHTML = `
+                    <div class="mistake-header">
+                        <h4 class="mistake-title">${item.name}</h4>
+                        <span class="mistake-type ${getTypeClass(item.type)}">${item.type.toUpperCase()}</span>
+                    </div>
+                    <p class="mistake-description">${item.description}</p>
+                    <div class="mistake-code">
+                        <span class="bad">❌ Wrong:</span>
+                        <code>${item.badCode}</code>
+                        <span class="good">✅ Correct:</span>
+                        <code>${item.goodCode}</code>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // Category Tab Filtering
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                // Filter mistakes
+                const filter = this.getAttribute('data-filter');
+                generateMistakeCards(filter);
+            });
+        });
+
+        // Initialize on load
+        generateMistakeCards('all');
+    </script>
+</body>
+</html>

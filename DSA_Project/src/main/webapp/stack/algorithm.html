@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Algorithm - CodeCanvas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --accent-green: #10B981;
+        --accent-orange: #F59E0B;
+        --accent-pink: #EC4899;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --code-bg: #0d1117;
+        --keyword: #c084fc;
+        --function: #38bdf8;
+        --number: #f472b6;
+        --string: #4ade80;
+        --comment: #6b7280;
+        --variable: #fbbf24;
+        --operator: #f472b6;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    @media (max-width: 768px) {
+        .navbar { 
+            flex-direction: column; 
+            height: auto; 
+            padding: 10px 15px; 
+        }
+        .navbar nav ul { 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 10px; 
+            margin-top: 10px; 
+        }
+        .navbar .logo { 
+            font-size: 18px; 
+        }
+    }
+
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1100px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+    }
+
+    .algo-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    .lang-selector {
+        background: var(--bg-secondary);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 2px solid var(--accent-purple);
+        box-shadow: 0 0 20px rgba(139,108,246,0.3);
+    }
+
+    .lang-selector h2 { 
+        margin-top: 0; 
+        margin-bottom: 10px; 
+        border: none; 
+    }
+    
+    .lang-selector p { 
+        margin-bottom: 20px; 
+    }
+
+    .lang-selector select {
+        padding: 12px 25px;
+        border: 2px solid var(--accent-purple);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        min-width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .lang-selector select:hover, 
+    .lang-selector select:focus {
+        box-shadow: 0 0 15px rgba(139,108,246,0.5);
+        outline: none;
+    }
+
+    .code-block {
+        background: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        border-left: 4px solid var(--accent-blue);
+        margin: 15px 0 25px 0;
+        position: relative;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #e2e8f0;
+        white-space: pre;
+        display: block;
+    }
+
+    .keyword { color: var(--keyword); }
+    .function { color: var(--function); }
+    .number { color: var(--number); }
+    .string { color: var(--string); }
+    .comment { color: var(--comment); font-style: italic; }
+    .variable { color: var(--variable); }
+    .operator { color: var(--operator); }
+
+    .code-label {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: var(--accent-purple);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 10px 20px;
+        background: var(--bg-primary);
+        border: 2px solid var(--accent-purple);
+        color: var(--text-primary);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn.active { 
+        background: var(--accent-purple); 
+        color: white; 
+    }
+    
+    .tab-btn:hover { 
+        background: rgba(139,108,246,0.2); 
+    }
+
+    .tab-content { 
+        display: none; 
+    }
+    
+    .tab-content.active { 
+        display: block; 
+    }
+
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #F59E0B;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--accent-green);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .steps-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+        background: rgba(139,108,246,0.1);
+        border-radius: 8px;
+        border-left: 3px solid var(--accent-purple);
+    }
+
+    .step-number {
+        background: var(--accent-purple);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step-title {
+        color: var(--accent-blue);
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .step-desc {
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    .pseudocode {
+        background: var(--bg-primary);
+        border: 1px solid var(--accent-purple);
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .pseudocode h4 {
+        color: var(--accent-purple);
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .pseudocode pre {
+        font-family: 'Fira Code', monospace;
+        font-size: 13px;
+        line-height: 1.8;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+    .complexity-badges {
+        display: flex;
+        gap: 15px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .badge-time { 
+        background: rgba(79, 195, 247, 0.2); 
+        color: var(--accent-blue); 
+    }
+    
+    .badge-space { 
+        background: rgba(16, 185, 129, 0.2); 
+        color: var(--accent-green); 
+    }
+    
+    .badge-worst { 
+        background: rgba(245, 158, 11, 0.2); 
+        color: var(--accent-orange); 
+    }
+    
+    .badge-best { 
+        background: rgba(16, 185, 129, 0.2); 
+        color: var(--accent-green); 
+    }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <a href="#" class="logo">CodeCanvas - Stack</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/stackGS.html">Back to Stack</a></li>
+            <li><a href="../stack/theory.html">Theory</a></li>
+            <li><a href="../stack/syntax.html">Syntax</a></li>
+            <li><a href="../stack/algorithm.html" class="active">Algorithm</a></li>
+            <li><a href="../stack/complexity.html">Complexity</a></li>
+            <li><a href="../stack/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="algorithm">
+    <div class="section-content">
+
+        <!-- Language Selector -->
+        <div class="lang-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see the implementation of stack algorithms. The code will update dynamically.</p>
+            <select id="lang-select">
+                <option value="c">C Language</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="basic">Basic Operations</button>
+            <button class="tab-btn" data-tab="conversion">Conversions</button>
+            <button class="tab-btn" data-tab="traversal">Tree Traversal</button>
+            <button class="tab-btn" data-tab="validation">Validation</button>
+            <button class="tab-btn" data-tab="advanced">Advanced</button>
+        </div>
+
+        <!-- ==================== BASIC OPERATIONS ==================== -->
+        <div id="basic" class="tab-content active">
+            <div class="algo-card">
+                <h2>1. Stack Initialization</h2>
+                <p>Creates an empty stack with maximum capacity.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(1)</span>
+                    <span class="badge badge-space">Space: O(n)</span>
+                </div>
+                <h3>Pseudocode</h3>
+                <div class="pseudocode">
+                    <pre>PROCEDURE initializeStack(maxSize)
+    stack[maxSize]
+    top = -1
+END PROCEDURE</pre>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-init">C</span>
+                    <code id="code-init">void initStack(int stack[], int *top, int maxSize) {
+    *top = -1;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>2. Push Operation</h2>
+                <p>Adds an element to the top of the stack.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(1)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+                <h3>Algorithm Steps</h3>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Check Overflow</div>
+                            <div class="step-desc">If top == maxSize-1, stack is full</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Increment Top</div>
+                            <div class="step-desc">top = top + 1</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Add Element</div>
+                            <div class="step-desc">stack[top] = element</div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-push">C</span>
+                    <code id="code-push">void push(int stack[], int *top, int element, int maxSize) {
+    if(*top == maxSize - 1) {
+        printf("Stack Overflow!\n");
+        return;
+    }
+    stack[++(*top)] = element;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>3. Pop Operation</h2>
+                <p>Removes and returns the top element from the stack.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(1)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+                <h3>Algorithm Steps</h3>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Check Underflow</div>
+                            <div class="step-desc">If top == -1, stack is empty</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Return Top</div>
+                            <div class="step-desc">element = stack[top]</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Decrement Top</div>
+                            <div class="step-desc">top = top - 1</div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-pop">C</span>
+                    <code id="code-pop">int pop(int stack[], int *top) {
+    if(*top == -1) {
+        printf("Stack Underflow!\n");
+        return -1;
+    }
+    return stack[(*top)--];
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>4. Peek/Top Operation</h2>
+                <p>Returns the top element without removing it.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(1)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-peek">C</span>
+                    <code id="code-peek">int peek(int stack[], int top) {
+    if(top == -1) {
+        printf("Stack is empty!\n");
+        return -1;
+    }
+    return stack[top];
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>5. Is Empty & Is Full</h2>
+                <p>Check stack conditions.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(1)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-check">C</span>
+                    <code id="code-check">int isEmpty(int top) { 
+    return top == -1; 
+}
+int isFull(int top, int maxSize) { 
+    return top == maxSize - 1; 
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CONVERSIONS ==================== -->
+        <div id="conversion" class="tab-content">
+            <div class="algo-card">
+                <h2>6. Infix to Postfix Conversion</h2>
+                <p>Converts infix expression to postfix using stack (Shunting Yard Algorithm).</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(n)</span>
+                </div>
+                <h3>Algorithm Steps</h3>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Scan Input</div>
+                            <div class="step-desc">Read each character of infix expression</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Operand</div>
+                            <div class="step-desc">Directly output to postfix</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Operator</div>
+                            <div class="step-desc">Pop higher/equal precedence operators first</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Parentheses</div>
+                            <div class="step-desc">Push '(', pop until '(' for ')'</div>
+                        </div>
+                    </div>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-infix-postfix">C</span>
+                    <code id="code-infix-postfix">int precedence(char op) {
+    if(op == '+' || op == '-') return 1;
+    if(op == '*' || op == '/') return 2;
+    return 0;
+}
+
+void infixToPostfix(char infix[], char postfix[]) {
+    int stack[100], top = -1, k = 0;
+    for(int i = 0; infix[i]; i++) {
+        if(infix[i] == '(') stack[++top] = infix[i];
+        else if(infix[i] == ')') {
+            while(top >= 0 && stack[top] != '(')
+                postfix[k++] = stack[top--];
+            if(top >= 0) top--;
+        }
+        else if(precedence(infix[i])) {
+            while(top >= 0 && precedence(stack[top]) >= precedence(infix[i]))
+                postfix[k++] = stack[top--];
+            stack[++top] = infix[i];
+        }
+        else postfix[k++] = infix[i];
+    }
+    while(top >= 0) postfix[k++] = stack[top--];
+    postfix[k] = '\0';
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>7. Postfix Evaluation</h2>
+                <p>Evaluates postfix expression using stack.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(n)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-postfix-eval">C</span>
+                    <code id="code-postfix-eval">int evaluatePostfix(char exp[]) {
+    int stack[100], top = -1;
+    for(int i = 0; exp[i]; i++) {
+        if(isdigit(exp[i]))
+            stack[++top] = exp[i] - '0';
+        else {
+            int b = stack[top--], a = stack[top--];
+            if(exp[i] == '+') stack[++top] = a + b;
+            else if(exp[i] == '-') stack[++top] = a - b;
+            else if(exp[i] == '*') stack[++top] = a * b;
+            else if(exp[i] == '/') stack[++top] = a / b;
+        }
+    }
+    return stack[top];
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== TREE TRAVERSAL ==================== -->
+        <div id="traversal" class="tab-content">
+            <div class="algo-card">
+                <h2>8. Inorder Tree Traversal (Iterative)</h2>
+                <p>Performs inorder traversal using stack.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(h)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-inorder">C</span>
+                    <code id="code-inorder">void inorderIterative(Node* root) {
+    Node* curr = root;
+    Stack s;
+    while(curr != NULL || !s.isEmpty()) {
+        while(curr != NULL) {
+            s.push(curr);
+            curr = curr->left;
+        }
+        curr = s.pop();
+        printf("%d ", curr->data);
+        curr = curr->right;
+    }
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>9. Preorder Tree Traversal (Iterative)</h2>
+                <p>Performs preorder traversal using stack.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(h)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-preorder">C</span>
+                    <code id="code-preorder">void preorderIterative(Node* root) {
+    if(!root) return;
+    Stack s; s.push(root);
+    while(!s.isEmpty()) {
+        Node* node = s.pop();
+        printf("%d ", node->data);
+        if(node->right) s.push(node->right);
+        if(node->left) s.push(node->left);
+    }
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== VALIDATION ==================== -->
+        <div id="validation" class="tab-content">
+            <div class="algo-card">
+                <h2>10. Balanced Parentheses</h2>
+                <p>Validates if parentheses are properly balanced.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(n)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-balanced">C</span>
+                    <code id="code-balanced">int isBalanced(char str[]) {
+    int stack[100]; int top = -1;
+    for(int i = 0; str[i]; i++) {
+        if(str[i] == '(' || str[i] == '{' || str[i] == '[')
+            stack[++top] = str[i];
+        else {
+            if(top == -1) return 0;
+            if(str[i] == ')' && stack[top] != '(') return 0;
+            if(str[i] == '}' && stack[top] != '{') return 0;
+            if(str[i] == ']' && stack[top] != '[') return 0;
+            top--;
+        }
+    }
+    return top == -1;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>11. Next Greater Element</h2>
+                <p>Finds next greater element for each element using stack.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(n)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-next-greater">C++</span>
+                    <code id="code-next-greater">vector<int> nextGreater(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> res(n, -1);
+    stack<int> st;
+    for(int i = n-1; i >= 0; i--) {
+        while(!st.empty() && st.top() <= nums[i])
+            st.pop();
+        if(!st.empty()) res[i] = st.top();
+        st.push(nums[i]);
+    }
+    return res;
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ADVANCED ==================== -->
+        <div id="advanced" class="tab-content">
+            <div class="algo-card">
+                <h2>12. Two Stacks in Single Array</h2>
+                <p>Implements two stacks using a single array from both ends.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(1)</span>
+                    <span class="badge badge-space">Space: O(n)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-two-stacks">C</span>
+                    <code id="code-two-stacks">#define MAX 100
+int top1 = -1, top2 = MAX;
+void push1(int stack[], int x) {
+    if(top1 < top2 - 1) stack[++top1] = x;
+}
+void push2(int stack[], int x) {
+    if(top1 < top2 - 1) stack[--top2] = x;
+}
+int pop1(int stack[]) { return stack[top1--]; }
+int pop2(int stack[]) { return stack[top2++]; }</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>13. Reverse String Using Stack</h2>
+                <p>Reverses a string using stack LIFO property.</p>
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(n)</span>
+                </div>
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-reverse-str">C</span>
+                    <code id="code-reverse-str">void reverseString(char str[]) {
+    int stack[100]; int top = -1, i = 0;
+    // Push all characters
+    while(str[i]) stack[++top] = str[i++];
+    // Pop and overwrite original string
+    i = 0;
+    while(top >= 0) str[i++] = stack[top--];
+    str[i] = '\0';
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="../stack/syntax.html" class="nav-btn secondary">← Syntax</a>
+            <a href="../stack/complexity.html" class="nav-btn">Complexity →</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../stack/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<script>
+    // Complete language data - FULLY FIXED with proper escaping and complete implementations
+    const langData = {
+        c: {
+            'label-init': 'C', 'code-init': `void initStack(int stack[], int *top, int maxSize) {
+    *top = -1;
+}`,
+            'label-push': 'C', 'code-push': `void push(int stack[], int *top, int element, int maxSize) {
+    if(*top == maxSize - 1) {
+        printf("Stack Overflow!\\n");
+        return;
+    }
+    stack[++(*top)] = element;
+}`,
+            'label-pop': 'C', 'code-pop': `int pop(int stack[], int *top) {
+    if(*top == -1) {
+        printf("Stack Underflow!\\n");
+        return -1;
+    }
+    return stack[(*top)--];
+}`,
+            'label-peek': 'C', 'code-peek': `int peek(int stack[], int top) {
+    if(top == -1) {
+        printf("Stack is empty!\\n");
+        return -1;
+    }
+    return stack[top];
+}`,
+            'label-check': 'C', 'code-check': `int isEmpty(int top) { 
+    return top == -1; 
+}
+int isFull(int top, int maxSize) { 
+    return top == maxSize - 1; 
+}`,
+            'label-infix-postfix': 'C', 'code-infix-postfix': `int precedence(char op) {
+    if(op == '+' || op == '-') return 1;
+    if(op == '*' || op == '/') return 2;
+    return 0;
+}
+
+void infixToPostfix(char infix[], char postfix[]) {
+    int stack[100], top = -1, k = 0;
+    for(int i = 0; infix[i]; i++) {
+        if(infix[i] == '(') stack[++top] = infix[i];
+        else if(infix[i] == ')') {
+            while(top >= 0 && stack[top] != '(')
+                postfix[k++] = stack[top--];
+            if(top >= 0) top--;
+        }
+        else if(precedence(infix[i])) {
+            while(top >= 0 && precedence(stack[top]) >= precedence(infix[i]))
+                postfix[k++] = stack[top--];
+            stack[++top] = infix[i];
+        }
+        else postfix[k++] = infix[i];
+    }
+    while(top >= 0) postfix[k++] = stack[top--];
+    postfix[k] = '\\0';
+}`,
+'label-postfix-eval': 'C', 'code-postfix-eval': `int evaluatePostfix(char exp[]) {
+    int stack[100], top = -1;
+    for(int i = 0; exp[i]; i++) {
+        if(isdigit(exp[i]))
+            stack[++top] = exp[i] - '0';
+        else {
+            int b = stack[top--], a = stack[top--];
+            if(exp[i] == '+') stack[++top] = a + b;
+            else if(exp[i] == '-') stack[++top] = a - b;
+            else if(exp[i] == '*') stack[++top] = a * b;
+            else if(exp[i] == '/') stack[++top] = a / b;
+        }
+    }
+    return stack[top];
+}`,
+            'label-inorder': 'C', 'code-inorder': `void inorderIterative(Node* root) {
+    Node* curr = root;
+    Stack s;
+    while(curr != NULL || !s.isEmpty()) {
+        while(curr != NULL) {
+            s.push(curr);
+            curr = curr->left;
+        }
+        curr = s.pop();
+        printf("%d ", curr->data);
+        curr = curr->right;
+    }
+}`,
+            'label-preorder': 'C', 'code-preorder': `void preorderIterative(Node* root) {
+    if(!root) return;
+    Stack s; s.push(root);
+    while(!s.isEmpty()) {
+        Node* node = s.pop();
+        printf("%d ", node->data);
+        if(node->right) s.push(node->right);
+        if(node->left) s.push(node->left);
+    }
+}`,
+            'label-balanced': 'C', 'code-balanced': `int isBalanced(char str[]) {
+    int stack[100]; int top = -1;
+    for(int i = 0; str[i]; i++) {
+        if(str[i] == '(' || str[i] == '{' || str[i] == '[')
+            stack[++top] = str[i];
+        else {
+            if(top == -1) return 0;
+            if(str[i] == ')' && stack[top] != '(') return 0;
+            if(str[i] == '}' && stack[top] != '{') return 0;
+            if(str[i] == ']' && stack[top] != '[') return 0;
+            top--;
+        }
+    }
+    return top == -1;
+}`,
+            'label-next-greater': 'C++', 'code-next-greater': `vector<int> nextGreater(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> res(n, -1);
+    stack<int> st;
+    for(int i = n-1; i >= 0; i--) {
+        while(!st.empty() && st.top() <= nums[i])
+            st.pop();
+        if(!st.empty()) res[i] = st.top();
+        st.push(nums[i]);
+    }
+    return res;
+}`,
+            'label-two-stacks': 'C', 'code-two-stacks': `#define MAX 100
+int top1 = -1, top2 = MAX;
+void push1(int stack[], int x) {
+    if(top1 < top2 - 1) stack[++top1] = x;
+}
+void push2(int stack[], int x) {
+    if(top1 < top2 - 1) stack[--top2] = x;
+}
+int pop1(int stack[]) { return stack[top1--]; }
+int pop2(int stack[]) { return stack[top2++]; }`,
+            'label-reverse-str': 'C', 'code-reverse-str': `void reverseString(char str[]) {
+    int stack[100]; int top = -1, i = 0;
+    while(str[i]) stack[++top] = str[i++];
+    i = 0;
+    while(top >= 0) str[i++] = stack[top--];
+    str[i] = '\\0';
+}`
+        },
+        cpp: {
+            'label-init': 'C++', 'code-init': `#include <stack>
+std::stack<int> s;`,
+            'label-push': 'C++', 'code-push': `s.push(element);`,
+            'label-pop': 'C++', 'code-pop': `if(!s.empty()) {
+    int result = s.top(); 
+    s.pop(); 
+    return result;
+}
+return -1;`,
+            'label-peek': 'C++', 'code-peek': `if(!s.empty()) return s.top();
+return -1;`,
+            'label-check': 'C++', 'code-check': `s.empty();
+s.size() == capacity;`,
+            'label-infix-postfix': 'C++', 'code-infix-postfix': `stack<char> s;
+for(char c : infix) {
+    if(isalnum(c)) output += c;
+    else if(c == '(') s.push(c);
+    else if(c == ')') {
+        while(!s.empty() && s.top() != '(') {
+            output += s.top(); s.pop();
+        }
+        s.pop();
+    }
+    // precedence logic...
+}`,
+            'label-postfix-eval': 'C++', 'code-postfix-eval': `stack<int> st;
+for(char c : exp) {
+    if(isdigit(c)) st.push(c - '0');
+    else {
+        int b = st.top(); st.pop();
+        int a = st.top(); st.pop();
+        if(c == '+') st.push(a + b);
+        // other operators...
+    }
+}
+return st.top();`,
+            'label-inorder': 'C++', 'code-inorder': `stack<Node*> s;
+Node* curr = root;
+while(curr || !s.empty()) {
+    while(curr) {
+        s.push(curr);
+        curr = curr->left;
+    }
+    curr = s.top(); s.pop();
+    cout << curr->data << " ";
+    curr = curr->right;
+}`,
+            'label-preorder': 'C++', 'code-preorder': `stack<Node*> s; 
+if(root) s.push(root);
+while(!s.empty()) {
+    Node* node = s.top(); s.pop();
+    cout << node->data << " ";
+    if(node->right) s.push(node->right);
+    if(node->left) s.push(node->left);
+}`,
+            'label-balanced': 'C++', 'code-balanced': `stack<char> s;
+for(char c : str) {
+    if(c == '(' || c == '{' || c == '[') s.push(c);
+    else {
+        if(s.empty()) return false;
+        if(c == ')' && s.top() != '(') return false;
+        // other checks...
+        s.pop();
+    }
+}
+return s.empty();`,
+            'label-next-greater': 'C++', 'code-next-greater': `vector<int> nextGreater(vector<int>& nums) {
+    vector<int> res(nums.size(), -1);
+    stack<int> st;
+    for(int i = nums.size()-1; i>=0; i--) {
+        while(!st.empty() && st.top() <= nums[i])
+            st.pop();
+        if(!st.empty()) res[i] = st.top();
+        st.push(nums[i]);
+    }
+    return res;
+}`,
+            'label-two-stacks': 'C++', 'code-two-stacks': `stack<int> stack1, stack2;
+// Use two separate std::stack instances`,
+            'label-reverse-str': 'C++', 'code-reverse-str': `stack<char> s;
+for(char c : str) s.push(c);
+string result;
+while(!s.empty()) {
+    result += s.top(); s.pop();
+}
+return result;`
+        },
+        java: {
+            'label-init': 'Java', 'code-init': `Stack<Integer> stack = new Stack<>();`,
+            'label-push': 'Java', 'code-push': `stack.push(element);`,
+            'label-pop': 'Java', 'code-pop': `if(!stack.isEmpty()) return stack.pop();
+return -1;`,
+            'label-peek': 'Java', 'code-peek': `if(!stack.isEmpty()) return stack.peek();
+return -1;`,
+            'label-check': 'Java', 'code-check': `stack.isEmpty();
+stack.size() == capacity;`,
+            'label-infix-postfix': 'Java', 'code-infix-postfix': `Stack<Character> stack = new Stack<>();
+// Shunting yard algorithm implementation`,
+            'label-postfix-eval': 'Java', 'code-postfix-eval': `Stack<Integer> stack = new Stack<>();
+for(char c : exp.toCharArray()) {
+    if(Character.isDigit(c))
+        stack.push(c - '0');
+    else {
+        int b = stack.pop(), a = stack.pop();
+        if(c == '+') stack.push(a + b);
+        // other operators...
+    }
+}
+return stack.pop();`,
+            'label-inorder': 'Java', 'code-inorder': `Stack<Node> stack = new Stack<>();
+Node curr = root;
+while(curr != null || !stack.isEmpty()) {
+    while(curr != null) {
+        stack.push(curr);
+        curr = curr.left;
+    }
+    curr = stack.pop();
+    System.out.print(curr.val + " ");
+    curr = curr.right;
+}`,
+            'label-preorder': 'Java', 'code-preorder': `Stack<Node> stack = new Stack<>();
+if(root != null) stack.push(root);
+while(!stack.isEmpty()) {
+    Node node = stack.pop();
+    System.out.print(node.val + " ");
+    if(node.right != null) stack.push(node.right);
+    if(node.left != null) stack.push(node.left);
+}`,
+            'label-balanced': 'Java', 'code-balanced': `Stack<Character> stack = new Stack<>();
+for(char c : str.toCharArray()) {
+    if(c == '(' || c == '{' || c == '[') stack.push(c);
+    else {
+        if(stack.isEmpty()) return false;
+        if(c == ')' && stack.peek() != '(') return false;
+        // other checks...
+        stack.pop();
+    }
+}
+return stack.isEmpty();`,
+            'label-next-greater': 'Java', 'code-next-greater': `public int[] nextGreater(int[] nums) {
+    int[] res = new int[nums.length];
+    Arrays.fill(res, -1);
+    Stack<Integer> stack = new Stack<>();
+    for(int i = nums.length - 1; i >= 0; i--) {
+        while(!stack.isEmpty() && stack.peek() <= nums[i])
+            stack.pop();
+        if(!stack.isEmpty()) res[i] = stack.peek();
+        stack.push(nums[i]);
+    }
+    return res;
+}`,
+            'label-two-stacks': 'Java', 'code-two-stacks': `Stack<Integer> stack1 = new Stack<>();
+Stack<Integer> stack2 = new Stack<>();`,
+            'label-reverse-str': 'Java', 'code-reverse-str': `Stack<Character> stack = new Stack<>();
+for(char c : str.toCharArray()) stack.push(c);
+StringBuilder sb = new StringBuilder();
+while(!stack.isEmpty()) {
+    sb.append(stack.pop());
+}
+return sb.toString();`
+        },
+        python: {
+            'label-init': 'Python', 'code-init': `stack = []`,
+            'label-push': 'Python', 'code-push': `stack.append(element)`,
+            'label-pop': 'Python', 'code-pop': `return stack.pop() if stack else None`,
+            'label-peek': 'Python', 'code-peek': `return stack[-1] if stack else None`,
+            'label-check': 'Python', 'code-check': `not stack
+len(stack) == capacity`,
+            'label-infix-postfix': 'Python', 'code-infix-postfix': `def precedence(op):
+    if op in '+-': return 1
+    if op in '*/': return 2
+    return 0
+
+stack = []
+output = ''
+# Shunting yard algorithm`,
+            'label-postfix-eval': 'Python', 'code-postfix-eval': `stack = []
+for token in postfix:
+    if token.isdigit():
+        stack.append(int(token))
+    else:
+        b, a = stack.pop(), stack.pop()
+        if token == '+': stack.append(a + b)
+        # other operators...
+return stack[0]`,
+            'label-inorder': 'Python', 'code-inorder': `stack = []
+curr = root
+while curr or stack:
+    while curr:
+        stack.append(curr)
+        curr = curr.left
+    curr = stack.pop()
+    print(curr.val, end=" ")
+    curr = curr.right`,
+            'label-preorder': 'Python', 'code-preorder': `stack = [root] if root else []
+while stack:
+    node = stack.pop()
+    print(node.val, end=" ")
+    if node.right: stack.append(node.right)
+    if node.left: stack.append(node.left)`,
+            'label-balanced': 'Python', 'code-balanced': `stack = []
+for c in s:
+    if c in '({[': stack.append(c)
+    elif stack and ((c == ')' and stack[-1] == '(') or
+                    (c == '}' and stack[-1] == '{') or
+                    (c == ']' and stack[-1] == '[')):
+        stack.pop()
+    else:
+        return False
+return not stack`,
+            'label-next-greater': 'Python', 'code-next-greater': `def nextGreater(nums):
+    res = [-1] * len(nums)
+    stack = []
+    for i in range(len(nums)-1, -1, -1):
+        while stack and stack[-1] <= nums[i]:
+            stack.pop()
+        if stack: res[i] = stack[-1]
+        stack.append(nums[i])
+    return res`,
+            'label-two-stacks': 'Python', 'code-two-stacks': `stack1, stack2 = [], []`,
+            'label-reverse-str': 'Python', 'code-reverse-str': `stack = list(s)
+return ''.join(stack[::-1])`
+        }
+    };
+
+    // Tab functionality - FIXED
+    function showTab(tabName, button) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab content
+        document.getElementById(tabName).classList.add('active');
+        
+        // Add active class to clicked button
+        if(button) button.classList.add('active');
+    }
+
+    // Language selector functionality - FIXED
+    const langSelect = document.getElementById('lang-select');
+    
+    function updateCode(lang) {
+        const data = langData[lang];
+        if (!data) return;
+        
+        // Update all code blocks and labels
+        Object.keys(data).forEach(key => {
+            const codeElement = document.getElementById(key.replace('label-', 'code-'));
+            const labelElement = document.getElementById(key);
+            
+            if (codeElement) {
+                codeElement.textContent = data[key];
+            }
+            
+            if (labelElement && key.startsWith('label-')) {
+                labelElement.textContent = data[key];
+            }
+        });
+    }
+
+    // Navigation function
+    function loadPage(page) {
+        alert(`Navigating to ${page} (Single page app simulation)`);
+        // In a real SPA, you would load the content here
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab event listeners
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                showTab(tabId, this);
+            });
+        });
+
+        // Language selector
+        langSelect.addEventListener('change', function() {
+            updateCode(this.value);
+        });
+
+        // Initialize with C language
+        updateCode('c');
+    });
+
+</script>
+
+</body>
+</html>

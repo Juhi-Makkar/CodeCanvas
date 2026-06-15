@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Visualizer - Learn Trees</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #0A0F24;
+            --bg-secondary: #161B3A;
+            --accent-purple: #7F5AF0;
+            --accent-blue: #38BDF8;
+            --text-primary: #E2E8F0;
+            --text-secondary: #94A3B8;
+            --success: #10B981;
+            --error: #EF4444;
+            --tree-green: #10B981;
+            --tree-orange: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        /* ===================== NAVBAR ===================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(127,90,240,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(127,90,240,0.1);
+        }
+
+        /* ===================== SECTIONS ===================== */
+        section {
+            min-height: 70vh;
+            padding: 90px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #home { padding-bottom: 30px; }
+        #working { padding-top: 50px; }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ===================== HOME LAYOUT ===================== */
+        #home .section-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding-top: 40px;
+        }
+
+        .home-left {
+            text-align: left;
+            max-width: 550px;
+        }
+
+        .tree-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 50px 0;
+        }
+
+        /* Tree Node Styles */
+        .tree-node {
+            width: 100px;
+            height: 60px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            position: relative;
+            animation: fade-in 1s ease-out forwards;
+            transition: all 0.3s ease;
+        }
+
+        .tree-node.root {
+            background: linear-gradient(135deg, var(--tree-green), #059669);
+            border-color: var(--tree-green);
+            font-size: 18px;
+        }
+
+        .tree-node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(127,90,240,0.5);
+        }
+
+        .tree-lines {
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+            height: 20px;
+            position: relative;
+        }
+
+        .tree-line {
+            width: 2px;
+            height: 40px;
+            background: var(--accent-purple);
+            position: absolute;
+            top: 20px;
+        }
+
+        .tree-line.left { left: 50px; }
+        .tree-line.right { right: 50px; }
+
+        .level {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .home-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 51px;
+            justify-content: center;
+        }
+
+        /* ===================== TREE VISUALIZER ===================== */
+        .tree-viz-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .tree-viz {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            min-height: 400px;
+            padding: 20px;
+            background: rgba(22, 27, 58, 0.5);
+            border-radius: 20px;
+            border: 1px solid rgba(127,90,240,0.3);
+        }
+
+        .viz-node {
+            width: 70px;
+            height: 50px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            position: relative;
+            transition: all 0.5s;
+            cursor: pointer;
+        }
+
+        .viz-node.active {
+            box-shadow: 0 0 20px var(--accent-purple);
+            transform: scale(1.1);
+        }
+
+        .viz-node.root-viz {
+            background: linear-gradient(135deg, var(--tree-green), #059669);
+            border-color: var(--tree-green);
+        }
+
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .input-section input {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--accent-purple);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        /* ===================== QUIZ & FAQ ===================== */
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(127,90,240,0.35);
+            margin: 30px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        .correct { color: var(--success); }
+        .incorrect { color: var(--error); }
+
+        .faq-item {
+            background: var(--bg-secondary);
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 18px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(127,90,240,0.1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 18px;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 18px;
+        }
+
+        /* ===================== FOOTER ===================== */
+        footer {
+            background: var(--bg-secondary);
+            padding: 25px;
+            text-align: center;
+            border-top: 1px solid rgba(127,90,240,0.2);
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            margin: 0 15px;
+            text-decoration: none;
+        }
+
+        /* ===================== ANIMATIONS ===================== */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+        @media (min-width: 768px) {
+            #home .section-content {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .home-left, .home-right {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 12px 15px;
+            }
+            .navbar nav ul {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 8px;
+            }
+            .tree-node, .viz-node {
+                width: 70px;
+                height: 45px;
+                font-size: 12px;
+            }
+            .input-section {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .input-section input {
+                width: 80%;
+            }
+            .btn {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tree-node, .viz-node {
+                width: 60px;
+                height: 40px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">Tree Visualizer</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#working">Working</a></li>
+                <li><a href="#quiz">Quiz</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HOME SECTION -->
+    <section id="home">
+        <div class="section-content">
+            <div class="home-left">
+                <h1>What is a Tree?</h1>
+                <p>
+                    A <b>tree</b> is a hierarchical data structure consisting of <b>nodes</b> connected by <b>edges</b>. 
+                    Each node has a <b>parent-child relationship</b> with exactly one root and no cycles.
+                </p>
+
+                <h3>Key Properties</h3>
+                <ul>
+                    <li>Hierarchical structure</li>
+                    <li>One root node</li>
+                    <li>No cycles</li>
+                    <li>Each node has 0+ children</li>
+                    <li>Parent-child relationship</li>
+                </ul>
+
+                <h3>Types of Trees</h3>
+                <ul>
+                    <li>Binary Tree → Max 2 children</li>
+                    <li>Binary Search Tree → Sorted order</li>
+                    <li>AVL Tree → Balanced BST</li>
+                    <li>Heap → Complete tree</li>
+                </ul>
+            </div>
+
+            <div class="home-right">
+                <div class="tree-diagram">
+                    <!-- Root Level -->
+                    <div class="tree-node root">50</div>
+                    
+                    <!-- Connection Lines -->
+                    <div class="tree-lines">
+                        <div class="tree-line left"></div>
+                        <div class="tree-line right"></div>
+                    </div>
+                    
+                    <!-- Level 1 -->
+                    <div class="level">
+                        <div class="tree-node">30</div>
+                        <div class="tree-node">70</div>
+                    </div>
+                    
+                    <!-- Connection Lines for Level 2 -->
+                    <div class="tree-lines">
+                        <div class="tree-line left"></div>
+                        <div class="tree-line right"></div>
+                    </div>
+                    
+                    <!-- Level 2 -->
+                    <div class="level">
+                        <div class="tree-node">20</div>
+                        <div class="tree-node">40</div>
+                        <div class="tree-node">60</div>
+                        <div class="tree-node">80</div>
+                    </div>
+                </div>
+
+                <div class="home-buttons">
+                    <a href="../GetStarted/treeGS.html" class="btn">Get Started</a>
+                    <a href="../tree/questions.html" class="btn">Test</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORKING SECTION -->
+    <section id="working">
+        <div class="section-content">
+            <h1>Tree Visualizer</h1>
+            <div class="input-section">
+                <input type="number" id="tree-input" placeholder="Enter node value">
+                <button class="btn" onclick="insertNode()">Insert Node</button>
+                <button class="btn" onclick="deleteNode()">Delete Node</button>
+                <button class="btn" onclick="traverseInOrder()">In-Order</button>
+                <button class="btn" onclick="resetTree()">Reset Tree</button>
+            </div>
+            <div class="tree-viz-container">
+                <div class="tree-viz" id="tree-viz">
+                    <!-- Dynamic tree will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- QUIZ SECTION -->
+    <section id="quiz">
+        <div class="section-content">
+            <h1>Tree Quiz</h1>
+            <div class="quiz-question" id="quiz-container">
+                <!-- Questions loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section id="faq">
+        <div class="section-content">
+            <h1>Frequently Asked Questions</h1>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">What is a tree data structure?</button>
+                <div class="faq-answer">
+                    A tree is a hierarchical data structure with nodes connected by edges, having one root and no cycles. Each node can have child nodes forming parent-child relationships.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">What is a binary tree?</button>
+                <div class="faq-answer">
+                    A binary tree is a tree where each node has at most two children: left child and right child. It's the foundation for many advanced tree structures.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">What is a Binary Search Tree (BST)?</button>
+                <div class="faq-answer">
+                    A BST is a binary tree where for each node, all elements in its left subtree are less than the node, and all in right subtree are greater.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">What are tree traversals?</button>
+                <div class="faq-answer">
+                    Tree traversals are methods to visit all nodes: In-order (LNR), Pre-order (NLR), Post-order (LRN), and Level-order (BFS).
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">Best source to learn Trees?</button>
+                <div class="faq-answer">
+                    Learn trees from structured tutorials and interactive platforms. 
+                    <b><a href="https://www.geeksforgeeks.org/binary-tree-data-structure/" style="color:#38BDF8;">Click here</a></b> for comprehensive tree resources.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+        <p>Built by [Your Name] | Algorithm Visualizer</p>
+        <a href="#home">Home</a> | <a href="#working">Working</a> | <a href="#quiz">Quiz</a> | <a href="#faq">FAQ</a>
+        <p>&copy; 2023 All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Tree data structure (simplified)
+        let treeRoot = null;
+        const treeViz = document.getElementById('tree-viz');
+
+        class TreeNode {
+            constructor(value) {
+                this.value = value;
+                this.left = null;
+                this.right = null;
+            }
+        }
+
+        // Insert node (BST logic)
+        function insertNode() {
+            const input = document.getElementById('tree-input');
+            const value = parseInt(input.value);
+            if (isNaN(value)) return;
+            
+            if (!treeRoot) {
+                treeRoot = new TreeNode(value);
+            } else {
+                insertBST(treeRoot, value);
+            }
+            renderTree();
+            input.value = '';
+        }
+
+        function insertBST(node, value) {
+            if (value < node.value) {
+                if (!node.left) {
+                    node.left = new TreeNode(value);
+                } else {
+                    insertBST(node.left, value);
+                }
+            } else {
+                if (!node.right) {
+                    node.right = new TreeNode(value);
+                } else {
+                    insertBST(node.right, value);
+                }
+            }
+        }
+
+        // Delete node (simplified)
+        function deleteNode() {
+            const input = document.getElementById('tree-input');
+            const value = parseInt(input.value);
+            if (isNaN(value)) return;
+            treeRoot = deleteBST(treeRoot, value);
+            renderTree();
+            input.value = '';
+        }
+
+        function deleteBST(root, value) {
+            if (!root) return root;
+            
+            if (value < root.value) {
+                root.left = deleteBST(root.left, value);
+            } else if (value > root.value) {
+                root.right = deleteBST(root.right, value);
+            } else {
+                // Node found
+                if (!root.left) return root.right;
+                if (!root.right) return root.left;
+                
+                // Node has two children
+                let minNode = findMin(root.right);
+                root.value = minNode.value;
+                root.right = deleteBST(root.right, minNode.value);
+            }
+            return root;
+        }
+
+        function findMin(node) {
+            while (node.left) node = node.left;
+            return node;
+        }
+
+        // Tree traversals
+        function traverseInOrder() {
+            let result = [];
+            inOrderTraversal(treeRoot, result);
+            alert('In-order: ' + result.join(', '));
+        }
+
+        function inOrderTraversal(node, result) {
+            if (node) {
+                inOrderTraversal(node.left, result);
+                result.push(node.value);
+                inOrderTraversal(node.right, result);
+            }
+        }
+
+        // Render tree visualization
+        function renderTree() {
+            treeViz.innerHTML = '';
+            if (!treeRoot) {
+                treeViz.innerHTML = '<div style="color: var(--text-secondary);">Empty Tree</div>';
+                return;
+            }
+            renderNode(treeRoot, 0, treeViz);
+        }
+
+        function renderNode(node, level, container) {
+            const levelDiv = document.createElement('div');
+            levelDiv.style.display = 'flex';
+            levelDiv.style.justifyContent = 'center';
+            levelDiv.style.gap = '20px';
+            levelDiv.style.marginBottom = '10px';
+
+            if (level > 0) {
+                const linesDiv = document.createElement('div');
+                linesDiv.style.display = 'flex';
+                linesDiv.style.justifyContent = 'space-between';
+                linesDiv.style.width = '200px';
+                linesDiv.style.height = '20px';
+                linesDiv.style.position = 'relative';
+                
+                const leftLine = document.createElement('div');
+                leftLine.style.width = '2px';
+                leftLine.style.height = '30px';
+                leftLine.style.background = 'var(--accent-purple)';
+                leftLine.style.position = 'absolute';
+                leftLine.style.left = '30px';
+                leftLine.style.top = '20px';
+                
+                const rightLine = leftLine.cloneNode();
+                rightLine.style.left = 'auto';
+                rightLine.style.right = '30px';
+                
+                linesDiv.appendChild(leftLine);
+                linesDiv.appendChild(rightLine);
+                container.appendChild(linesDiv);
+            }
+
+            const nodeDiv = document.createElement('div');
+            nodeDiv.className = 'viz-node';
+            if (level === 0) nodeDiv.classList.add('root-viz');
+            nodeDiv.innerHTML = `<div>${node.value}</div>`;
+            nodeDiv.onclick = () => nodeDiv.classList.toggle('active');
+            levelDiv.appendChild(nodeDiv);
+            container.appendChild(levelDiv);
+
+            // Render children
+            if (node.left || node.right) {
+                const childrenDiv = document.createElement('div');
+                childrenDiv.style.display = 'flex';
+                childrenDiv.style.gap = '60px';
+                childrenDiv.style.justifyContent = 'center';
+
+                if (node.left) {
+                    renderNode(node.left, level + 1, childrenDiv);
+                }
+                if (node.right) {
+                    renderNode(node.right, level + 1, childrenDiv);
+                }
+                container.appendChild(childrenDiv);
+            }
+        }
+
+        // Reset tree
+        function resetTree() {
+            treeRoot = null;
+            renderTree();
+        }
+
+        // Quiz questions
+        const questions = [
+            { q: "Q1. What is a tree data structure?", options: ["Linear structure", "Hierarchical structure", "Circular structure", "Random structure"], correct: 1, exp: "Trees are hierarchical with parent-child relationships." },
+            { q: "Q2. How many children can a binary tree node have?", options: ["1", "2", "3", "Unlimited"], correct: 1, exp: "Maximum 2 children per node." },
+            { q: "Q3. What is the root of a tree?", options: ["First leaf", "Top node", "Last node", "Middle node"], correct: 1, exp: "Root is the topmost node." },
+            { q: "Q4. In BST, where do smaller values go?", options: ["Right subtree", "Left subtree", "Root", "Anywhere"], correct: 1, exp: "Left subtree for smaller values." },
+            { q: "Q5. What is in-order traversal?", options: ["Root-Left-Right", "Left-Root-Right", "Left-Right-Root", "Level by level"], correct: 1, exp: "LNR: Left-Root-Right." },
+            { q: "Q6. Time complexity of tree search (average)?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], correct: 2, exp: "Balanced BST search is O(log n)." },
+            { q: "Q7. What is a leaf node?", options: ["Node with children", "Node with no children", "Root node", "Parent node"], correct: 1, exp: "Leaf has no children." },
+            { q: "Q8. Pre-order traversal order?", options: ["LRN", "NLR", "LNR", "RNL"], correct: 1, exp: "Root-Left-Right (NLR)." },
+            { q: "Q9. Height of a tree with single node?", options: ["0", "1", "-1", "∞"], correct: 0, exp: "Single node tree has height 0." },
+            { q: "Q10. What is a full binary tree?", options: ["Every node has 0 or 2 children", "Every node has 1 child", "Complete tree", "Perfect tree"], correct: 0, exp: "No node has only 1 child." },
+            { q: "Q11. Post-order traversal?", options: ["Root first", "Left first", "Right first", "Root last"], correct: 3, exp: "Root visited last (LRN)." },
+            { q: "Q12. In BST, where to insert 25 if root is 30?", options: ["Right", "Left", "Replace root", "Cannot insert"], correct: 1, exp: "25 < 30, goes left." },
+            { q: "Q13. What is tree height?", options: ["Number of nodes", "Longest path from root to leaf", "Number of leaves", "Number of levels"], correct: 1, exp: "Longest root-to-leaf path." },
+            { q: "Q14. Level-order traversal uses?", options: ["DFS", "BFS", "In-order", "Pre-order"], correct: 1, exp: "Breadth-First Search." },
+            { q: "Q15. Perfect binary tree property?", options: ["All levels filled", "Left-filled only", "Right-filled only", "Sparse"], correct: 0, exp: "All levels completely filled." },
+            { q: "Q16. Time complexity of unbalanced tree?", options: ["O(log n)", "O(n)", "O(1)", "O(n log n)"], correct: 1, exp: "Worst case is O(n)." },
+            { q: "Q17. What is a complete binary tree?", options: ["All levels filled left to right", "Perfect tree", "Sparse tree", "Skewed tree"], correct: 0, exp: "Nodes filled left-to-right." },
+            { q: "Q18. In-order traversal of BST gives?", options: ["Random order", "Sorted order", "Reverse order", "Level order"], correct: 1, exp: "Ascending sorted order." },
+            { q: "Q19. Depth of root node?", options: ["0", "1", "-1", "Height of tree"], correct: 0, exp: "Root is at depth 0." },
+            { q: "Q20. What is an AVL tree?", options: ["Unbalanced BST", "Self-balancing BST", "Heap", "Trie"], correct: 1, exp: "Maintains balance factor ≤ 1." }
+        ];
+
+        let currentQ = 0;
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('quiz-container').innerHTML = `
+                <h3>${q.q}</h3>
+                <div class="options">
+                    ${q.options.map((opt, i) => `<label class="option"><input type="radio" name="answer" value="${i}"> ${opt}</label>`).join('')}
+                </div>
+                <button class="btn" onclick="checkAnswer()">Check Answer</button>
+                <div class="feedback" id="feedback"></div>
+            `;
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) return;
+            const ans = parseInt(selected.value);
+            const feedback = document.getElementById('feedback');
+            if (ans === questions[currentQ].correct) {
+                feedback.innerHTML = '<span class="correct">✓ Correct! Moving to next question.</span>';
+                setTimeout(() => { currentQ = (currentQ + 1) % questions.length; loadQuestion(); }, 2000);
+            } else {
+                feedback.innerHTML = `<span class="incorrect">✗ Incorrect. ${questions[currentQ].exp} Try again.</span>`;
+            }
+        }
+
+        // FAQ toggle
+        function toggleFAQ(btn) {
+            btn.parentElement.classList.toggle('active');
+        }
+
+        // Smooth scrolling for navbar links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Initialize
+        renderTree();
+        loadQuestion();
+    </script>
+</body>
+</html>

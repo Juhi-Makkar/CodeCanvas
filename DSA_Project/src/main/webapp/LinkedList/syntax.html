@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List Syntax - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --code-bg: #0d1117;
+        --keyword: #c084fc;
+        --function: #38bdf8;
+        --number: #f472b6;
+        --string: #4ade80;
+        --comment: #6b7280;
+        --variable: #fbbf24;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1100px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .syntax-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    /* ===================== LANGUAGE SELECTOR ===================== */
+    .lang-selector {
+        background: var(--bg-secondary);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 2px solid var(--accent-purple);
+        box-shadow: 0 0 20px rgba(139,108,246,0.3);
+    }
+
+    .lang-selector h2 { margin-top: 0; margin-bottom: 10px; border: none; }
+    .lang-selector p { margin-bottom: 20px; }
+
+    .lang-selector select {
+        padding: 12px 25px;
+        border: 2px solid var(--accent-purple);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        min-width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .lang-selector select:hover, .lang-selector select:focus {
+        box-shadow: 0 0 15px rgba(139,108,246,0.5);
+        outline: none;
+    }
+
+    /* ===================== CODE BLOCKS ===================== */
+    .code-block {
+        background: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        border-left: 4px solid var(--accent-blue);
+        margin: 15px 0 25px 0;
+        position: relative;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #e2e8f0;
+        white-space: pre;
+    }
+
+    /* Syntax Highlighting */
+    .keyword { color: var(--keyword); }
+    .function { color: var(--function); }
+    .number { color: var(--number); }
+    .string { color: var(--string); }
+    .comment { color: var(--comment); font-style: italic; }
+
+    /* Code Label */
+    .code-label {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: var(--accent-purple);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* ===================== TABS ===================== */
+    .tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 10px 18px;
+        background: var(--bg-primary);
+        border: 2px solid var(--accent-purple);
+        color: var(--text-primary);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    .tab-btn.active { background: var(--accent-purple); color: white; }
+    .tab-btn:hover { background: rgba(139,108,246,0.2); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===================== INFO BOXES ===================== */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #F59E0B;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* ===================== NAVIGATION ===================== */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+    /* Responsive tabs */
+    @media (max-width: 768px) {
+        .tabs { justify-content: center; gap: 5px; }
+        .tab-btn { padding: 8px 12px; font-size: 13px; }
+    }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <a href="linkedlistGS.html" class="logo">CodeCanvas - Linked List</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/llGS.html">Back to Linked Lists</a></li>
+            <li><a href="../LinkedList/theory.html">Theory</a></li>
+            <li><a href="../LinkedList/syntax.html" class="active">Syntax</a></li>
+            <li><a href="../LinkedList/algorithm.html">Algorithm</a></li>
+            <li><a href="../LinkedList/complexity.html">Complexity</a></li>
+            <li><a href="../LinkedList/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="syntax">
+    <div class="section-content">
+
+        <!-- Language Selector -->
+        <div class="lang-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see the syntax for all linked list types and operations.</p>
+            <select id="lang-select">
+                <option value="c">C Language</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+        </div>
+
+        <!-- Updated Tabs for ALL Linked List Types -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('singly')">🔗 Singly</button>
+            <button class="tab-btn" onclick="showTab('circular-singly')">🔄 Circular Singly</button>
+            <button class="tab-btn" onclick="showTab('doubly')">🔗🔗 Doubly</button>
+            <button class="tab-btn" onclick="showTab('circular-doubly')">🔄🔗🔗 Circular Doubly</button>
+        </div>
+
+        <!-- ==================== SINGLY LINKED LIST ==================== -->
+        <div id="singly" class="tab-content active">
+            <!-- Node Structure -->
+            <div class="syntax-card">
+                <h2>1. Singly Linked List - Node Structure</h2>
+                <p>Fundamental building block with data and pointer to next node.</p>
+
+                <h3>Node Definition</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-singly-node">C</span>
+                    <code id="code-singly-node"><span class="keyword">struct</span> Node {
+    <span class="keyword">int</span> data;
+    <span class="keyword">struct</span> Node* next;
+};</code>
+                </div>
+
+                <h3>Insert at Beginning</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-singly-insert-begin">C</span>
+                    <code id="code-singly-insert-begin"><span class="keyword">void</span> insertAtBegin(<span class="keyword">struct</span> Node** head, <span class="keyword">int</span> data) {
+    <span class="keyword">struct</span> Node* newNode = createNode(data);
+    newNode->next = *head;
+    *head = newNode;
+}</code>
+                </div>
+            </div>
+
+            <!-- Operations -->
+            <div class="syntax-card">
+                <h2>2. Key Operations</h2>
+                
+                <h3>Insert at End</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-singly-insert-end">C</span>
+                    <code id="code-singly-insert-end"><span class="keyword">void</span> insertAtEnd(<span class="keyword">struct</span> Node** head, <span class="keyword">int</span> data) {
+    <span class="keyword">struct</span> Node* newNode = createNode(data);
+    <span class="keyword">if</span>(*head == NULL) {
+        *head = newNode;
+        <span class="keyword">return</span>;
+    }
+    <span class="keyword">struct</span> Node* temp = *head;
+    <span class="keyword">while</span>(temp->next != NULL)
+        temp = temp->next;
+    temp->next = newNode;
+}</code>
+                </div>
+
+                <h3>Delete from Beginning</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-singly-delete-begin">C</span>
+                    <code id="code-singly-delete-begin"><span class="keyword">void</span> deleteAtBegin(<span class="keyword">struct</span> Node** head) {
+    <span class="keyword">if</span>(*head == NULL) <span class="keyword">return</span>;
+    <span class="keyword">struct</span> Node* temp = *head;
+    *head = (*head)->next;
+    <span class="function">free</span>(temp);
+}</code>
+                </div>
+
+                <h3>Traverse</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-singly-traverse">C</span>
+                    <code id="code-singly-traverse"><span class="keyword">void</span> traverse(<span class="keyword">struct</span> Node* head) {
+    <span class="keyword">struct</span> Node* temp = head;
+    <span class="keyword">while</span>(temp != NULL) {
+        <span class="function">printf</span>(<span class="string">"%d -> "</span>, temp->data);
+        temp = temp->next;
+    }
+    <span class="function">printf</span>(<span class="string">"NULL\n"</span>);
+}</code>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Time Complexity:</strong> Insert/Delete at beginning: O(1), at end/position: O(n)
+            </div>
+        </div>
+
+        <!-- ==================== CIRCULAR SINGLY LINKED LIST ==================== -->
+        <div id="circular-singly" class="tab-content">
+            <div class="syntax-card">
+                <h2>1. Circular Singly Linked List - Node Structure</h2>
+                <p>Last node points back to first node (head).</p>
+
+                <h3>Node Definition</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circsingly-node">C</span>
+                    <code id="code-circsingly-node"><span class="keyword">struct</span> Node {
+    <span class="keyword">int</span> data;
+    <span class="keyword">struct</span> Node* next;
+};</code>
+                </div>
+
+                <h3>Insert at End (Circular)</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circsingly-insert-end">C</span>
+                    <code id="code-circsingly-insert-end"><span class="keyword">void</span> insertAtEnd(<span class="keyword">struct</span> Node** head, <span class="keyword">int</span> data) {
+    <span class="keyword">struct</span> Node* newNode = createNode(data);
+    <span class="keyword">if</span>(*head == NULL) {
+        *head = newNode;
+        newNode->next = *head;
+        <span class="keyword">return</span>;
+    }
+    <span class="keyword">struct</span> Node* temp = *head;
+    <span class="keyword">while</span>(temp->next != *head)
+        temp = temp->next;
+    temp->next = newNode;
+    newNode->next = *head;
+}</code>
+                </div>
+
+                <h3>Traverse Circular</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circsingly-traverse">C</span>
+                    <code id="code-circsingly-traverse"><span class="keyword">void</span> traverse(<span class="keyword">struct</span> Node* head) {
+    <span class="keyword">if</span>(head == NULL) <span class="keyword">return</span>;
+    <span class="keyword">struct</span> Node* temp = head;
+    <span class="keyword">do</span> {
+        <span class="function">printf</span>(<span class="string">"%d -> "</span>, temp->data);
+        temp = temp->next;
+    } <span class="keyword">while</span>(temp != head);
+    <span class="function">printf</span>(<span class="string">" (back to head)\n"</span>);
+}</code>
+                </div>
+
+                <h3>Delete Node (Circular)</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circsingly-delete">C</span>
+                    <code id="code-circsingly-delete"><span class="keyword">void</span> deleteNode(<span class="keyword">struct</span> Node** head, <span class="keyword">int</span> key) {
+    <span class="keyword">if</span>(*head == NULL) <span class="keyword">return</span>;
+    <span class="keyword">struct</span> Node* temp = *head, *prev;
+    <span class="keyword">if</span>(temp->data == key) {
+        <span class="keyword">while</span>(temp->next != *head)
+            temp = temp->next;
+        temp->next = (*head)->next;
+        <span class="function">free</span>(*head);
+        *head = temp->next;
+        <span class="keyword">return</span>;
+    }
+    <span class="keyword">while</span>(temp != *head && temp->data != key) {
+        prev = temp;
+        temp = temp->next;
+    }
+    <span class="keyword">if</span>(temp == *head) <span class="keyword">return</span>;
+    prev->next = temp->next;
+    <span class="function">free</span>(temp);
+}</code>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Advantage:</strong> Continuous traversal without NULL termination
+            </div>
+        </div>
+
+        <!-- ==================== DOUBLY LINKED LIST ==================== -->
+        <div id="doubly" class="tab-content">
+            <div class="syntax-card">
+                <h2>1. Doubly Linked List - Node Structure</h2>
+                <p>Each node has pointers to both next and previous nodes.</p>
+                
+                <h3>Node Definition</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-doubly-node">C</span>
+                    <code id="code-doubly-node"><span class="keyword">struct</span> DoublyNode {
+    <span class="keyword">int</span> data;
+    <span class="keyword">struct</span> DoublyNode* next;
+    <span class="keyword">struct</span> DoublyNode* prev;
+};</code>
+                </div>
+
+                <h3>Insert at Beginning</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-doubly-insert-begin">C</span>
+                    <code id="code-doubly-insert-begin"><span class="keyword">void</span> insertAtBegin(<span class="keyword">struct</span> DoublyNode** head, <span class="keyword">int</span> data) {
+    <span class="keyword">struct</span> DoublyNode* newNode = createDoublyNode(data);
+    newNode->next = *head;
+    newNode->prev = NULL;
+    <span class="keyword">if</span>(*head != NULL)
+        (*head)->prev = newNode;
+    *head = newNode;
+}</code>
+                </div>
+
+                <h3>Delete Node (Doubly)</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-doubly-delete">C</span>
+                    <code id="code-doubly-delete"><span class="keyword">void</span> deleteNode(<span class="keyword">struct</span> DoublyNode** head, <span class="keyword">struct</span> DoublyNode* del) {
+    <span class="keyword">if</span>(*head == NULL || del == NULL) <span class="keyword">return</span>;
+    <span class="keyword">if</span>(*head == del) {
+        *head = del->next;
+    }
+    <span class="keyword">if</span>(del->next != NULL)
+        del->next->prev = del->prev;
+    <span class="keyword">if</span>(del->prev != NULL)
+        del->prev->next = del->next;
+    <span class="function">free</span>(del);
+}</code>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Advantage:</strong> Bidirectional traversal, O(1) deletion with node pointer
+            </div>
+        </div>
+
+        <!-- ==================== CIRCULAR DOUBLY LINKED LIST ==================== -->
+        <div id="circular-doubly" class="tab-content">
+            <div class="syntax-card">
+                <h2>1. Circular Doubly Linked List - Node Structure</h2>
+                <p>Last node points to first, first points to last. Bidirectional circular.</p>
+                
+                <h3>Node Definition</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circdoubly-node">C</span>
+                    <code id="code-circdoubly-node"><span class="keyword">struct</span> DoublyNode {
+    <span class="keyword">int</span> data;
+    <span class="keyword">struct</span> DoublyNode* next;
+    <span class="keyword">struct</span> DoublyNode* prev;
+};</code>
+                </div>
+
+                <h3>Insert at End (Circular Doubly)</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circdoubly-insert-end">C</span>
+                    <code id="code-circdoubly-insert-end"><span class="keyword">void</span> insertAtEnd(<span class="keyword">struct</span> DoublyNode** head, <span class="keyword">int</span> data) {
+    <span class="keyword">struct</span> DoublyNode* newNode = createDoublyNode(data);
+    <span class="keyword">if</span>(*head == NULL) {
+        *head = newNode;
+        newNode->next = newNode;
+        newNode->prev = newNode;
+        <span class="keyword">return</span>;
+    }
+    <span class="keyword">struct</span> DoublyNode* last = (*head)->prev;
+    newNode->next = *head;
+    newNode->prev = last;
+    last->next = newNode;
+    (*head)->prev = newNode;
+}</code>
+                </div>
+
+                <h3>Traverse Circular Doubly (Forward)</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circdoubly-traverse">C</span>
+                    <code id="code-circdoubly-traverse"><span class="keyword">void</span> traverse(<span class="keyword">struct</span> DoublyNode* head) {
+    <span class="keyword">struct</span> DoublyNode* temp = head;
+    <span class="keyword">if</span>(head == NULL) <span class="keyword">return</span>;
+    <span class="keyword">do</span> {
+        <span class="function">printf</span>(<span class="string">"%d <-> "</span>, temp->data);
+        temp = temp->next;
+    } <span class="keyword">while</span>(temp != head);
+}</code>
+                </div>
+
+                <h3>Traverse Backward</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circdoubly-traverse-back">C</span>
+                    <code id="code-circdoubly-traverse-back"><span class="keyword">void</span> traverseBackward(<span class="keyword">struct</span> DoublyNode* head) {
+    <span class="keyword">struct</span> DoublyNode* temp = head->prev;
+    <span class="keyword">do</span> {
+        <span class="function">printf</span>(<span class="string">"%d <- "</span>, temp->data);
+        temp = temp->prev;
+    } <span class="keyword">while</span>(temp != head->prev);
+}</code>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Most Powerful:</strong> Bidirectional + Circular traversal from any node
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="../LinkedList/theory.html" class="nav-btn secondary">← Theory</a>
+            <a href="../LinkedList/algorithm.html" class="nav-btn">Algorithm →</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../LinkedList/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Tab functionality
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    // Comprehensive Language data for ALL linked list types
+    const langData = {
+        c: {
+            // Singly Linked List
+            'label-singly-node': 'C',
+            'code-singly-node': '<span class="keyword">struct</span> Node {\n    <span class="keyword">int</span> data;\n    <span class="keyword">struct</span> Node* next;\n};',
+            'label-singly-insert-begin': 'C',
+            'code-singly-insert-begin': '<span class="keyword">void</span> insertAtBegin(<span class="keyword">struct</span> Node** head, <span class="keyword">int</span> data) {\n    <span class="keyword">struct</span> Node* newNode = createNode(data);\n    newNode->next = *head;\n    *head = newNode;\n}',
+            'label-singly-insert-end': 'C',
+            'code-singly-insert-end': '<span class="keyword">void</span> insertAtEnd(<span class="keyword">struct</span> Node** head, <span class="keyword">int</span> data) {\n    <span class="keyword">struct</span> Node* newNode = createNode(data);\n    <span class="keyword">if</span>(*head == NULL) {\n        *head = newNode;\n        <span class="keyword">return</span>;\n    }\n    <span class="keyword">struct</span> Node* temp = *head;\n    <span class="keyword">while</span>(temp->next != NULL)\n        temp = temp->next;\n    temp->next = newNode;\n}',
+            'label-singly-delete-begin': 'C',
+            'code-singly-delete-begin': '<span class="keyword">void</span> deleteAtBegin(<span class="keyword">struct</span> Node** head) {\n    <span class="keyword">if</span>(*head == NULL) <span class="keyword">return</span>;\n    <span class="keyword">struct</span> Node* temp = *head;\n    *head = (*head)->next;\n    <span class="function">free</span>(temp);\n}',
+            'label-singly-traverse': 'C',
+            'code-singly-traverse': '<span class="keyword">void</span> traverse(<span class="keyword">struct</span> Node* head) {\n    <span class="keyword">struct</span> Node* temp = head;\n    <span class="keyword">while</span>(temp != NULL) {\n        <span class="function">printf</span>(<span class="string">"%d -> "</span>, temp->data);\n        temp = temp->next;\n    }\n    <span class="function">printf</span>(<span class="string">"NULL\\n"</span>);\n}',
+
+            // Circular Singly
+            'label-circsingly-node': 'C',
+            'code-circsingly-node': '<span class="keyword">struct</span> Node {\n    <span class="keyword">int</span> data;\n    <span class="keyword">struct</span> Node* next;\n};',
+            'label-circsingly-insert-end': 'C',
+            'code-circsingly-insert-end': '<span class="keyword">void</span> insertAtEnd(<span class="keyword">struct</span> Node** head, <span class="keyword">int</span> data) {\n    <span class="keyword">struct</span> Node* newNode = createNode(data);\n    <span class="keyword">if</span>(*head == NULL) {\n        *head = newNode;\n        newNode->next = *head;\n        <span class="keyword">return</span>;\n    }\n    <span class="keyword">struct</span> Node* temp = *head;\n    <span class="keyword">while</span>(temp->next != *head)\n        temp = temp->next;\n    temp->next = newNode;\n    newNode->next = *head;\n}',
+            'label-circsingly-traverse': 'C',
+            'code-circsingly-traverse': '<span class="keyword">void</span> traverse(<span class="keyword">struct</span> Node* head) {\n    <span class="keyword">if</span>(head == NULL) <span class="keyword">return</span>;\n    <span class="keyword">struct</span> Node* temp = head;\n    <span class="keyword">do</span> {\n        <span class="function">printf</span>(<span class="string">"%d -> "</span>, temp->data);\n        temp = temp->next;\n    } <span class="keyword">while</span>(temp != head);\n    <span class="function">printf</span>(<span class="string">" (back to head)\\n"</span>);\n}',
+            'label-circsingly-delete': 'C',
+            'code-circsingly-delete': '<span class="keyword">void</span> deleteNode(<span class="keyword">struct</span> Node** head, <span class="keyword">int</span> key) {\n    <span class="keyword">if</span>(*head == NULL) <span class="keyword">return</span>;\n    <span class="keyword">struct</span> Node* temp = *head, *prev;\n    <span class="keyword">if</span>(temp->data == key) {\n        <span class="keyword">while</span>(temp->next != *head)\n            temp = temp->next;\n        temp->next = (*head)->next;\n        <span class="function">free</span>(*head);\n        *head = temp->next;\n        <span class="keyword">return</span>;\n    }\n    <span class="keyword">while</span>(temp != *head && temp->data != key) {\n        prev = temp;\n        temp = temp->next;\n    }\n    prev->next = temp->next;\n    <span class="function">free</span>(temp);\n}',
+
+            // Doubly
+            'label-doubly-node': 'C',
+            'code-doubly-node': '<span class="keyword">struct</span> DoublyNode {\n    <span class="keyword">int</span> data;\n    <span class="keyword">struct</span> DoublyNode* next;\n    <span class="keyword">struct</span> DoublyNode* prev;\n};',
+            'label-doubly-insert-begin': 'C',
+            'code-doubly-insert-begin': '<span class="keyword">void</span> insertAtBegin(<span class="keyword">struct</span> DoublyNode** head, <span class="keyword">int</span> data) {\n    <span class="keyword">struct</span> DoublyNode* newNode = createDoublyNode(data);\n    newNode->next = *head;\n    newNode->prev = NULL;\n    <span class="keyword">if</span>(*head != NULL)\n        (*head)->prev = newNode;\n    *head = newNode;\n}',
+            'label-doubly-delete': 'C',
+            'code-doubly-delete': '<span class="keyword">void</span> deleteNode(<span class="keyword">struct</span> DoublyNode** head, <span class="keyword">struct</span> DoublyNode* del) {\n    <span class="keyword">if</span>(*head == NULL || del == NULL) <span class="keyword">return</span>;\n    <span class="keyword">if</span>(*head == del) {\n        *head = del->next;\n    }\n    <span class="keyword">if</span>(del->next != NULL)\n        del->next->prev = del->prev;\n    <span class="keyword">if</span>(del->prev != NULL)\n        del->prev->next = del->next;\n    <span class="function">free</span>(del);\n}',
+
+            // Circular Doubly
+            'label-circdoubly-node': 'C',
+            'code-circdoubly-node': '<span class="keyword">struct</span> DoublyNode {\n    <span class="keyword">int</span> data;\n    <span class="keyword">struct</span> DoublyNode* next;\n    <span class="keyword">struct</span> DoublyNode* prev;\n};',
+            'label-circdoubly-insert-end': 'C',
+            'code-circdoubly-insert-end': '<span class="keyword">void</span> insertAtEnd(<span class="keyword">struct</span> DoublyNode** head, <span class="keyword">int</span> data) {\n    <span class="keyword">struct</span> DoublyNode* newNode = createDoublyNode(data);\n    <span class="keyword">if</span>(*head == NULL) {\n        *head = newNode;\n        newNode->next = newNode;\n        newNode->prev = newNode;\n        <span class="keyword">return</span>;\n    }\n    <span class="keyword">struct</span> DoublyNode* last = (*head)->prev;\n    newNode->next = *head;\n    newNode->prev = last;\n    last->next = newNode;\n    (*head)->prev = newNode;\n}',
+            'label-circdoubly-traverse': 'C',
+            'code-circdoubly-traverse': '<span class="keyword">void</span> traverse(<span class="keyword">struct</span> DoublyNode* head) {\n    <span class="keyword">struct</span> DoublyNode* temp = head;\n    <span class="keyword">if</span>(head == NULL) <span class="keyword">return</span>;\n    <span class="keyword">do</span> {\n        <span class="function">printf</span>(<span class="string">"%d <-> "</span>, temp->data);\n        temp = temp->next;\n    } <span class="keyword">while</span>(temp != head);\n}',
+            'label-circdoubly-traverse-back': 'C',
+            'code-circdoubly-traverse-back': '<span class="keyword">void</span> traverseBackward(<span class="keyword">struct</span> DoublyNode* head) {\n    <span class="keyword">struct</span> DoublyNode* temp = head->prev;\n    <span class="keyword">do</span> {\n        <span class="function">printf</span>(<span class="string">"%d <- "</span>, temp->data);\n        temp = temp->prev;\n    } <span class="keyword">while</span>(temp != head->prev);\n}'
+        },
+        cpp: {
+            // Singly
+            'label-singly-node': 'C++',
+            'code-singly-node': '<span class="keyword">struct</span> Node {\n    <span class="keyword">int</span> data;\n    Node* next;\n    Node(<span class="keyword">int</span> val) : data(val), next(nullptr) {}\n};',
+            'label-singly-insert-begin': 'C++',
+            'code-singly-insert-begin': '<span class="comment">// std::forward_list or manual</span>\nlist.push_front(<span class="number">10</span>);',
+            'label-singly-traverse': 'C++',
+            'code-singly-traverse': '<span class="keyword">for</span>(<span class="keyword">auto</span> it = list.begin(); it != list.end(); ++it)\n    cout << *it << <span class="string">" -> "</span>;',
+
+            // Circular Singly
+            'label-circsingly-node': 'C++',
+            'code-circsingly-node': '<span class="comment">// Manual implementation required</span>\n<span class="keyword">struct</span> Node { ... };',
+            'label-circsingly-traverse': 'C++',
+            'code-circsingly-traverse': '<span class="comment">// Use do-while loop</span>\n<span class="keyword">do</span> { ... } <span class="keyword">while</span>(temp != head);',
+
+            // Doubly
+            'label-doubly-node': 'C++',
+            'code-doubly-node': '<span class="comment">// std::list is doubly linked</span>\nstd::list&lt;int&gt; list;',
+            'label-doubly-insert-begin': 'C++',
+            'code-doubly-insert-begin': 'list.push_front(<span class="number">10</span>);',
+            'label-doubly-delete': 'C++',
+            'code-doubly-delete': 'list.erase(iterator);',
+
+            // Circular Doubly
+            'label-circdoubly-node': 'C++',
+            'code-circdoubly-node': '<span class="comment">// Manual or deque-like</span>\nstd::deque&lt;int&gt; deque;',
+            'label-circdoubly-traverse': 'C++',
+            'code-circdoubly-traverse': '<span class="keyword">for</span>(<span class="keyword">auto</span>&amp; val : list)\n    cout << val << <span class="string">" <-> "</span>;'
+        },
+        java: {
+            // Singly
+            'label-singly-node': 'Java',
+            'code-singly-node': '<span class="keyword">class</span> Node {\n    <span class="keyword">int</span> data;\n    Node next;\n    Node(<span class="keyword">int</span> data) { <span class="keyword">this</span>.data = data; }\n}',
+            'label-singly-insert-begin': 'Java',
+            'code-singly-insert-begin': '<span class="comment">// Manual implementation</span>\nnode.next = head;\nhead = node;',
+
+            // Circular Singly
+            'label-circsingly-node': 'Java',
+            'code-circsingly-node': '<span class="comment">// Manual circular list</span>',
+            'label-circsingly-traverse': 'Java',
+            'code-circsingly-traverse': '<span class="keyword">do</span> {\n    System.out.print(node.data + <span class="string">" -> "</span>);\n    node = node.next;\n} <span class="keyword">while</span>(node != head);',
+
+            // Doubly
+            'label-doubly-node': 'Java',
+            'code-doubly-node': '<span class="comment">// java.util.LinkedList (doubly)</span>\nLinkedList&lt;Integer&gt; list = <span class="keyword">new</span> LinkedList<>();',
+            'label-doubly-insert-begin': 'Java',
+            'code-doubly-insert-begin': 'list.addFirst(<span class="number">10</span>);',
+            'label-doubly-delete': 'Java',
+            'code-doubly-delete': 'list.remove(node);',
+
+            // Circular Doubly
+            'label-circdoubly-node': 'Java',
+            'code-circdoubly-node': '<span class="comment">// Manual implementation</span>',
+            'label-circdoubly-traverse': 'Java',
+            'code-circdoubly-traverse': '<span class="keyword">for</span>(<span class="keyword">int</span> val : list)\n    System.out.print(val + <span class="string">" <-> "</span>);'
+        },
+        python: {
+            // Singly
+            'label-singly-node': 'Python',
+            'code-singly-node': '<span class="keyword">class</span> Node:\n    <span class="keyword">def</span> __init__(self, data):\n        self.data = data\n        self.next = None',
+            'label-singly-insert-begin': 'Python',
+            'code-singly-insert-begin': 'node.next = head\nhead = node',
+            'label-singly-traverse': 'Python',
+            'code-singly-traverse': 'temp = head\nwhile temp:\n    print(temp.data, end=<span class="string">" -> "</span>)\n    temp = temp.next',
+
+            // Circular Singly
+            'label-circsingly-node': 'Python',
+            'code-circsingly-node': '<span class="keyword">class</span> Node:\n    <span class="keyword">def</span> __init__(self, data):\n        self.data = data\n        self.next = None',
+            'label-circsingly-traverse': 'Python',
+            'code-circsingly-traverse': 'temp = head\nwhile True:\n    print(temp.data, end=<span class="string">" -> "</span>)\n    temp = temp.next\n    if temp == head: break',
+
+            // Doubly
+            'label-doubly-node': 'Python',
+            'code-doubly-node': '<span class="keyword">class</span> DoublyNode:\n    <span class="keyword">def</span> __init__(self, data):\n        self.data = data\n        self.next = self.prev = None',
+            'label-doubly-insert-begin': 'Python',
+            'code-doubly-insert-begin': 'node.next = head\nnode.prev = None\nif head:\n    head.prev = node\nhead = node',
+
+            // Circular Doubly
+            'label-circdoubly-node': 'Python',
+            'code-circdoubly-node': '<span class="keyword">class</span> DoublyNode:\n    <span class="keyword">def</span> __init__(self, data):\n        self.data = data\n        self.next = self.prev = None',
+            'label-circdoubly-traverse': 'Python',
+            'code-circdoubly-traverse': 'temp = head\nwhile True:\n    print(temp.data, end=<span class="string">" <-> "</span>)\n    temp = temp.next\n    if temp == head: break'
+        }
+    };
+
+    // Language selector
+    const langSelect = document.getElementById('lang-select');
+
+    function updateCode(lang) {
+        const data = langData[lang];
+        if (data) {
+            for (const [id, code] of Object.entries(data)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.innerHTML = code;
+                }
+            }
+        }
+    }
+
+    langSelect.addEventListener('change', function() {
+        updateCode(this.value);
+    });
+
+    // Initialize with C
+    updateCode('c');
+</script>
+
+</body>
+</html>

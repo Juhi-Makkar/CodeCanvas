@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowcharts for Queue - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+        
+        .navbar nav a.active {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.2);
+        }
+
+        /* Section Spacing */
+        section {
+            min-height: auto;
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Search Bar */
+        .search-container {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-container h2 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .search-container input {
+            padding: 12px;
+            width: 60%;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            padding: 12px 22px;
+            border: none;
+            background: linear-gradient(135deg, #8B6CF6, #9f7aea);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(139,108,246,0.6);
+        }
+
+        /* Flowchart Container */
+        .flowchart-container {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .flowchart-container h3 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Explanation */
+        .explanation {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .explanation h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .explanation p {
+            margin-bottom: 15px;
+        }
+
+        /* Quick Access Cards */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .quick-card {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(139,108,246,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(139,108,246,0.5);
+            border-color: var(--accent-purple);
+        }
+
+        .quick-card h4 {
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+        }
+
+        .quick-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .search-container input {
+                width: 80%;
+            }
+            .mermaid {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="queueGS.html" class="logo">CodeCanvas - Queue</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/queueGS.html">Back to Queue</a></li>
+            <li><a href="../queue/theory.html" >Theory</a></li>
+            <li><a href="../queue/syntax.html">Syntax</a></li>
+            <li><a href="../queue/algorithm.html">Algorithm</a></li>
+            <li><a href="../queue/complexity.html">Complexity</a></li>
+            <li><a href="../queue/flowchart.html" class="active">Flowchart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search Section -->
+    <section id="search">
+        <div class="section-content">
+            <div class="search-container">
+                <h2>Search for a Flowchart Concept</h2>
+                <p>Enter a concept (e.g., "Enqueue", "Dequeue", "Circular Queue") to generate its flowchart.</p>
+                <input type="text" id="search-input" placeholder="Type a concept...">
+                <button id="search-btn">Generate Flowchart</button>
+                <div id="results"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access Section -->
+    <section id="quick-access">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 20px;">Quick Access</h2>
+            <div class="quick-access" id="quick-access-grid">
+                <!-- Quick cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Explanation Section -->
+    <section id="explanation">
+        <div class="section-content">
+            <div class="explanation">
+                <h2>What are Flowcharts for Queues?</h2>
+                <p>Flowcharts visualize queue operations using FIFO (First In, First Out) principle. Queues have two ends: front (dequeue) and rear (enqueue). They help understand operations like insertion, deletion, and traversal.</p>
+                <p><strong>Key Symbols:</strong></p>
+                <ul>
+                    <li><strong>Rectangle:</strong> Process (e.g., "queue[rear] = element").</li>
+                    <li><strong>Diamond:</strong> Decision (e.g., "Is queue full?").</li>
+                    <li><strong>Oval:</strong> Start/End.</li>
+                    <li><strong>Arrow:</strong> Flow direction.</li>
+                </ul>
+                <p><strong>Queue Types:</strong> Linear Queue, Circular Queue, Priority Queue, Deque.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flowchart Display Section -->
+    <section id="flowcharts">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 20px;">All Flowcharts</h2>
+            <div id="flowchart-display"></div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../queue/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Comprehensive queue flowcharts database
+        const flowcharts = {
+            "Enqueue (Linear Queue)": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue full?<br/>rear == max-1"}
+                B -->|Yes| C["Overflow Error"]
+                B -->|No| D["rear++"]
+                D --> E["queue[rear] = element"]
+                E --> F["End"]`,
+                explanation: "Add element at rear end. Check for overflow before insertion."
+            },
+            "Dequeue (Linear Queue)": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue empty?<br/>front == -1"}
+                B -->|Yes| C["Underflow Error"]
+                B -->|No| D["element = queue[front]"]
+                D --> E["front++"]
+                E --> F["Return element"]
+                F --> G["End"]`,
+                explanation: "Remove element from front. Check for underflow before deletion."
+            },
+            "Display Queue": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue empty?<br/>front == -1"}
+                B -->|Yes| C["Queue Empty"]
+                B -->|No| D["i = front"]
+                D --> E{"i <= rear ?"}
+                E -->|Yes| F["Print queue[i]"]
+                F --> G["i++"]
+                G --> E
+                E -->|No| H["End"]`,
+                explanation: "Traverse from front to rear and display all elements."
+            },
+            "Peek/Front Element": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue empty?<br/>front == -1"}
+                B -->|Yes| C["Underflow Error"]
+                B -->|No| D["Return queue[front]"]
+                D --> E["End"]`,
+                explanation: "Return front element without removing it. Check for underflow."
+            },
+            "Is Empty Check": {
+                mermaid: `graph TD
+                A["Start"] --> B{"front == -1 ?"}
+                B -->|Yes| C["Queue Empty"]
+                B -->|No| D["Queue Not Empty"]
+                D --> E["End"]
+                C --> E`,
+                explanation: "Simple check if queue has no elements."
+            },
+            "Is Full Check": {
+                mermaid: `graph TD
+                A["Start"] --> B{"rear == max-1 ?"}
+                B -->|Yes| C["Queue Full"]
+                B -->|No| D["Queue Not Full"]
+                D --> E["End"]
+                C --> E`,
+                explanation: "Check if queue has reached maximum capacity."
+            },
+            "Circular Queue Enqueue": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue full?<br/>(rear+1)%max == front"}
+                B -->|Yes| C["Overflow Error"]
+                B -->|No| D{"front == -1 ?"}
+                D -->|Yes| E["front = 0"]
+                D -->|No| F["rear = (rear+1)%max"]
+                E --> F
+                F --> G["queue[rear] = element"]
+                G --> H["End"]`,
+                explanation: "Enqueue in circular queue. Wraps around using modulo operation."
+            },
+            "Circular Queue Dequeue": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue empty?<br/>front == -1"}
+                B -->|Yes| C["Underflow Error"]
+                B -->|No| D["element = queue[front]"]
+                D --> E{"front == rear ?"}
+                E -->|Yes| F["front = rear = -1"]
+                E -->|No| G["front = (front+1)%max"]
+                F --> H["Return element"]
+                G --> H
+                H --> I["End"]`,
+                explanation: "Dequeue from circular queue. Reset pointers when queue becomes empty."
+            },
+            "Priority Queue Insert": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = rear"]
+                B --> C{"i >= front ?"}
+                C -->|No| D["queue[++rear] = element"]
+                C -->|Yes| E{"priority[queue[i]]<br/>< priority[element] ?"}
+                E -->|Yes| F["queue[i+1] = queue[i]"]
+                F --> G["i--"]
+                G --> C
+                E -->|No| D
+                D --> H["End"]`,
+                explanation: "Insert based on priority. Higher priority elements go towards front."
+            },
+            "Priority Queue Delete": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue empty?"}
+                B -->|Yes| C["Underflow"]
+                B -->|No| D["element = queue[front]"]
+                D --> E["Shift all elements left"]
+                E --> F["rear--"]
+                F --> G["Return element"]
+                G --> H["End"]`,
+                explanation: "Delete highest priority element (front) and shift remaining elements."
+            },
+            "Deque Insert Front": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue full?"}
+                B -->|Yes| C["Overflow"]
+                B -->|No| D{"front == 0 ?"}
+                D -->|Yes| E["Shift all right"]
+                D -->|No| F["front--"]
+                E --> F
+                F --> G["queue[front] = element"]
+                G --> H["End"]`,
+                explanation: "Insert at front end of deque. May require shifting elements."
+            },
+            "Deque Insert Rear": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue full?"}
+                B -->|Yes| C["Overflow"]
+                B -->|No| D["rear++"]
+                D --> E["queue[rear] = element"]
+                E --> F["End"]`,
+                explanation: "Insert at rear end of deque (same as regular enqueue)."
+            },
+            "Deque Delete Front": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue empty?"}
+                B -->|Yes| C["Underflow"]
+                B -->|No| D["element = queue[front]"]
+                D --> E["front++"]
+                E --> F["Return element"]
+                F --> G["End"]`,
+                explanation: "Delete from front end of deque (same as regular dequeue)."
+            },
+            "Deque Delete Rear": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is queue empty?"}
+                B -->|Yes| C["Underflow"]
+                B -->|No| D["element = queue[rear]"]
+                D --> E["rear--"]
+                E --> F["Return element"]
+                F --> G["End"]`,
+                explanation: "Delete from rear end of deque. No shifting required."
+            },
+            "Queue from Array": {
+                mermaid: `graph TD
+                A["Start"] --> B["front = 0"]
+                B --> C["rear = size-1"]
+                C --> D["Use array as queue"]
+                D --> E["End"]`,
+                explanation: "Convert existing array into queue by setting front and rear pointers."
+            },
+            "Queue Size Calculation": {
+                mermaid: `graph TD
+                A["Start"] --> B{"front == -1 ?"}
+                B -->|Yes| C["Size = 0"]
+                B -->|No| D["Size = rear - front + 1"]
+                D --> E["Return Size"]
+                C --> E
+                E --> F["End"]`,
+                explanation: "Calculate number of elements in queue. Handle empty queue case separately."
+            },
+            "Reverse Queue": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create stack"]
+                B --> C{"Queue empty ?"}
+                C -->|Yes| D["Return stack"]
+                C -->|No| E["temp = dequeue()"]
+                E --> F["Push temp to stack"]
+                F --> C
+                D --> G["End"]`,
+                explanation: "Use stack to reverse queue. Dequeue from queue, push to stack, then pop back."
+            },
+            "Check Palindrome Queue": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create stack"]
+                B --> C{"Queue empty ?"}
+                C -->|No| D["temp = dequeue()"]
+                D --> E["Push temp to stack"]
+                E --> C
+                C -->|Yes| F{"Stack empty ?"}
+                F -->|No| G["Pop stack, dequeue queue"]
+                G --> H{"Equal ?"}
+                H -->|No| I["Not Palindrome"]
+                H -->|Yes| F
+                F -->|Yes| J["Palindrome"]
+                J --> K["End"]
+                I --> K`,
+                explanation: "Use stack to compare first half with reversed second half."
+            },
+            "Circular Queue Display": {
+                mermaid: `graph TD
+                A["Start"] --> B{"front == -1 ?"}
+                B -->|Yes| C["Empty"]
+                B -->|No| D["i = front"]
+                D --> E{"i != rear ?"}
+                E -->|Yes| F["Print queue[i]"]
+                F --> G["i = (i+1)%max"]
+                G --> E
+                E -->|No| H["Print queue[rear]"]
+                H --> I["End"]
+                C --> I`,
+                explanation: "Display circular queue from front to rear, wrapping around using modulo."
+            },
+            "Queue using Two Stacks": {
+                mermaid: `graph TD
+                A["Enqueue"] --> B["Push to stack1"]
+                B --> C["End"]
+                D["Dequeue"] --> E{"stack2 empty ?"}
+                E -->|Yes| F["Pop all from stack1 to stack2"]
+                E -->|No| G["Pop from stack2"]
+                F --> G
+                G --> H["Return element"]
+                H --> I["End"]`,
+                explanation: "Implement queue using two stacks. stack1 for enqueue, stack2 for dequeue."
+            },
+            "Queue using Linked List": {
+                mermaid: `graph TD
+                A["Enqueue"] --> B["Create new node"]
+                B --> C["If empty: head = tail = new"]
+                C -->|No| D["tail->next = new"]
+                D --> E["tail = new"]
+                E --> F["End"]
+                G["Dequeue"] --> H{"head == NULL ?"}
+                H -->|Yes| I["Empty"]
+                H -->|No| J["temp = head"]
+                J --> K["head = head->next"]
+                K --> L["Free temp"]
+                L --> M["End"]`,
+                explanation: "Dynamic queue using linked list. No fixed size limitations."
+            },
+            "Find Max in Queue": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Empty ?"}
+                B -->|Yes| C["Error"]
+                B -->|No| D["max = queue[front]"]
+                D --> E["i = front"]
+                E --> F{"i <= rear ?"}
+                F -->|Yes| G{"queue[i] > max ?"}
+                G -->|Yes| H["max = queue[i]"]
+                G -->|No| I["i++"]
+                H --> I
+                I --> F
+                F -->|No| J["Return max"]
+                J --> K["End"]`,
+                explanation: "Traverse queue to find maximum element. O(n) time complexity."
+            },
+            "Count Occurrences": {
+                mermaid: `graph TD
+                A["Start"] --> B["count = 0"]
+                B --> C["i = front"]
+                C --> D{"i <= rear ?"}
+                D -->|Yes| E{"queue[i] == key ?"}
+                E -->|Yes| F["count++"]
+                E -->|No| G["i++"]
+                F --> G
+                G --> D
+                D -->|No| H["Return count"]
+                H --> I["End"]`,
+                explanation: "Count how many times a specific element appears in queue."
+            },
+            "Merge Two Queues": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create result queue"]
+                B --> C{"Q1 empty AND Q2 empty ?"}
+                C -->|Yes| D["End"]
+                C -->|No| E{"Q1 empty ?"}
+                E -->|Yes| F["Enqueue Q2.front to result"]
+                E -->|No| G{"Q2 empty ?"}
+                G -->|Yes| H["Enqueue Q1.front to result"]
+                G -->|No| I["Merge by priority/condition"]
+                F --> J["Dequeue from Q2"]
+                H --> K["Dequeue from Q1"]
+                I --> L["Dequeue from both"]
+                J --> C
+                K --> C
+                L --> C`,
+                explanation: "Merge two queues based on priority or simple concatenation."
+            },
+            "Rotate Queue by K": {
+                mermaid: `graph TD
+                A["Start"] --> B["For i=1 to k:"]
+                B --> C["temp = dequeue()"]
+                C --> D["Enqueue temp to end"]
+                D --> B
+                B -->|Done| E["End"]`,
+                explanation: "Rotate queue left by K positions. First K elements move to end."
+            },
+            "Sliding Window Maximum": {
+                mermaid: `graph TD
+                A["Start"] --> B["Use deque to store indices"]
+                B --> C["For each element:"]
+                C --> D["Remove indices > window"]
+                D --> E["Remove smaller values from back"]
+                E --> F["Add current index"]
+                F --> G["First index = max"]
+                G --> H["Remove out-of-window"]
+                H --> I["End"]`,
+                explanation: "Efficient sliding window maximum using deque. O(n) time."
+            },
+            "Josephus Problem": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create circular queue"]
+                B --> C{"People > 1 ?"}
+                C -->|Yes| D["Count k steps"]
+                D --> E["Eliminate person"]
+                E --> F["Continue from next"]
+                F --> C
+                C -->|No| G["Last person wins"]
+                G --> H["End"]`,
+                explanation: "Circular elimination problem. Classic queue application."
+            },
+            "Level Order Traversal": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create queue"]
+                B --> C["Enqueue root"]
+                C --> D{"Queue empty ?"}
+                D -->|No| E["Dequeue node"]
+                E --> F["Process node"]
+                F --> G["Enqueue left child"]
+                G --> H["Enqueue right child"]
+                H --> D
+                D -->|Yes| I["End"]`,
+                explanation: "BFS traversal using queue. Process level by level."
+            },
+            "Task Scheduling": {
+                mermaid: `graph TD
+                A["Start"] --> B["Priority queue"]
+                B --> C["Add tasks with priority"]
+                C --> D{"Queue empty ?"}
+                D -->|No| E["Get highest priority"]
+                E --> F["Execute task"]
+                F --> G["Remove task"]
+                G --> D
+                D -->|Yes| H["End"]`,
+                explanation: "Priority queue for CPU scheduling. Highest priority first."
+            },
+            "Circular Queue Size": {
+                mermaid: `graph TD
+                A["Start"] --> B{"front == -1 ?"}
+                B -->|Yes| C["Size = 0"]
+                B -->|No| D{"front <= rear ?"}
+                D -->|Yes| E["Size = rear-front+1"]
+                D -->|No| F["Size = max - front + rear + 1"]
+                E --> G["Return Size"]
+                F --> G
+                C --> G
+                G --> H["End"]`,
+                explanation: "Calculate size in circular queue. Handle wrap-around case."
+            },
+            "Double Ended Queue Enqueue Front": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Full ?"}
+                B -->|Yes| C["Overflow"]
+                B -->|No| D{"front == 0 ?"}
+                D -->|Yes| E["Shift right"]
+                D -->|No| F["front--"]
+                E --> F
+                F --> G["queue[front] = data"]
+                G --> H["End"]`,
+                explanation: "Deque operation: Insert at front end efficiently."
+            }
+        };
+
+        // Fuse.js for fuzzy search
+        const fuse = new Fuse(Object.keys(flowcharts), { threshold: 0.4 });
+
+        // Search functionality (Main Search)
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            const displayDiv = document.getElementById('flowchart-display');
+            displayDiv.innerHTML = '';
+
+            if (!query) {
+                resultsDiv.innerHTML = '<p style="color: var(--error);">Please enter a concept.</p>';
+                return;
+            }
+
+            const matches = fuse.search(query);
+            if (matches.length > 0) {
+                const concept = matches[0].item;
+                const data = flowcharts[concept];
+                displayDiv.innerHTML = `
+                    <div class="flowchart-container">
+                        <h3>${concept}</h3>
+                        <div class="mermaid">${data.mermaid}</div>
+                        <p>${data.explanation}</p>
+                    </div>
+                `;
+                resultsDiv.innerHTML = '<p style="color: var(--success);">Flowchart generated at the end!</p>';
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            } else {
+                resultsDiv.innerHTML = `<p style="color: var(--error);">No exact match. Try: ${Object.keys(flowcharts).slice(0, 5).join(', ')}...</p>`;
+            }
+        });
+
+        // Enter key support for search
+        document.getElementById('search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('search-btn').click();
+            }
+        });
+
+        // Generate Quick Access Cards
+        function generateQuickAccess() {
+            const grid = document.getElementById('quick-access-grid');
+            const sampleConcepts = Object.keys(flowcharts).slice(0, 8);
+            grid.innerHTML = sampleConcepts.map(concept => `
+                <div class="quick-card" onclick="selectConcept('${concept}')">
+                    <h4>${concept}</h4>
+                    <p>${flowcharts[concept].explanation.substring(0, 80)}...</p>
+                </div>
+            `).join('');
+        }
+
+        // Select concept from quick access cards
+        window.selectConcept = function(concept) {
+            document.getElementById('search-input').value = concept;
+            const data = flowcharts[concept];
+            document.getElementById('flowchart-display').innerHTML = `
+                <div class="flowchart-container">
+                    <h3>${concept}</h3>
+                    <div class="mermaid">${data.mermaid}</div>
+                    <p>${data.explanation}</p>
+                </div>
+            `;
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            document.getElementById('results').innerHTML = '<p style="color: var(--success);">Flowchart displayed!</p>';
+        };
+
+        // Initialize Mermaid with custom theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "base",
+            themeVariables: {
+                primaryColor: "#1e1e2f",
+                primaryBorderColor: "#8b6cf6",
+                primaryTextColor: "#ffffff",
+                lineColor: "#a78bfa",
+                secondaryColor: "#2a2a40",
+                tertiaryColor: "#141427",
+                edgeLabelBackground: "#1e1e2f"
+            }
+        });
+
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            generateQuickAccess();
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

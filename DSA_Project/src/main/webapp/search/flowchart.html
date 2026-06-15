@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowcharts for Searching Algorithms - v</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+        
+            .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+        /* Section Spacing */
+        section {
+            min-height: auto;
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Search Bar */
+        .search-container {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-container h2 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .search-container input {
+            padding: 12px;
+            width: 60%;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            padding: 12px 22px;
+            border: none;
+            background: linear-gradient(135deg, #8B6CF6, #9f7aea);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(139,108,246,0.6);
+        }
+
+        /* Flowchart Container */
+        .flowchart-container {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .flowchart-container h3 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Explanation */
+        .explanation {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .explanation h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .explanation p {
+            margin-bottom: 15px;
+        }
+
+        /* Quick Access Cards */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .quick-card {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(139,108,246,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(139,108,246,0.5);
+            border-color: var(--accent-purple);
+        }
+
+        .quick-card h4 {
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+        }
+
+        .quick-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .search-container input {
+                width: 80%;
+            }
+            .mermaid {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="searchGS.html" class="logo">CodeCanvas - Searching</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/searchingGS.html">Back to Search</a></li>
+            <li><a href="../search/theory.html">Theory</a></li>
+            <li><a href="../search/syntax.html">Syntax</a></li>
+            <li><a href="../search/algorithm.html">Algorithm</a></li>
+            <li><a href="../search/complexity.html">Complexity</a></li>
+            <li><a href="../search/flowchart.html" class="active">Flowchart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search Section -->
+    <section id="search">
+        <div class="section-content">
+            <div class="search-container">
+                <h2>Search for a Searching Algorithm Flowchart</h2>
+                <p>Enter an algorithm (e.g., "Linear Search", "Binary Search", "Jump Search") to generate its flowchart.</p>
+                <input type="text" id="search-input" placeholder="Type an algorithm...">
+                <button id="search-btn">Generate Flowchart</button>
+                <div id="results"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access Section -->
+    <section id="quick-access">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 20px;">Quick Access</h2>
+            <div class="quick-access" id="quick-access-grid">
+                <!-- Quick cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Explanation Section -->
+    <section id="explanation">
+        <div class="section-content">
+            <div class="explanation">
+                <h2>What are Search Algorithm Flowcharts?</h2>
+                <p>Search algorithm flowcharts visually represent how different searching techniques locate elements in data structures. Each algorithm has unique decision points, comparisons, and termination conditions.</p>
+                <p><strong>Key Components:</strong></p>
+                <ul>
+                    <li><strong>Start/End:</strong> Algorithm boundaries</li>
+                    <li><strong>Decisions:</strong> Comparison operations (found/not found, bounds checking)</li>
+                    <li><strong>Processes:</strong> Index calculations, array access</li>
+                    <li><strong>Loops:</strong> Iteration through search space</li>
+                </ul>
+                <p><strong>Search Categories:</strong> Sequential (Linear), Divide & Conquer (Binary), Interpolation, Exponential, and Hash-based searches.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flowchart Display Section -->
+    <section id="flowcharts">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 20px;">All Search Algorithm Flowcharts</h2>
+            <div id="flowchart-display"></div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../search/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Comprehensive searching algorithms flowcharts database
+// Replace the existing searchFlowcharts object with this expanded version:
+
+const searchFlowcharts = {
+    // === BASIC SEARCHING ===
+    "Linear Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["i = 0"]
+        B --> C{"i < size ?"}
+        C -->|Yes| D{"arr[i] == key ?"}
+        D -->|Yes| E["Return i"]
+        D -->|No| F["i++"]
+        F --> C
+        C -->|No| G["Return -1"]
+        G --> H["End"]`,
+        explanation: "Sequential search checking each element. Works on unsorted arrays. Time: O(n), Space: O(1)."
+    },
+    "Binary Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["low=0, high=size-1"]
+        B --> C{"low <= high ?"}
+        C -->|No| D["Return -1"]
+        C -->|Yes| E["mid=(low+high)/2"]
+        E --> F{"arr[mid]==key ?"}
+        F -->|Yes| G["Return mid"]
+        F -->|No| H{"key < arr[mid] ?"}
+        H -->|Yes| I["high = mid-1"]
+        H -->|No| J["low = mid+1"]
+        I --> C
+        J --> C`,
+        explanation: "Divide and conquer on sorted arrays. Time: O(log n), Space: O(1)."
+    },
+    
+    // === BINARY SEARCH VARIANTS ===
+    "Binary Search Recursive": {
+        mermaid: `graph TD
+        A["Start"] --> B{"low > high ?"}
+        B -->|Yes| C["Return -1"]
+        B -->|No| D["mid=(low+high)/2"]
+        D --> E{"arr[mid]==key ?"}
+        E -->|Yes| F["Return mid"]
+        E -->|No| G{"key < arr[mid] ?"}
+        G -->|Yes| H["BinarySearch(low, mid-1)"]
+        G -->|No| I["BinarySearch(mid+1, high)"]
+        H --> J["End"]
+        I --> J`,
+        explanation: "Recursive implementation. Time: O(log n), Space: O(log n)."
+    },
+    "Binary Search First Occurrence": {
+        mermaid: `graph TD
+        A["Start"] --> B["low=0, high=size-1, result=-1"]
+        B --> C{"low <= high ?"}
+        C -->|No| D["Return result"]
+        C -->|Yes| E["mid=(low+high)/2"]
+        E --> F{"arr[mid]==key ?"}
+        F -->|Yes| G["result=mid<br>high=mid-1"]
+        F -->|No| H{"key < arr[mid] ?"}
+        H -->|Yes| I["high=mid-1"]
+        H -->|No| J["low=mid+1"]
+        G --> C
+        I --> C
+        J --> C`,
+        explanation: "Finds first occurrence in sorted array with duplicates."
+    },
+    "Binary Search Last Occurrence": {
+        mermaid: `graph TD
+        A["Start"] --> B["low=0, high=size-1, result=-1"]
+        B --> C{"low <= high ?"}
+        C -->|No| D["Return result"]
+        C -->|Yes| E["mid=(low+high)/2"]
+        E --> F{"arr[mid]==key ?"}
+        F -->|Yes| G["result=mid<br>low=mid+1"]
+        F -->|No| H{"key < arr[mid] ?"}
+        H -->|Yes| I["high=mid-1"]
+        H -->|No| J["low=mid+1"]
+        G --> C
+        I --> C
+        J --> C`,
+        explanation: "Finds last occurrence in sorted array with duplicates."
+    },
+    
+    // === JUMPING SEARCHES ===
+    "Jump Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["step = sqrt(size)"]
+        B --> C["i = 0"]
+        C --> D{"i < size ?"}
+        D -->|No| E["Return -1"]
+        D -->|Yes| F{"arr[i] >= key ?"}
+        F -->|Yes| G["Linear search<br>i-step to i"]
+        F -->|No| H["i += step"]
+        H --> D
+        G --> I["Found/Not Found"]
+        I --> J["End"]`,
+        explanation: "Jumps by sqrt(n), then linear search. Time: O(√n)."
+    },
+    "Block Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["blockSize = sqrt(size)"]
+        B --> C["block = 0"]
+        C --> D{"block * blockSize < size ?"}
+        D -->|No| E["Return -1"]
+        D -->|Yes| F["Check block"]
+        F -->|Key in block| G["Linear search in block"]
+        F -->|No| H["block++"]
+        H --> D
+        G --> I["Found/Not Found"]
+        I --> J["End"]`,
+        explanation: "Divides array into √n blocks, linear search within block."
+    },
+    
+    // === INTERPOLATION & EXPONENTIAL ===
+    "Interpolation Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["low=0, high=size-1"]
+        B --> C{"low <= high ?"}
+        C -->|No| D["Return -1"]
+        C -->|Yes| E["pos = low +<br>((key-arr[low])*(high-low))<br>/(arr[high]-arr[low])"]
+        E --> F{"arr[pos]==key ?"}
+        F -->|Yes| G["Return pos"]
+        F -->|No| H{"key < arr[pos] ?"}
+        H -->|Yes| I["high = pos-1"]
+        H -->|No| J["low = pos+1"]
+        I --> C
+        J --> C`,
+        explanation: "Estimates position using interpolation. Time: O(log log n) average."
+    },
+    "Exponential Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["i = 1"]
+        B --> C{"i < size ?"}
+        C -->|No| D["Binary(i/2 to i)"]
+        C -->|Yes| E{"arr[i] >= key ?"}
+        E -->|Yes| F["Binary(i/2 to i)"]
+        E -->|No| G["i *= 2"]
+        G --> C
+        D --> H["Result"]
+        F --> H
+        H --> I["End"]`,
+        explanation: "Exponential bounds + binary search. Good for unbounded arrays."
+    },
+    
+    // === FIBONACCI & TERNARY ===
+    "Fibonacci Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["fibMMm2=0<br>fibMMm1=1<br>fibM=fibMMm1"]
+        B --> C{"fibM < size ?"}
+        C -->|No| D["Check arr[0]"]
+        C -->|Yes| E["i = min(offset+fibMMm2, size-1)"]
+        E --> F{"arr[i] < key ?"}
+        F -->|Yes| G["fibMMm2 = fibMMm1<br>fibMMm1 = fibM<br>fibM = fibMMm1+fibMMm2"]
+        F -->|No| H["fibMMm1 = fibMMm2<br>fibMMm2 = fibM-fibMMm1<br>fibM = fibMMm1+fibMMm2"]
+        G --> C
+        H --> C
+        D --> I["Result"]`,
+        explanation: "Uses Fibonacci sequence partitioning. No division needed."
+    },
+    "Ternary Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["low=0, high=size-1"]
+        B --> C{"low <= high ?"}
+        C -->|No| D["Return -1"]
+        C -->|Yes| E["mid1=low+(high-low)/3<br>mid2=high-(high-low)/3"]
+        E --> F{"arr[mid1] > arr[mid2] ?"}
+        F -->|Yes| G{"arr[mid1] >= key ?"}
+        F -->|No| H{"arr[mid2] <= key ?"}
+        G -->|Yes| I["high=mid1"]
+        G -->|No| J["low=mid1"]
+        H -->|Yes| K["low=mid2"]
+        H -->|No| L["high=mid2"]
+        I --> C
+        J --> C
+        K --> C
+        L --> C`,
+        explanation: "Divides into 3 parts. Good for unimodal functions."
+    },
+    
+    // === HASH-BASED ===
+    "Hash Table Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["hash = hashFunction(key)"]
+        B --> C["index = hash % tableSize"]
+        C --> D{"table[index] == key ?"}
+        D -->|Yes| E["Return index"]
+        D -->|No| F["Resolve collision<br>(Linear/Quadratic probing)"]
+        F --> G{"Found ?"}
+        G -->|Yes| H["Return index"]
+        G -->|No| I["Return -1"]
+        I --> J["End"]`,
+        explanation: "Direct access via hash function. Average: O(1)."
+    },
+    "Double Hashing Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["h1 = hash1(key)"]
+        B --> C["h2 = hash2(key)"]
+        C --> D["i = 0"]
+        D --> E{"table[(h1+i*h2)%size] == key ?"}
+        E -->|Yes| F["Return index"]
+        E -->|No| G["i++"]
+        G --> H{"Collision limit ?"}
+        H -->|Yes| I["Return -1"]
+        H -->|No| D`,
+        explanation: "Uses two hash functions to reduce clustering."
+    },
+    
+    // === SPECIALIZED SEARCHES ===
+    "Sentinel Linear Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["arr[size] = key"]
+        B --> C["i = 0"]
+        C --> D{"arr[i] == key ?"}
+        D -->|Yes| E{"i == size ?"}
+        E -->|Yes| F["Return -1"]
+        E -->|No| G["Return i"]
+        D -->|No| H["i++"]
+        H --> D`,
+        explanation: "Sentinel eliminates bounds checking. Faster in practice."
+    },
+    "Linear Search Early Termination": {
+        mermaid: `graph TD
+        A["Start"] --> B["i = 0"]
+        B --> C{"i < size && arr[i] <= key ?"}
+        C -->|No| D["Return -1"]
+        C -->|Yes| E{"arr[i] == key ?"}
+        E -->|Yes| F["Return i"]
+        E -->|No| G["i++"]
+        G --> C`,
+        explanation: "Early exit for sorted arrays when target exceeded."
+    },
+    
+    // === BOUNDARY SEARCHES ===
+    "Lower Bound": {
+        mermaid: `graph TD
+        A["Start"] --> B["low=0, high=size"]
+        B --> C{"low < high ?"}
+        C -->|No| D["Return low"]
+        C -->|Yes| E["mid=(low+high)/2"]
+        E --> F{"arr[mid] < key ?"}
+        F -->|Yes| G["low=mid+1"]
+        F -->|No| H["high=mid"]
+        G --> C
+        H --> C`,
+        explanation: "First position ≥ key (insertion point)."
+    },
+    "Upper Bound": {
+        mermaid: `graph TD
+        A["Start"] --> B["low=0, high=size"]
+        B --> C{"low < high ?"}
+        C -->|No| D["Return low"]
+        C -->|Yes| E["mid=(low+high)/2"]
+        E --> F{"arr[mid] <= key ?"}
+        F -->|Yes| G["low=mid+1"]
+        F -->|No| H["high=mid"]
+        G --> C
+        H --> C`,
+        explanation: "First position > key (insertion point)."
+    },
+    
+    // === STRING SEARCHING ===
+    "Naive String Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["i=0"]
+        B --> C{"i <= n-m ?"}
+        C -->|No| D["Return -1"]
+        C -->|Yes| E["j=0"]
+        E --> F{"j < m && text[i+j]==pat[j] ?"}
+        F -->|Yes| G["j++"]
+        F -->|No| H{"j == m ?"}
+        H -->|Yes| I["Return i"]
+        H -->|No| J["i++"]
+        G --> F
+        I --> K["End"]
+        J --> C`,
+        explanation: "Brute force string matching. Time: O((n-m+1)m)."
+    },
+    "KMP Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["Compute LPS array"]
+        B --> C["i=0, q=0"]
+        C --> D{"i < n ?"}
+        D -->|No| E["Return q==m ? i : -1"]
+        D -->|Yes| F{"text[i]==pat[q] ?"}
+        F -->|Yes| G["i++, q++"]
+        F -->|No| H{"q == 0 ?"}
+        H -->|Yes| I["i++"]
+        H -->|No| J["q = lps[q-1]"]
+        G --> K{"q == m ?"}
+        K -->|Yes| L["Return i-m"]
+        K -->|No| D
+        I --> D
+        J --> F`,
+        explanation: "Knuth-Morris-Pratt with prefix table. Time: O(n+m)."
+    },
+    "Rabin-Karp Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["Compute pat hash"]
+        B --> C["Compute text[0..m-1] hash"]
+        C --> D["i=0"]
+        D --> E{"i <= n-m ?"}
+        E -->|No| F["Return -1"]
+        E -->|Yes| G{"hashes equal ?"}
+        G -->|Yes| H["Strings equal ?"]
+        H -->|Yes| I["Return i"]
+        H -->|No| J["i++, roll hash"]
+        G -->|No| K["i++, roll hash"]
+        I --> L["End"]
+        J --> E
+        K --> E`,
+        explanation: "Hashing + rolling hash. Time: O(n+m) average."
+    },
+    
+    // === TREE SEARCHING ===
+    "BST Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["curr = root"]
+        B --> C{"curr == null ?"}
+        C -->|Yes| D["Return false"]
+        C -->|No| E{"key == curr.data ?"}
+        E -->|Yes| F["Return true"]
+        E -->|No| G{"key < curr.data ?"}
+        G -->|Yes| H["Search left subtree"]
+        G -->|No| I["Search right subtree"]
+        H --> J["End"]
+        I --> J`,
+        explanation: "Binary Search Tree traversal. Time: O(h) where h=height."
+    },
+    "AVL Tree Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["curr = root"]
+        B --> C{"curr == null ?"}
+        C -->|Yes| D["Return false"]
+        C -->|No| E{"key == curr.key ?"}
+        E -->|Yes| F["Return true"]
+        E -->|No| G{"key < curr.key ?"}
+        G -->|Yes| H["Search left"]
+        G -->|No| I["Search right"]
+        H --> J["End"]
+        I --> J`,
+        explanation: "Balanced BST search. Time: O(log n)."
+    },
+    
+    // === ADVANCED & SPECIAL ===
+    "Boyer-Moore": {
+        mermaid: `graph TD
+        A["Start"] --> B["Preprocess bad char & good suffix"]
+        B --> C["i = m-1"]
+        C --> D{"i < n ?"}
+        D -->|No| E["Return -1"]
+        D -->|Yes| F["Compare from end"]
+        F -->|Match| G["i += m"]
+        F -->|Mismatch| H["Shift by max(badchar, goodsuffix)"]
+        G --> D
+        H --> D`,
+        explanation: "Backward matching with preprocessing. Very fast in practice."
+    },
+    "Z-Algorithm": {
+        mermaid: `graph TD
+        A["Start"] --> B["Build Z-array for pat$+text"]
+        B --> C["Scan Z-array"]
+        C --> D{"Z[i] == m ?"}
+        D -->|Yes| E["Return i-m-1"]
+        D -->|No| F["i++"]
+        F --> D`,
+        explanation: "Linear time string matching using Z-array."
+    },
+    
+    // === PARALLEL & DISTRIBUTED ===
+    "Parallel Binary Search": {
+        mermaid: `graph TD
+        A["Start"] --> B["Divide range<br>among threads"]
+        B --> C["Each thread:<br>Binary search subrange"]
+        C --> D["Merge results"]
+        D --> E["Return first match"]
+        E --> F["End"]`,
+        explanation: "Divide and conquer across multiple processors."
+    },
+    
+    // === MEMORY EFFICIENT ===
+    "Memory Efficient Binary": {
+        mermaid: `graph TD
+        A["Start"] --> B["low=0, high=size-1"]
+        B --> C{"low < high ?"}
+        C -->|No| D["Check arr[low]"]
+        C -->|Yes| E["mid=low+(high-low)/2"]
+        E --> F{"arr[mid] >= key ?"}
+        F -->|Yes| G["high=mid"]
+        F -->|No| H["low=mid+1"]
+        G --> C
+        H --> C`,
+        explanation: "Avoids overflow using subtraction. Space: O(1)."
+    }
+};
+
+            // Fuse.js for fuzzy search
+            const fuse = new Fuse(Object.keys(searchFlowcharts), { threshold: 0.4 });
+
+            // Search functionality (Main Search)
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const query = document.getElementById('search-input').value.trim().toLowerCase();
+                const resultsDiv = document.getElementById('results');
+                const displayDiv = document.getElementById('flowchart-display');
+                displayDiv.innerHTML = '';
+
+                if (!query) {
+                    resultsDiv.innerHTML = '<p style="color: var(--error);">Please enter an algorithm name.</p>';
+                    return;
+                }
+
+                const matches = fuse.search(query);
+                if (matches.length > 0) {
+                    const algorithm = matches[0].item;
+                    const data = searchFlowcharts[algorithm];
+                    displayDiv.innerHTML = `
+                        <div class="flowchart-container">
+                            <h3>${algorithm}</h3>
+                            <div class="mermaid">${data.mermaid}</div>
+                            <p>${data.explanation}</p>
+                        </div>
+                    `;
+                    resultsDiv.innerHTML = '<p style="color: var(--success);">Flowchart generated below!</p>';
+                    mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                } else {
+                    resultsDiv.innerHTML = `<p style="color: var(--error);">No match found. Try: ${Object.keys(searchFlowcharts).slice(0, 5).join(', ')}...</p>`;
+                }
+            });
+
+            // Enter key to search
+            document.getElementById('search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('search-btn').click();
+                }
+            });
+
+            // Generate Quick Access Cards
+            function generateQuickAccess() {
+                const grid = document.getElementById('quick-access-grid');
+                const sampleAlgorithms = Object.keys(searchFlowcharts).slice(0, 8);
+                grid.innerHTML = sampleAlgorithms.map(algorithm => `
+                    <div class="quick-card" onclick="selectAlgorithm('${algorithm}')">
+                        <h4>${algorithm}</h4>
+                        <p>${searchFlowcharts[algorithm].explanation.substring(0, 80)}...</p>
+                    </div>
+                `).join('');
+            }
+
+            // Select algorithm from quick access
+            window.selectAlgorithm = function(algorithm) {
+                document.getElementById('search-input').value = algorithm;
+                const data = searchFlowcharts[algorithm];
+                document.getElementById('flowchart-display').innerHTML = `
+                    <div class="flowchart-container">
+                        <h3>${algorithm}</h3>
+                        <div class="mermaid">${data.mermaid}</div>
+                        <p>${data.explanation}</p>
+                    </div>
+                `;
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            };
+
+            // Initialize Mermaid with custom theme
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: "base",
+                themeVariables: {
+                    primaryColor: "#1e1e2f",
+                    primaryBorderColor: "#8b6cf6",
+                    primaryTextColor: "#ffffff",
+                    lineColor: "#a78bfa",
+                    secondaryColor: "#2a2a40",
+                    tertiaryColor: "#141427",
+                    edgeLabelBackground: "#1e1e2f"
+                }
+            });
+
+            // Display all flowcharts initially (optional)
+            function displayAllFlowcharts() {
+                const displayDiv = document.getElementById('flowchart-display');
+                let html = '';
+                Object.entries(searchFlowcharts).forEach(([name, data]) => {
+                    html += `
+                        <div class="flowchart-container">
+                            <h3>${name}</h3>
+                            <div class="mermaid">${data.mermaid}</div>
+                            <p>${data.explanation}</p>
+                        </div>
+                    `;
+                });
+                displayDiv.innerHTML = html;
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            }
+
+            // Initialize on page load
+            window.addEventListener('load', function() {
+                generateQuickAccess();
+                // Uncomment to show all flowcharts initially
+                // displayAllFlowcharts();
+            });
+        </script>
+    </body>
+    </html>

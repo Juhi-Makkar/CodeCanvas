@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Applications - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --accent-green: #10B981;
+            --accent-orange: #F59E0B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+
+        .navbar nav a.active {
+            color: var(--accent-purple);
+            background: rgba(139,108,246,0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 150px 20px 80px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-purple);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Section Spacing */
+        section {
+            min-height: 70vh;
+            padding: 100px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Application Cards */
+        .application-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .application-card {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent-purple);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .application-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .application-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .application-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(139,108,246,0.4);
+        }
+
+        .application-card h3 {
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .application-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .application-card code {
+            background: rgba(139,108,246,0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-purple);
+            font-size: 13px;
+            display: inline-block;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .category-tech { background: rgba(79, 195, 247, 0.2); color: var(--accent-blue); }
+        .category-data { background: rgba(139, 108, 246, 0.2); color: var(--accent-purple); }
+        .category-search { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .category-business { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+
+        /* Code Examples Section */
+        .code-section {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .code-section h2 {
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .code-block {
+            background: #1e1e2f;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid rgba(139,108,246,0.2);
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .comment { color: #6a9955; }
+        .code-block .function { color: #dcdcaa; }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, var(--bg-secondary), rgba(139,108,246,0.1));
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(139,108,246,0.2);
+        }
+
+        .info-card h4 {
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .application-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="sortingGS.html" class="logo">CodeCanvas - Sorting</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/sortGS.html">Back to Sorting</a></li>
+            <li><a href="../sort/theory.html">Theory</a></li>
+            <li><a href="../sort/syntax.html">Syntax</a></li>
+            <li><a href="../sort/algorithm.html">Algorithm</a></li>
+            <li><a href="../sort/flowchart.html">Flowchart</a></li>
+            <li><a href="../sort/sorting.html">Sorting</a></li>
+                <li><a href="applications.html" class="active">Applications</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="section-content">
+            <h1>Real-World Sorting Applications</h1>
+            <p>Explore how sorting algorithms power search engines, databases, and everyday applications we rely on.</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">Use Cases</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">O(n log n)</div>
+                    <div class="stat-label">Best Efficiency</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99%</div>
+                    <div class="stat-label">Daily Usage</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="introduction">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Why Sorting Matters</h2>
+                <p>Sorting is one of the most fundamental operations in computer science with countless real-world applications.</p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Search Optimization</h4>
+                    <p>Sorted data enables binary search (O(log n)) instead of linear search (O(n)).</p>
+                </div>
+                <div class="info-card">
+                    <h4>Data Analysis</h4>
+                    <p>Sorting is essential for ranking, filtering, and statistical analysis of datasets.</p>
+                </div>
+                <div class="info-card">
+                    <h4>User Experience</h4>
+                    <p>Sorted results provide intuitive, organized information presentation.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Performance Critical</h4>
+                    <p>Sorting algorithms are heavily optimized in every programming language library.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World Applications -->
+    <section id="applications">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Real-World Applications</h2>
+                <p>Discover how sorting powers modern technology across industries.</p>
+            </div>
+            <div class="application-grid" id="application-grid">
+                <!-- Application cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Examples Section -->
+    <section id="code-examples">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Code Examples</h2>
+                <p>Practical implementations of sorting in real-world scenarios.</p>
+            </div>
+            <div class="code-section">
+                <h3>1. Search Engine Results</h3>
+                <div class="code-block">
+                    <pre><code><span class="keyword">function</span> <span class="function">sortSearchResults</span>(results, criteria) {
+    <span class="keyword">return</span> results.<span class="function">sort</span>((a, b) => {
+        <span class="keyword">if</span> (criteria === <span class="string">'relevance'</span>) {
+            <span class="keyword">return</span> b.score - a.score;
+        }
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="function">Date</span>(b.date) - <span class="keyword">new</span> <span class="function">Date</span>(a.date);
+    });
+}</code></pre>
+                </div>
+                
+                <h3>2. E-commerce Product Sorting</h3>
+                <div class="code-block">
+                    <pre><code><span class="keyword">function</span> <span class="function">sortProducts</span>(products, sortBy) {
+    <span class="keyword">switch</span>(sortBy) {
+        <span class="keyword">case</span> <span class="string">'price'</span>:
+            <span class="keyword">return</span> products.<span class="function">sort</span>((a, b) => a.price - b.price);
+        <span class="keyword">case</span> <span class="string">'rating'</span>:
+            <span class="keyword">return</span> products.<span class="function">sort</span>((a, b) => b.rating - a.rating);
+        <span class="keyword">case</span> <span class="string">'name'</span>:
+            <span class="keyword">return</span> products.<span class="function">sort</span>((a, b) => a.name.<span class="function">localeCompare</span>(b.name));
+    }
+}</code></pre>
+                </div>
+                
+                <h3>3. Database Query Results</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment">// SQL ORDER BY equivalent</span>
+<span class="keyword">const</span> users = [
+    { id: 3, name: <span class="string">'Bob'</span>, age: 25 },
+    { id: 1, name: <span class="string">'Alice'</span>, age: 30 },
+    { id: 2, name: <span class="string">'Charlie'</span>, age: 35 }
+];
+
+<span class="keyword">const</span> sortedUsers = users.<span class="function">sort</span>((a, b) => {
+    <span class="keyword">return</span> a.age - b.age; <span class="comment">// ORDER BY age ASC</span>
+});</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../sort/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Sorting Applications Data
+        const applications = [
+            {
+                name: "Search Engines",
+                description: "Google, Bing sort billions of results by relevance, date, and popularity.",
+                code: "results.sort((a,b) => b.relevance - a.relevance);",
+                category: "search"
+            },
+            {
+                name: "E-commerce",
+                description: "Amazon, eBay sort products by price, rating, popularity, and new arrivals.",
+                code: "products.sort((a,b) => a.price - b.price);",
+                category: "business"
+            },
+            {
+                name: "Databases",
+                description: "SQL ORDER BY clauses use sorting for query results and indexing.",
+                code: "ORDER BY name ASC, price DESC;",
+                category: "data"
+            },
+            {
+                name: "Social Media",
+                description: "Twitter, Facebook sort feeds by recency, engagement, and relevance.",
+                code: "posts.sort((a,b) => b.likes - a.likes);",
+                category: "business"
+            },
+            {
+                name: "Music Streaming",
+                description: "Spotify sorts playlists by popularity, recently played, and alphabetical order.",
+                code: "songs.sort((a,b) => a.title.localeCompare(b.title));",
+                category: "business"
+            },
+            {
+                name: "File Explorers",
+                description: "Windows Explorer, Finder sort files by name, date, size, and type.",
+                code: "files.sort((a,b) => a.name.localeCompare(b.name));",
+                category: "tech"
+            },
+            {
+                name: "Leaderboards",
+                description: "Gaming platforms sort players by score, rank, and wins.",
+                code: "players.sort((a,b) => b.score - a.score);",
+                category: "game"
+            },
+            {
+                name: "Task Managers",
+                description: "Todoist, Trello sort tasks by priority, due date, and completion status.",
+                code: "tasks.sort((a,b) => a.priority - b.priority);",
+                category: "business"
+            },
+            {
+                name: "Stock Trading",
+                description: "Trading platforms sort stocks by price change, volume, and market cap.",
+                code: "stocks.sort((a,b) => b.change - a.change);",
+                category: "business"
+            },
+            {
+                name: "Machine Learning",
+                description: "Sorting used in k-NN algorithms and ranking model predictions.",
+                code: "predictions.sort((a,b) => b.confidence - a.confidence);",
+                category: "data"
+            },
+            {
+                name: "Autocomplete",
+                description: "Google search, IDEs sort suggestions by frequency and relevance.",
+                code: "suggestions.sort((a,b) => b.frequency - a.frequency);",
+                category: "search"
+            },
+            {
+                name: "Contact Lists",
+                description: "Phone apps sort contacts alphabetically and by recent usage.",
+                code: "contacts.sort((a,b) => a.name.localeCompare(b.name));",
+                category: "tech"
+            },
+            {
+                name: "Weather Apps",
+                description: "Sort forecasts by temperature, precipitation, and location proximity.",
+                code: "forecasts.sort((a,b) => a.temp - b.temp);",
+                category: "data"
+            },
+            {
+                name: "News Feeds",
+                description: "CNN, BBC sort articles by recency, popularity, and relevance.",
+                code: "articles.sort((a,b) => new Date(b.date) - new Date(a.date));",
+                category: "business"
+            },
+            {
+                name: "Video Platforms",
+                description: "YouTube sorts videos by views, upload date, and relevance.",
+                code: "videos.sort((a,b) => b.views - a.views);",
+                category: "business"
+            },
+            {
+                name: "Spreadsheets",
+                description: "Excel, Google Sheets sort rows by column values.",
+                code: "rows.sort((a,b) => a.columnA - b.columnA);",
+                category: "data"
+            },
+            {
+                name: "Calendar Apps",
+                description: "Google Calendar sorts events by start time and duration.",
+                code: "events.sort((a,b) => a.startTime - b.startTime);",
+                category: "tech"
+            },
+            {
+                name: "Ride Sharing",
+                description: "Uber sorts drivers by distance, rating, and ETA.",
+                code: "drivers.sort((a,b) => a.distance - b.distance);",
+                category: "business"
+            },
+            {
+                name: "Recommendation Systems",
+                description: "Netflix sorts recommendations by predicted user interest.",
+                code: "recommendations.sort((a,b) => b.score - a.score);",
+                category: "data"
+            },
+            {
+                name: "Flight Booking",
+                description: "Kayak sorts flights by price, duration, and departure time.",
+                code: "flights.sort((a,b) => a.price - b.price);",
+                category: "business"
+            },
+            {
+                name: "Job Portals",
+                description: "LinkedIn sorts jobs by relevance, date posted, and salary.",
+                code: "jobs.sort((a,b) => b.relevance - a.relevance);",
+                category: "business"
+            },
+            {
+                name: "Graph Algorithms",
+                description: "Dijkstra's, Prim's algorithms use priority queues with sorting.",
+                code: "pq.sort((a,b) => a.distance - b.distance);",
+                category: "tech"
+            },
+            {
+                name: "Data Visualization",
+                description: "Charts and graphs require sorted data for proper display.",
+                code: "data.sort((a,b) => a.value - b.value);",
+                category: "data"
+            }
+        ];
+
+        // Generate Application Cards
+        function generateApplicationCards() {
+            const grid = document.getElementById('application-grid');
+            applications.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'application-card';
+                card.innerHTML = `
+                    <span class="category-badge category-${item.category}">${item.category.toUpperCase()}</span>
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <code>${item.code}</code>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Initialize on load
+        generateApplicationCards();
+    </script>
+</body>
+</html>

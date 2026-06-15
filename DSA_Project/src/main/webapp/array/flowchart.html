@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowcharts for Array - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+        
+        .navbar nav a.active {
+            color: var(--accent-purple);
+            background: rgba(139,108,246,0.2);
+        }
+
+        /* Section Spacing */
+        section {
+            min-height: auto;
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Search Bar */
+        .search-container {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-container h2 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .search-container input {
+            padding: 12px;
+            width: 60%;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            padding: 12px 22px;
+            border: none;
+            background: linear-gradient(135deg, #8B6CF6, #9f7aea);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(139,108,246,0.6);
+        }
+
+        /* Flowchart Container */
+        .flowchart-container {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .flowchart-container h3 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Explanation */
+        .explanation {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .explanation h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .explanation p {
+            margin-bottom: 15px;
+        }
+
+        /* Quick Access Cards */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .quick-card {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(139,108,246,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(139,108,246,0.5);
+            border-color: var(--accent-purple);
+        }
+
+        .quick-card h4 {
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+        }
+
+        .quick-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .search-container input {
+                width: 80%;
+            }
+            .mermaid {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="arrayGS.html" class="logo">CodeCanvas - Array</a>
+        <nav>
+            <ul>
+             <li><a href="../GetStarted/arrayGS.html">Back To Array</a></li>
+             <li><a href="../array/theory.html">Theory</a></li>
+             <li><a href="../array/syntax.html">Syntax</a></li>
+             <li><a href="../array/algorithm.html">Algorithm</a></li>
+             <li><a href="../array/complexity.html">Complexity</a></li>
+             <li><a href="../array/flowchart.html" class="active">Flowchart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search Section -->
+    <section id="search">
+        <div class="section-content">
+            <div class="search-container">
+                <h2>Search for a Flowchart Concept</h2>
+                <p>Enter a concept (e.g., "Array Traversal", "Linear Search", "Binary Search") to generate its flowchart.</p>
+                <input type="text" id="search-input" placeholder="Type a concept...">
+                <button id="search-btn">Generate Flowchart</button>
+                <div id="results"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access Section -->
+    <section id="quick-access">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 20px;">Quick Access</h2>
+            <div class="quick-access" id="quick-access-grid">
+                <!-- Quick cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Explanation Section -->
+    <section id="explanation">
+        <div class="section-content">
+            <div class="explanation">
+                <h2>What are Flowcharts?</h2>
+                <p>Flowcharts are visual representations of algorithms or processes, using symbols like rectangles (processes), diamonds (decisions), and arrows (flow). They help in understanding logic, debugging, and planning code. In data structures like arrays, flowcharts illustrate operations such as traversal, searching, and sorting.</p>
+                <p><strong>Key Symbols:</strong></p>
+                <ul>
+                    <li><strong>Rectangle:</strong> Process or action (e.g., "Process arr[i]").</li>
+                    <li><strong>Diamond:</strong> Decision (e.g., "i < size?").</li>
+                    <li><strong>Oval:</strong> Start/End.</li>
+                    <li><strong>Arrow:</strong> Flow direction.</li>
+                </ul>
+                <p><strong>Examples in Arrays:</strong> Traversal loops through elements; searches check conditions; sorts rearrange data.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flowchart Display Section -->
+    <section id="flowcharts">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 20px;">All Flowcharts</h2>
+            <div id="flowchart-display"></div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../array/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Comprehensive flowcharts database
+        const flowcharts = {
+            "Array Traversal": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = 0"]
+                B --> C{"i < size ?"}
+                C -->|Yes| D["Process arr[i]"]
+                D --> E["i++"]
+                E --> C
+                C -->|No| F["End"]`,
+                explanation: "This flowchart shows how to traverse an array: initialize index, check bounds, process each element, and increment until all elements are visited."
+            },
+            "Linear Search": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = 0"]
+                B --> C{"i < size ?"}
+                C -->|Yes| D{"arr[i] == key ?"}
+                D -->|Yes| E["Return i"]
+                D -->|No| F["i++"]
+                F --> C
+                C -->|No| G["Return -1"]`,
+                explanation: "Linear search checks each element sequentially until the key is found or the end is reached. Time complexity: O(n)."
+            },
+            "Binary Search": {
+                mermaid: `graph TD
+                A["Start"] --> B["low=0, high=size-1"]
+                B --> C{"low <= high ?"}
+                C -->|No| D["Return -1"]
+                C -->|Yes| E["mid=(low+high)/2"]
+                E --> F{"arr[mid]==key ?"}
+                F -->|Yes| G["Return mid"]
+                F -->|No| H{"key < arr[mid] ?"}
+                H -->|Yes| I["high = mid-1"]
+                H -->|No| J["low = mid+1"]
+                I --> C
+                J --> C`,
+                explanation: "Binary search halves the array each time, requiring a sorted array for efficiency. Time complexity: O(log n)."
+            },
+            "Insertion at End": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is array full?"}
+                B -->|Yes| C["Error: Overflow"]
+                B -->|No| D["arr[size] = newElement"]
+                D --> E["size++"]
+                E --> F["End"]`,
+                explanation: "Simple insertion at the end of array. Only requires checking if array has space."
+            },
+            "Insertion at Beginning": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is array full?"}
+                B -->|Yes| C["Error: Overflow"]
+                B -->|No| D["Shift all elements right"]
+                D --> E["arr[0] = newElement"]
+                E --> F["size++"]
+                F --> G["End"]`,
+                explanation: "Insertion at the beginning requires shifting all existing elements one position to the right to make space for the new element."
+            },
+            "Insertion at Specific Position": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is array full?"}
+                B -->|Yes| C["Error: Overflow"]
+                B -->|No| D{"Is position valid?"}
+                D -->|No| E["Error: Invalid Position"]
+                D -->|Yes| F["Shift elements from index right"]
+                F --> G["Insert at index"]
+                G --> H["size++"]
+                H --> I["End"]`,
+                explanation: "Insertion at a specific position requires shifting elements from that position onwards to the right, then placing the new element."
+            },
+            "Deletion from End": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is array empty?"}
+                B -->|Yes| C["Error: Underflow"]
+                B -->|No| D["size--"]
+                D --> E["End"]`,
+                explanation: "Simple deletion from the end. Just decrement the size counter. No shifting required."
+            },
+            "Deletion from Beginning": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is array empty?"}
+                B -->|Yes| C["Error: Underflow"]
+                B -->|No| D["Shift all elements left"]
+                D --> E["size--"]
+                E --> F["End"]`,
+                explanation: "Deletion from the beginning requires shifting all elements one position to the left to fill the gap."
+            },
+            "Deletion from Specific Position": {
+                mermaid: `graph TD
+                    A["Start"] --> B{"Is array empty?"}
+                    B -->|Yes| C["Error: Underflow"]
+                    B -->|No| D{"Is position valid?"}
+                    D -->|No| E["Error: Invalid Position"]
+                    D -->|Yes| F["Shift elements from index+1 left"]
+                    F --> G["size--"]
+                    G --> H["End"]`,
+                    explanation: "Deletion from a specific position requires shifting all elements after that position to the left to fill the gap."
+                },
+                "Find Maximum Element": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["max = arr[0], i = 1"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D{"arr[i] > max ?"}
+                    D -->|Yes| E["max = arr[i]"]
+                    D -->|No| F["Continue"]
+                    E --> G["i++"]
+                    F --> G
+                    G --> C
+                    C -->|No| H["Print max"]
+                    H --> I["End"]`,
+                    explanation: "Iterate through the array, comparing each element with the current maximum. Update max if a larger element is found."
+                },
+                "Find Minimum Element": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["min = arr[0], i = 1"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D{"arr[i] < min ?"}
+                    D -->|Yes| E["min = arr[i]"]
+                    D -->|No| F["Continue"]
+                    E --> G["i++"]
+                    F --> G
+                    G --> C
+                    C -->|No| H["Print min"]
+                    H --> I["End"]`,
+                    explanation: "Similar to finding maximum, but track the smallest element instead."
+                },
+                "Reverse an Array": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["i = 0, j = size-1"]
+                    B --> C{"i < j ?"}
+                    C -->|Yes| D["Swap arr[i], arr[j]"]
+                    D --> E["i++, j--"]
+                    E --> C
+                    C -->|No| F["End"]`,
+                    explanation: "Swap elements from both ends moving towards the center until the middle is reached."
+                },
+                "Sum of Array Elements": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["sum = 0, i = 0"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D["sum = sum + arr[i]"]
+                    D --> E["i++"]
+                    E --> C
+                    C -->|No| F["Print sum"]
+                    F --> G["End"]`,
+                    explanation: "Accumulate the sum by adding each element to a running total."
+                },
+                "Product of Array Elements": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["product = 1, i = 0"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D["product = product * arr[i]"]
+                    D --> E["i++"]
+                    E --> C
+                    C -->|No| F["Print product"]
+                    F --> G["End"]`,
+                    explanation: "Multiply all elements together to get the product. Initialize product to 1."
+                },
+                "Average of Array Elements": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["sum = 0, i = 0"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D["sum = sum + arr[i]"]
+                    D --> E["i++"]
+                    E --> C
+                    C -->|No| F["avg = sum / size"]
+                    F --> G["Print avg"]
+                    G --> H["End"]`,
+                    explanation: "Calculate sum first, then divide by the number of elements to get the average."
+                },
+                "Check if Array is Sorted": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["i = 0"]
+                    B --> C{"i < size-1 ?"}
+                    C -->|Yes| D{"arr[i] > arr[i+1] ?"}
+                    D -->|Yes| E["Not Sorted"]
+                    D -->|No| F["i++"]
+                    F --> C
+                    C -->|No| G["Sorted"]
+                    G --> H["End"]`,
+                    explanation: "Check adjacent elements; if any pair is out of order, the array is not sorted."
+                },
+                "Check if Array is Sorted (Descending)": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["i = 0"]
+                    B --> C{"i < size-1 ?"}
+                    C -->|Yes| D{"arr[i] < arr[i+1] ?"}
+                    D -->|Yes| E["Not Sorted"]
+                    D -->|No| F["i++"]
+                    F --> C
+                    C -->|No| G["Sorted"]
+                    G --> H["End"]`,
+                    explanation: "Similar to ascending check, but verify elements are in descending order."
+                },
+                "Count Positive Numbers": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["count = 0, i = 0"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D{"arr[i] > 0 ?"}
+                    D -->|Yes| E["count++"]
+                    D -->|No| F["Continue"]
+                    E --> G["i++"]
+                    F --> G
+                    G --> C
+                    C -->|No| H["Print count"]
+                    H --> I["End"]`,
+                    explanation: "Iterate through array and count elements greater than zero."
+                },
+                "Count Negative Numbers": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["count = 0, i = 0"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D{"arr[i] < 0 ?"}
+                    D -->|Yes| E["count++"]
+                    D -->|No| F["Continue"]
+                    E --> G["i++"]
+                    F --> G
+                    G --> C
+                    C -->|No| H["Print count"]
+                    H --> I["End"]`,
+                    explanation: "Iterate through array and count elements less than zero."
+                },
+                "Count Even Numbers": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["count = 0, i = 0"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D{"arr[i] % 2 == 0 ?"}
+                    D -->|Yes| E["count++"]
+                    D -->|No| F["Continue"]
+                    E --> G["i++"]
+                    F --> G
+                    G --> C
+                    C -->|No| H["Print count"]
+                    H --> I["End"]`,
+                    explanation: "Check if each element is divisible by 2 and count even numbers."
+                },
+                "Count Odd Numbers": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["count = 0, i = 0"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D{"arr[i] % 2 != 0 ?"}
+                    D -->|Yes| E["count++"]
+                    D -->|No| F["Continue"]
+                    E --> G["i++"]
+                    F --> G
+                    G --> C
+                    C -->|No| H["Print count"]
+                    H --> I["End"]`,
+                    explanation: "Check if each element is not divisible by 2 and count odd numbers."
+                },
+                "Find Second Largest": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["first = -1, second = -1"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D{"arr[i] > first ?"}
+                    D -->|Yes| E["second = first, first = arr[i]"]
+                    D -->|No| F{"arr[i] > second ?"}
+                    F -->|Yes| G["second = arr[i]"]
+                    F -->|No| H["Continue"]
+                    E --> I["i++"]
+                    G --> I
+                    H --> I
+                    I --> C
+                    C -->|No| J["Print second"]
+                    J --> K["End"]`,
+                    explanation: "Track both the largest and second largest elements in a single pass."
+                },
+                "Find Second Smallest": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["first = infinity, second = infinity"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D{"arr[i] < first ?"}
+                    D -->|Yes| E["second = first, first = arr[i]"]
+                    D -->|No| F{"arr[i] < second ?"}
+                    F -->|Yes| G["second = arr[i]"]
+                    F -->|No| H["Continue"]
+                    E --> I["i++"]
+                    G --> I
+                    H --> I
+                    I --> C
+                    C -->|No| J["Print second"]
+                    J --> K["End"]`,
+                    explanation: "Track both the smallest and second smallest elements in a single pass."
+                },
+                "Rotate Array Left by 1": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["temp = arr[0]"]
+                    B --> C["Shift all elements left"]
+                    C --> D["arr[size-1] = temp"]
+                    D --> E["End"]`,
+                    explanation: "Move first element to end, shift all other elements one position left."
+                },
+                "Rotate Array Right by 1": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["temp = arr[size-1]"]
+                    B --> C["Shift all elements right"]
+                    C --> D["arr[0] = temp"]
+                    D --> E["End"]`,
+                    explanation: "Move last element to beginning, shift all other elements one position right."
+                },
+                "Bubble Sort": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["i = 0"]
+                    B --> C{"i < size-1 ?"}
+                    C -->|Yes| D["j = 0"]
+                    D --> E{"j < size-i-1 ?"}
+                    E -->|Yes| F{"arr[j] > arr[j+1] ?"}
+                    F -->|Yes| G["Swap arr[j], arr[j+1]"]
+                    F -->|No| H["j++"]
+                    G --> H
+                    H --> E
+                    E -->|No| I["i++"]
+                    I --> C
+                    C -->|No| J["End"]`,
+                    explanation: "Repeatedly swap adjacent elements if they are in wrong order. Time complexity: O(n²)."
+                },
+                "Selection Sort": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["i = 0"]
+                    B --> C{"i < size-1 ?"}
+                    C -->|Yes| D["minIdx = i"]
+                    D --> E["j = i+1"]
+                    E --> F{"j < size ?"}
+                    F -->|Yes| G{"arr[j] < arr[minIdx] ?"}
+                    G -->|Yes| H["minIdx = j"]
+                    G -->|No| I["j++"]
+                    H --> I
+                    I --> F
+                    F -->|No| J["Swap arr[i], arr[minIdx]"]
+                    J --> K["i++"]
+                    K --> C
+                    C -->|No| L["End"]`,
+                    explanation: "Find minimum element and place it at the beginning. Time complexity: O(n²)."
+                },
+                "Insertion Sort": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["i = 1"]
+                    B --> C{"i < size ?"}
+                    C -->|Yes| D["key = arr[i], j = i-1"]
+                    D --> E{"j >= 0 && arr[j] > key ?"}
+                    E -->|Yes| F["arr[j+1] = arr[j]"]
+                    E -->|No| G["arr[j+1] = key"]
+                    F --> H["j--"]
+                    H --> E
+                    G --> I["i++"]
+                    I --> C
+                    C -->|No| J["End"]`,
+                    explanation: "Build sorted array one element at a time. Time complexity: O(n²)."
+                },
+                "Merge Sort": {
+                    mermaid: `graph TD
+                    A["Start"] --> B{"size <= 1 ?"}
+                    B -->|Yes| C["Return"]
+                    B -->|No| D["Divide array into halves"]
+                    D --> E["Sort left half"]
+                    E --> F["Sort right half"]
+                    F --> G["Merge two halves"]
+                    G --> H["End"]`,
+                    explanation: "Divide and conquer approach. Recursively divide and merge sorted halves. Time complexity: O(n log n)."
+                },
+                "Quick Sort": {
+                    mermaid: `graph TD
+                    A["Start"] --> B{"low < high ?"}
+                    B -->|No| C["Return"]
+                    B -->|Yes| D["Partition array"]
+                    D --> E["pivotIndex = partition"]
+                    E --> F["Quick sort left"]
+                    F --> G["Quick sort right"]
+                    G --> H["End"]`,
+                    explanation: "Choose pivot, partition array, then recursively sort both sides. Time complexity: O(n log n) average."
+                },
+                "2D Array Row Traversal": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["i = 0"]
+                    B --> C{"i < rows ?"}
+                    C -->|Yes| D["j = 0"]
+                    D --> E{"j < cols ?"}
+                    E -->|Yes| F["Process matrix[i][j]"]
+                    F --> G["j++"]
+                    G --> E
+                    E -->|No| H["i++"]
+                    H --> C
+                    C -->|No| I["End"]`,
+                    explanation: "Traverse 2D array row by row, visiting each element in order."
+                },
+                "2D Array Column Traversal": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["j = 0"]
+                    B --> C{"j < cols ?"}
+                    C -->|Yes| D["i = 0"]
+                    D --> E{"i < rows ?"}
+                    E -->|Yes| F["Process matrix[i][j]"]
+                    F --> G["i++"]
+                    G --> E
+                    E -->|No| H["j++"]
+                    H --> C
+                    C -->|No| I["End"]`,
+                    explanation: "Traverse 2D array column by column, visiting each element in order."
+                },
+                "2D Array Diagonal Traversal": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["i = 0, j = 0"]
+                    B --> C{"i < rows && j < cols ?"}
+                    C -->|Yes| D["Process matrix[i][j]"]
+                    D --> E["i++, j++"]
+                    E --> C
+                    C -->|No| F["End"]`,
+                    explanation: "Traverse the main diagonal of a 2D array (where row index equals column index)."
+                },
+                "Transpose 2D Array": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["Create newMatrix[cols][rows]"]
+                    B --> C["i = 0"]
+                    C --> D{"i < rows ?"}
+                    D -->|Yes| E["j = 0"]
+                    E --> F{"j < cols ?"}
+                    F -->|Yes| G["newMatrix[j][i] = matrix[i][j]"]
+                    G --> H["j++"]
+                    H --> F
+                    F -->|No| I["i++"]
+                    I --> D
+                    D -->|No| J["Print newMatrix"]
+                    J --> K["End"]`,
+                    explanation: "Transpose swaps rows and columns. Element at [i][j] moves to [j][i]."
+                },
+                "Rotate Matrix 90 Degrees": {
+                    mermaid: `graph TD
+                    A["Start"] --> B["Create newMatrix[cols][rows]"]
+                    B --> C["i = 0"]
+                    C --> D{"i < rows ?"}
+                    D -->|Yes| E["j = 0"]
+                    E --> F{"j < cols ?"}
+                    F -->|Yes| G["newMatrix[j][rows-1-i] = matrix[i][j]"]
+                    G --> H["j++"]
+                    H --> F
+                    F -->|No| I["i++"]
+                    I --> D
+                    D -->|No| J["Print newMatrix"]
+                    J --> K["End"]`,
+                    explanation: "Rotate matrix 90 degrees clockwise by mapping [i][j] to [j][rows-1-i]."
+                },
+                "Find Missing Number": {
+                    mermaid: `graph TD
+                        A["Start"] --> B["sum = 0, expected = 0"]
+                        B --> C["i = 0"]
+                        C --> D{"i < n ?"}
+                        D -->|Yes| E["sum += arr[i]"]
+                        E --> F["i++"]
+                        F --> C
+                        C -->|No| G["expected = n*(n+1)/2"]
+                        G --> H["missing = expected - sum"]
+                        H --> I["Print missing"]
+                        I --> J["End"]`,
+                        explanation: "Calculate expected sum of 1 to n, subtract actual sum to find missing number."
+                    },
+                    "Check if Palindrome": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 0, j = size-1"]
+                        B --> C{"i < j ?"}
+                        C -->|Yes| D{"arr[i] == arr[j] ?"}
+                        D -->|Yes| E["i++, j--"]
+                        D -->|No| F["Not Palindrome"]
+                        E --> C
+                        C -->|No| G["Is Palindrome"]
+                        G --> H["End"]`,
+                        explanation: "Compare elements from both ends moving towards the center."
+                    },
+                    "Count Zeros": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["count = 0, i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] == 0 ?"}
+                        D -->|Yes| E["count++"]
+                        D -->|No| F["Continue"]
+                        E --> G["i++"]
+                        F --> G
+                        G --> C
+                        C -->|No| H["Print count"]
+                        H --> I["End"]`,
+                        explanation: "Iterate through array and count elements equal to zero."
+                    },
+                    "Find Duplicate": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D["j = i+1"]
+                        D --> E{"j < size ?"}
+                        E -->|Yes| F{"arr[i] == arr[j] ?"}
+                        F -->|Yes| G["Duplicate Found"]
+                        F -->|No| H["j++"]
+                        H --> E
+                        E -->|No| I["i++"]
+                        I --> C
+                        C -->|No| J["No Duplicate"]
+                        J --> K["End"]`,
+                        explanation: "Compare each element with every other element to find duplicates."
+                    },
+                    "Count Positive Numbers": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["count = 0, i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] > 0 ?"}
+                        D -->|Yes| E["count++"]
+                        D -->|No| F["Continue"]
+                        E --> G["i++"]
+                        F --> G
+                        G --> C
+                        C -->|No| H["Print count"]
+                        H --> I["End"]`,
+                        explanation: "Iterate through array and count elements greater than zero."
+                    },
+                    "Count Negative Numbers": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["count = 0, i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] < 0 ?"}
+                        D -->|Yes| E["count++"]
+                        D -->|No| F["Continue"]
+                        E --> G["i++"]
+                        F --> G
+                        G --> C
+                        C -->|No| H["Print count"]
+                        H --> I["End"]`,
+                        explanation: "Iterate through array and count elements less than zero."
+                    },
+                    "Count Even Numbers": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["count = 0, i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] % 2 == 0 ?"}
+                        D -->|Yes| E["count++"]
+                        D -->|No| F["Continue"]
+                        E --> G["i++"]
+                        F --> G
+                        G --> C
+                        C -->|No| H["Print count"]
+                        H --> I["End"]`,
+                        explanation: "Check if each element is divisible by 2 and count even numbers."
+                    },
+                    "Count Odd Numbers": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["count = 0, i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] % 2 != 0 ?"}
+                        D -->|Yes| E["count++"]
+                        D -->|No| F["Continue"]
+                        E --> G["i++"]
+                        F --> G
+                        G --> C
+                        C -->|No| H["Print count"]
+                        H --> I["End"]`,
+                        explanation: "Check if each element is not divisible by 2 and count odd numbers."
+                    },
+                    "Find Second Largest": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["first = -1, second = -1"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] > first ?"}
+                        D -->|Yes| E["second = first, first = arr[i]"]
+                        D -->|No| F{"arr[i] > second ?"}
+                        F -->|Yes| G["second = arr[i]"]
+                        F -->|No| H["Continue"]
+                        E --> I["i++"]
+                        G --> I
+                        H --> I
+                        I --> C
+                        C -->|No| J["Print second"]
+                        J --> K["End"]`,
+                        explanation: "Track both the largest and second largest elements in a single pass."
+                    },
+                    "Find Second Smallest": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["first = infinity, second = infinity"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] < first ?"}
+                        D -->|Yes| E["second = first, first = arr[i]"]
+                        D -->|No| F{"arr[i] < second ?"}
+                        F -->|Yes| G["second = arr[i]"]
+                        F -->|No| H["Continue"]
+                        E --> I["i++"]
+                        G --> I
+                        H --> I
+                        I --> C
+                        C -->|No| J["Print second"]
+                        J --> K["End"]`,
+                        explanation: "Track both the smallest and second smallest elements in a single pass."
+                    },
+                    "Rotate Array Left by 1": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["temp = arr[0]"]
+                        B --> C["Shift all elements left"]
+                        C --> D["arr[size-1] = temp"]
+                        D --> E["End"]`,
+                        explanation: "Move first element to end, shift all other elements one position left."
+                    },
+                    "Rotate Array Right by 1": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["temp = arr[size-1]"]
+                        B --> C["Shift all elements right"]
+                        C --> D["arr[0] = temp"]
+                        D --> E["End"]`,
+                        explanation: "Move last element to beginning, shift all other elements one position right."
+                    },
+                    "Bubble Sort": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 0"]
+                        B --> C{"i < size-1 ?"}
+                        C -->|Yes| D["j = 0"]
+                        D --> E{"j < size-i-1 ?"}
+                        E -->|Yes| F{"arr[j] > arr[j+1] ?"}
+                        F -->|Yes| G["Swap arr[j], arr[j+1]"]
+                        F -->|No| H["j++"]
+                        G --> H
+                        H --> E
+                        E -->|No| I["i++"]
+                        I --> C
+                        C -->|No| J["End"]`,
+                        explanation: "Repeatedly swap adjacent elements if they are in wrong order. Time complexity: O(n²)."
+                    },
+                    "Selection Sort": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 0"]
+                        B --> C{"i < size-1 ?"}
+                        C -->|Yes| D["minIdx = i"]
+                        D --> E["j = i+1"]
+                        E --> F{"j < size ?"}
+                        F -->|Yes| G{"arr[j] < arr[minIdx] ?"}
+                        G -->|Yes| H["minIdx = j"]
+                        G -->|No| I["j++"]
+                        H --> I
+                        I --> F
+                        F -->|No| J["Swap arr[i], arr[minIdx]"]
+                        J --> K["i++"]
+                        K --> C
+                        C -->|No| L["End"]`,
+                        explanation: "Find minimum element and place it at the beginning. Time complexity: O(n²)."
+                    },
+                    "Insertion Sort": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 1"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D["key = arr[i], j = i-1"]
+                        D --> E{"j >= 0 && arr[j] > key ?"}
+                        E -->|Yes| F["arr[j+1] = arr[j]"]
+                        E -->|No| G["arr[j+1] = key"]
+                        F --> H["j--"]
+                        H --> E
+                        G --> I["i++"]
+                        I --> C
+                        C -->|No| J["End"]`,
+                        explanation: "Build sorted array one element at a time. Time complexity: O(n²)."
+                    },
+                    "Merge Sort": {
+                        mermaid: `graph TD
+                        A["Start"] --> B{"size <= 1 ?"}
+                        B -->|Yes| C["Return"]
+                        B -->|No| D["Divide array into halves"]
+                        D --> E["Sort left half"]
+                        E --> F["Sort right half"]
+                        F --> G["Merge two halves"]
+                        G --> H["End"]`,
+                        explanation: "Divide and conquer approach. Recursively divide and merge sorted halves. Time complexity: O(n log n)."
+                    },
+                    "Quick Sort": {
+                        mermaid: `graph TD
+                        A["Start"] --> B{"low < high ?"}
+                        B -->|No| C["Return"]
+                        B -->|Yes| D["Partition array"]
+                        D --> E["pivotIndex = partition"]
+                        E --> F["Quick sort left"]
+                        F --> G["Quick sort right"]
+                        G --> H["End"]`,
+                        explanation: "Choose pivot, partition array, then recursively sort both sides. Time complexity: O(n log n) average."
+                    },
+                    "2D Array Row Traversal": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 0"]
+                        B --> C{"i < rows ?"}
+                        C -->|Yes| D["j = 0"]
+                        D --> E{"j < cols ?"}
+                        E -->|Yes| F["Process matrix[i][j]"]
+                        F --> G["j++"]
+                        G --> E
+                        E -->|No| H["i++"]
+                        H --> C
+                        C -->|No| I["End"]`,
+                        explanation: "Traverse 2D array row by row, visiting each element in order."
+                    },
+                    "2D Array Column Traversal": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["j = 0"]
+                        B --> C{"j < cols ?"}
+                        C -->|Yes| D["i = 0"]
+                        D --> E{"i < rows ?"}
+                        E -->|Yes| F["Process matrix[i][j]"]
+                        F --> G["i++"]
+                        G --> E
+                        E -->|No| H["j++"]
+                        H --> C
+                        C -->|No| I["End"]`,
+                        explanation: "Traverse 2D array column by column, visiting each element in order."
+                    },
+                    "2D Array Diagonal Traversal": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 0, j = 0"]
+                        B --> C{"i < rows && j < cols ?"}
+                        C -->|Yes| D["Process matrix[i][j]"]
+                        D --> E["i++, j++"]
+                        E --> C
+                        C -->|No| F["End"]`,
+                        explanation: "Traverse the main diagonal of a 2D array (where row index equals column index)."
+                    },
+                    "Transpose 2D Array": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["Create newMatrix[cols][rows]"]
+                        B --> C["i = 0"]
+                        C --> D{"i < rows ?"}
+                        D -->|Yes| E["j = 0"]
+                        E --> F{"j < cols ?"}
+                        F -->|Yes| G["newMatrix[j][i] = matrix[i][j]"]
+                        G --> H["j++"]
+                        H --> F
+                        F -->|No| I["i++"]
+                        I --> D
+                        D -->|No| J["Print newMatrix"]
+                        J --> K["End"]`,
+                        explanation: "Transpose swaps rows and columns. Element at [i][j] moves to [j][i]."
+                    },
+                    "Rotate Matrix 90 Degrees": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["Create newMatrix[cols][rows]"]
+                        B --> C["i = 0"]
+                        C --> D{"i < rows ?"}
+                        D -->|Yes| E["j = 0"]
+                        E --> F{"j < cols ?"}
+                        F -->|Yes| G["newMatrix[j][rows-1-i] = matrix[i][j]"]
+                        G --> H["j++"]
+                        H --> F
+                        F -->|No| I["i++"]
+                        I --> D
+                        D -->|No| J["Print newMatrix"]
+                        J --> K["End"]`,
+                        explanation: "Rotate matrix 90 degrees clockwise by mapping [i][j] to [j][rows-1-i]."
+                    },
+                    "Check if Palindrome": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 0, j = size-1"]
+                        B --> C{"i < j ?"}
+                        C -->|Yes| D{"arr[i] == arr[j] ?"}
+                        D -->|Yes| E["i++, j--"]
+                        D -->|No| F["Not Palindrome"]
+                        E --> C
+                        C -->|No| G["Is Palindrome"]
+                        G --> H["End"]`,
+                        explanation: "Compare elements from both ends moving towards the center."
+                    },
+                    "Count Zeros": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["count = 0, i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] == 0 ?"}
+                        D -->|Yes| E["count++"]
+                        D -->|No| F["Continue"]
+                        E --> G["i++"]
+                        F --> G
+                        G --> C
+                        C -->|No| H["Print count"]
+                        H --> I["End"]`,
+                        explanation: "Iterate through array and count elements equal to zero."
+                    },
+                    "Find Duplicate": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D["j = i+1"]
+                        D --> E{"j < size ?"}
+                        E -->|Yes| F{"arr[i] == arr[j] ?"}
+                        F -->|Yes| G["Duplicate Found"]
+                        F -->|No| H["j++"]
+                        H --> E
+                        E -->|No| I["i++"]
+                        I --> C
+                        C -->|No| J["No Duplicate"]
+                        J --> K["End"]`,
+                        explanation: "Compare each element with every other element to find duplicates."
+                    },
+                    "Count Positive Numbers": {
+                        mermaid: `graph TD
+                        A["Start"] --> B["count = 0, i = 0"]
+                        B --> C{"i < size ?"}
+                        C -->|Yes| D{"arr[i] > 0 ?"}
+                        D -->|Yes| E["count++"]
+                        D -->|No| F["Continue"]
+                        E --> G["i++"]
+                        F --> G
+                        G --> C
+                        C -->|No| H["Print count"]
+                        H --> I["End"]`,
+                        explanation: "Iterate through array and count elements greater than zero."
+                    },
+                    "Count Negative Numbers": {
+                        mermaid: `graph TD
+                            A["Start"] --> B["count = 0, i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] < 0 ?"}
+                            D -->|Yes| E["count++"]
+                            D -->|No| F["Continue"]
+                            E --> G["i++"]
+                            F --> G
+                            G --> C
+                            C -->|No| H["Print count"]
+                            H --> I["End"]`,
+                            explanation: "Iterate through array and count elements less than zero."
+                        },
+                        "Count Even Numbers": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["count = 0, i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] % 2 == 0 ?"}
+                            D -->|Yes| E["count++"]
+                            D -->|No| F["Continue"]
+                            E --> G["i++"]
+                            F --> G
+                            G --> C
+                            C -->|No| H["Print count"]
+                            H --> I["End"]`,
+                            explanation: "Check if each element is divisible by 2 and count even numbers."
+                        },
+                        "Count Odd Numbers": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["count = 0, i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] % 2 != 0 ?"}
+                            D -->|Yes| E["count++"]
+                            D -->|No| F["Continue"]
+                            E --> G["i++"]
+                            F --> G
+                            G --> C
+                            C -->|No| H["Print count"]
+                            H --> I["End"]`,
+                            explanation: "Check if each element is not divisible by 2 and count odd numbers."
+                        },
+                        "Find Second Largest": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["first = -1, second = -1"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] > first ?"}
+                            D -->|Yes| E["second = first, first = arr[i]"]
+                            D -->|No| F{"arr[i] > second ?"}
+                            F -->|Yes| G["second = arr[i]"]
+                            F -->|No| H["Continue"]
+                            E --> I["i++"]
+                            G --> I
+                            H --> I
+                            I --> C
+                            C -->|No| J["Print second"]
+                            J --> K["End"]`,
+                            explanation: "Track both the largest and second largest elements in a single pass."
+                        },
+                        "Find Second Smallest": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["first = infinity, second = infinity"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] < first ?"}
+                            D -->|Yes| E["second = first, first = arr[i]"]
+                            D -->|No| F{"arr[i] < second ?"}
+                            F -->|Yes| G["second = arr[i]"]
+                            F -->|No| H["Continue"]
+                            E --> I["i++"]
+                            G --> I
+                            H --> I
+                            I --> C
+                            C -->|No| J["Print second"]
+                            J --> K["End"]`,
+                            explanation: "Track both the smallest and second smallest elements in a single pass."
+                        },
+                        "Rotate Array Left by 1": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["temp = arr[0]"]
+                            B --> C["Shift all elements left"]
+                            C --> D["arr[size-1] = temp"]
+                            D --> E["End"]`,
+                            explanation: "Move first element to end, shift all other elements one position left."
+                        },
+                        "Rotate Array Right by 1": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["temp = arr[size-1]"]
+                            B --> C["Shift all elements right"]
+                            C --> D["arr[0] = temp"]
+                            D --> E["End"]`,
+                            explanation: "Move last element to beginning, shift all other elements one position right."
+                        },
+                        "Bubble Sort": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["i = 0"]
+                            B --> C{"i < size-1 ?"}
+                            C -->|Yes| D["j = 0"]
+                            D --> E{"j < size-i-1 ?"}
+                            E -->|Yes| F{"arr[j] > arr[j+1] ?"}
+                            F -->|Yes| G["Swap arr[j], arr[j+1]"]
+                            F -->|No| H["j++"]
+                            G --> H
+                            H --> E
+                            E -->|No| I["i++"]
+                            I --> C
+                            C -->|No| J["End"]`,
+                            explanation: "Repeatedly swap adjacent elements if they are in wrong order. Time complexity: O(n²)."
+                        },
+                        "Selection Sort": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["i = 0"]
+                            B --> C{"i < size-1 ?"}
+                            C -->|Yes| D["minIdx = i"]
+                            D --> E["j = i+1"]
+                            E --> F{"j < size ?"}
+                            F -->|Yes| G{"arr[j] < arr[minIdx] ?"}
+                            G -->|Yes| H["minIdx = j"]
+                            G -->|No| I["j++"]
+                            H --> I
+                            I --> F
+                            F -->|No| J["Swap arr[i], arr[minIdx]"]
+                            J --> K["i++"]
+                            K --> C
+                            C -->|No| L["End"]`,
+                            explanation: "Find minimum element and place it at the beginning. Time complexity: O(n²)."
+                        },
+                        "Insertion Sort": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["i = 1"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D["key = arr[i], j = i-1"]
+                            D --> E{"j >= 0 && arr[j] > key ?"}
+                            E -->|Yes| F["arr[j+1] = arr[j]"]
+                            E -->|No| G["arr[j+1] = key"]
+                            F --> H["j--"]
+                            H --> E
+                            G --> I["i++"]
+                            I --> C
+                            C -->|No| J["End"]`,
+                            explanation: "Build sorted array one element at a time. Time complexity: O(n²)."
+                        },
+                        "Merge Sort": {
+                            mermaid: `graph TD
+                            A["Start"] --> B{"size <= 1 ?"}
+                            B -->|Yes| C["Return"]
+                            B -->|No| D["Divide array into halves"]
+                            D --> E["Sort left half"]
+                            E --> F["Sort right half"]
+                            F --> G["Merge two halves"]
+                            G --> H["End"]`,
+                            explanation: "Divide and conquer approach. Recursively divide and merge sorted halves. Time complexity: O(n log n)."
+                        },
+                        "Quick Sort": {
+                            mermaid: `graph TD
+                            A["Start"] --> B{"low < high ?"}
+                            B -->|No| C["Return"]
+                            B -->|Yes| D["Partition array"]
+                            D --> E["pivotIndex = partition"]
+                            E --> F["Quick sort left"]
+                            F --> G["Quick sort right"]
+                            G --> H["End"]`,
+                            explanation: "Choose pivot, partition array, then recursively sort both sides. Time complexity: O(n log n) average."
+                        },
+                        "2D Array Row Traversal": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["i = 0"]
+                            B --> C{"i < rows ?"}
+                            C -->|Yes| D["j = 0"]
+                            D --> E{"j < cols ?"}
+                            E -->|Yes| F["Process matrix[i][j]"]
+                            F --> G["j++"]
+                            G --> E
+                            E -->|No| H["i++"]
+                            H --> C
+                            C -->|No| I["End"]`,
+                            explanation: "Traverse 2D array row by row, visiting each element in order."
+                        },
+                        "2D Array Column Traversal": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["j = 0"]
+                            B --> C{"j < cols ?"}
+                            C -->|Yes| D["i = 0"]
+                            D --> E{"i < rows ?"}
+                            E -->|Yes| F["Process matrix[i][j]"]
+                            F --> G["i++"]
+                            G --> E
+                            E -->|No| H["j++"]
+                            H --> C
+                            C -->|No| I["End"]`,
+                            explanation: "Traverse 2D array column by column, visiting each element in order."
+                        },
+                        "2D Array Diagonal Traversal": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["i = 0, j = 0"]
+                            B --> C{"i < rows && j < cols ?"}
+                            C -->|Yes| D["Process matrix[i][j]"]
+                            D --> E["i++, j++"]
+                            E --> C
+                            C -->|No| F["End"]`,
+                            explanation: "Traverse the main diagonal of a 2D array (where row index equals column index)."
+                        },
+                        "Transpose 2D Array": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["Create newMatrix[cols][rows]"]
+                            B --> C["i = 0"]
+                            C --> D{"i < rows ?"}
+                            D -->|Yes| E["j = 0"]
+                            E --> F{"j < cols ?"}
+                            F -->|Yes| G["newMatrix[j][i] = matrix[i][j]"]
+                            G --> H["j++"]
+                            H --> F
+                            F -->|No| I["i++"]
+                            I --> D
+                            D -->|No| J["Print newMatrix"]
+                            J --> K["End"]`,
+                            explanation: "Transpose swaps rows and columns. Element at [i][j] moves to [j][i]."
+                        },
+                        "Rotate Matrix 90 Degrees": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["Create newMatrix[cols][rows]"]
+                            B --> C["i = 0"]
+                            C --> D{"i < rows ?"}
+                            D -->|Yes| E["j = 0"]
+                            E --> F{"j < cols ?"}
+                            F -->|Yes| G["newMatrix[j][rows-1-i] = matrix[i][j]"]
+                            G --> H["j++"]
+                            H --> F
+                            F -->|No| I["i++"]
+                            I --> D
+                            D -->|No| J["Print newMatrix"]
+                            J --> K["End"]`,
+                            explanation: "Rotate matrix 90 degrees clockwise by mapping [i][j] to [j][rows-1-i]."
+                        },
+                        "Check if Palindrome": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["i = 0, j = size-1"]
+                            B --> C{"i < j ?"}
+                            C -->|Yes| D{"arr[i] == arr[j] ?"}
+                            D -->|Yes| E["i++, j--"]
+                            D -->|No| F["Not Palindrome"]
+                            E --> C
+                            C -->|No| G["Is Palindrome"]
+                            G --> H["End"]`,
+                            explanation: "Compare elements from both ends moving towards the center."
+                        },
+                        "Count Zeros": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["count = 0, i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] == 0 ?"}
+                            D -->|Yes| E["count++"]
+                            D -->|No| F["Continue"]
+                            E --> G["i++"]
+                            F --> G
+                            G --> C
+                            C -->|No| H["Print count"]
+                            H --> I["End"]`,
+                            explanation: "Iterate through array and count elements equal to zero."
+                        },
+                        "Find Duplicate": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D["j = i+1"]
+                            D --> E{"j < size ?"}
+                            E -->|Yes| F{"arr[i] == arr[j] ?"}
+                            F -->|Yes| G["Duplicate Found"]
+                            F -->|No| H["j++"]
+                            H --> E
+                            E -->|No| I["i++"]
+                            I --> C
+                            C -->|No| J["No Duplicate"]
+                            J --> K["End"]`,
+                            explanation: "Compare each element with every other element to find duplicates."
+                        },
+                        "Count Positive Numbers": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["count = 0, i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] > 0 ?"}
+                            D -->|Yes| E["count++"]
+                            D -->|No| F["Continue"]
+                            E --> G["i++"]
+                            F --> G
+                            G --> C
+                            C -->|No| H["Print count"]
+                            H --> I["End"]`,
+                            explanation: "Iterate through array and count elements greater than zero."
+                        },
+                        "Count Negative Numbers": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["count = 0, i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] < 0 ?"}
+                            D -->|Yes| E["count++"]
+                            D -->|No| F["Continue"]
+                            E --> G["i++"]
+                            F --> G
+                            G --> C
+                            C -->|No| H["Print count"]
+                            H --> I["End"]`,
+                            explanation: "Iterate through array and count elements less than zero."
+                        },
+                        "Count Even Numbers": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["count = 0, i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] % 2 == 0 ?"}
+                            D -->|Yes| E["count++"]
+                            D -->|No| F["Continue"]
+                            E --> G["i++"]
+                            F --> G
+                            G --> C
+                            C -->|No| H["Print count"]
+                            H --> I["End"]`,
+                            explanation: "Check if each element is divisible by 2 and count even numbers."
+                        },
+                        "Count Odd Numbers": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["count = 0, i = 0"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] % 2 != 0 ?"}
+                            D -->|Yes| E["count++"]
+                            D -->|No| F["Continue"]
+                            E --> G["i++"]
+                            F --> G
+                            G --> C
+                            C -->|No| H["Print count"]
+                            H --> I["End"]`,
+                            explanation: "Check if each element is not divisible by 2 and count odd numbers."
+                        },
+                        "Find Second Largest": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["first = -1, second = -1"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] > first ?"}
+                            D -->|Yes| E["second = first, first = arr[i]"]
+                            D -->|No| F{"arr[i] > second ?"}
+                            F -->|Yes| G["second = arr[i]"]
+                            F -->|No| H["Continue"]
+                            E --> I["i++"]
+                            G --> I
+                            H --> I
+                            I --> C
+                            C -->|No| J["Print second"]
+                            J --> K["End"]`,
+                            explanation: "Track both the largest and second largest elements in a single pass."
+                        },
+                        "Find Second Smallest": {
+                            mermaid: `graph TD
+                            A["Start"] --> B["first = infinity, second = infinity"]
+                            B --> C{"i < size ?"}
+                            C -->|Yes| D{"arr[i] < first ?"}
+                            D -->|Yes| E["second = first, first = arr[i]"]
+                            D -->|No| F{"arr[i] < second ?"}
+                            F -->|Yes| G["second = arr[i]"]
+                            F -->|No| H["Continue"]
+                            E --> I["i++"]
+                            G --> I
+                            H --> I
+                            I --> C
+                            C -->|No| J["Print second"]
+                            J --> K["End"]`,
+                            explanation: "Track both the smallest and second smallest elements in a single pass."
+                        }
+                    };
+
+                    // Fuse.js for fuzzy search
+                    const fuse = new Fuse(Object.keys(flowcharts), { threshold: 0.4 });
+
+                    // Search functionality (Main Search)
+                    document.getElementById('search-btn').addEventListener('click', function() {
+                        const query = document.getElementById('search-input').value.trim().toLowerCase();
+                        const resultsDiv = document.getElementById('results');
+                        const displayDiv = document.getElementById('flowchart-display');
+                        displayDiv.innerHTML = '';
+
+                        if (!query) {
+                            resultsDiv.innerHTML = '<p style="color: var(--error);">Please enter a concept.</p>';
+                            return;
+                        }
+
+                        const matches = fuse.search(query);
+                        if (matches.length > 0) {
+                            const concept = matches[0].item;
+                            const data = flowcharts[concept];
+                            displayDiv.innerHTML = `
+                                <div class="flowchart-container">
+                                    <h3>${concept}</h3>
+                                    <div class="mermaid">${data.mermaid}</div>
+                                    <p>${data.explanation}</p>
+                                </div>
+                            `;
+                            resultsDiv.innerHTML = '<p style="color: var(--success);">Flowchart generated at the end!</p>';
+                            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                        } else {
+                            resultsDiv.innerHTML = `<p style="color: var(--error);">No exact match. Try: ${Object.keys(flowcharts).slice(0, 5).join(', ')}...</p>`;
+                        }
+                    });
+
+                    // Generate Quick Access Cards
+                    function generateQuickAccess() {
+                        const grid = document.getElementById('quick-access-grid');
+                        const sampleConcepts = Object.keys(flowcharts).slice(0, 8);
+                        grid.innerHTML = sampleConcepts.map(concept => `
+                            <div class="quick-card" onclick="selectConcept('${concept}')">
+                                <h4>${concept}</h4>
+                                <p>${flowcharts[concept].explanation.substring(0, 80)}...</p>
+                            </div>
+                        `).join('');
+                    }
+
+                    // Select concept from search
+                    window.selectConcept = function(concept) {
+                        document.getElementById('search-input').value = concept;
+                        const data = flowcharts[concept];
+                        document.getElementById('flowchart-display').innerHTML = `
+                            <div class="flowchart-container">
+                                <h3>${concept}</h3>
+                                <div class="mermaid">${data.mermaid}</div>
+                                <p>${data.explanation}</p>
+                            </div>
+                        `;
+                        mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+                    };
+
+                    // Initialize Mermaid
+                    mermaid.initialize({
+                        startOnLoad: true,
+                        theme: "base",
+                        themeVariables: {
+                            primaryColor: "#1e1e2f",
+                            primaryBorderColor: "#8b6cf6",
+                            primaryTextColor: "#ffffff",
+                            lineColor: "#a78bfa",
+                            secondaryColor: "#2a2a40",
+                            tertiaryColor: "#141427",
+                            edgeLabelBackground: "#1e1e2f"
+                        }
+                    });
+
+                    // Initialize on load
+                    generateQuickAccess();
+                    
+                 // Navbar Active Link Highlighting
+                    const currentPage = window.location.pathname.split("/").pop();
+                    const navLinks = document.querySelectorAll('.navbar nav a');
+                    
+                    navLinks.forEach(link => {
+                        if(link.getAttribute('href') === currentPage) {
+                            link.classList.add('active');
+                        }
+                    });
+
+                    // Smooth Scroll for Anchor Links
+                    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                        anchor.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                                behavior: 'smooth'
+                            });
+                        });
+                    });
+                </script>
+            </body>
+            </html>

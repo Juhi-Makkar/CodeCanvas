@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started with Sorting - Learn Sorting</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        /* Theme 2.0 - Lighter Dark Theme */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* ===================== NAVBAR ===================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+
+        /* ===================== RESPONSIVE NAVBAR ===================== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .navbar .logo {
+                font-size: 18px;
+            }
+        }
+
+        /* ---------- SECTION SPACING ---------- */
+        section {
+            min-height: 70vh;
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        #language {
+            min-height: auto;
+            padding-bottom: 40px;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* ---------- LANGUAGE SELECTOR ---------- */
+        .language-selector {
+            text-align: center;
+            margin-bottom: 40px;
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        }
+
+        .language-selector select {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        /* ---------- SORTING INTRO ---------- */
+        .sorting-intro {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        }
+
+        .intro-text {
+            flex: 1;
+        }
+
+        .intro-text h3 {
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+        }
+
+        .start-btn {
+            margin-top: 15px;
+            padding: 12px 22px;
+            border: none;
+            background: linear-gradient(135deg,#8B6CF6,#9f7aea);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(139,108,246,0.6);
+        }
+
+        /* Demo bars for sorting visualization */
+        .intro-demo {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            height: 120px;
+            padding: 15px;
+            background: rgba(139,108,246,0.1);
+            border-radius: 8px;
+            border: 2px solid var(--accent-purple);
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(135deg, var(--accent-blue), var(--success));
+            border-radius: 4px 4px 0 0;
+            transition: all 0.5s ease;
+            position: relative;
+            min-width: 40px;
+        }
+
+        .bar::after {
+            content: attr(data-value);
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        /* ---------- THEORY SECTION ---------- */
+        .theory {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .theory h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .theory h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .theory ul {
+            list-style-type: disc;
+            padding-left: 25px;
+        }
+
+        .theory p {
+            margin-bottom: 15px;
+        }
+
+        /* ---------- SYNTAX SECTION ---------- */
+        .syntax {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .syntax h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .syntax h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .syntax h4 {
+            color: var(--text-secondary);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .syntax pre {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9;
+            margin-bottom: 15px;
+        }
+
+        .syntax code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        /* ---------- ALGORITHM SECTION ---------- */
+        .algorithm {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .algorithm h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .algorithm h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .algorithm ol {
+            padding-left: 25px;
+        }
+
+        .algorithm pre {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9;
+            margin-top: 10px;
+        }
+
+        /* ---------- FLOWCHART SECTION ---------- */
+        .flowchart {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .flowchart h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .flowchart h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .mermaid svg path {
+            stroke-width: 2.5px !important;
+            filter: drop-shadow(0 0 4px #8b6cf6);
+        }
+
+        /* ---------- TIME COMPLEXITY SECTION ---------- */
+        .complexity {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .complexity h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .complexity table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .complexity th, .complexity td {
+            border: 1px solid var(--accent-purple);
+            padding: 12px;
+            text-align: left;
+        }
+
+        .complexity th {
+            background: var(--accent-purple);
+            color: var(--text-primary);
+        }
+
+        /* ---------- APPLICATIONS SECTION ---------- */
+        .applications {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .applications h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .applications ul {
+            list-style-type: disc;
+            padding-left: 25px;
+        }
+
+        /* ---------- COMMON MISTAKES SECTION ---------- */
+        .mistakes {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .mistakes h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .mistakes ul {
+            list-style-type: disc;
+            padding-left: 25px;
+        }
+
+        /* ---------- QUESTIONS SECTION ---------- */
+        .questions {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .questions h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .questions h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .questions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .questions li {
+            margin-bottom: 12px;
+        }
+
+        .questions a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .questions a:hover {
+            text-decoration: underline;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* ===================== RESPONSIVE BREAKPOINTS ===================== */
+        @media (max-width: 768px) {
+            section {
+                padding: 140px 15px 40px;
+            }
+            .section-content {
+                padding: 15px;
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 12px;
+                padding: 15px;
+            }
+            .complexity table {
+                font-size: 12px;
+            }
+            .complexity th, .complexity td {
+                padding: 8px;
+            }
+            .mermaid {
+                font-size: 12px;
+            }
+            .sorting-intro {
+                flex-direction: column;
+                text-align: center;
+            }
+            .intro-demo {
+                justify-content: center;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .navbar .logo {
+                font-size: 16px;
+            }
+            .navbar nav ul {
+                gap: 8px;
+            }
+            .language-selector select {
+                width: 100%;
+                max-width: 200px;
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">CodeCanvas - Sorting</div>
+        <nav>
+            <ul>
+                <li><a href="../pages/sort.html">Home</a></li>
+                <li><a href="../sort/sorting.html">Perform</a></li>
+                <li><a href="#theory">Learn</a></li>
+                <li><a href="#questions">Test</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Language Selector -->
+    <section id="language">
+        <div class="section-content">
+            <div class="language-selector">
+                <h2>Select Programming Language</h2>
+                <p>Choose a language to see sorting algorithm implementations in that language. All code snippets will update dynamically.</p>
+                <select id="lang-select">
+                    <option value="c">C</option>
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                    <option value="cpp">C++</option>
+                </select>
+            </div>
+
+            <!-- SORTING INTRO PANEL -->
+            <div class="sorting-intro">
+                <div class="intro-text">
+                    <h3>What is Sorting?</h3>
+                    <p>
+                        Sorting is the process of arranging elements in a specific order (ascending/descending).
+                        Essential for efficient searching, data analysis, and preprocessing.
+                    </p>
+                    <button class="start-btn">Start Visualization →</button>
+                </div>
+
+                <div class="intro-demo">
+                    <div class="bar" style="height: 40%; --value: 64" data-value="64"></div>
+                    <div class="bar" style="height: 80%; --value: 34" data-value="34"></div>
+                    <div class="bar" style="height: 60%; --value: 25" data-value="25"></div>
+                    <div class="bar" style="height: 90%; --value: 12" data-value="12"></div>
+                    <div class="bar" style="height: 30%; --value: 22" data-value="22"></div>
+                    <div class="bar" style="height: 70%; --value: 11" data-value="11"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theory Section -->
+    <section id="theory">
+        <div class="section-content">
+            <div class="theory">
+                <h2><a href="../sort/theory.html" style="color: inherit; text-decoration: none;">What is Sorting?</a></h2>
+                <p>Sorting algorithms arrange elements of an array or list in a specific order (ascending or descending). They are fundamental for efficient searching, data processing, and optimization problems. Different algorithms have different trade-offs in time/space complexity and stability.</p>
+                <p>For example, sorting [64, 34, 25, 12, 22, 11] → [11, 12, 22, 25, 34, 64].</p>
+                <h3>Types of Sorting Algorithms</h3>
+                <ul>
+                    <li><strong>Comparison-based:</strong> Bubble, Selection, Insertion, Merge, Quick, Heap sort</li>
+                    <li><strong>Non-comparison:</strong> Counting, Radix, Bucket sort</li>
+                    <li><strong>Stable:</strong> Maintains relative order of equal elements (Merge, Insertion)</li>
+                    <li><strong>In-place:</strong> Requires O(1) extra space (Quick, Heap)</li>
+                    <li><strong>Adaptive:</strong> Faster on nearly sorted data (Insertion)</li>
+                </ul>
+                <h3>Key Properties</h3>
+                <ul>
+                    <li><strong>Time Complexity:</strong> Best/Average/Worst case analysis</li>
+                    <li><strong>Space Complexity:</strong> Auxiliary space required</li>
+                    <li><strong>Stability:</strong> Preserves relative order of equal elements</li>
+                    <li><strong>In-place:</strong> Requires O(1) extra space (Quick, Heap)</li>
+                    <li><strong>Adaptive:</strong> Faster on nearly sorted data (Insertion)</li>
+                    <li><strong>Online:</strong> Can process elements as they arrive (Insertion)</li>
+                </ul>
+                <h3>Advantages of Sorting</h3>
+                <ul>
+                    <li>Enables efficient searching (Binary search O(log n))</li>
+                    <li>Simplifies many algorithms (Merge, closest pair)</li>
+                    <li>Essential for data analysis and visualization</li>
+                    <li>Prepares data for divide-and-conquer strategies</li>
+                </ul>
+                <h3>Limitations</h3>
+                <ul>
+                    <li>General comparison sorts have Ω(n log n) lower bound</li>
+                    <li>Some algorithms unstable or have worst-case O(n²)</li>
+                    <li>Extra space required for some efficient algorithms</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Syntax Section -->
+    <section id="syntax">
+        <div class="section-content">
+            <div class="syntax">
+                <h2><a href="../sort/syntax.html" style="color: inherit; text-decoration: none;">Syntax for Popular Sorting Algorithms</a></h2>
+                <p>Basic syntax for implementing common sorting algorithms in different languages.</p>
+                <h3>Bubble Sort</h3>
+                <h4>Implementation</h4>
+                <pre><code id="bubble-sort">for(int i = 0; i < n-1; i++)
+    for(int j = 0; j < n-i-1; j++)
+        if(arr[j] > arr[j+1]) swap(arr[j], arr[j+1]);</code></pre>
+                
+                <h3>Selection Sort</h3>
+                <h4>Implementation</h4>
+                <pre><code id="selection-sort">for(int i = 0; i < n-1; i++) {
+    int min_idx = i;
+    for(int j = i+1; j < n; j++)
+        if(arr[j] < arr[min_idx])
+            min_idx = j;
+    swap(arr[i], arr[min_idx]);
+}</code></pre>
+
+                <h3>Insertion Sort</h3>
+                <h4>Implementation</h4>
+                <pre><code id="insertion-sort">for(int i = 1; i < n; i++) {
+    int key = arr[i];
+    int j = i - 1;
+    while(j >= 0 && arr[j] > key) {
+        arr[j+1] = arr[j];
+        j--;
+    }
+    arr[j+1] = key;
+}</code></pre>
+
+                <h3>Merge Sort (Recursive)</h3>
+                <h4>Implementation</h4>
+                <pre><code id="merge-sort">void mergeSort(int arr[], int l, int r) {
+    if(l < r) {
+        int m = l + (r-l)/2;
+        mergeSort(arr, l, m);
+        mergeSort(arr, m+1, r);
+        merge(arr, l, m, r);
+    }
+}</code></pre>
+
+                <h3>Quick Sort</h3>
+                <h4>Implementation</h4>
+                <pre><code id="quick-sort">int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    for(int j = low; j < high; j++)
+        if(arr[j] <= pivot) swap(arr[++i], arr[j]);
+    swap(arr[i+1], arr[high]);
+    return i+1;
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithm Section -->
+    <section id="algorithm">
+        <div class="section-content">
+            <div class="algorithm">
+                <h2><a href="../sort/algorithm.html" style="color: inherit; text-decoration: none;">Step-by-Step Algorithms</a></h2>
+                <h3>Bubble Sort Algorithm</h3>
+                <ol>
+                    <li>Repeat for n-1 passes</li>
+                    <li>In each pass, compare adjacent elements</li>
+                    <li>If out of order, swap them</li>
+                    <li>Reduce comparison range by 1 each pass</li>
+                    <li>Largest element bubbles to end each pass</li>
+                </ol>
+                <pre><code>// Pseudocode
+for i from 0 to n-2:
+    for j from 0 to n-i-2:
+        if arr[j] > arr[j+1]:
+            swap arr[j], arr[j+1]</code></pre>
+
+                <h3>Selection Sort Algorithm</h3>
+                <ol>
+                    <li>For each position i from 0 to n-2</li>
+                    <li>Find minimum element in unsorted portion</li>
+                    <li>Swap minimum with first unsorted element</li>
+                    <li>Unsored portion shrinks by 1</li>
+                </ol>
+                <pre><code>// Pseudocode
+for i from 0 to n-2:
+    min_idx = i
+    for j from i+1 to n-1:
+        if arr[j] < arr[min_idx]:
+            min_idx = j
+    swap arr[i], arr[min_idx]</code></pre>
+
+                <h3>Quick Sort (Partition Scheme)</h3>
+                <ol>
+                    <li>Choose pivot (last, first, random, median)</li>
+                    <li>Partition: smaller elements left, larger right</li>
+                    <li>Recursively sort left and right subarrays</li>
+                    <li>Base case: single element or empty</li>
+                </ol>
+                <pre><code>// Pseudocode
+partition(arr, low, high):
+    pivot = arr[high]
+    i = low - 1
+    for j from low to high-1:
+        if arr[j] <= pivot:
+            i++
+            swap arr[i], arr[j]
+    swap arr[i+1], arr[high]
+    return i+1</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flowchart Section -->
+    <section id="flowchart">
+        <div class="section-content">
+            <div class="flowchart">
+                <h2><a href="../sort/flowchart.html" style="color: inherit; text-decoration: none;">Flowcharts for Sorting Algorithms</a></h2>
+                <h3>Bubble Sort</h3>
+                <div class="mermaid">
+                    graph TD
+                    A["Start"] --> B{"i < n-1?"}
+                    B -->|Yes| C{"j < n-i-1?"}
+                    C -->|Yes| D{"arr[j] > arr[j+1]?"}
+                    D -->|Yes| E["Swap"]
+                    D -->|No| F["j++"]
+                    E --> F
+                    F --> C
+                    C -->|No| G["i++"]
+                    G --> B
+                    B -->|No| H["End"]
+                </div>
+
+                <h3>Quick Sort Partition</h3>
+                <div class="mermaid">
+                    graph TD
+                    A["Start Partition"] --> B["pivot = arr[high]"]
+                    B --> C["i = low-1"]
+                    C --> D{"j < high?"}
+                    D -->|Yes| E{"arr[j] <= pivot?"}
+                    E -->|Yes| F["i++"]
+                    F --> G["Swap arr[i], arr[j]"]
+                    E -->|No| H["j++"]
+                    G --> H
+                    H --> D
+                    D -->|No| I["Swap arr[i+1], arr[high]"]
+                    I --> J["Return i+1"]
+                </div>
+
+                <h3>Selection Sort</h3>
+                <div class="mermaid">
+                    graph TD
+                    A["Start"] --> B{"i < n-1?"}
+                    B -->|Yes| C["min_idx = i"]
+                    C --> D{"j < n?"}
+                    D -->|Yes| E{"arr[j] < arr[min_idx]?"}
+                    E -->|Yes| F["min_idx = j"]
+                    E -->|No| G["j++"]
+                    F --> G
+                    G --> D
+                    D -->|No| H["Swap arr[i], arr[min_idx]"]
+                    H --> I["i++"]
+                    I --> B
+                    B -->|No| J["End"]
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Time Complexity Section -->
+    <section id="complexity">
+        <div class="section-content">
+            <div class="complexity">
+                <h2><a href="../sort/complexity.html" style="color: inherit; text-decoration: none;">Time & Space Complexity Comparison</a></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Best</th>
+                            <th>Average</th>
+                            <th>Worst</th>
+                            <th>Space</th>
+                            <th>Stable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Bubble Sort</td>
+                            <td>O(n)</td>
+                            <td>O(n²)</td>
+                            <td>O(n²)</td>
+                            <td>O(1)</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Selection Sort</td>
+                            <td>O(n²)</td>
+                            <td>O(n²)</td>
+                            <td>O(n²)</td>
+                            <td>O(1)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>Insertion Sort</td>
+                            <td>O(n)</td>
+                            <td>O(n²)</td>
+                            <td>O(n²)</td>
+                            <td>O(1)</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Merge Sort</td>
+                            <td>O(n log n)</td>
+                            <td>O(n log n)</td>
+                            <td>O(n log n)</td>
+                            <td>O(n)</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>Quick Sort</td>
+                            <td>O(n log n)</td>
+                            <td>O(n log n)</td>
+                            <td>O(n²)</td>
+                            <td>O(log n)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>Heap Sort</td>
+                            <td>O(n log n)</td>
+                            <td>O(n log n)</td>
+                            <td>O(n log n)</td>
+                            <td>O(1)</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>Counting Sort</td>
+                            <td>O(n + k)</td>
+                            <td>O(n + k)</td>
+                            <td>O(n + k)</td>
+                            <td>O(k)</td>
+                            <td>Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>Note:</strong> k = range of input values. Quick Sort average case is excellent with good pivot selection.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section id="applications">
+        <div class="section-content">
+            <div class="applications">
+                <h2><a href="../sort/applications.html" style="color: inherit; text-decoration: none;">Applications of Sorting</a></h2>
+                <ul>
+                    <li><strong>Searching:</strong> Binary search requires sorted arrays</li>
+                    <li><strong>Databases:</strong> ORDER BY clauses, index optimization</li>
+                    <li><strong>Data Analysis:</strong> Sorting for ranking, percentiles</li>
+                    <li><strong>Graph Algorithms:</strong> Dijkstra, Prim's (priority queues)</li>
+                    <li><strong>Closest Pair:</strong> Divide and conquer geometric problems</li>
+                    <li><strong>Merge Operations:</strong> External sorting, multi-way merges</li>
+                    <li><strong>Dynamic Programming:</strong> LIS, weighted interval scheduling</li>
+                    <li><strong>Computational Geometry:</strong> Convex hull, line segment intersection</li>
+                    <li><strong>Numerical Methods:</strong> Matrix operations, eigenvalue problems</li>
+                    <li><strong>Machine Learning:</strong> Feature ranking, k-NN preprocessing</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Common Mistakes Section -->
+    <section id="mistakes">
+        <div class="section-content">
+            <div class="mistakes">
+                <h2><a href="../sort/mistakes.html" style="color: inherit; text-decoration: none;">Common Mistakes & Best Practices</a></h2>
+                <ul>
+                    <li><strong>Quick Sort Worst Case:</strong> Use random pivot or median-of-three</li>
+                    <li><strong>Infinite Recursion:</strong> Always check base cases in recursive sorts</li>
+                    <li><strong>Stack Overflow:</strong> Merge/Quick sort recursion depth O(log n)</li>
+                    <li><strong>Off-by-One:</strong> Loop bounds in bubble/selection sort</li>
+                    <li><strong>Unstable Sorting:</strong> Use stable sort when relative order matters</li>
+                    <li><strong>Array Bounds:</strong> Check indices before access</li>
+                    <li><strong>Pivot Selection:</strong> Poor pivot → worst case performance</li>
+                    <li><strong>Space Issues:</strong> Merge sort needs O(n) space</li>
+                    <li><strong>Small Arrays:</strong> Use Insertion sort for n < 10</li>
+                    <li><strong>Duplicates:</strong> Handle equal elements properly</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Questions Section -->
+    <section id="questions">
+        <div class="section-content">
+            <div class="questions">
+                <h2><a href="../sort/questions.html" style="color: inherit; text-decoration: none;">Placement-Based Important Sorting Questions</a></h2>
+                <p>Practice these 45+ questions from LeetCode, GeeksForGeeks, CodeChef, HackerRank to master sorting for coding interviews. Focus on time/space optimization, stability, and edge cases.</p>
+                <h3>Easy</h3>
+                <ul>
+                    <li><a href="https://leetcode.com/problems/sort-an-array/">Sort an Array (LeetCode #912)</a> - Implement O(n log n) sorting algorithm.</li>
+                    <li><a href="https://leetcode.com/problems/merge-sorted-array/">Merge Sorted Array (LeetCode #88)</a> - In-place merge of two sorted arrays.</li>
+                    <li><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-array/">Remove Duplicates from Sorted Array (LeetCode #26)</a> - In-place, return new length.</li>
+                    <li><a href="https://leetcode.com/problems/check-if-array-is-sorted-and-rotated/">Check if Array is Sorted and Rotated (LeetCode #1752)</a> - Single pass O(n) solution.</li>
+                    <li><a href="https://www.geeksforgeeks.org/check-sorted-array-increasing-order/">Check if Sorted Array (GeeksForGeeks)</a> - Iterative validation.</li>
+                    <li><a href="https://leetcode.com/problems/valid-anagram/">Valid Anagram (LeetCode #242)</a> - Sorting strings comparison.</li>
+                    <li><a href="https://leetcode.com/problems/majority-element/">Majority Element (LeetCode #169)</a> - Sort + Boyer-Moore.</li>
+                    <li><a href="https://www.geeksforgeeks.org/minimum-distance-between-two-numbers/">Minimum Distance Between Two Numbers (GFG)</a> - Sort + two pointers.</li>
+                    <li><a href="https://leetcode.com/problems/intersection-of-two-arrays-ii/">Intersection of Two Arrays II (LeetCode #350)</a> - Sort + two pointers.</li>
+                    <li><a href="https://www.geeksforgeeks.org/check-if-array-elements-are-consecutive/">Check Array Elements Consecutive (GFG)</a> - Sort + range check.</li>
+                </ul>
+                <h3>Medium</h3>
+                <ul>
+                    <li><a href="https://leetcode.com/problems/kth-largest-element-in-an-array/">Kth Largest Element (LeetCode #215)</a> - Quickselect/Heap O(n).</li>
+                    <li><a href="https://leetcode.com/problems/meeting-rooms-ii/">Meeting Rooms II (LeetCode #253)</a> - Sort + Min-heap.</li>
+                    <li><a href="https://leetcode.com/problems/sort-colors/">Sort Colors (LeetCode #75)</a> - Dutch National Flag O(n).</li>
+                    <li><a href="https://leetcode.com/problems/merge-intervals/">Merge Intervals (LeetCode #56)</a> - Sort + greedy merge.</li>
+                    <li><a href="https://leetcode.com/problems/insert-interval/">Insert Interval (LeetCode #57)</a> - Sorted intervals insertion.</li>
+                    <li><a href="https://leetcode.com/problems/queue-reconstruction-by-height/">Queue Reconstruction (LeetCode #406)</a> - Sort + greedy insert.</li>
+                    <li><a href="https://leetcode.com/problems/meetings-rooms/">Meeting Rooms I (LeetCode #252)</a> - Sort + sweep line.</li>
+                    <li><a href="https://leetcode.com/problems/car-fleet/">Car Fleet (LeetCode #853)</a> - Sort + stack simulation.</li>
+                    <li><a href="https://leetcode.com/problems/exclusive-time-of-functions/">Exclusive Time of Functions (LeetCode #636)</a> - Sort timestamps.</li>
+                    <li><a href="https://www.geeksforgeeks.org/meeting-maximum-guests/">Meeting Maximum Guests (GFG)</a> - Sort arrival/departure.</li>
+                    <li><a href="https://leetcode.com/problems/reorder-data-in-log-files/">Reorder Data in Log Files (LeetCode #937)</a> - Custom string sorting.</li>
+                    <li><a href="https://leetcode.com/problems/largest-number/">Largest Number (LeetCode #179)</a> - Custom comparator sorting.</li>
+                    <li><a href="https://leetcode.com/problems/wiggle-sort-ii/">Wiggle Sort II (LeetCode #324)</a> - Median + reverse pairing.</li>
+                </ul>
+                <h3>Hard</h3>
+                <ul>
+                    <li><a href="https://leetcode.com/problems/count-of-smaller-numbers-after-self/">Count Smaller After Self (LeetCode #315)</a> - Merge sort + Fenwick/BST.</li>
+                    <li><a href="https://leetcode.com/problems/reverse-pairs/">Reverse Pairs (LeetCode #493)</a> - Merge sort counting O(n log n).</li>
+                    <li><a href="https://leetcode.com/problems/find-median-from-data-stream/">Median from Data Stream (LeetCode #295)</a> - Two heaps balancing.</li>
+                    <li><a href="https://leetcode.com/problems/sliding-window-median/">Sliding Window Median (LeetCode #480)</a> - Multiset + delayed deletion.</li>
+                    <li><a href="https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/">Smallest Range K Lists (LeetCode #632)</a> - Min-heap + sorting.</li>
+                    <li><a href="https://leetcode.com/problems/create-maximum-number/">Create Maximum Number (LeetCode #321)</a> - Stack + monotonic sorting.</li>
+                    <li><a href="https://leetcode.com/problems/trapping-rain-water-ii/">Trapping Rain Water II (LeetCode #407)</a> - Priority queue + BFS.</li>
+                    <li><a href="https://leetcode.com/problems/remove-k-digits/">Remove K Digits (LeetCode #402)</a> - Monotonic stack sorting.</li>
+                    <li><a href="https://leetcode.com/problems/longest-increasing-subsequence/">Longest Increasing Subsequence (LeetCode #300)</a> - DP + binary search.</li>
+                    <li><a href="https://www.geeksforgeeks.org/find-smallest-range-containing-elements-from-k-lists/">Smallest Range K Lists (GFG)</a> - Min-heap multi-pointer.</li>
+                </ul>
+                <p><strong>Mastery Tips:</strong> 
+                <ul style="padding-left: 25px; margin-top: 15px;">
+                    <li>Implement QuickSort partition manually (most asked)</li>
+                    <li>Practice stability-aware sorting problems</li>
+                    <li>Master custom comparators & radix sort</li>
+                    <li>Test ALL edge cases: empty, single, duplicates, negatives</li>
+                    <li>Combine sorting with 2-pointers/greedy/heap for 80% problems</li>
+                    <li>Time yourself: solve Medium in &lt;20 mins, Hard in &lt;40 mins</li>
+                </ul>
+                Use LeetCode Playgrounds for live coding practice!</p>
+            </div>
+        </div>
+    </section>
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../sort/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Language selector functionality for sorting
+        document.addEventListener('DOMContentLoaded', function() {
+            const langSelect = document.getElementById('lang-select');
+            const codeBlocks = {
+                'bubble-sort': {
+                    c: 'for(int i = 0; i < n-1; i++)\n    for(int j = 0; j < n-i-1; j++)\n        if(arr[j] > arr[j+1]) swap(&arr[j], &arr[j+1]);',
+                    java: 'for(int i = 0; i < n-1; i++)\n    for(int j = 0; j < n-i-1; j++)\n        if(arr[j] > arr[j+1]) swap(arr, j, j+1);',
+                    python: 'for i in range(n-1):\n    for j in range(n-i-1):\n        if arr[j] > arr[j+1]:\n            arr[j], arr[j+1] = arr[j+1], arr[j]',
+                    cpp: 'for(int i = 0; i < n-1; i++)\n    for(int j = 0; j < n-i-1; j++)\n        if(arr[j] > arr[j+1]) swap(arr[j], arr[j+1]);'
+                },
+                'selection-sort': {
+                    c: 'for(int i = 0; i < n-1; i++) {\n    int min_idx = i;\n    for(int j = i+1; j < n; j++)\n        if(arr[j] < arr[min_idx])\n            min_idx = j;\n    swap(&arr[i], &arr[min_idx]);\n}',
+                    java: 'for(int i = 0; i < n-1; i++) {\n    int min_idx = i;\n    for(int j = i+1; j < n; j++)\n        if(arr[j] < arr[min_idx])\n            min_idx = j;\n    swap(arr, i, min_idx);\n}',
+                    python: 'for i in range(n-1):\n    min_idx = i\n    for j in range(i+1, n):\n        if arr[j] < arr[min_idx]:\n            min_idx = j\n    arr[i], arr[min_idx] = arr[min_idx], arr[i]',
+                    cpp: 'for(int i = 0; i < n-1; i++) {\n    int min_idx = i;\n    for(int j = i+1; j < n; j++)\n        if(arr[j] < arr[min_idx])\n            min_idx = j;\n    swap(arr[i], arr[min_idx]);\n}'
+                },
+                'insertion-sort': {
+                    c: 'for(int i = 1; i < n; i++) {\n    int key = arr[i];\n    int j = i - 1;\n    while(j >= 0 && arr[j] > key) {\n        arr[j+1] = arr[j];\n        j--;\n    }\n    arr[j+1] = key;\n}',
+                    java: 'for(int i = 1; i < n; i++) {\n    int key = arr[i];\n    int j = i - 1;\n    while(j >= 0 && arr[j] > key) {\n        arr[j+1] = arr[j];\n        j--;\n    }\n    arr[j+1] = key;\n}',
+                    python: 'for i in range(1, n):\n    key = arr[i]\n    j = i - 1\n    while j >= 0 and arr[j] > key:\n        arr[j+1] = arr[j]\n        j -= 1\n    arr[j+1] = key',
+                    cpp: 'for(int i = 1; i < n; i++) {\n    int key = arr[i];\n    int j = i - 1;\n    while(j >= 0 && arr[j] > key) {\n        arr[j+1] = arr[j];\n        j--;\n    }\n    arr[j+1] = key;\n}'
+                },
+                'merge-sort': {
+                    c: 'void mergeSort(int arr[], int l, int r) {\n    if(l < r) {\n        int m = l + (r-l)/2;\n        mergeSort(arr, l, m);\n        mergeSort(arr, m+1, r);\n        merge(arr, l, m, r);\n    }\n}',
+                    java: 'void mergeSort(int[] arr, int l, int r) {\n    if(l < r) {\n        int m = l + (r-l)/2;\n        mergeSort(arr, l, m);\n        mergeSort(arr, m+1, r);\n        merge(arr, l, m, r);\n    }\n}',
+                    python: 'def mergeSort(arr):\n    if len(arr) > 1:\n        mid = len(arr) // 2\n        left = mergeSort(arr[:mid])\n        right = mergeSort(arr[mid:])\n        return merge(left, right)\n    return arr',
+                    cpp: 'void mergeSort(int arr[], int l, int r) {\n    if(l < r) {\n        int m = l + (r-l)/2;\n        mergeSort(arr, l, m);\n        mergeSort(arr, m+1, r);\n        merge(arr, l, m, r);\n    }\n}'
+                },
+                'quick-sort': {
+                    c: 'int partition(int arr[], int low, int high) {\n    int pivot = arr[high];\n    int i = low - 1;\n    for(int j = low; j < high; j++)\n        if(arr[j] <= pivot) swap(&arr[++i], &arr[j]);\n    swap(&arr[i+1], &arr[high]);\n    return i+1;\n}',
+                    java: 'int partition(int[] arr, int low, int high) {\n    int pivot = arr[high];\n    int i = low - 1;\n    for(int j = low; j < high; j++)\n        if(arr[j] <= pivot) swap(arr, ++i, j);\n    swap(arr, i+1, high);\n    return i+1;\n}',
+                    python: 'def partition(arr, low, high):\n    pivot = arr[high]\n    i = low - 1\n    for j in range(low, high):\n        if arr[j] <= pivot:\n            i += 1\n            arr[i], arr[j] = arr[j], arr[i]\n    arr[i+1], arr[high] = arr[high], arr[i+1]\n    return i+1',
+                    cpp: 'int partition(int arr[], int low, int high) {\n    int pivot = arr[high];\n    int i = low - 1;\n    for(int j = low; j < high; j++)\n        if(arr[j] <= pivot) swap(arr[++i], arr[j]);\n    swap(arr[i+1], arr[high]);\n    return i+1;\n}'
+                }
+            };
+
+            if (langSelect) {
+                langSelect.addEventListener('change', function() {
+                    const selectedLang = this.value;
+                    Object.keys(codeBlocks).forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.textContent = codeBlocks[id][selectedLang];
+                        }
+                    });
+                });
+            }
+        });
+
+        // Sorting visualization demo
+        document.querySelector('.start-btn').addEventListener('click', function() {
+            const bars = document.querySelectorAll('.bar');
+            const heights = [64, 34, 25, 12, 22, 11];
+            const sortedHeights = [11, 12, 22, 25, 34, 64];
+            
+            // Animate to sorted order
+            bars.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.height = sortedHeights[index] / 100 * 120 + '%';
+                    bar.style.background = 'linear-gradient(135deg, var(--success), var(--accent-blue))';
+                }, index * 300);
+            });
+            
+            setTimeout(() => {
+                // Reset after 3 seconds
+                bars.forEach((bar, index) => {
+                    setTimeout(() => {
+                        bar.style.height = heights[index] / 100 * 120 + '%';
+                        bar.style.background = 'linear-gradient(135deg, var(--accent-blue), var(--success))';
+                    }, index * 200);
+                });
+            }, 4000);
+        });
+
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "base",
+            themeVariables: {
+                primaryColor: "#1e1e2f",
+                primaryBorderColor: "#8b6cf6",
+                primaryTextColor: "#ffffff",
+                lineColor: "#a78bfa",
+                secondaryColor: "#2a2a40",
+                tertiaryColor: "#141427",
+                edgeLabelBackground: "#1e1e2f"
+            }
+        });
+    </script>
+</body>
+</html>

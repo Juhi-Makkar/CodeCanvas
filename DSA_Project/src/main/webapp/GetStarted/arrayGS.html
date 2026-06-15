@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started with Arrays - Learn Arrays</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- Your existing style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        /* Theme 2.0 - Lighter Dark Theme */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34; /* Lighter shade of original #0A0F24 */
+            --bg-secondary: #252A4A; /* Lighter shade of original #161B3A */
+            --accent-purple: #8B6CF6; /* Slightly lighter purple */
+            --accent-blue: #4FC3F7; /* Slightly lighter blue */
+            --text-primary: #F1F5F9; /* Slightly lighter text */
+            --text-secondary: #A1AEB8; /* Slightly lighter secondary text */
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* ===================== NAVBAR ===================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4); /* Adjusted to match lighter purple */
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1); /* Adjusted to match lighter purple */
+        }
+
+        /* ===================== RESPONSIVE NAVBAR ===================== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .navbar .logo {
+                font-size: 18px;
+            }
+        }
+
+        /* ---------- SECTION SPACING ---------- */
+        section {
+            min-height: 70vh;
+            padding: 120px 20px 40px; /* Increased top padding for better spacing */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Changed to flex-start for better alignment */
+        }
+        
+        #language {
+            min-height: auto;
+            padding-bottom: 40px;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px; /* Added padding for content */
+            box-sizing: border-box;
+        }
+
+        /* ---------- LANGUAGE SELECTOR ---------- */
+        .language-selector {
+            text-align: center;
+            margin-bottom: 40px; /* Increased margin */
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+        }
+
+        .language-selector select {
+            padding: 12px; /* Increased padding */
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+/* ---------- LANGUAGE SELECTOR AND ARRAY INTRO ---------- */
+.language-selector {
+    text-align: center;
+    margin-bottom: 40px; /* Increased margin */
+    background: var(--bg-secondary);
+    padding: 25px; /* Increased padding */
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple in theme 2.0 */
+}
+
+.language-selector select {
+    padding: 12px; /* Increased padding */
+    border: 2px solid var(--accent-purple);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.array-intro {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    background: var(--bg-secondary); /* Changed to match language selector theme */
+    padding: 25px; /* Adjusted to match language selector */
+    border-radius: 12px; /* Adjusted to match language selector */
+    box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple in theme 2.0 */
+}
+
+.intro-text {
+    flex: 1;
+}
+
+.intro-text h3 {
+    color: var(--accent-purple); /* Uses theme 2.0 accent purple */
+    margin-bottom: 10px;
+}
+
+.start-btn {
+    margin-top: 15px;
+    padding: 12px 22px;
+    border: none;
+    background: linear-gradient(135deg,#8B6CF6,#9f7aea); /* Adjusted to lighter purple in theme 2.0 */
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(139,108,246,0.6); /* Adjusted to match lighter purple in theme 2.0 */
+}
+
+/* Demo boxes */
+.intro-demo {
+    display: flex;
+    gap: 12px;
+}
+
+.array-box {
+    width: 60px;
+    height: 60px;
+    background: var(--bg-secondary); /* Uses theme 2.0 bg-secondary */
+    border: 2px solid var(--accent-purple); /* Uses theme 2.0 accent purple */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 8px;
+    box-shadow: 0 0 12px rgba(139,108,246,0.4); /* Adjusted to match lighter purple in theme 2.0 */
+}
+        /* ---------- THEORY SECTION ---------- */
+        .theory {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .theory h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .theory h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 10px;
+        }
+
+        .theory ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        .theory p {
+            margin-bottom: 15px; /* Added margin */
+        }
+
+        /* ---------- SYNTAX SECTION ---------- */
+        .syntax {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .syntax h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .syntax h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .syntax h4 {
+            color: var(--text-secondary);
+            margin-top: 20px; /* Increased margin */
+            margin-bottom: 10px;
+        }
+
+        .syntax pre {
+            background: #1e293b;
+            padding: 20px; /* Increased padding */
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9; /* Adjusted to match lighter text */
+            margin-bottom: 15px; /* Increased margin */
+        }
+
+        .syntax code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px; /* Set font size */
+        }
+
+        /* ---------- ALGORITHM SECTION ---------- */
+        .algorithm {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .algorithm h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .algorithm h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .algorithm ol {
+            padding-left: 25px; /* Increased padding */
+        }
+
+        .algorithm pre {
+            background: #1e293b;
+            padding: 20px; /* Increased padding */
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9; /* Adjusted to match lighter text */
+            margin-top: 10px;
+        }
+
+        /* ---------- FLOWCHART SECTION ---------- */
+        .flowchart {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .flowchart h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .flowchart h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0; /* Added margin */
+        }
+        
+        .mermaid svg path {
+            stroke-width: 2.5px !important;
+            filter: drop-shadow(0 0 4px #8b6cf6);
+        }
+        
+
+        /* ---------- TIME COMPLEXITY SECTION ---------- */
+        .complexity {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .complexity h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .complexity table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Increased margin */
+        }
+
+        .complexity th, .complexity td {
+            border: 1px solid var(--accent-purple);
+            padding: 12px; /* Increased padding */
+            text-align: left;
+        }
+
+        .complexity th {
+            background: var(--accent-purple);
+            color: var(--text-primary);
+        }
+
+        /* ---------- APPLICATIONS SECTION ---------- */
+        .applications {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .applications h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .applications ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        /* ---------- COMMON MISTAKES SECTION ---------- */
+        .mistakes {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .mistakes h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .mistakes ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        /* ---------- QUESTIONS SECTION ---------- */
+        .questions {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .questions h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .questions h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .questions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .questions li {
+            margin-bottom: 12px; /* Increased margin */
+        }
+
+        .questions a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .questions a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+        /* ===================== RESPONSIVE BREAKPOINTS ===================== */
+        @media (max-width: 768px) {
+            section {
+                padding: 140px 15px 40px; /* Adjusted for mobile */
+            }
+            .section-content {
+                padding: 15px; /* Reduced padding */
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 12px;
+                padding: 15px; /* Adjusted padding */
+            }
+            .complexity table {
+                font-size: 12px;
+            }
+            .complexity th, .complexity td {
+                padding: 8px; /* Reduced padding */
+            }
+            .mermaid {
+                font-size: 12px; /* Smaller for mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .navbar .logo {
+                font-size: 16px;
+            }
+            .navbar nav ul {
+                gap: 8px;
+            }
+            .language-selector select {
+                width: 100%;
+                max-width: 200px;
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">CodeCanvas - Array</div>
+        <nav>
+            <ul>
+                <li><a href="../pages/array.html">Home</a></li>
+                <li><a href="#language">Language</a></li>
+                <li><a href="#theory">Learn</a></li>
+                <li><a href="#questions">Test</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Language Selector -->
+ <section id="language">
+    <div class="section-content">
+
+        <div class="language-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see syntax examples in that language. All code snippets will update dynamically.</p>
+            <select id="lang-select">
+                <option value="c">C</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+                <option value="cpp">C++</option>
+            </select>
+        </div>
+
+        <!-- NEW: ARRAY INTRO PANEL -->
+        <div class="array-intro">
+            <div class="intro-text">
+                <h3>What is an Array?</h3>
+                <p>
+                    An array is a collection of elements stored in contiguous memory locations.
+                    Each element can be accessed using its index.
+                </p>
+                <button class="start-btn">Start Visualization →</button>
+            </div>
+
+            <div class="intro-demo">
+                <div class="array-box">10</div>
+                <div class="array-box">20</div>
+                <div class="array-box">30</div>
+                <div class="array-box">40</div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Theory Section -->
+<section id="theory">
+    <div class="section-content">
+        <div class="theory">
+            <h2><a href="../array/theory.html" style="color: inherit; text-decoration: none;">What is an Array?</a></h2>
+            <p>An array is a fundamental data structure that stores a collection of elements of the same data type in contiguous memory locations. It allows efficient access to elements using an index, starting from 0. Arrays are used to store multiple values in a single variable, making data management easier.</p>
+            <p>For example, an array of integers [10, 20, 30] stores three integers in adjacent memory locations.</p>
+            <h3>Properties of Arrays</h3>
+            <ul>
+                <li><strong>Fixed Size:</strong> The size is determined at declaration and cannot be changed in static arrays.</li>
+                <li><strong>Homogeneous Elements:</strong> All elements must be of the same data type.</li>
+                <li><strong>Contiguous Memory:</strong> Elements are stored in consecutive memory locations.</li>
+                <li><strong>Random Access:</strong> Any element can be accessed directly using its index in O(1) time.</li>
+                <li><strong>Zero-Based Indexing:</strong> The first element is at index 0.</li>
+            </ul>
+            <h3>Advantages of Arrays</h3>
+            <ul>
+                <li>Fast access to elements via indexing.</li>
+                <li>Simple to implement and understand.</li>
+                <li>Efficient for static data where size is known.</li>
+                <li>Cache-friendly due to contiguous memory.</li>
+            </ul>
+            <h3>Limitations of Arrays</h3>
+            <ul>
+                <li>Fixed size leads to overflow (if trying to add more elements) or underflow (if removing).</li>
+                <li>Insertion and deletion operations are costly (O(n)) as they require shifting elements.</li>
+                <li>Waste of memory if the array is not fully utilized.</li>
+                <li>No built-in support for dynamic resizing in many languages (use dynamic arrays like ArrayList in Java).</li>
+            </ul>
+            <h3>Types of Arrays</h3>
+            <ul>
+                <li><strong>1D Arrays:</strong> Single row of elements, e.g., [1, 2, 3].</li>
+                <li><strong>2D Arrays:</strong> Matrix-like structure, e.g., [[1,2], [3,4]].</li>
+                <li><strong>Multi-dimensional Arrays:</strong> Arrays with more than two dimensions.</li>
+                <li><strong>Dynamic Arrays:</strong> Resizable arrays (e.g., vectors in C++, ArrayList in Java).</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Syntax Section -->
+<section id="syntax">
+    <div class="section-content">
+        <div class="syntax">
+            <h2><a href="../array/syntax.html" style="color: inherit; text-decoration: none;">Syntax for Array Operations</a></h2>
+            <p>Below are syntax examples for common array operations in the selected language. Note that some operations may require additional logic for dynamic arrays.</p>
+            <h3>1D Array Operations</h3>
+            <h4>Declaration</h4>
+            <pre><code id="1d-declare">int arr[5];  // C</code></pre>
+            <h4>Initialization</h4>
+            <pre><code id="1d-init">int arr[5] = {1, 2, 3, 4, 5};  // C</code></pre>
+            <h4>Traversal</h4>
+            <pre><code id="1d-traverse">for(int i = 0; i < 5; i++) { printf("%d ", arr[i]); }  // C</code></pre>
+            <h4>Insertion (at end, assuming dynamic size)</h4>
+            <pre><code id="1d-insert">// Insert at end: arr[size++] = value;  // C</code></pre>
+            <h4>Deletion (at index)</h4>
+            <pre><code id="1d-delete">// Delete at index: for(int i = idx; i < size-1; i++) arr[i] = arr[i+1]; size--;  // C</code></pre>
+            <h4>Searching (Linear Search)</h4>
+            <pre><code id="1d-search">for(int i = 0; i < size; i++) if(arr[i] == key) return i;  // C</code></pre>
+            <h4>Updating an Element</h4>
+            <pre><code id="1d-update">arr[index] = newValue;  // C</code></pre>
+
+            <h3>2D Array Operations</h3>
+            <h4>Declaration</h4>
+            <pre><code id="2d-declare">int arr[3][3];  // C</code></pre>
+            <h4>Initialization</h4>
+            <pre><code id="2d-init">int arr[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};  // C</code></pre>
+            <h4>Traversal (Row-wise)</h4>
+            <pre><code id="2d-traverse-row">for(int i = 0; i < 3; i++) for(int j = 0; j < 3; j++) printf("%d ", arr[i][j]);  // C</code></pre>
+            <h4>Traversal (Column-wise)</h4>
+            <pre><code id="2d-traverse-col">for(int j = 0; j < 3; j++) for(int i = 0; i < 3; i++) printf("%d ", arr[i][j]);  // C</code></pre>
+            <h4>Accessing Elements</h4>
+            <pre><code id="2d-access">int val = arr[row][col];  // C</code></pre>
+            <h4>Modification of Elements</h4>
+            <pre><code id="2d-modify">arr[row][col] = newValue;  // C</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- Algorithm Section -->
+<section id="algorithm">
+    <div class="section-content">
+        <div class="algorithm">
+            <h2><a href="../array/algorithm.html" style="color: inherit; text-decoration: none;">Step-by-Step Algorithms</a></h2>
+            <p>Here are detailed algorithms for common array operations. These are essential for understanding how arrays work internally and for implementing them in code.</p>
+            <h3>Traversing a 1D Array</h3>
+            <ol>
+                <li>Initialize a loop variable i to 0.</li>
+                <li>While i < size of array, do the following:</li>
+                <li>Access the element at index i.</li>
+                <li>Perform the required operation (e.g., print or process).</li>
+                <li>Increment i by 1.</li>
+                <li>Repeat until i reaches the size.</li>
+            </ol>
+            <pre><code>// Pseudocode
+for i from 0 to size-1:
+    process arr[i]</code></pre>
+
+            <h3>Inserting an Element at a Specific Position</h3>
+            <ol>
+                <li>Check if the array is full (for static arrays) or if resizing is needed.</li>
+                <li>Shift all elements from the insertion index to the right by one position to make space.</li>
+                <li>Insert the new element at the specified index.</li>
+                <li>Increment the size of the array.</li>
+            </ol>
+            <pre><code>// Pseudocode
+if size == capacity: return error or resize
+for i from size-1 downto index:
+    arr[i+1] = arr[i]
+arr[index] = newElement
+size++</code></pre>
+
+            <h3>Deleting an Element at a Specific Position</h3>
+            <ol>
+                <li>Check if the array is empty.</li>
+                <li>Shift all elements from the deletion index + 1 to the left by one position to fill the gap.</li>
+                <li>Decrement the size of the array.</li>
+                <li>Optionally, set the last element to null or 0 for cleanup.</li>
+            </ol>
+            <pre><code>// Pseudocode
+if size == 0: return error
+for i from index to size-2:
+    arr[i] = arr[i+1]
+size--</code></pre>
+
+            <h3>Searching for an Element (Linear Search)</h3>
+            <ol>
+                <li>Initialize i to 0.</li>
+                <li>While i < size, check if arr[i] == key.</li>
+                <li>If yes, return i (the index).</li>
+                <li>If not, increment i.</li>
+                <li>If the loop ends without finding, return -1 (not found).</li>
+            </ol>
+            <pre><code>// Pseudocode
+for i from 0 to size-1:
+    if arr[i] == key:
+        return i
+return -1</code></pre>
+
+            <h3>Traversing a 2D Array (Row-wise)</h3>
+            <ol>
+                <li>Use nested loops: outer loop for rows (i from 0 to rows-1), inner loop for columns (j from 0 to cols-1).</li>
+                <li>Access and process arr[i][j] for each i and j.</li>
+            </ol>
+            <pre><code>// Pseudocode
+for i from 0 to rows-1:
+    for j from 0 to cols-1:
+        process arr[i][j]</code></pre>
+
+            <h3>Traversing a 2D Array (Column-wise)</h3>
+            <ol>
+                <li>Use nested loops: outer loop for columns (j from 0 to cols-1), inner loop for rows (i from 0 to rows-1).</li>
+                <li>Access and process arr[i][j] for each j and i.</li>
+            </ol>
+            <pre><code>// Pseudocode
+for j from 0 to cols-1:
+    for i from 0 to rows-1:
+        process arr[i][j]</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- Flowchart Section -->
+<section id="flowchart">
+    <div class="section-content">
+        <div class="flowchart">
+            <h2><a href="../array/flowchart.html" style="color: inherit; text-decoration: none;">Flowcharts for Array Operations</a></h2>
+            <p>Flowcharts help visualize the logic of array operations. Below are interactive flowcharts created using Mermaid.</p>
+           <h3>Array Traversal</h3>
+           <div class="mermaid">
+               graph TD
+               A["Start"] --> B["i = 0"]
+               B --> C{"i < size ?"}
+               C -->|Yes| D["Process arr[i]"]
+               D --> E["i++"]
+               E --> C
+               C -->|No| F["End"]
+            </div>
+
+
+            <h3>Insertion at Specific Position</h3>
+            <div class="mermaid">
+                graph TD
+                A[Start] --> B{Is full?}
+                B -->|Yes| C[Error]
+                B -->|No| D[Shift elements right from index]
+                D --> E[Insert new element at index]
+                E --> F[Increment size]
+                F --> G[End]
+            </div>
+
+            <h3>Deletion at Specific Position</h3>
+            <div class="mermaid">
+                graph TD
+                A[Start] --> B{Is empty?}
+                B -->|Yes| C[Error]
+                B -->|No| D[Shift elements left from index+1]
+                D --> E[Decrement size]
+                E --> F[End]
+            </div>
+
+            <h3>Linear Search</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B["i = 0"]
+                B --> C{"i < size ?"}
+                C -->|Yes| D{"arr[i] == key ?"}
+                D -->|Yes| E["Return i"]
+                D -->|No| F["i++"]
+                F --> C
+                C -->|No| G["Return -1"]
+          </div>
+ 
+        </div>
+    </div>
+</section>
+
+<!-- Time Complexity Section -->
+<section id="complexity">
+    <div class="section-content">
+        <div class="complexity">
+            <h2><a href="../array/complexity.html" style="color: inherit; text-decoration: none;">Time Complexity of Array Operations</a></h2>
+            <p>Understanding time complexity helps in choosing the right data structure and optimizing code. Arrays have different complexities based on the operation and whether they are static or dynamic.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Best Case</th>
+                        <th>Average Case</th>
+                        <th>Worst Case</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Access (by index)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct indexing</td>
+                    </tr>
+                    <tr>
+                        <td>Traversal</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Visit each element</td>
+                    </tr>
+                    <tr>
+                        <td>Insertion (at end, dynamic)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Amortized for dynamic arrays</td>
+                    </tr>
+                    <tr>
+                        <td>Insertion (at specific position)</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Shifting required</td>
+                    </tr>
+                    <tr>
+                        <td>Deletion (at end)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct removal</td>
+                    </tr>
+                    <tr>
+                        <td>Deletion (at specific position)</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Shifting required</td>
+                    </tr>
+                    <tr>
+                        <td>Linear Search</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Unsorted array</td>
+                    </tr>
+                    <tr>
+                        <td>Binary Search (sorted)</td>
+                        <td>O(1)</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)</td>
+                        <td>Requires sorted array</td>
+                    </tr>
+                    <tr>
+                        <td>Sorting (e.g., Quick Sort)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n²)</td>
+                        <td>Worst case for quicksort</td>
+                    </tr>
+                    <tr>
+                        <td>Reversing</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Swap elements</td>
+                    </tr>
+                    <tr>
+                        <td>Finding Max/Min</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Single pass</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Note:</strong> For static arrays, insertion/deletion at arbitrary positions is O(n) due to shifting. Dynamic arrays (like vectors in C++, ArrayList in Java) may have amortized O(1) for append operations. Space complexity is O(n) for storing elements, plus O(1) auxiliary for most operations.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Applications Section -->
+<section id="applications">
+    <div class="section-content">
+        <div class="applications">
+            <h2><a href="../array/applications.html" style="color: inherit; text-decoration: none;">Applications of Arrays</a></h2>
+            <p>Arrays are fundamental and used in a wide range of applications across computer science, software development, and real-world systems. Their simplicity and efficiency make them indispensable.</p>
+            <ul>
+                <li><strong>Data Storage and Management:</strong> Storing lists of items like student records, employee data, inventory lists, or contact lists in databases.</li>
+                <li><strong>Sorting Algorithms:</strong> Base for algorithms like bubble sort, insertion sort, quicksort, mergesort, and heapsort.</li>
+                <li><strong>Searching Algorithms:</strong> Linear search for unsorted arrays, binary search for sorted arrays.</li>
+                <li><strong>Matrices and 2D Structures:</strong> Representing images (pixel arrays), graphs (adjacency matrices), tables, and spreadsheets.</li>
+                <li><strong>Dynamic Programming:</strong> DP tables for problems like knapsack, longest common subsequence, edit distance, and matrix chain multiplication.</li>
+                <li><strong>Queues and Stacks:</strong> Underlying implementation for queues (circular arrays) and stacks (array-based).</li>
+                <li><strong>Hash Tables:</strong> Arrays used in separate chaining for collision resolution.</li>
+                <li><strong>Operating Systems:</strong> Memory management (page tables), process scheduling queues, buffer management.</li>
+                <li><strong>Databases:</strong> Storing records in tables, indexing, and query processing.</li>
+                <li><strong>Graphics and Multimedia:</strong> Pixel arrays in images, audio buffers, video frames.</li>
+                <li><strong>Scientific Computing:</strong> Numerical simulations, matrix operations in MATLAB or NumPy.</li>
+                <li><strong>Networking:</strong> Packet buffers, routing tables.</li>
+                <li><strong>Embedded Systems:</strong> Sensor data arrays, control systems.</li>
+                <li><strong>Game Development:</strong> Level data, sprite arrays, collision detection grids.</li>
+                <li><strong>Machine Learning:</strong> Feature vectors, datasets, weight matrices in neural networks.</li>
+            </ul>
+            <p>Arrays are the building blocks for more complex data structures like linked lists, trees, and graphs.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Common Mistakes Section -->
+<section id="mistakes">
+    <div class="section-content">
+        <div class="mistakes">
+            <h2><a href="../array/mistakes.html" style="color: inherit; text-decoration: none;">Common Mistakes and How to Avoid Them</a></h2>
+            <p>Working with arrays can lead to bugs if not handled carefully. Here are common pitfalls and tips to avoid them.</p>
+            <ul>
+                <li><strong>Off-by-One Errors:</strong> Forgetting that indices start at 0. Always double-check loop bounds (e.g., for(i=0; i&lt;size; i++) accesses indices 0 to size-1).</li>
+                <li><strong>Array Bounds Overflow/Underflow:</strong> Accessing arr[size] or negative indices. Add bounds checking: if(index >=0 && index < size).</li>
+                <li><strong>Uninitialized Arrays:</strong> Using arrays without initialization leads to garbage values. Always initialize arrays (e.g., memset in C, or use loops).</li>
+                <li><strong>Ignoring Time Complexity:</strong> Using O(n) operations unnecessarily. For large arrays, prefer O(log n) searches if sorted.</li>
+                <li><strong>Shallow Copy Issues:</strong> In languages like Java/C#, arrays are reference types. Use deep copy (e.g., Arrays.copyOf) to avoid unintended modifications.</li>
+                <li><strong>Fixed Size Limitation:</strong> Static arrays can't resize. Use dynamic arrays (e.g., ArrayList in Java, vectors in C++) for variable sizes.</li>
+                <li><strong>2D Array Confusion:</strong> Mixing row and column indices. Remember arr[row][col] and row-major order.</li>
+                <li><strong>Memory Waste:</strong> Allocating oversized arrays. Calculate required size or use dynamic allocation.</li>
+                <li><strong>Sorting Unsorted Arrays for Binary Search:</strong> Binary search requires sorted arrays. Sort first or use linear search.</li>
+                <li><strong>Pointer Errors in C/C++:</strong> Dereferencing null or invalid pointers. Check pointers before use.</li>
+                <li><strong>Integer Overflow in Size Calculations:</strong> For large arrays, ensure size fits in int (use size_t).</li>
+                <li><strong>Not Handling Edge Cases:</strong> Test with empty arrays, single elements, all duplicates, or maximum size.</li>
+                <li><strong>Assuming Contiguous Memory:</strong> In some languages, arrays may not be contiguous; check documentation.</li>
+                <li><strong>Thread Safety:</strong> Arrays are not thread-safe. Use synchronization for multi-threaded access.</li>
+                <li><strong>Type Mismatches:</strong> Mixing data types in strongly typed languages. Ensure homogeneous elements.</li>
+            </ul>
+            <p><strong>Debugging Tip:</strong> Use tools like gdb for C/C++, or IDE debuggers. Print array contents frequently during development.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Questions Section -->
+<section id="questions">
+    <div class="section-content">
+        <div class="questions">
+            <h2><a href="../array/questions.html" style="color: inherit; text-decoration: none;">Placement-Based Important Questions</a></h2>
+            <p>Practice these questions from LeetCode, GeeksForGeeks, CodeChef, HackerRank, and other platforms to prepare for coding interviews and placements. Focus on understanding concepts rather than memorizing solutions.</p>
+            <h3>Easy (Beginner-friendly, focus on basics)</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/two-sum/">Two Sum (LeetCode)</a> - Find two numbers that add up to a target using hash map or brute force.</li>
+                <li><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-array/">Remove Duplicates from Sorted Array (LeetCode)</a> - Remove duplicates in-place, return new length.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-the-missing-number/">Find the Missing Number (GeeksForGeeks)</a> - In array of 1 to n, find missing using XOR or sum.</li>
+                <li><a href="https://leetcode.com/problems/move-zeroes/">Move Zeroes (LeetCode)</a> - Move all zeroes to the end while maintaining order.</li>
+                <li><a href="https://www.geeksforgeeks.org/reverse-an-array/">Reverse an Array (GeeksForGeeks)</a> - Reverse elements in place using two pointers.</li>
+                <li><a href="https://leetcode.com/problems/contains-duplicate/">Contains Duplicate (LeetCode)</a> - Check if array has duplicates using set or sorting.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-maximum-and-minimum-in-an-array/">Find Maximum and Minimum (GeeksForGeeks)</a> - In single pass using divide and conquer.</li>
+                <li><a href="https://leetcode.com/problems/single-number/">Single Number (LeetCode)</a> - Find the number that appears once using XOR.</li>
+                <li><a href="https://www.geeksforgeeks.org/array-rotation/">Array Rotation (GeeksForGeeks)</a> - Rotate array by k positions using reversal or juggling.</li>
+                <li><a href="https://leetcode.com/problems/intersection-of-two-arrays/">Intersection of Two Arrays (LeetCode)</a> - Find common elements using sets or sorting.</li>
+                <li><a href="https://www.geeksforgeeks.org/search-insert-and-delete-in-an-unsorted-array/">Search, Insert, Delete in Unsorted Array (GeeksForGeeks)</a> - Basic operations.</li>
+                <li><a href="https://leetcode.com/problems/merge-sorted-array/">Merge Sorted Array (LeetCode)</a> - Merge two sorted arrays into one.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-second-largest-element-array/">Find Second Largest Element (GeeksForGeeks)</a> - In single pass.</li>
+                <li><a href="https://leetcode.com/problems/majority-element/">Majority Element (LeetCode)</a> - Element appearing more than n/2 times.</li>
+                <li><a href="https://www.geeksforgeeks.org/rearrange-array-alternating-positive-negative-items-o1-extra-space/">Rearrange Positive and Negative (GeeksForGeeks)</a> - In place.</li>
+            </ul>
+            <h3>Medium</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/container-with-most-water/">Container With Most Water (LeetCode)</a> - Two pointers technique.</li>
+                <li><a href="https://leetcode.com/problems/3sum/">3Sum (LeetCode)</a> - Find triplets summing to zero.</li>
+                <li><a href="https://www.geeksforgeeks.org/kadanes-algorithm/">Kadane's Algorithm (GeeksForGeeks)</a> - Maximum subarray sum.</li>
+                <li><a href="https://leetcode.com/problems/next-permutation/">Next Permutation (LeetCode)</a> - Rearrange to next lexicographical order.</li>
+                <li><a href="https://www.geeksforgeeks.org/merge-two-sorted-arrays/">Merge Two Sorted Arrays (GeeksForGeeks)</a> - Without extra space.</li>
+                <li><a href="https://leetcode.com/problems/subarray-sum-equals-k/">Subarray Sum Equals K (LeetCode)</a> - Prefix sums and hash map.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-the-duplicate-number/">Find the Duplicate Number (GeeksForGeeks)</a> - Floyd's cycle detection.</li>
+                <li><a href="https://leetcode.com/problems/sort-colors/">Sort Colors (LeetCode)</a> - Dutch flag algorithm.</li>
+                <li><a href="https://www.geeksforgeeks.org/rearrange-array-alternating-positive-negative-items-o1-extra-space/">Rearrange Positive and Negative (GeeksForGeeks)</a> - In place with order.</li>
+                <li><a href="https://leetcode.com/problems/maximum-product-subarray/">Maximum Product Subarray (LeetCode)</a> - Handle negative numbers.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-pivot-element-array/">Find Pivot Element (GeeksForGeeks)</a> - Sum of left equals right.</li>
+                <li><a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/">Find Minimum in Rotated Sorted Array (LeetCode)</a> - Binary search variant.</li>
+                <li><a href="https://www.geeksforgeeks.org/count-inversions-array/">Count Inversions (GeeksForGeeks)</a> - Using merge sort.</li>
+                <li><a href="https://leetcode.com/problems/product-of-array-except-self/">Product of Array Except Self (LeetCode)</a> - Without division.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-all-pairs-with-given-sum/">Find All Pairs with Given Sum (GeeksForGeeks)</a> - Efficient approach.</li>
+            </ul>
+            <h3>Hard</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/trapping-rain-water/">Trapping Rain Water (LeetCode)</a> - Two pointers.</li>
+                <li><a href="https://leetcode.com/problems/median-of-two-sorted-arrays/">Median of Two Sorted Arrays (LeetCode)</a> - Binary search.</li>
+                <li><a href="https://www.geeksforgeeks.org/longest-consecutive-sequence/">Longest Consecutive Sequence (GeeksForGeeks)</a> - Hash set.</li>
+                <li><a href="https://leetcode.com/problems/first-missing-positive/">First Missing Positive (LeetCode)</a> - In-place modification.</li>
+                <li><a href="https://www.geeksforgeeks.org/maximum-of-all-subarrays-of-size-k/">Sliding Window Maximum (GeeksForGeeks)</a> - Deque.</li>
+                <li><a href="https://leetcode.com/problems/largest-rectangle-in-histogram/">Largest Rectangle in Histogram (LeetCode)</a> - Stack.</li>
+                <li><a href="https://www.geeksforgeeks.org/maximum-sum-with-rotations/">Maximum Sum with Rotations (GeeksForGeeks)</a> - Prefix sums.</li>
+                <li><a href="https://leetcode.com/problems/maximal-rectangle/">Maximal Rectangle (LeetCode)</a> - Histogram approach.</li>
+                <li><a href="https://www.geeksforgeeks.org/count-number-of-subarrays-with-sum-equal-to-k/">Subarrays with Sum K (GeeksForGeeks)</a> - Hash map.</li>
+                <li><a href="https://leetcode.com/problems/minimum-window-substring/">Minimum Window Substring (LeetCode)</a> - Sliding window.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-the-smallest-window-in-a-string-containing-all-characters-of-another-string/">Smallest Window Containing All Characters (GeeksForGeeks)</a> - Advanced sliding window.</li>
+                <li><a href="https://leetcode.com/problems/merge-intervals/">Merge Intervals (LeetCode)</a> - Sorting and merging.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-the-maximum-of-minimums-of-every-window-size/">Maximum of Minimums of Every Window Size (GeeksForGeeks)</a> - Stack.</li>
+                <li><a href="https://leetcode.com/problems/longest-increasing-subsequence/">Longest Increasing Subsequence (LeetCode)</a> - DP.</li>
+                <li><a href="https://www.geeksforgeeks.org/count-number-of-ways-to-partition-a-set-into-k-subsets/">Partition into K Subsets (GeeksForGeeks)</a> - DP.</li>
+            </ul>
+            <p><strong>Tip:</strong> Solve these on paper first, then code. Focus on edge cases like empty arrays, single elements, duplicates, and maximum constraints. Use platforms like LeetCode for timed practice.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../array/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<script>
+    // Language selector functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const langSelect = document.getElementById('lang-select');
+        const codeBlocks = {
+            '1d-declare': {
+                c: 'int arr[5];',
+                java: 'int[] arr = new int[5];',
+                python: 'arr = [0] * 5',
+                cpp: 'int arr[5];'
+            },
+            '1d-init': {
+                c: 'int arr[5] = {1, 2, 3, 4, 5};',
+                java: 'int[] arr = {1, 2, 3, 4, 5};',
+                python: 'arr = [1, 2, 3, 4, 5]',
+                cpp: 'int arr[5] = {1, 2, 3, 4, 5};'
+            },
+            '1d-traverse': {
+                c: 'for(int i = 0; i < 5; i++) { printf("%d ", arr[i]); }',
+                java: 'for(int i = 0; i < arr.length; i++) { System.out.print(arr[i] + " "); }',
+                python: 'for i in arr: print(i, end=" ")',
+                cpp: 'for(int i = 0; i < 5; i++) { cout << arr[i] << " "; }'
+            },
+            '1d-insert': {
+                c: '// Insert at end: arr[size++] = value;',
+                java: '// Insert at end: arr[size++] = value;',
+                python: 'arr.append(value)',
+                cpp: '// Insert at end: arr[size++] = value;'
+            },
+            '1d-delete': {
+                c: '// Delete at index: for(int i = idx; i < size-1; i++) arr[i] = arr[i+1]; size--;',
+                java: '// Use ArrayList for dynamic deletion',
+                python: 'arr.pop(idx)',
+                cpp: '// Delete at index: for(int i = idx; i < size-1; i++) arr[i] = arr[i+1]; size--;'
+            },
+            '1d-search': {
+                c: 'for(int i = 0; i < size; i++) if(arr[i] == key) return i;',
+                java: 'for(int i = 0; i < arr.length; i++) if(arr[i] == key) return i;',
+                python: 'arr.index(key)',
+                cpp: 'for(int i = 0; i < size; i++) if(arr[i] == key) return i;'
+            },
+            '1d-update': {
+                c: 'arr[index] = newValue;',
+                java: 'arr[index] = newValue;',
+                python: 'arr[index] = newValue',
+                cpp: 'arr[index] = newValue;'
+            },
+            '2d-declare': {
+                c: 'int arr[3][3];',
+                java: 'int[][] arr = new int[3][3];',
+                python: 'arr = [[0]*3 for _ in range(3)]',
+                cpp: 'int arr[3][3];'
+            },
+            '2d-init': {
+                c: 'int arr[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};',
+                java: 'int[][] arr = {{1,2,3}, {4,5,6}, {7,8,9}};',
+                python: 'arr = [[1,2,3], [4,5,6], [7,8,9]]',
+                cpp: 'int arr[3][3] = {{1,2,3}, {4,5,6}, {7,8,9}};'
+            },
+            '2d-traverse-row': {
+                c: 'for(int i = 0; i < 3; i++) for(int j = 0; j < 3; j++) printf("%d ", arr[i][j]);',
+                java: 'for(int i = 0; i < 3; i++) for(int j = 0; j < 3; j++) System.out.print(arr[i][j] + " ");',
+                python: 'for row in arr: for val in row: print(val, end=" ")',
+                cpp: 'for(int i = 0; i < 3; i++) for(int j = 0; j < 3; j++) cout << arr[i][j] << " ";'
+            },
+            '2d-traverse-col': {
+                c: 'for(int j = 0; j < 3; j++) for(int i = 0; i < 3; i++) printf("%d ", arr[i][j]);',
+                java: 'for(int j = 0; j < 3; j++) for(int i = 0; i < 3; i++) System.out.print(arr[i][j] + " ");',
+                python: 'for j in range(3): for i in range(3): print(arr[i][j], end=" ")',
+                cpp: 'for(int j = 0; j < 3; j++) for(int i = 0; i < 3; i++) cout << arr[i][j] << " ";'
+            },
+            '2d-access': {
+                c: 'int val = arr[row][col];',
+                java: 'int val = arr[row][col];',
+                python: 'val = arr[row][col]',
+                cpp: 'int val = arr[row][col];'
+            },
+            '2d-modify': {
+                c: 'arr[row][col] = newValue;',
+                java: 'arr[row][col] = newValue;',
+                python: 'arr[row][col] = newValue',
+                cpp: 'arr[row][col] = newValue;'
+            }
+        };
+
+        if (langSelect) {
+            langSelect.addEventListener('change', function() {
+                const selectedLang = this.value;
+                Object.keys(codeBlocks).forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = codeBlocks[id][selectedLang];
+                    }
+                });
+            });
+        } else {
+            console.error('Language selector not found');
+        }
+    });
+    
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: "base",
+        themeVariables: {
+            primaryColor: "#1e1e2f",
+            primaryBorderColor: "#8b6cf6",
+            primaryTextColor: "#ffffff",
+
+            lineColor: "#a78bfa",        // 🔥 THIS changes arrow lines
+            secondaryColor: "#2a2a40",
+            tertiaryColor: "#141427",
+
+            edgeLabelBackground: "#1e1e2f" // background of Yes/No labels
+        }
+    });
+</script>
+    </body>
+ </html> 

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searching Theory - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --success: #10B981;
+        --error: #EF4444;
+        --warning: #F59E0B;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1000px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .theory-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    h4 {
+        color: var(--accent-purple);
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    ul, ol {
+        list-style-position: inside;
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        padding-left: 10px;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+
+    /* ===================== VISUAL BOXES ===================== */
+    .visual-container {
+        background: #161b33;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 20px 0;
+        overflow-x: auto;
+        border: 1px solid var(--accent-purple);
+    }
+
+    .visual-title {
+        text-align: center;
+        color: var(--accent-blue);
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    /* Array Visual Representation */
+    .array-visual {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .array-cell {
+        min-width: 60px;
+        height: 60px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--text-primary);
+        font-size: 18px;
+        border-radius: 6px;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .array-cell.found {
+        background: var(--success);
+        border-color: var(--success);
+        transform: scale(1.1);
+    }
+
+    .array-cell.searched {
+        background: var(--warning);
+        border-color: var(--warning);
+    }
+
+    .array-cell::after {
+        content: attr(data-index);
+        position: absolute;
+        bottom: -25px;
+        font-size: 12px;
+        color: var(--accent-purple);
+        font-weight: bold;
+    }
+
+    /* Search Animation Steps */
+    .search-step {
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(139,108,246,0.1);
+        border-radius: 8px;
+        border-left: 4px solid var(--accent-purple);
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    .comparison-table th, .comparison-table td {
+        border: 1px solid var(--accent-purple);
+        padding: 12px;
+        text-align: left;
+    }
+
+    .comparison-table th {
+        background: var(--accent-purple);
+        color: var(--text-primary);
+    }
+
+    .comparison-table tr:nth-child(even) {
+        background: rgba(139,108,246,0.1);
+    }
+
+    /* Algorithm Steps */
+    .algorithm-steps {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--success);
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 0 8px 8px 0;
+    }
+
+    /* Info Box */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid var(--warning);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--success);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .error-box {
+        background: rgba(239, 68, 68, 0.1);
+        border-left: 4px solid var(--error);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+    <!-- Navbar -->
+<header class="navbar">
+    <a href="searchingGS.html" class="logo">CodeCanvas - Searching</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/searchingGS.html">Back to Search</a></li>
+            <li><a href="../search/theory.html" class="active">Theory</a></li>
+            <li><a href="../search/syntax.html">Syntax</a></li>
+            <li><a href="../search/algorithm.html">Algorithm</a></li>
+            <li><a href="../search/complexity.html">Complexity</a></li>
+            <li><a href="../search/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="theory">
+    <div class="section-content">
+
+        <!-- Header -->
+        <div class="theory-card">
+            <h2>Searching Algorithms - Complete Theory Guide</h2>
+            <p style="font-size: 18px; color: var(--text-primary);">
+                Searching algorithms are fundamental techniques used to find specific elements within data structures. 
+                They form the backbone of database queries, information retrieval, and countless other applications.
+            </p>
+        </div>
+
+        <!-- What is Searching -->
+        <div class="theory-card" id="what-is-searching">
+            <h3>1. What is Searching?</h3>
+            <p><strong>Searching</strong> is the process of finding a specific element (target) within a collection of data (array, list, etc.).</p>
+            
+            <div class="info-box">
+                <strong>Simple Definition:</strong> Searching is like finding a specific book in a library. You need an efficient method to locate it quickly among thousands of books.
+            </div>
+
+            <p>The algorithm returns:</p>
+            <ul>
+                <li><strong>Index/Position</strong> if the element is found</li>
+                <li><strong>-1 or special value</strong> if the element is not found</li>
+            </ul>
+
+            <div class="visual-container">
+                <div class="visual-title">Search Example: Find 42</div>
+                <div class="array-visual">
+                    <div class="array-cell" data-index="0">10</div>
+                    <div class="array-cell" data-index="1">20</div>
+                    <div class="array-cell" data-index="2">30</div>
+                    <div class="array-cell" data-index="3">42</div>
+                    <div class="array-cell" data-index="4">50</div>
+                </div>
+                <p style="text-align: center; color: var(--success); font-weight: bold; font-size: 16px;">
+                    ✅ Found at index 3
+                </p>
+            </div>
+        </div>
+
+        <!-- Types of Searching -->
+        <div class="theory-card" id="types">
+            <h3>2. Types of Searching Algorithms</h3>
+
+            <h4>a) Linear Search (Sequential Search)</h4>
+            <p>Checks each element sequentially from start to end. Works on both sorted and unsorted data.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Linear Search Steps (Target: 42)</div>
+                <div class="search-step">
+                    <strong>Step 1:</strong> Check arr[0] = 10 ≠ 42 → Continue
+                </div>
+                <div class="search-step">
+                    <strong>Step 2:</strong> Check arr[1] = 20 ≠ 42 → Continue
+                </div>
+                <div class="search-step">
+                    <strong>Step 3:</strong> Check arr[2] = 30 ≠ 42 → Continue
+                </div>
+                <div class="search-step">
+                    <strong>Step 4:</strong> Check arr[3] = 42 ✓ → <strong>Found at index 3</strong>
+                </div>
+            </div>
+
+            <h4>b) Binary Search</h4>
+            <p>Works only on <strong>sorted arrays</strong>. Repeatedly divides the search space in half by comparing the target with the middle element.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Binary Search Steps (Target: 42)</div>
+                <div class="array-visual">
+                    <div class="array-cell" data-index="0">10</div>
+                    <div class="array-cell" data-index="1">20</div>
+                    <div class="array-cell" data-index="2" style="background: var(--warning);">30</div>
+                    <div class="array-cell" data-index="3">42</div>
+                    <div class="array-cell" data-index="4">50</div>
+                </div>
+                <p style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                    Step 1: Middle = 30 < 42 → Search right half
+                </p>
+            </div>
+
+            <h4>c) Other Advanced Algorithms</h4>
+            <ul>
+                <li><strong>Jump Search:</strong> Uses block-wise jumps</li>
+                <li><strong>Interpolation Search:</strong> Uses interpolation formula</li>
+                <li><strong>Exponential Search:</strong> Finds range first, then binary search</li>
+            </ul>
+        </div>
+
+        <!-- Linear Search Deep Dive -->
+        <div class="theory-card" id="linear-search">
+            <h3>3. Linear Search - Detailed Analysis</h3>
+            
+            <div class="algorithm-steps">
+                <strong>Algorithm:</strong><br>
+                1. Start from index 0<br>
+                2. Compare target with arr[i]<br>
+                3. If match → return i<br>
+                4. If no match → continue to next<br>
+                5. If end reached → return -1
+            </div>
+
+            <div class="visual-container">
+                <div class="visual-title">Linear Search Visualization</div>
+                <div style="text-align: center;">
+                    <div class="array-visual">
+                        <div class="array-cell searched" data-index="0">15</div>
+                        <div class="array-cell searched" data-index="1">25</div>
+                        <div class="array-cell searched" data-index="2">35</div>
+                        <div class="array-cell found" data-index="3">45</div>
+                        <div class="array-cell" data-index="4">55</div>
+                    </div>
+                    <p style="color: var(--success); font-weight: bold;">
+                        🔍 Searched → Found 45 at index 3
+                    </p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Key Point:</strong> Linear search checks <em>every</em> element in worst case, making it O(n).
+            </div>
+        </div>
+
+        <!-- Binary Search Deep Dive -->
+        <div class="theory-card" id="binary-search">
+            <h3>4. Binary Search - Detailed Analysis</h3>
+            
+            <p>Binary search eliminates half of the remaining elements in each step, making it extremely efficient.</p>
+
+            <div class="algorithm-steps">
+                <strong>Algorithm:</strong><br>
+                1. Initialize low = 0, high = n-1<br>
+                2. While low ≤ high:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;mid = (low + high) / 2<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;If arr[mid] == target → return mid<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;If arr[mid] < target → low = mid + 1<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Else → high = mid - 1<br>
+                3. Return -1 (not found)
+            </div>
+
+            <div class="visual-container">
+                <div class="visual-title">Binary Search Tree Visualization</div>
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+                    <div>
+                        <p><strong>Step 1:</strong> mid=2 (30)</p>
+                        <div class="array-visual">
+                            <div class="array-cell" data-index="0">10</div>
+                            <div class="array-cell" data-index="1">20</div>
+                            <div class="array-cell searched" data-index="2">30</div>
+                            <div class="array-cell" data-index="3">42</div>
+                            <div class="array-cell" data-index="4">50</div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--warning);">30 < 42 → Search right</p>
+                    </div>
+                    <div>
+                        <p><strong>Step 2:</strong> mid=3 (42)</p>
+                        <div class="array-visual">
+                            <div class="array-cell" data-index="0">-</div>
+                            <div class="array-cell" data-index="1">-</div>
+                            <div class="array-cell" data-index="2">-</div>
+                            <div class="array-cell found" data-index="3">42</div>
+                            <div class="array-cell" data-index="4">50</div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--success);">✅ Found!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Key Requirements:</strong><br>
+                1. Array must be <strong>sorted</strong><br>
+                2. Elements must be <strong>comparable</strong>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="theory-card" id="comparison">
+            <h3>5. Linear vs Binary Search Comparison</h3>
+            
+            <div class="visual-container">
+                <div class="visual-title">Performance Comparison</div>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Feature</th>
+                        <th>Linear Search</th>
+                        <th>Binary Search</th>
+                    </tr>
+                    <tr>
+                        <td>Best Case</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td>Average Case</td>
+                        <td>O(n)</td>
+                        <td>O(log n)</td>
+                    </tr>
+                    <tr>
+                        <td>Worst Case</td>
+                        <td>O(n)</td>
+                        <td>O(log n)</td>
+                    </tr>
+                    <tr>
+                        <td>Space Complexity</td>
+                        <td>O(1)</td>
+                        <td>O(1) Iterative / O(log n) Recursive</td>
+                    </tr>
+                    <tr>
+                        <td>Array Requirement</td>
+                        <td>Sorted or Unsorted</td>
+                        <td><strong>Must be Sorted</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Implementation</td>
+                        <td>Simple</td>
+                        <td>Moderate</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="info-box">
+                <strong>When to Use:</strong><br>
+                - Linear: Small datasets, unsorted data<br>
+                - Binary: Large datasets, sorted data
+            </div>
+        </div>
+
+        <!-- Prerequisites and Limitations -->
+        <div class="theory-card" id="prerequisites">
+            <h3>6. Prerequisites & Limitations</h3>
+
+            <h4>Binary Search Prerequisites:</h4>
+            <ul>
+                <li><strong>Sorted Array:</strong> Must be sorted in ascending/descending order</li>
+                <li><strong>Comparable Elements:</strong> Elements must support comparison operators</li>
+                <li><strong>Static Size:</strong> Size shouldn't change during search</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>Common Mistake:</strong> Using binary search on unsorted array will give wrong results!
+            </div>
+
+            <h4>When Linear Search is Better:</h4>
+            <ul>
+                <li>Small arrays (n < 100)</li>
+                <li>Unsorted data</li>
+                <li>Frequent insertions/deletions</li>
+                <li>Linked lists (no random access)</li>
+            </ul>
+        </div>
+
+        <!-- Real-world Applications -->
+        <div class="theory-card" id="applications">
+            <h3>7. Real-World Applications</h3>
+            
+            <ul>
+                <li><strong>Database Queries:</strong> Finding records by ID</li>
+                <li><strong>Dictionary/Autocomplete:</strong> Word lookup</li>
+                <li><strong>File Systems:</strong> Finding files by name</li>
+                <li><strong>Network Routing:</strong> IP address lookup</li>
+                <li><strong>Game Development:</strong> Finding player positions</li>
+                <li><strong>Machine Learning:</strong> Nearest neighbor search</li>
+                <li><strong>Compilers:</strong> Symbol table lookup</li>
+            </ul>
+
+            <div class="success-box">
+                <strong>Fun Fact:</strong> Google search uses advanced searching techniques on trillions of web pages!
+            </div>
+        </div>
+
+        <!-- Advanced Topics -->
+        <div class="theory-card" id="advanced">
+            <h3>8. Advanced Searching Topics</h3>
+            
+            <ul>
+                <li><strong>Hash-based Search:</strong> O(1) average case using hash tables</li>
+                <li><strong>Tree-based Search:</strong> BST, AVL trees (O(log n))</li>
+                <li><strong>Graph Search:</strong> BFS, DFS, Dijkstra</li>
+                <li><strong>Pattern Matching:</strong> KMP, Rabin-Karp for strings</li>
+                <li><strong>Multi-dimensional Search:</strong> KD-trees, R-trees</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>Next Level:</strong> For massive datasets, use indexing, caching, and distributed search systems like Elasticsearch.
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="theory-card">
+            <h3>Summary</h3>
+            <p>Searching algorithms are crucial for efficient data retrieval. Choose the right algorithm based on your data characteristics:</p>
+            <ul>
+                <li><strong>Small/Unsorted:</strong> Linear Search (O(n))</li>
+                <li><strong>Large/Sorted:</strong> Binary Search (O(log n))</li>
+            </ul>
+            <p>Understanding time complexity and prerequisites is key to selecting the optimal algorithm.</p>
+
+            <div class="nav-buttons">
+                <a href="../GetStarted/searchingGS.html" class="nav-btn secondary">← Back to Home</a>
+                <a href="../search/syntax.html" class="nav-btn">Next: Syntax Examples →</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../search/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript for Theory Page -->
+<script>
+    // Navbar Active Link Highlighting
+    const currentPage = window.location.pathname.split("/").pop();
+    const navLinks = document.querySelectorAll('.navbar nav a');
+    
+    navLinks.forEach(link => {
+        if(link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+        }
+    });
+
+    // Smooth Scroll for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Simple search animation demo
+    function animateSearch() {
+        const cells = document.querySelectorAll('.array-cell');
+        let index = 0;
+        
+        const interval = setInterval(() => {
+            if (index < cells.length) {
+                cells[index].classList.add('searched');
+                index++;
+            } else {
+                clearInterval(interval);
+                cells[3].classList.add('found'); // Highlight found element
+            }
+        }, 500);
+    }
+
+    // Auto-trigger animation on page load (demo)
+    window.addEventListener('load', () => {
+        setTimeout(animateSearch, 1000);
+    });
+</script>
+
+</body>
+</html>
+                           

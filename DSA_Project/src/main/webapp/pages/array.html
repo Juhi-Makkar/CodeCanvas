@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array - Learn Arrays</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- Your existing style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.ico">
+    <style>
+        /* Embedded theme-specific styles (overrides/additions to style.css) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #0A0F24;
+            --bg-secondary: #161B3A;
+            --accent-purple: #7F5AF0;
+            --accent-blue: #38BDF8;
+            --text-primary: #E2E8F0;
+            --text-secondary: #94A3B8;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+             
+        }
+
+/* ===================== NAVBAR (FINAL CLEAN VERSION) ===================== */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+    box-shadow: 0 0 15px rgba(127,90,240,0.4);
+    z-index: 1000;
+
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Spacing */
+    padding: 15px 60px;   /* good left-right spacing */
+    height: 70px;
+
+    box-sizing: border-box;
+}
+
+/* Center container effect */
+.navbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    max-width: 1400px;
+    margin: auto;
+    pointer-events: none;
+}
+
+/* Logo */
+.navbar .logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-purple);
+    letter-spacing: 0.5px;
+    
+}
+
+/* Navigation list */
+.navbar nav ul {
+    list-style: none;
+    display: flex;
+    gap: 35px;      /* space between menu items */
+    margin: 0;
+    padding: 0;
+}
+
+/* Links */
+.navbar nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 12px;   /* bigger clickable area */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    
+}
+
+/* Hover effect */
+.navbar nav a:hover {
+    color: var(--accent-blue);
+    background: rgba(127,90,240,0.1);
+}
+ 
+/* NAV LOGO CONTAINER */
+
+.nav-logo{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    
+}
+
+/* LOGO IMAGE */
+
+.nav-logo-img{
+    width:82px;
+    height:82px;
+    object-fit:contain;
+    border-radius:50%;
+    filter:drop-shadow(0 0 14px rgba(217,70,239,0.55))brightness(1.08)contrast(1.08);
+    transition:0.3s ease;
+    margin-top:-2px;
+}
+
+/* HOVER EFFECT */
+
+.nav-logo-img:hover{
+    transform:scale(1.05);
+    filter:
+    drop-shadow(0 0 18px rgba(0,217,255,0.65))brightness(1.1)contrast(1.1);
+}
+
+/* TITLE */
+
+.nav-logo h1{
+
+    font-size:32px;
+    font-weight:700;
+    background:
+    linear-gradient(
+    90deg,
+    #b86cff,
+    #00d9ff);
+    -webkit-background-clip:text; 
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===================== RESPONSIVE NAVBAR ===================== */
+
+@media (max-width: 900px) {
+    .navbar {
+        padding: 15px 25px;
+    }
+
+    .navbar nav ul {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 12px 15px;
+    }
+
+    .navbar nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 8px;
+    }
+}
+
+
+/* ---------- SECTION SPACING (REDUCED) ---------- */
+section{
+min-height:70vh;
+padding:90px 20px 20px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+}
+
+#home{ padding-bottom:30px; }
+#working{ padding-top:50px; }
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+ /* ---------- HOME LAYOUT ---------- */
+.section-content{
+max-width:1200px;
+width:100%;
+text-align:center;
+}
+
+#home .section-content{
+display:flex;
+flex-direction:column;
+gap:30px;
+padding-top: 40px; /* Added top padding for more space */
+}
+
+.home-left{
+text-align:left;
+max-width:550px;
+}
+
+.array-diagram{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:30px;
+padding-top: 50px;
+}
+
+/* ---------- BUTTONS IN HOME ---------- */
+.home-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 51px;
+    justify-content: center;
+}
+
+/* ---------- MEMORY BLOCKS ---------- */
+.memory-block{
+width:80px;
+height:80px;
+background:var(--bg-secondary);
+border:2px solid var(--accent-purple);
+border-radius:8px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+animation:fade-in 1s ease-out forwards;
+}
+
+.memory-block .index{
+font-size:12px;
+color:var(--accent-blue);
+}
+
+.memory-block .value{
+font-size:18px;
+}
+
+@keyframes fade-in{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1;}
+}
+
+        /* Working Section */
+        .array-viz {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Increased gap */
+            margin: 30px 0; /* Added margin */
+            flex-wrap: wrap;
+        }
+
+        .viz-block {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.5s;
+        }
+
+        .viz-block.active {
+            box-shadow: 0 0 20px var(--accent-purple);
+        }
+
+        .input-section {
+            margin: 30px 0; /* Increased margin */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .input-section input {
+            padding: 12px; /* Increased padding */
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            margin-right: 10px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--accent-purple);
+            color: var(--text-primary);
+            padding: 12px 20px; /* Increased padding */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        .tooltip {
+            position: absolute;
+            top: -40px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .viz-block:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(127,90,240,0.35);
+            margin: 30px 0; /* Increased margin */
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Increased gap */
+            margin: 25px 0; /* Increased margin */
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback {
+            margin-top: 25px; /* Increased margin */
+            font-weight: bold;
+        }
+
+        .correct { color: var(--success); }
+        .incorrect { color: var(--error); }
+
+        /* FAQ Section */
+        .faq-item {
+            background: var(--bg-secondary);
+            margin: 15px 0; /* Increased margin */
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 18px; /* Increased padding */
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(127,90,240,0.1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 18px; /* Increased padding */
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 18px; /* Increased padding */
+        }
+
+/* ================= FOOTER ================= */
+
+.footer{
+  position:relative;
+  background:linear-gradient(to bottom,#050816,#0B1023);
+  padding:45px 6%;
+  overflow:hidden;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+
+/* GLOW OVERLAY */
+
+.footer-overlay{
+  position:absolute;
+  inset:0;
+  background:  
+  radial-gradient(circle at top left,
+  rgba(168,85,247,0.15),
+  transparent 30%),
+  radial-gradient(circle at bottom right,
+  rgba(0,255,255,0.12),
+  transparent 30%);
+  pointer-events:none;
+}
+
+/* CONTAINER */
+
+.footer-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+  position:relative;
+  z-index:2;
+}
+
+/* LOGO */
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  
+}
+
+/* LOGO IMAGE */
+
+.logo-img{
+  width:65px;
+  height:65px;
+  object-fit:contain;
+  border-radius:50%;
+  filter: drop-shadow(0 0 10px rgba(217,70,239,0.45));
+  transition:0.3s ease;
+}
+
+/* HOVER EFFECT */
+
+.logo-img:hover{
+  transform:scale(1.05);
+  filter:drop-shadow(0 0 16px rgba(0,217,255,0.55));
+}
+
+.logo h2{
+  color:white;
+  font-size:30px;
+}
+
+.logo p{
+  color:#aaa;
+}
+
+.brand-text{
+  color:#bbb;
+  line-height:1.8;
+  margin-bottom:25px;
+}
+
+/* SOCIALS */
+
+.socials{
+  display:flex;
+  gap:15px;
+}
+
+.socials a{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.15);
+  transition:0.4s;
+  text-decoration:none;
+  backdrop-filter:blur(10px);
+}
+
+.socials a:hover{
+  transform:translateY(-5px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 40px #d946ef;
+  border-color:#00ffff;
+}
+
+/* FOOTER HEADINGS */
+
+.footer-section h3{
+  color:white;
+  margin-bottom:25px;
+  font-size:22px;
+}
+
+/* LINKS */
+
+.footer-section ul{
+  list-style:none;
+}
+
+.footer-section ul li{
+  margin-bottom:15px;
+  color:#bbb;
+  transition:0.3s;
+  cursor:pointer;
+}
+
+.footer-section ul li a{
+  text-decoration:none;
+  color:#bbb;
+}
+
+.footer-section ul li:hover{
+  color:#00ffff;
+  transform:translateX(8px);
+}
+
+/* ACTIVITY CARD */
+
+.activity-card{
+    width:100%;
+    max-width:320px;
+    padding:28px 24px;
+    border-radius:24px;
+    background:
+    rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    backdrop-filter:blur(10px);
+    box-shadow:
+    0 0 18px rgba(217,70,239,0.12);
+}
+
+/* TITLE */
+
+.activity-card p{
+    color:white;
+    font-size:20px;
+    font-weight:600;
+    text-align:center;
+    margin:0;
+}
+
+/* BARS */
+
+.bars{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:12px;
+    height:120px;
+}
+
+/* EACH BAR */
+
+.bars span{
+    width:18px;
+    border-radius:20px;
+    background:
+    linear-gradient(
+    to top,
+    #00d9ff,
+    #d946ef);
+    animation:bars 1.6s infinite ease-in-out;
+}
+
+/* DIFFERENT HEIGHTS */
+
+.bars span:nth-child(1){height:50px;}
+.bars span:nth-child(2){height:90px;}
+.bars span:nth-child(3){height:70px;}
+.bars span:nth-child(4){height:120px;}
+.bars span:nth-child(5){height:95px;}
+.bars span:nth-child(6){height:75px;}
+.bars span:nth-child(7){height:135px;}
+
+/* BAR ANIMATION */
+
+@keyframes bars{
+
+    0%,100%{
+    transform:scaleY(1);
+    }
+    50%{
+        transform:scaleY(0.75);
+    }
+
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    color:#ff4dff;
+    font-size:17px;
+    font-weight:500;
+}
+
+/* DOT */
+
+.dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#ff00ff;
+    box-shadow:
+    0 0 12px #ff00ff;
+    animation:pulse 1s infinite;
+}
+
+/* DOT ANIMATION */
+
+@keyframes pulse{
+
+    0%{transform:scale(1);}
+    50%{transform:scale(1.25);}
+    100%{transform:scale(1);}
+}
+
+/* STATS */
+
+.stats-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:25px;
+  margin-top:70px;
+}
+
+.stat-card{
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  text-align:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.stat-card:hover{
+  transform:translateY(-10px);
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px rgba(168,85,247,0.5);
+}
+
+.stat-card h2{
+  font-size:28px;
+  color:#00ffff;
+}
+
+/* QUOTE */
+
+.quote-section{
+  text-align:center;
+  margin-top:40px;
+  color:white;
+}
+
+.quote-icon{
+  font-size:60px;
+  color:#d946ef;
+  text-shadow:0 0 20px #d946ef;
+}
+
+.quote-section p{
+  font-size:18px;
+  max-width:900px;
+  margin:20px auto;
+  line-height:1.8;
+  color:#ddd;
+}
+
+.quote-section h4{
+  color:#ff66ff;
+}
+
+/* TECH STACK */
+
+.tech-stack{
+  margin-top:70px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.tech-card{
+  padding:12px 18px;
+  border-radius:15px;
+  color:white;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.tech-card:hover{
+  transform:translateY(-8px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 30px #d946ef;
+}
+
+
+
+/* WAVE */
+
+.wave{
+  width:100%;
+  height:4px;
+  margin-top:80px;
+  background:linear-gradient(
+  90deg,
+  #00ffff,
+  #d946ef,
+  #00ffff);
+  animation:wave 4s linear infinite;
+  background-size:300% 100%;
+  border-radius:10px;
+}
+
+@keyframes wave{
+  0%{
+    background-position:0%;
+  }
+  100%{
+    background-position:300%;
+  }
+}
+
+/* SCROLL BUTTON */
+
+#scrollTopBtn{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:65px;
+  height:65px;
+  border:none;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00ffff,#d946ef);
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px #d946ef;
+  transition:0.4s;
+}
+
+#scrollTopBtn:hover{
+  transform:scale(1.1);
+}
+
+/* COPYRIGHT */
+
+.copyright{
+  margin-top:50px;
+  padding-top:25px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:15px;
+  color:#aaa;
+  position:relative;
+  z-index:2;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .footer{
+    padding:70px 6%;
+  }
+
+  .quote-section p{
+    font-size:18px;
+  }
+
+  .copyright{
+    flex-direction:column;
+    text-align:center;
+  }
+
+}
+
+        
+
+        /* Responsiveness */
+        @media (min-width: 768px) {
+            #home .section-content {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .home-left, .home-right {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar nav ul { flex-direction: column; gap: 15px; }
+            .memory-block, .viz-block { width: 60px; height: 60px; }
+            .array-diagram, .array-viz { gap: 8px; }
+            .input-section { flex-direction: column; align-items: center; }
+        }
+        
+        /* ===================== FULL RESPONSIVENESS FIX ===================== */
+
+/* ----- LARGE LAPTOPS (1200px and below) ----- */
+@media (max-width: 1200px) {
+    .section-content {
+        max-width: 95%;
+    }
+
+    .array-diagram {
+        gap: 20px;
+    }
+}
+
+/* ----- TABLETS (900px and below) ----- */
+@media (max-width: 900px) {
+ 
+    /* Navbar fix */
+    .navbar {
+        padding: 12px 25px;
+    }
+
+    .navbar nav ul {
+        gap: 18px;
+    }
+
+    /* Home layout becomes vertical */
+    #home .section-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .home-left {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .array-diagram {
+        justify-content: center;
+        gap: 15px;
+    }
+}
+
+/* ----- MOBILE (768px and below) ----- */
+@media (max-width: 768px) {
+
+    /* Navbar becomes stacked */
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 15px;
+    }
+
+    .navbar nav ul {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+
+    /* Sections spacing adjust */
+    section {
+        padding: 80px 15px 20px;
+        min-height: auto;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    p, li {
+        font-size: 14px;
+    }
+
+    /* Memory blocks smaller */
+    .memory-block, .viz-block {
+        width: 60px;
+        height: 60px;
+    }
+
+    .memory-block .value,
+    .viz-block .value {
+        font-size: 14px;
+    }
+
+    .array-diagram,
+    .array-viz {
+        gap: 8px;
+    }
+
+    /* Input section becomes vertical */
+    .input-section {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .input-section input {
+        width: 80%;
+        margin-bottom: 8px;
+    }
+
+    .btn {
+        width: 80%;
+    }
+
+    /* Quiz box smaller */
+    .quiz-question {
+        padding: 18px;
+    }
+
+    /* FAQ answers smoother */
+    .faq-item.active .faq-answer {
+        max-height: 300px;
+    }
+
+    /* Footer centered */
+    footer {
+        font-size: 14px;
+    }
+}
+
+/* ----- SMALL MOBILE (480px and below) ----- */
+@media (max-width: 480px) {
+
+    .logo {
+        font-size: 20px;
+    }
+
+    .memory-block, .viz-block {
+        width: 55px;
+        height: 55px;
+    }
+
+    .array-diagram {
+        gap: 6px; 
+    }
+
+    .input-section input,
+    .btn {
+        width: 90%;
+    }
+}
+        /* ======= IMPROVED NAVBAR ======= */
+.navbar {
+    padding: 15px 80px;  /* more breathing space */
+    backdrop-filter: blur(5px);
+}
+
+/* Center everything nicely */
+.navbar nav ul {
+    align-items: center;
+}
+
+/* Better logo spacing */
+.navbar .logo {
+    font-size: 26px;
+}
+
+/* ======= MOBILE NAVBAR FIX ======= */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 12px 20px;
+    }
+
+    .navbar .logo {
+        margin-bottom: 8px;
+    }
+
+    .navbar nav ul {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="nav-logo">
+
+        <img
+        src="../image/CC_icon.png"
+        alt="CodeCanvas Logo"
+        class="nav-logo-img">
+        <div class="logo">CodeCanvas - Array</div> </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#working">Working</a></li>
+                <li><a href="#quiz">Quiz</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ---------- HOME ---------- -->
+<section id="home">
+<div class="section-content">
+
+<div class="home-left">
+<h1>What is an Array?</h1>
+<p>
+An <b>array</b> is a collection of elements of the same data type
+stored in <b>contiguous memory locations</b>. It allows fast access using indexes.
+</p>
+
+<h3>Key Properties</h3>
+<ul>
+<li>Same data type</li>
+<li>Contiguous memory</li>
+<li>Fixed size</li>
+<li>Fast access O(1)</li>
+<li>Index starts from 0</li>
+</ul>
+
+<h3>Types of Arrays</h3>
+<ul>
+<li>1D Array → [10,20,30,40]</li>
+<li>2D Array → Matrix</li>
+<li>3D Array → Cube structure</li>
+</ul>
+</div>
+
+<div class="home-right">
+<div class="array-diagram">
+
+<div class="memory-block"><div class="index">0</div><div class="value">10</div></div>
+<div class="memory-block"><div class="index">1</div><div class="value">20</div></div>
+<div class="memory-block"><div class="index">2</div><div class="value">30</div></div>
+<div class="memory-block"><div class="index">3</div><div class="value">40</div></div>
+<div class="memory-block"><div class="index">4</div><div class="value">50</div></div>
+
+<div class="memory-block"><div class="index">0</div><div class="value">A</div></div>
+<div class="memory-block"><div class="index">1</div><div class="value">B</div></div>
+<div class="memory-block"><div class="index">2</div><div class="value">C</div></div>
+<div class="memory-block"><div class="index">3</div><div class="value">D</div></div>
+<div class="memory-block"><div class="index">4</div><div class="value">E</div></div>
+
+</div>
+
+<div class="home-buttons">
+    <a href="../GetStarted/arrayGS.html" class="btn">Get Started</a>
+    <a href="../array/questions.html" class="btn">Test</a>
+</div>
+</div>
+
+</div>
+</section>
+
+    <!-- Working Section -->
+    <section id="working">
+        <div class="section-content">
+            <h1>How Arrays Work</h1>
+            <div class="input-section">
+                <input type="number" id="array-input" placeholder="Enter a number">
+                <button class="btn" onclick="addElement()">Add Element</button>
+                <button class="btn" onclick="removeLast()">Remove Last</button>
+                <button class="btn" onclick="resetArray()">Reset Array</button>
+            </div>
+            <div class="array-viz" id="array-viz">
+                <!-- Dynamic blocks will be added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz">
+        <div class="section-content">
+            <h1>Array Quiz</h1>
+            <div class="quiz-question" id="quiz-container">
+                <!-- Questions loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq">
+        <div class="section-content">
+            <h1>Frequently Asked Questions</h1>
+            <div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is an array?</button>
+    <div class="faq-answer">
+        An array is a fundamental data structure that stores a collection of elements of the same data type in contiguous memory locations. 
+        It allows efficient access to elements using an index, making it widely used in programming.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">Why are arrays faster?</button>
+    <div class="faq-answer">
+        Arrays are faster because their elements are stored in contiguous memory locations, which allows direct access using indexing.
+        This makes element retrieval very efficient with O(1) time complexity.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">Can arrays store different data types?</button>
+    <div class="faq-answer">
+        In most programming languages, arrays store elements of the same data type only.
+        If mixed data types are needed, programmers usually use structures, objects, or lists instead.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is the limitation of arrays?</button>
+    <div class="faq-answer">
+        The main limitation of arrays is their fixed size. Once declared, the size cannot be changed.
+        If more space is needed, a new array must be created and elements copied.
+    </div>
+</div>
+
+<!-- REPLACED QUESTION -->
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">Best source to learn Arrays?</button>
+    <div class="faq-answer">
+        You can learn arrays from structured tutorials, programming documentation, and interactive platforms that provide visual explanations and coding practice.  
+        <b><a href="https://www.geeksforgeeks.org/dsa/array-data-structure-guide/" style="color:#38BDF8;">Click here</a></b> to visit the recommended resource.
+    </div>
+</div>
+
+        </div>
+    </section>
+
+<!-- ========================= -->
+<!-- FUTURISTIC FOOTER START -->
+<!-- ========================= -->
+
+<footer class="footer">
+  <div class="footer-overlay"></div>
+
+  <div class="footer-container">
+
+    <!-- LEFT BRAND SECTION -->
+    <div class="footer-section brand">
+      <div class="logo">
+        <img src="../image/CC_logo.png" alt="CodeCanvas Logo" class="logo-img">
+        <div>
+          <h2>CodeCanvas</h2>
+          <p>Algorithm Visualizer</p>
+        </div>
+      </div>
+
+      <p class="brand-text">
+        A platform to visualize, learn and master computer science algorithms.
+      </p>
+
+      <div class="socials">
+        <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com" target="_blank"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../pages/array.html">Array</a></li>
+        <li><a href="../pages/stack.html">Stack</a></li>
+        <li><a href="../pages/queue.html">Queue</a></li>
+        <li><a href="../pages/linkedlist.html">LinkedList</a></li>
+        <li><a href="../pages/search.html">Searching</a></li>
+        <li><a href="../pages/sort.html">Sorting</a></li>
+      </ul>
+    </div>
+
+    <!-- ALGORITHMS -->
+    <div class="footer-section">
+      <h3>Algorithms</h3>
+      <ul>
+        <li>Sorting Algorithms</li>
+        <li>Searching Algorithms</li>
+        <li>Graph Algorithms</li>
+        <li>Dynamic Programming</li>
+        <li>Greedy Algorithms</li>
+        <li>Backtracking</li>
+      </ul>
+    </div>
+
+    <!-- LIVE ACTIVITY -->
+    <div class="footer-section activity">
+      <h3>Live Activity</h3>
+        
+      <div class="activity-card">
+      
+        <p>Sorting in Progress...</p> 
+
+        <div class="bars">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="status">
+          <div class="dot"></div>
+          Visualizing...
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-container">
+
+    <div class="stat-card">
+      <h2>25+</h2>
+      <p>Algorithms</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>120+</h2>
+      <p>Animations</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>500K+</h2>
+      <p>Executions</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>10K+</h2>
+      <p>Users</p>
+    </div>
+
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-section">
+    <span class="quote-icon">❝</span>
+
+    <p>
+      A good programmer is someone who always looks both ways before crossing a one-way street.
+    </p>
+
+    <h4>— Doug Linder</h4>
+  </div>
+
+  <!-- TECH STACK 
+  <div class="tech-stack">
+
+    <div class="tech-card">HTML5</div>
+    <div class="tech-card">CSS3</div>
+    <div class="tech-card">JavaScript</div>
+    <div class="tech-card">React</div>
+    <div class="tech-card">Canvas API</div>
+
+  </div>  -->
+
+  <!-- SCROLL TOP -->
+  <button id="scrollTopBtn">↑</button>
+
+  <!-- WAVES -->
+  <div class="wave"></div>
+
+  <!-- COPYRIGHT -->
+  <div class="copyright">
+    <p>© 2026 CodeCanvas | Designed & Developed with 💜 by Juhi Makkar</p>
+    <span>Stay curious. Keep coding. Keep learning.</span>
+  </div>
+
+</footer>
+    <script>
+        // Array state
+        let arrayData = [];
+        const maxSlots = 10;
+        const vizContainer = document.getElementById('array-viz');
+
+        // Add element with animation
+        function addElement() {
+            const input = document.getElementById('array-input');
+            const value = parseInt(input.value);
+            if (isNaN(value) || arrayData.length >= maxSlots) return;
+            arrayData.push(value);
+            updateViz();
+            input.value = '';
+        }
+
+        // Remove last element
+        function removeLast() {
+            arrayData.pop();
+            updateViz();
+        }
+
+        // Reset array
+        function resetArray() {
+            arrayData = [];
+            updateViz();
+        }
+
+        // Update visualization
+        function updateViz() {
+            vizContainer.innerHTML = '';
+            arrayData.forEach((val, idx) => {
+                const block = document.createElement('div');
+                block.className = 'viz-block';
+                block.innerHTML = `<div class="index">${idx}</div><div class="value">${val}</div><div class="tooltip">Value ${val} at index ${idx}, memory ${1000 + idx}</div>`;
+                vizContainer.appendChild(block);
+                setTimeout(() => block.classList.add('active'), 100); // Animation delay
+            });
+        }
+
+        // Quiz logic
+       const questions = [
+    { q: "Q1. Which memory allocation does an array use?", options: ["Contiguous", "Scattered", "Dynamic", "Heap"], correct: 0, exp: "Arrays use contiguous memory for efficient access." },
+    { q: "Q2. Are array elements stored contiguously?", options: ["Yes", "No", "Sometimes", "Only in C"], correct: 0, exp: "Yes, in contiguous blocks." },
+    { q: "Q3. What is the starting index of an array in C?", options: ["1", "0", "-1", "Random"], correct: 1, exp: "Arrays start at index 0." },
+    { q: "Q4. Can arrays change size dynamically?", options: ["Yes", "No", "In JavaScript", "Only in Python"], correct: 1, exp: "Arrays have fixed size." },
+    { q: "Q5. What is an array index?", options: ["Data type", "Position number", "Memory address", "Value"], correct: 1, exp: "Index is the position (starting from 0)." },
+    { q: "Q6. What is the time complexity for accessing an element in an array?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], correct: 0, exp: "Array access is O(1) due to direct indexing." },
+    { q: "Q7. Which of the following is not a property of arrays?", options: ["Fixed size", "Homogeneous elements", "Dynamic resizing", "Indexed access"], correct: 2, exp: "Arrays have fixed size, not dynamic resizing." },
+    { q: "Q8. In C, how do you declare an integer array of size 5?", options: ["int arr[5];", "array int[5];", "int arr = new int[5];", "int arr(5);"], correct: 0, exp: "Correct syntax is int arr[5];" },
+    { q: "Q9. What will be the output of arr[2] if arr = [10, 20, 30, 40]?", options: ["10", "20", "30", "40"], correct: 2, exp: "Index 2 is the third element, 30." },
+    { q: "Q10. Which language allows dynamic arrays natively?", options: ["C", "Java", "Python", "C++"], correct: 2, exp: "Python lists are dynamic." },
+    { q: "Q11. What is the data type of elements in int arr[5]?", options: ["int", "float", "char", "double"], correct: 0, exp: "All elements are integers." },
+    { q: "Q12. In Java, arrays are objects of which class?", options: ["Array", "Object", "Collection", "List"], correct: 1, exp: "Arrays extend Object class." },
+    { q: "Q13. What happens if you access arr[10] in an array of size 5?", options: ["Returns 0", "Throws exception", "Undefined behavior", "Adds element"], correct: 2, exp: "Out of bounds access is undefined." },
+    { q: "Q14. Which operation is O(n) in arrays?", options: ["Access", "Search", "Insert at end", "Delete"], correct: 1, exp: "Linear search is O(n)." },
+    { q: "Q15. In Python, what is the type of [1, 2, 3]?", options: ["list", "array", "tuple", "set"], correct: 0, exp: "It's a list." },
+    { q: "Q16. What is the output of len([1,2,3,4]) in Python?", options: ["3", "4", "5", "Error"], correct: 1, exp: "Length is 4." },
+    { q: "Q17. In C++, what is std::array?", options: ["Dynamic array", "Fixed-size array", "Vector", "List"], correct: 1, exp: "std::array is fixed-size." },
+    { q: "Q18. Which of these is a 2D array?", options: ["int arr[5];", "int arr[5][5];", "int* arr;", "vector<int> arr;"], correct: 1, exp: "Two dimensions." },
+    { q: "Q19. What is the default value of int array elements in Java?", options: ["0", "null", "undefined", "garbage"], correct: 0, exp: "Primitives default to 0." },
+    { q: "Q20. In JavaScript, how do you add an element to an array?", options: ["push()", "add()", "append()", "insert()"], correct: 0, exp: "push() adds to end." },
+    { q: "Q21. What is the output of [1,2,3].pop()?", options: ["1", "2", "3", "[1,2]"], correct: 2, exp: "pop() removes and returns last element." },
+    { q: "Q22. In C, what is the size of int arr[10]?", options: ["10", "40", "Depends", "Error"], correct: 1, exp: "Assuming 4 bytes per int, 40 bytes." },
+    { q: "Q23. Which array type is jagged?", options: ["Rectangular", "Jagged", "Square", "Circular"], correct: 1, exp: "Jagged arrays have varying row lengths." },
+    { q: "Q24. In Python, what does arr[::-1] do?", options: ["Reverse", "Sort", "Shuffle", "Copy"], correct: 0, exp: "Reverses the array." },
+    { q: "Q25. What is the time complexity of inserting at the beginning of an array?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], correct: 1, exp: "Shifting elements." },
+    { q: "Q26. In Java, how to copy an array?", options: ["Arrays.copyOf()", "clone()", "Both", "Neither"], correct: 2, exp: "Both methods work." },
+    { q: "Q27. What is the output of arr[0] for arr = []?", options: ["0", "null", "Error", "undefined"], correct: 2, exp: "IndexError in Python." },
+    { q: "Q28. Which is not an array method in JavaScript?", options: ["push", "pop", "add", "shift"], correct: 2, exp: "'add' is not a standard method." },
+    { q: "Q29. In C, what is arr[0] equivalent to?", options: ["*arr", "&arr", "arr+1", "arr-1"], correct: 0, exp: "Dereference pointer." },
+    { q: "Q30. What is the output of sizeof(arr)/sizeof(arr[0]) for int arr[5]?", options: ["4", "5", "20", "1"], correct: 1, exp: "Number of elements." },
+    { q: "Q31. In Python, how to check if 5 in [1,2,3,4,5]?", options: ["True", "False", "Error", "None"], correct: 0, exp: "Membership test." },
+    { q: "Q32. What is the data type of [1, 'a', 2.5] in Python?", options: ["list", "tuple", "mixed", "error"], correct: 0, exp: "List can hold mixed types." },
+    { q: "Q33. In Java, what is ArrayList?", options: ["Array", "Dynamic array", "Linked list", "Set"], correct: 1, exp: "Resizable array." },
+    { q: "Q34. What is the output of arr.length in Java for int[] arr = new int[3];?", options: ["0", "3", "null", "undefined"], correct: 1, exp: "Length is 3." },
+    { q: "Q36. In C++, what is vector?", options: ["Array", "Dynamic array", "Stack", "Queue"], correct: 1, exp: "Dynamic array." },
+    { q: "Q39. What is the time complexity of array traversal?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], correct: 1, exp: "Visit each element." },
+    { q: "Q40. In JavaScript, what does arr.splice(1,2) do?", options: ["Adds", "Removes 2 from index 1", "Replaces", "Sorts"], correct: 1, exp: "Removes 2 elements starting from index 1." },
+    { q: "Q41. What is the output of [1,2,3] + [4,5]?", options: ["[1,2,3,4,5]", "[5,7,8]", "Error", "[1,2,3][4,5]"], correct: 0, exp: "Concatenation." },
+    { q: "Q42. In C, what is the data type of arr in int arr[5];?", options: ["int*", "int[]", "int", "void"], correct: 0, exp: "Decays to pointer." },
+    { q: "Q43. What is the output of arr[1] = 10; print(arr[1]);?", options: ["10", "1", "Error", "0"], correct: 0, exp: "Assignment works." },
+    { q: "Q44. In Python, what is arr.append(4) for arr=[1,2,3]?", options: ["[1,2,3,4]", "[4,1,2,3]", "[1,2,4]", "Error"], correct: 0, exp: "Appends to end." },
+    { q: "Q45. What is the maximum index in an array of size 5?", options: ["4", "5", "6", "0"], correct: 0, exp: "0-based indexing." },
+    { q: "Q46. In Java, what is Arrays.sort() complexity?", options: ["O(n)", "O(n log n)", "O(n²)", "O(1)"], correct: 1, exp: "Dual-pivot quicksort." },
+    { q: "Q47. What is the output of len([])?", options: ["0", "1", "Error", "null"], correct: 0, exp: "Empty list length." },
+    { q: "Q48. In C++, what is arr.begin()?", options: ["First element", "Iterator", "Size", "End"], correct: 1, exp: "Iterator to first." },
+    { q: "Q49. What is a sparse array?", options: ["Dense", "Mostly empty", "Sorted", "Reversed"], correct: 1, exp: "Few non-zero elements." },
+    { q: "Q50. In JavaScript, what is arr.indexOf(2) for [1,2,3]?", options: ["0", "1", "2", "3"], correct: 1, exp: "Index of 2." },
+    { q: "Q51. What is the data type of elements in char arr[10]?", options: ["char", "string", "int", "float"], correct: 0, exp: "Characters." },
+    { q: "Q52. In Python, what does arr.insert(0,0) do?", options: ["Append", "Prepend", "Replace", "Remove"], correct: 1, exp: "Inserts at beginning." },
+    { q: "Q53. What is the output of arr[0] for int arr[5] = {1,2,3};?", options: ["1", "0", "Garbage", "Error"], correct: 0, exp: "Initialized to 1." },
+    { q: "Q54. In Java, what is the superclass of arrays?", options: ["Object", "Array", "Collection", "Serializable"], correct: 0, exp: "Object." },
+    { q: "Q55. What is the time complexity of binary search on sorted array?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], correct: 2, exp: "Divide and conquer." },
+    { q: "Q56. In C, what is memset(arr, 0, sizeof(arr));?", options: ["Set to 0", "Copy", "Compare", "Sort"], correct: 0, exp: "Fills with 0." },
+    { q: "Q57. What is the output of [1,2,3].reverse()?", options: ["[3,2,1]", "[1,2,3]", "Error", "[1,3,2]"], correct: 0, exp: "Reverses in place." },
+    { q: "Q58. In Python, what is arr[1:3] for [0,1,2,3,4]?", options: ["[1,2]", "[0,1,2]", "[2,3]", "[1,2,3]"], correct: 0, exp: "Slice from 1 to 3." },
+    { q: "Q59. What is an associative array?", options: ["Indexed by numbers", "Indexed by keys", "Sorted", "Fixed size"], correct: 1, exp: "Like dictionaries." },
+    { q: "Q60. In Java, what is the length of int[] arr = {1,2,3};?", options: ["2", "3", "4", "0"], correct: 1, exp: "3 elements." },
+    { q: "Q61. What is the output of arr.push(4) for arr=[1,2,3];?", options: ["4", "[1,2,3,4]", "Error", "[4,1,2,3]"], correct: 1, exp: "Array becomes [1,2,3,4]." },
+    { q: "Q62. In C++, what is the size of vector<int> v;", options: ["0", "1", "Undefined", "Error"], correct: 0, exp: "Empty vector." },
+    { q: "Q63. What is the data type of arr in JavaScript var arr = [];", options: ["array", "object", "undefined", "null"], correct: 1, exp: "Arrays are objects." },
+    { q: "Q64. In Python, what does arr.remove(2) do for [1,2,3,2]?", options: ["Removes first 2", "Removes all 2", "Removes index 2", "Error"], correct: 0, exp: "Removes first occurrence." },
+    { q: "Q65. What is the output of arr[4] for int arr[5]; in C?", options: ["0", "Garbage", "Error", "5"], correct: 1, exp: "Uninitialized." },
+    { q: "Q66. In Java, what is Arrays.toString(arr)?", options: ["String", "Array", "List", "Set"], correct: 0, exp: "Converts to string." },
+    { q: "Q67. What is the time complexity of array sorting?", options: ["O(n)", "O(n log n)", "O(n²)", "O(1)"], correct: 1, exp: "Best case for comparison sorts." },
+    { q: "Q68. In C, what is the output of printf(\"%d\", arr[0]); for int arr[1] = {5};?", options: ["5", "0", "Error", "1"], correct: 0, exp: "5." },
+    { q: "Q69. What is a multi-dimensional array?", options: ["1D", "2D or more", "Dynamic", "Sparse"], correct: 1, exp: "Multiple dimensions." },
+    { q: "Q70. In Python, what is arr.count(2) for [1,2,2,3]?", options: ["1", "2", "3", "4"], correct: 1, exp: "Counts occurrences." },
+    { q: "Q71. What is the output of arr.shift() for [1,2,3]?", options: ["1", "[2,3]", "Error", "[1,2,3]"], correct: 0, exp: "Removes and returns first." },
+    { q: "Q72. In C++, what is arr.size() for array<int,5> arr;", options: ["4", "5", "0", "Error"], correct: 1, exp: "Size is 5." },
+    { q: "Q73. What is the data type of elements in float arr[10];?", options: ["float", "int", "double", "char"], correct: 0, exp: "Floats." },
+    { q: "Q74. In JavaScript, what does arr.slice(1,3) do?", options: ["Removes", "Copies", "Replaces", "Sorts"], correct: 1, exp: "Returns copy of portion." },
+    { q: "Q75. What is the output of len(arr) for arr = [[]];?", options: ["0", "1", "2", "Error"], correct: 1, exp: "One element." },
+    { q: "Q76. In C, what is the address of arr[1]?", options: ["arr+1", "arr+4", "arr", "&arr[1]"], correct: 0, exp: "Pointer arithmetic." },
+    { q: "Q77. What is a dynamic array?", options: ["Fixed size", "Resizable", "Sorted", "Sparse"], correct: 1, exp: "Can grow/shrink." },
+    { q: "Q78. In Python, what is arr.extend([4,5]) for [1,2,3]?", options: ["[1,2,3,4,5]", "[4,5,1,2,3]", "Error", "[1,2,3][4,5]"], correct: 0, exp: "Extends the list." },
+    { q: "Q79. What is the output of arr[0] for char arr[] = \"hello\";?", options: ["h", "'h'", "104", "Error"], correct: 0, exp: "First character." },
+    { q: "Q80. In Java, what is the default value for boolean array?", options: ["true", "false", "null", "0"], correct: 1, exp: "false." },
+    { q: "Q81. What is the time complexity of array copy?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], correct: 1, exp: "Copy each element." },
+    { q: "Q82. In C++, what is the output of arr.at(0) for vector<int> arr = {1,2,3};?", options: ["1", "0", "Error", "2"], correct: 0, exp: "First element." },
+    { q: "Q83. What is the data type of arr in Python for arr = [1,2,3]?", options: ["list", "array", "tuple", "dict"], correct: 0, exp: "It's a list."},
+    { q: "Q84. What is an associative array?", options: ["Indexed by numbers", "Indexed by keys", "Sorted", "Fixed size"], correct: 1, exp: "Like dictionaries." },
+    { q: "Q85. In Java, what is the length of int[] arr = {1,2,3};?", options: ["2", "3", "4", "0"], correct: 1, exp: "3 elements." },
+    { q: "Q86. What is the output of arr.push(4) for arr=[1,2,3];?", options: ["4", "[1,2,3,4]", "Error", "[4,1,2,3]"], correct: 1, exp: "Array becomes [1,2,3,4]." },
+    { q: "Q87. In C++, what is the size of vector<int> v;", options: ["0", "1", "Undefined", "Error"], correct: 0, exp: "Empty vector." },
+    { q: "Q88. What is the data type of arr in JavaScript var arr = [];", options: ["array", "object", "undefined", "null"], correct: 1, exp: "Arrays are objects." },
+    { q: "Q89. In Python, what does arr.remove(2) do for [1,2,3,2]?", options: ["Removes first 2", "Removes all 2", "Removes index 2", "Error"], correct: 0, exp: "Removes first occurrence." },
+    { q: "Q90. What is the output of arr[4] for int arr[5]; in C?", options: ["0", "Garbage", "Error", "5"], correct: 1, exp: "Uninitialized." },
+    { q: "Q91. In Java, what is Arrays.toString(arr)?", options: ["String", "Array", "List", "Set"], correct: 0, exp: "Converts to string." },
+    { q: "Q92. What is the time complexity of array sorting?", options: ["O(n)", "O(n log n)", "O(n²)", "O(1)"], correct: 1, exp: "Best case for comparison sorts." },
+    { q: "Q93. In C, what is the output of printf(\"%d\", arr[0]); for int arr[1] = {5};?", options: ["5", "0", "Error", "1"], correct: 0, exp: "5." },
+    { q: "Q94. What is a multi-dimensional array?", options: ["1D", "2D or more", "Dynamic", "Sparse"], correct: 1, exp: "Multiple dimensions." },
+    { q: "Q95. In Python, what is arr.count(2) for [1,2,2,3]?", options: ["1", "2", "3", "4"], correct: 1, exp: "Counts occurrences." },
+    { q: "Q96. What is the output of arr.shift() for [1,2,3]?", options: ["1", "[2,3]", "Error", "[1,2,3]"], correct: 0, exp: "Removes and returns first." },
+    { q: "Q97. In C++, what is arr.size() for array<int,5> arr;", options: ["4", "5", "0", "Error"], correct: 1, exp: "Size is 5." },
+    { q: "Q98. What is the data type of elements in float arr[10];?", options: ["float", "int", "double", "char"], correct: 0, exp: "Floats." },
+    { q: "Q99. In JavaScript, what does arr.slice(1,3) do?", options: ["Removes", "Copies", "Replaces", "Sorts"], correct: 1, exp: "Returns copy of portion." },
+    { q: "Q100. What is the output of len(arr) for arr = [[]];?", options: ["0", "1", "2", "Error"], correct: 1, exp: "One element." }
+    
+    ];
+        let currentQ = 0;
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('quiz-container').innerHTML = `
+                <h3>${q.q}</h3>
+                <div class="options">
+                    ${q.options.map((opt, i) => `<label class="option"><input type="radio" name="answer" value="${i}"> ${opt}</label>`).join('')}
+                </div>
+                <button class="btn" onclick="checkAnswer()">Check Answer</button>
+                <div class="feedback" id="feedback"></div>
+            `;
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) return;
+            const ans = parseInt(selected.value);
+            const feedback = document.getElementById('feedback');
+            if (ans === questions[currentQ].correct) {
+                feedback.innerHTML = '<span class="correct">✓ Correct! Moving to next question.</span>';
+                setTimeout(() => { currentQ = (currentQ + 1) % questions.length; loadQuestion(); }, 2000);
+            } else {
+                feedback.innerHTML = `<span class="incorrect">✗ Incorrect. ${questions[currentQ].exp} Try again.</span>`;
+            }
+        }
+
+        // FAQ toggle
+        function toggleFAQ(btn) {
+            btn.parentElement.classList.toggle('active');
+        }
+
+        // Initialize
+        loadQuestion();
+        updateViz();
+        
+        /* SCROLL TO TOP */
+
+        const scrollBtn = document.getElementById("scrollTopBtn");
+
+        scrollBtn.addEventListener("click", () => {
+          window.scrollTo({
+            top:0,
+            behavior:"smooth"
+          });
+        });
+
+    </script>
+</body>
+</html>

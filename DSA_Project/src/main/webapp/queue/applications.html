@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Applications - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --accent-green: #10B981;
+            --accent-orange: #F59E0B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-purple);
+            background: rgba(16,185,129,0.1);
+        }
+
+        .navbar nav a.active {
+            color: var(--accent-purple);
+            background: rgba(16,185,129,0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 150px 20px 80px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-purple);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Section Spacing */
+        section {
+            min-height: 70vh;
+            padding: 100px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Application Cards */
+        .application-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .application-card {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent-purple);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .application-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .application-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .application-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(139,108,246,0.4);
+        }
+
+        .application-card h3 {
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .application-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .application-card code {
+            background: rgba(16,185,129,0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-purple);
+            font-size: 13px;
+            display: inline-block;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .category-tech { background: rgba(79, 195, 247, 0.2); color: var(--accent-blue); }
+        .category-system { background: rgba(16, 185, 129, 0.2); color: var(--accent-purple); }
+        .category-network { background: rgba(139, 108, 246, 0.2); color: var(--accent-green); }
+        .category-business { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+
+        /* Code Examples Section */
+        .code-section {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .code-section h2 {
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .code-block {
+            background: #1e1e2f;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .comment { color: #6a9955; }
+        .code-block .function { color: #dcdcaa; }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, var(--bg-secondary), rgba(16,185,129,0.1));
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(16,185,129,0.2);
+        }
+
+        .info-card h4 {
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .application-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="queueGS.html" class="logo">CodeCanvas - Queue</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/queueGS.html">Back to Queue</a></li>
+            <li><a href="../queue/theory.html" >Theory</a></li>
+            <li><a href="../queue/syntax.html">Syntax</a></li>
+            <li><a href="../queue/algorithm.html">Algorithm</a></li>
+            <li><a href="../queue/complexity.html">Complexity</a></li>
+            <li><a href="../queue/flowchart.html">Flowchart</a></li>
+                <li><a href="..queue/applications.html" class="active">Applications</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="section-content">
+            <h1>Real-World Queue Applications</h1>
+            <p>Discover how queues power essential systems from operating systems to networking. FIFO principle in action across industries.</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">Use Cases</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">O(1)</div>
+                    <div class="stat-label">Enqueue/Dequeue</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">System Critical</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="introduction">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Why Queues Matter</h2>
+                <p>Queues implement the FIFO (First In, First Out) principle, essential for ordered processing in computer systems.</p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>FIFO Processing</h4>
+                    <p>Perfect for scenarios requiring strict order preservation like task scheduling and data buffering.</p>
+                </div>
+                <div class="info-card">
+                    <h4>System Critical</h4>
+                    <p>Powers operating systems, networks, and real-time applications where order matters most.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Resource Management</h4>
+                    <p>Manages limited resources efficiently through fair, ordered access mechanisms.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Scalable</h4>
+                    <p>Handles high-throughput scenarios from print jobs to network packets seamlessly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-World Applications -->
+    <section id="applications">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Real-World Applications</h2>
+                <p>Explore how queues are used across different industries and technologies.</p>
+            </div>
+            <div class="application-grid" id="application-grid">
+                <!-- Application cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Examples Section -->
+    <section id="code-examples">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Code Examples</h2>
+                <p>See how queues are implemented in real-world scenarios.</p>
+            </div>
+            <div class="code-section">
+                <h3>1. CPU Process Scheduler</h3>
+                <div class="code-block">
+                    <pre><code><span class="keyword">class</span> <span class="function">ProcessScheduler</span> {
+    <span class="keyword">constructor</span>() {
+        <span class="keyword">this</span>.readyQueue = [];
+    }
+    
+    <span class="function">addProcess</span>(process) {
+        <span class="keyword">this</span>.readyQueue.<span class="function">push</span>(process);
+    }
+    
+    <span class="function">executeNext</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.readyQueue.<span class="function">shift</span>();
+    }
+}</code></pre>
+                </div>
+                
+                <h3>2. Print Queue</h3>
+                <div class="code-block">
+                    <pre><code><span class="keyword">class</span> <span class="function">PrintQueue</span> {
+    <span class="keyword">constructor</span>() {
+        <span class="keyword">this</span>.jobs = [];
+    }
+    
+    <span class="function">addJob</span>(document) {
+        <span class="keyword">this</span>.jobs.<span class="function">push</span>(document);
+    }
+    
+    <span class="function">printNext</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.jobs.<span class="function">shift</span>();
+    }
+}</code></pre>
+                </div>
+                
+                <h3>3. Network Packet Queue</h3>
+                <div class="code-block">
+                    <pre><code><span class="keyword">class</span> <span class="function">PacketQueue</span> {
+    <span class="keyword">constructor</span>() {
+        <span class="keyword">this</span>.packets = [];
+    }
+    
+    <span class="function">receivePacket</span>(packet) {
+        <span class="keyword">this</span>.packets.<span class="function">push</span>(packet);
+    }
+    
+    <span class="function">sendNext</span>() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.packets.<span class="function">shift</span>();
+    }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../queue/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Queue Applications Data
+        const applications = [
+            {
+                name: "CPU Scheduling",
+                description: "Operating systems use queues to manage processes waiting for CPU time (Ready Queue, I/O Queue).",
+                code: "readyQueue.enqueue(process);",
+                category: "system"
+            },
+            {
+                name: "Print Spooling",
+                description: "Printer queues manage multiple print jobs in FIFO order for fair processing.",
+                code: "printQueue.enqueue(job);",
+                category: "system"
+            },
+            {
+                name: "Network Buffering",
+                description: "Routers and switches use queues to buffer packets during transmission.",
+                code: "packetQueue.enqueue(packet);",
+                category: "network"
+            },
+            {
+                name: "BFS Algorithm",
+                description: "Breadth-First Search uses queues to explore nodes level by level.",
+                code: "queue.enqueue(node);",
+                category: "tech"
+            },
+            {
+                name: "Task Scheduling",
+                description: "Web servers and background job processors use queues for task management.",
+                code: "taskQueue.enqueue(job);",
+                category: "system"
+            },
+            {
+                name: "Call Center",
+                description: "Customer service systems queue incoming calls for available agents.",
+                code: "callQueue.enqueue(caller);",
+                category: "business"
+            },
+            {
+                name: "Bank Teller Line",
+                description: "Physical and digital banking systems manage customer queues.",
+                code: "tellerQueue.enqueue(customer);",
+                category: "business"
+            },
+            {
+                name: "Music Streaming",
+                description: "Music players use queues for next-song playlists and autoplay.",
+                code: "playlistQueue.enqueue(song);",
+                category: "business"
+            },
+            {
+                name: "Video Buffering",
+                description: "Streaming services buffer video chunks in queues for smooth playback.",
+                code: "bufferQueue.enqueue(chunk);",
+                category: "tech"
+            },
+            {
+                name: "Order Processing",
+                description: "E-commerce platforms queue customer orders for fulfillment.",
+                code: "orderQueue.enqueue(order);",
+                category: "business"
+            },
+            {
+                name: "Email Servers",
+                description: "SMTP servers queue outgoing emails for delivery.",
+                code: "emailQueue.enqueue(message);",
+                category: "network"
+            },
+            {
+                name: "Message Brokers",
+                description: "Systems like RabbitMQ, Kafka use queues for reliable message delivery.",
+                code: "messageQueue.enqueue(payload);",
+                category: "network"
+            },
+            {
+                name: "Disk Scheduling",
+                description: "Operating systems use queues for disk I/O request ordering (FCFS).",
+                code: "diskQueue.enqueue(request);",
+                category: "system"
+            },
+            {
+                name: "Barcode Scanner",
+                description: "POS systems queue scanned items before checkout processing.",
+                code: "itemQueue.enqueue(product);",
+                category: "business"
+            },
+            {
+                name: "Flight Landing",
+                description: "Air traffic control manages aircraft landing queues.",
+                code: "landingQueue.enqueue(plane);",
+                category: "system"
+            },
+            {
+                name: "Cache Management",
+                description: "LRU caches use queues to track access order (though doubly-linked).",
+                code: "accessQueue.enqueue(key);",
+                category: "tech"
+            },
+            {
+                name: "Simulation Systems",
+                description: "Event-driven simulations use queues for event scheduling.",
+                code: "eventQueue.enqueue(event);",
+                category: "tech"
+            },
+            {
+                name: "Ride Sharing",
+                description: "Uber/Lyft queue ride requests for available drivers.",
+                code: "rideQueue.enqueue(request);",
+                category: "business"
+            },
+            {
+                name: "Food Delivery",
+                description: "Services like DoorDash queue orders for restaurant pickup.",
+                code: "deliveryQueue.enqueue(order);",
+                category: "business"
+            },
+            {
+                name: "Web Crawlers",
+                description: "Search engines use queues to manage URLs to crawl.",
+                code: "urlQueue.enqueue(link);",
+                category: "network"
+            },
+            {
+                name: "Undo/Redo",
+                description: "Applications use queues (or stacks) for action history.",
+                code: "actionQueue.enqueue(command);",
+                category: "tech"
+            },
+            {
+                name: "Telecom Switching",
+                description: "Telephone exchanges queue calls during network congestion.",
+                code: "callQueue.enqueue(connection);",
+                category: "network"
+            },
+            {
+                name: "Garbage Collection",
+                description: "Some GC algorithms use queues to track objects to process.",
+                code: "gcQueue.enqueue(object);",
+                category: "system"
+            },
+            {
+                name: "Game AI",
+                description: "Pathfinding and decision-making systems use queues.",
+                code: "aiQueue.enqueue(action);",
+                category: "tech"
+            },
+            {
+                name: "Real-time Systems",
+                description: "Embedded systems use queues for sensor data processing.",
+                code: "sensorQueue.enqueue(data);",
+                category: "system"
+            },
+            {
+                name: "Log Processing",
+                description: "Systems queue log entries for analysis and storage.",
+                code: "logQueue.enqueue(entry);",
+                category: "tech"
+            }
+        ];
+
+        // Generate Application Cards
+        function generateApplicationCards() {
+            const grid = document.getElementById('application-grid');
+            applications.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'application-card';
+                card.innerHTML = `
+                    <span class="category-badge category-${item.category}">${item.category.toUpperCase()}</span>
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <code>${item.code}</code>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Initialize on load
+        generateApplicationCards();
+    </script>
+</body>
+</html>

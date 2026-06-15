@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Syntax - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --code-bg: #0d1117;
+        --keyword: #c084fc;
+        --function: #38bdf8;
+        --number: #f472b6;
+        --string: #4ade80;
+        --comment: #6b7280;
+        --variable: #fbbf24;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1100px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .syntax-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    /* ===================== LANGUAGE SELECTOR ===================== */
+    .lang-selector {
+        background: var(--bg-secondary);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 2px solid var(--accent-purple);
+        box-shadow: 0 0 20px rgba(139,108,246,0.3);
+    }
+
+    .lang-selector h2 { margin-top: 0; margin-bottom: 10px; border: none; }
+    .lang-selector p { margin-bottom: 20px; }
+
+    .lang-selector select {
+        padding: 12px 25px;
+        border: 2px solid var(--accent-purple);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        min-width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .lang-selector select:hover, .lang-selector select:focus {
+        box-shadow: 0 0 15px rgba(139,108,246,0.5);
+        outline: none;
+    }
+
+    /* ===================== CODE BLOCKS ===================== */
+    .code-block {
+        background: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        border-left: 4px solid var(--accent-blue);
+        margin: 15px 0 25px 0;
+        position: relative;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #e2e8f0;
+        white-space: pre;
+    }
+
+    /* Syntax Highlighting */
+    .keyword { color: var(--keyword); }
+    .function { color: var(--function); }
+    .number { color: var(--number); }
+    .string { color: var(--string); }
+    .comment { color: var(--comment); font-style: italic; }
+
+    /* Code Label */
+    .code-label {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: var(--accent-purple);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* ===================== TABS ===================== */
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .tab-btn {
+        padding: 10px 20px;
+        background: var(--bg-primary);
+        border: 2px solid var(--accent-purple);
+        color: var(--text-primary);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn.active { background: var(--accent-purple); color: white; }
+    .tab-btn:hover { background: rgba(139,108,246,0.2); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===================== INFO BOXES ===================== */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #F59E0B;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* ===================== NAVIGATION ===================== */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <a href="queueGS.html" class="logo">CodeCanvas - Queue</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/queueGS.html">Back to Queue</a></li>
+            <li><a href="../queue/theory.html" >Theory</a></li>
+            <li><a href="../queue/syntax.html" class="active">Syntax</a></li>
+            <li><a href="../queue/algorithm.html">Algorithm</a></li>
+            <li><a href="../queue/complexity.html">Complexity</a></li>
+            <li><a href="../queue/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="syntax">
+    <div class="section-content">
+
+        <!-- Language Selector -->
+        <div class="lang-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see the syntax for queue operations. The code will update dynamically.</p>
+            <select id="lang-select">
+                <option value="c">C Language</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('array')">Array Queue</button>
+            <button class="tab-btn" onclick="showTab('linked')">Linked List Queue</button>
+        </div>
+
+        <!-- ==================== ARRAY QUEUE ==================== -->
+        <div id="array" class="tab-content active">
+            
+            <!-- Declaration -->
+            <div class="syntax-card">
+                <h2>1. Array Queue Declaration & Initialization</h2>
+                <p>Array-based queue implementation using front and rear pointers.</p>
+
+                <h3>Structure Declaration</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-array-struct">C</span>
+                    <code id="code-array-struct"><span class="keyword">typedef struct</span> {
+    <span class="keyword">int</span> data[MAX];
+    <span class="keyword">int</span> front, rear;
+} Queue;</code>
+                </div>
+
+                <h3>Initialization</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-array-init">C</span>
+                    <code id="code-array-init">Queue q;
+q.front = q.rear = -<span class="number">1</span>;</code>
+                </div>
+
+                <div class="info-box"><strong>Note:</strong> front = rear = -1 indicates empty queue.</div>
+            </div>
+
+            <!-- Basic Operations -->
+            <div class="syntax-card">
+                <h2>2. Basic Operations</h2>
+                
+                <h3>Enqueue (Insert)</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-enqueue">C</span>
+                    <code id="code-enqueue"><span class="keyword">void</span> enqueue(Queue* q, <span class="keyword">int</span> value) {
+    <span class="keyword">if</span>(q->rear == MAX-<span class="number">1</span>) <span class="keyword">return</span>; <span class="comment">// Overflow</span>
+    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) q->front = <span class="number">0</span>;
+    q->data[++q->rear] = value;
+}</code>
+                </div>
+
+                <h3>Dequeue (Delete)</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-dequeue">C</span>
+                    <code id="code-dequeue"><span class="keyword">int</span> dequeue(Queue* q) {
+    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>; <span class="comment">// Underflow</span>
+    <span class="keyword">int</span> val = q->data[q->front++];
+    <span class="keyword">if</span>(q->front > q->rear) q->front = q->rear = -<span class="number">1</span>;
+    <span class="keyword">return</span> val;
+}</code>
+                </div>
+
+                <h3>Peek/Front</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-peek">C</span>
+                    <code id="code-peek"><span class="keyword">int</span> peek(Queue* q) {
+    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="keyword">return</span> q->data[q->front];
+}</code>
+                </div>
+            </div>
+
+            <!-- Status Check -->
+            <div class="syntax-card">
+                <h2>3. Status Check Operations</h2>
+                
+                <h3>Is Empty</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-isempty">C</span>
+                    <code id="code-isempty"><span class="keyword">int</span> isEmpty(Queue* q) {
+    <span class="keyword">return</span> q->front == -<span class="number">1</span>;
+}</code>
+                </div>
+
+                <h3>Is Full</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-isfull">C</span>
+                    <code id="code-isfull"><span class="keyword">int</span> isFull(Queue* q) {
+    <span class="keyword">return</span> q->rear == MAX - <span class="number">1</span>;
+}</code>
+                </div>
+
+                <h3>Size</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-size">C</span>
+                    <code id="code-size"><span class="keyword">int</span> size(Queue* q) {
+    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">return</span> q->rear - q->front + <span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+
+            <!-- Circular Queue -->
+            <div class="syntax-card">
+                <h2>4. Circular Queue (Optimized)</h2>
+                
+                <h3>Circular Enqueue</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circular-enqueue">C</span>
+                    <code id="code-circular-enqueue"><span class="keyword">void</span> cEnqueue(Queue* q, <span class="keyword">int</span> value) {
+    <span class="keyword">if</span>((q->rear + <span class="number">1</span>) % MAX == q->front) <span class="keyword">return</span>;
+    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) q->front = <span class="number">0</span>;
+    q->data[(++q->rear) % MAX] = value;
+}</code>
+                </div>
+
+                <h3>Circular Dequeue</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-circular-dequeue">C</span>
+                    <code id="code-circular-dequeue"><span class="keyword">int</span> cDequeue(Queue* q) {
+    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="keyword">int</span> val = q->data[q->front];
+    <span class="keyword">if</span>(q->front == q->rear) q->front = q->rear = -<span class="number">1</span>;
+    <span class="keyword">else</span> q->front = (q->front + <span class="number">1</span>) % MAX;
+    <span class="keyword">return</span> val;
+}</code>
+                </div>
+
+                <div class="info-box"><strong>Circular Queue:</strong> Prevents wastage of space with modulo operation.</div>
+            </div>
+
+        </div> <!-- End Array Queue -->
+
+        <!-- ==================== LINKED LIST QUEUE ==================== -->
+        <div id="linked" class="tab-content">
+            
+            <div class="syntax-card">
+                <h2>5. Linked List Queue</h2>
+                <p>Dynamic queue implementation using pointers. No size limitation.</p>
+                
+                <h3>Node Structure</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-node-struct">C</span>
+                    <code id="code-node-struct"><span class="keyword">typedef struct</span> Node {
+    <span class="keyword">int</span> data;
+    <span class="keyword">struct</span> Node* next;
+} Node;</code>
+                </div>
+
+                <h3>Queue Structure</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-linked-struct">C</span>
+                    <code id="code-linked-struct"><span class="keyword">typedef struct</span> {
+    Node* front;
+    Node* rear;
+} Queue;</code>
+                </div>
+
+                <h3>Initialization</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-linked-init">C</span>
+                    <code id="code-linked-init">Queue q = {NULL, NULL};</code>
+                </div>
+            </div>
+
+            <!-- Linked List Operations -->
+            <div class="syntax-card">
+                <h2>6. Linked List Operations</h2>
+                
+                <h3>Enqueue</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-linked-enqueue">C</span>
+                    <code id="code-linked-enqueue"><span class="keyword">void</span> enqueue(Queue* q, <span class="keyword">int</span> value) {
+    Node* newNode = (<span class="keyword">struct</span> Node*)<span class="function">malloc</span>(<span class="keyword">sizeof</span>(Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    
+    <span class="keyword">if</span>(q->rear == NULL) {
+        q->front = q->rear = newNode;
+    } <span class="keyword">else</span> {
+        q->rear->next = newNode;
+        q->rear = newNode;
+    }
+}</code>
+                </div>
+
+                <h3>Dequeue</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-linked-dequeue">C</span>
+                    <code id="code-linked-dequeue"><span class="keyword">int</span> dequeue(Queue* q) {
+    <span class="keyword">if</span>(q->front == NULL) <span class="keyword">return</span> -<span class="number">1</span>;
+    
+    Node* temp = q->front;
+    <span class="keyword">int</span> val = temp->data;
+    q->front = q->front->next;
+    
+    <span class="keyword">if</span>(q->front == NULL) q->rear = NULL;
+    <span class="function">free</span>(temp);
+    <span class="keyword">return</span> val;
+}</code>
+                </div>
+
+                <h3>Peek</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-linked-peek">C</span>
+                    <code id="code-linked-peek"><span class="keyword">int</span> peek(Queue* q) {
+    <span class="keyword">if</span>(q->front == NULL) <span class="keyword">return</span> -<span class="number">1</span>;
+    <span class="keyword">return</span> q->front->data;
+}</code>
+                </div>
+            </div>
+
+            <!-- Display -->
+            <div class="syntax-card">
+                <h2>7. Display Queue</h2>
+                
+                <h3>Array Queue Display</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-display-array">C</span>
+                    <code id="code-display-array"><span class="keyword">void</span> display(Queue q) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = q.front; i <= q.rear; i++)
+        <span class="function">printf</span>(<span class="string">"%d "</span>, q.data[i]);
+}</code>
+                </div>
+
+                <h3>Linked List Display</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-display-linked">C</span>
+                    <code id="code-display-linked"><span class="keyword">void</span> display(Queue* q) {
+    Node* temp = q->front;
+    <span class="keyword">while</span>(temp != NULL) {
+        <span class="function">printf</span>(<span class="string">"%d "</span>, temp->data);
+        temp = temp->next;
+    }
+}</code>
+                </div>
+            </div>
+        </div> <!-- End Linked List Queue -->
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="../queue/theory.html" class="nav-btn secondary">← Theory</a>
+            <a href="../queue/algorithm.html" class="nav-btn">Algorithm →</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../queue/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Tab functionality
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    // Language data
+    const langData = {
+        c: {
+            // Array Queue
+            'label-array-struct': 'C', 
+            'code-array-struct': '<span class="keyword">typedef struct</span> {\n    <span class="keyword">int</span> data[MAX];\n    <span class="keyword">int</span> front, rear;\n} Queue;',
+            'label-array-init': 'C', 
+            'code-array-init': 'Queue q;\nq.front = q.rear = -<span class="number">1</span>;',
+            'label-enqueue': 'C', 
+            'code-enqueue': '<span class="keyword">void</span> enqueue(Queue* q, <span class="keyword">int</span> value) {\n    <span class="keyword">if</span>(q->rear == MAX-<span class="number">1</span>) <span class="keyword">return</span>; <span class="comment">// Overflow</span>\n    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) q->front = <span class="number">0</span>;\n    q->data[++q->rear] = value;\n}',
+            'label-dequeue': 'C', 
+            'code-dequeue': '<span class="keyword">int</span> dequeue(Queue* q) {\n    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>; <span class="comment">// Underflow</span>\n    <span class="keyword">int</span> val = q->data[q->front++];\n    <span class="keyword">if</span>(q->front > q->rear) q->front = q->rear = -<span class="number">1</span>;\n    <span class="keyword">return</span> val;\n}',
+            'label-peek': 'C', 
+            'code-peek': '<span class="keyword">int</span> peek(Queue* q) {\n    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>;\n    <span class="keyword">return</span> q->data[q->front];\n}',
+            'label-isempty': 'C', 
+            'code-isempty': '<span class="keyword">int</span> isEmpty(Queue* q) {\n    <span class="keyword">return</span> q->front == -<span class="number">1</span>;\n}',
+            'label-isfull': 'C', 
+            'code-isfull': '<span class="keyword">int</span> isFull(Queue* q) {\n    <span class="keyword">return</span> q->rear == MAX - <span class="number">1</span>;\n}',
+            'label-size': 'C', 
+            'code-size': '<span class="keyword">int</span> size(Queue* q) {\n    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) <span class="keyword">return</span> <span class="number">0</span>;\n    <span class="keyword">return</span> q->rear - q->front + <span class="number">1</span>;\n}',
+            'label-circular-enqueue': 'C', 
+            'code-circular-enqueue': '<span class="keyword">void</span> cEnqueue(Queue* q, <span class="keyword">int</span> value) {\n    <span class="keyword">if</span>((q->rear + <span class="number">1</span>) % MAX == q->front) <span class="keyword">return</span>;\n    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) q->front = <span class="number">0</span>;\n    q->data[(++q->rear) % MAX] = value;\n}',
+            'label-circular-dequeue': 'C', 
+            'code-circular-dequeue': '<span class="keyword">int</span> cDequeue(Queue* q) {\n    <span class="keyword">if</span>(q->front == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>;\n    <span class="keyword">int</span> val = q->data[q->front];\n    <span class="keyword">if</span>(q->front == q->rear) q->front = q->rear = -<span class="number">1</span>;\n    <span class="keyword">else</span> q->front = (q->front + <span class="number">1</span>) % MAX;\n    <span class="keyword">return</span> val;\n}',
+            // Linked List
+            'label-node-struct': 'C', 
+            'code-node-struct': '<span class="keyword">typedef struct</span> Node {\n    <span class="keyword">int</span> data;\n    <span class="keyword">struct</span> Node* next;\n} Node;',
+            'label-linked-struct': 'C', 
+            'code-linked-struct': '<span class="keyword">typedef struct</span> {\n    Node* front;\n    Node* rear;\n} Queue;',
+            'label-linked-init': 'C', 
+            'code-linked-init': 'Queue q = {NULL, NULL};',
+            'label-linked-enqueue': 'C', 
+            'code-linked-enqueue': '<span class="keyword">void</span> enqueue(Queue* q, <span class="keyword">int</span> value) {\n    Node* newNode = (<span class="keyword">struct</span> Node*)<span class="function">malloc</span>(<span class="keyword">sizeof</span>(Node));\n    newNode->data = value;\n    newNode->next = NULL;\n    <span class="keyword">if</span>(q->rear == NULL) {\n        q->front = q->rear = newNode;\n    } <span class="keyword">else</span> {\n        q->rear->next = newNode;\n        q->rear = newNode;\n    }\n}',
+            'label-linked-dequeue': 'C', 
+            'code-linked-dequeue': '<span class="keyword">int</span> dequeue(Queue* q) {\n    <span class="keyword">if</span>(q->front == NULL) <span class="keyword">return</span> -<span class="number">1</span>;\n    Node* temp = q->front;\n    <span class="keyword">int</span> val = temp->data;\n    q->front = q->front->next;\n    <span class="keyword">if</span>(q->front == NULL) q->rear = NULL;\n    <span class="function">free</span>(temp);\n    <span class="keyword">return</span> val;\n}',
+            'label-linked-peek': 'C', 
+            'code-linked-peek': '<span class="keyword">int</span> peek(Queue* q) {\n    <span class="keyword">if</span>(q->front == NULL) <span class="keyword">return</span> -<span class="number">1</span>;\n    <span class="keyword">return</span> q->front->data;\n}',
+            'label-display-array': 'C', 
+            'code-display-array': '<span class="keyword">void</span> display(Queue q) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = q.front; i <= q.rear; i++)\n        <span class="function">printf</span>(<span class="string">"%d "</span>, q.data[i]);\n}',
+            'label-display-linked': 'C', 
+            'code-display-linked': '<span class="keyword">void</span> display(Queue* q) {\n    Node* temp = q->front;\n    <span class="keyword">while</span>(temp != NULL) {\n        <span class="function">printf</span>(<span class="string">"%d "</span>, temp->data);\n        temp = temp->next;\n    }\n}'
+        },
+        cpp: {
+            'label-array-struct': 'C++', 
+            'code-array-struct': '<span class="keyword">class</span> Queue {\n<span class="keyword">private</span>:\n    <span class="keyword">int</span> data[MAX], front = -<span class="number">1</span>, rear = -<span class="number">1</span>;\n<span class="keyword">public</span>:\n    <span class="keyword">void</span> enqueue(<span class="keyword">int</span> val) { /* impl */ }\n};',
+            'label-array-init': 'C++', 
+            'code-array-init': 'Queue q;',
+            'label-enqueue': 'C++', 
+            'code-enqueue': '<span class="comment">// Use std::queue</span>\nq.push(value);',
+            'label-dequeue': 'C++', 
+            'code-dequeue': 'q.pop();',
+            'label-peek': 'C++', 
+            'code-peek': 'q.front();',
+            'label-isempty': 'C++', 
+            'code-isempty': 'q.empty();',
+            'label-isfull': 'C++', 
+            'code-isfull': '<span class="comment">// Custom implementation needed</span>',
+            'label-size': 'C++', 
+            'code-size': 'q.size();',
+            'label-circular-enqueue': 'C++', 
+            'code-circular-enqueue': '<span class="comment">// Use std::deque for circular behavior</span>',
+            'label-circular-dequeue': 'C++', 
+            'code-circular-dequeue': '<span class="comment">// Use std::deque</span>',
+            'label-node-struct': 'C++', 
+            'code-node-struct': '<span class="keyword">struct</span> Node {\n    <span class="keyword">int</span> data;\n    Node* next;\n};',
+            'label-linked-struct': 'C++', 
+            'code-linked-struct': '<span class="keyword">class</span> Queue { Node* front, *rear; };',
+            'label-linked-init': 'C++', 
+            'code-linked-init': 'Queue q;',
+            'label-linked-enqueue': 'C++', 
+            'code-linked-enqueue': '<span class="comment">// Use std::queue or std::list</span>\nq.push(value);',
+            'label-linked-dequeue': 'C++', 
+            'code-linked-dequeue': 'q.pop();',
+            'label-linked-peek': 'C++', 
+            'code-linked-peek': 'q.front();',
+            'label-display-array': 'C++', 
+            'code-display-array': '<span class="keyword">while</span>(!q.empty()) {\n    cout << q.front() << <span class="string">" "</span>;\n    q.pop();\n}',
+            'label-display-linked': 'C++', 
+            'code-display-linked': '<span class="keyword">for</span>(<span class="keyword">auto</span> it = q.begin(); it != q.end(); ++it)\n    cout << *it << <span class="string">" "</span>;'
+        },
+        java: {
+            'label-array-struct': 'Java', 
+            'code-array-struct': '<span class="keyword">class</span> Queue {\n    <span class="keyword">private int</span>[] data = <span class="keyword">new int</span>[MAX];\n    <span class="keyword">private int</span> front = -<span class="number">1</span>, rear = -<span class="number">1</span>;\n}',
+            'label-array-init': 'Java', 
+            'code-array-init': 'Queue q = <span class="keyword">new</span> Queue();',
+            'label-enqueue': 'Java', 
+            'code-enqueue': '<span class="comment">// Use LinkedList as Queue</span>\nq.add(value);',
+            'label-dequeue': 'Java', 
+            'code-dequeue': 'q.poll();',
+            'label-peek': 'Java', 
+            'code-peek': 'q.peek();',
+            'label-isempty': 'Java', 
+            'code-isempty': 'q.isEmpty();',
+            'label-isfull': 'Java', 
+            'code-isfull': '<span class="comment">// Custom implementation</span>',
+            'label-size': 'Java', 
+            'code-size': 'q.size();',
+            'label-circular-enqueue': 'Java', 
+            'code-circular-enqueue': '<span class="comment">// Use ArrayDeque</span>\nq.addLast(value);',
+            'label-circular-dequeue': 'Java', 
+            'code-circular-dequeue': 'q.pollFirst();',
+            'label-node-struct': 'Java', 
+            'code-node-struct': '<span class="keyword">class</span> Node {\n    <span class="keyword">int</span> data;\n    Node next;\n}',
+            'label-linked-struct': 'Java', 
+            'code-linked-struct': '<span class="keyword">class</span> Queue { Node front, rear; }',
+            'label-linked-init': 'Java', 
+            'code-linked-init': 'Queue q = <span class="keyword">new</span> Queue();',
+            'label-linked-enqueue': 'Java', 
+            'code-linked-enqueue': 'q.offer(value);',
+            'label-linked-dequeue': 'Java', 
+            'code-linked-dequeue': 'q.poll();',
+            'label-linked-peek': 'Java', 
+            'code-linked-peek': 'q.peek();',
+            'label-display-array': 'Java', 
+            'code-display-array': '<span class="keyword">while</span>(!q.isEmpty()) {\n    System.out.print(q.peek() + <span class="string">" "</span>);\n    q.poll();\n}',
+            'label-display-linked': 'Java', 
+            'code-display-linked': '<span class="keyword">for</span>(<span class="keyword">int</span> val : q)\n    System.out.print(val + <span class="string">" "</span>);'
+        },
+        python: {
+            'label-array-struct': 'Python', 
+            'code-array-struct': '<span class="keyword">class</span> Queue:\n    <span class="keyword">def</span> __init__(self):\n        self.data = []\n        self.front = self.rear = -<span class="number">1</span>',
+            'label-array-init': 'Python', 
+            'code-array-init': 'q = Queue()',
+            'label-enqueue': 'Python', 
+            'code-enqueue': 'q.append(value)',
+            'label-dequeue': 'Python', 
+            'code-dequeue': 'q.pop(<span class="number">0</span>)',
+            'label-peek': 'Python', 
+            'code-peek': 'q[<span class="number">0</span>]',
+            'label-isempty': 'Python', 
+            'code-isempty': '<span class="keyword">len</span>(q) == <span class="number">0</span>',
+            'label-isfull': 'Python', 
+            'code-isfull': '<span class="keyword">len</span>(q) == MAX',
+            'label-size': 'Python', 
+            'code-size': '<span class="keyword">len</span>(q)',
+            'label-circular-enqueue': 'Python', 
+            'code-circular-enqueue': '<span class="comment"># Use collections.deque</span>\nq.append(value)',
+            'label-circular-dequeue': 'Python', 
+            'code-circular-dequeue': 'q.popleft()',
+            'label-node-struct': 'Python', 
+            'code-node-struct': '<span class="keyword">class</span> Node:\n    <span class="keyword">def</span> __init__(self, data):\n        self.data = data\n        self.next = None',
+            'label-linked-struct': 'Python', 
+            'code-linked-struct': '<span class="keyword">class</span> Queue:\n    <span class="keyword">def</span> __init__(self):\n        self.front = self.rear = None',
+            'label-linked-init': 'Python', 
+            'code-linked-init': 'q = Queue()',
+            'label-linked-enqueue': 'Python', 
+            'code-linked-enqueue': 'q.enqueue(value)',
+            'label-linked-dequeue': 'Python', 
+            'code-linked-dequeue': 'q.dequeue()',
+            'label-linked-peek': 'Python', 
+            'code-linked-peek': 'q.front().data',
+            'label-display-array': 'Python', 
+            'code-display-array': '<span class="keyword">for</span> item <span class="keyword">in</span> q:\n    <span class="function">print</span>(item, end=<span class="string">" "</span>)',
+            'label-display-linked': 'Python', 
+            'code-display-linked': '<span class="keyword">while</span> q.front:\n    <span class="function">print</span>(q.front.data, end=<span class="string">" "</span>)\n    q.front = q.front.next'
+        }
+    };
+
+    // Language selector
+    const langSelect = document.getElementById('lang-select');
+
+    function updateCode(lang) {
+        const data = langData[lang];
+        if (data) {
+            for (const [id, code] of Object.entries(data)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.innerHTML = code;
+                }
+            }
+        }
+    }
+
+    langSelect.addEventListener('change', function() {
+        updateCode(this.value);
+    });
+
+    // Initialize with C
+    updateCode('c');
+</script>
+
+</body>
+</html>

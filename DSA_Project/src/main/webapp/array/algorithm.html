@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Algorithm - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    
+    <style>
+    /* --- Theme Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --accent-green: #10B981;
+        --accent-orange: #F59E0B;
+        --accent-pink: #EC4899;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --code-bg: #0d1117;
+        --keyword: #c084fc;
+        --function: #38bdf8;
+        --number: #f472b6;
+        --string: #4ade80;
+        --comment: #6b7280;
+        --variable: #fbbf24;
+        --operator: #f472b6;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1100px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .algo-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    /* ===================== LANGUAGE SELECTOR ===================== */
+    .lang-selector {
+        background: var(--bg-secondary);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 2px solid var(--accent-purple);
+        box-shadow: 0 0 20px rgba(139,108,246,0.3);
+    }
+
+    .lang-selector h2 { margin-top: 0; margin-bottom: 10px; border: none; }
+    .lang-selector p { margin-bottom: 20px; }
+
+    .lang-selector select {
+        padding: 12px 25px;
+        border: 2px solid var(--accent-purple);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        min-width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .lang-selector select:hover, .lang-selector select:focus {
+        box-shadow: 0 0 15px rgba(139,108,246,0.5);
+        outline: none;
+    }
+
+    /* ===================== CODE BLOCKS ===================== */
+    .code-block {
+        background: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        border-left: 4px solid var(--accent-blue);
+        margin: 15px 0 25px 0;
+        position: relative;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #e2e8f0;
+        white-space: pre;
+    }
+
+    /* Syntax Highlighting */
+    .keyword { color: var(--keyword); }
+    .function { color: var(--function); }
+    .number { color: var(--number); }
+    .string { color: var(--string); }
+    .comment { color: var(--comment); font-style: italic; }
+    .variable { color: var(--variable); }
+    .operator { color: var(--operator); }
+
+    /* Code Label */
+    .code-label {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: var(--accent-purple);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* ===================== TABS ===================== */
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 10px 20px;
+        background: var(--bg-primary);
+        border: 2px solid var(--accent-purple);
+        color: var(--text-primary);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn.active { background: var(--accent-purple); color: white; }
+    .tab-btn:hover { background: rgba(139,108,246,0.2); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===================== INFO BOXES ===================== */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #F59E0B;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--accent-green);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* ===================== ALGORITHM STEPS ===================== */
+    .steps-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 15px;
+        background: rgba(139,108,246,0.1);
+        border-radius: 8px;
+        border-left: 3px solid var(--accent-purple);
+    }
+
+    .step-number {
+        background: var(--accent-purple);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .step-content {
+        flex: 1;
+    }
+
+    .step-title {
+        color: var(--accent-blue);
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .step-desc {
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    /* ===================== PSEUDOCODE ===================== */
+    .pseudocode {
+        background: var(--bg-primary);
+        border: 1px solid var(--accent-purple);
+        border-radius: 8px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    .pseudocode h4 {
+        color: var(--accent-purple);
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+
+    .pseudocode pre {
+        font-family: 'Fira Code', monospace;
+        font-size: 13px;
+        line-height: 1.8;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    /* ===================== NAVIGATION ===================== */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+    /* ===================== COMPLEXITY BADGES ===================== */
+    .complexity-badges {
+        display: flex;
+        gap: 15px;
+        margin: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .badge-time { background: rgba(79, 195, 247, 0.2); color: var(--accent-blue); }
+    .badge-space { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+    .badge-worst { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+    .badge-best { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <a href="arrayGS.html" class="logo">CodeCanvas - Array</a>
+    <nav>
+        <ul>
+                <li><a href="../GetStarted/arrayGS.html">Back To Array</a></li>
+                <li><a href="../array/theory.html">Theory</a></li>
+                <li><a href="../array/syntax.html">Syntax</a></li>
+                <li><a href="../array/algorithm.html" class="active">Algorithm</a></li>
+                <li><a href="../array/complexity.html">Complexity</a></li>
+                <li><a href="../array/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="algorithm">
+    <div class="section-content">
+
+        <!-- Language Selector -->
+        <div class="lang-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see the implementation of array algorithms. The code will update dynamically.</p>
+            <select id="lang-select">
+                <option value="c">C Language</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('basic')">Basic Operations</button>
+            <button class="tab-btn" onclick="showTab('searching')">Searching</button>
+            <button class="tab-btn" onclick="showTab('sorting')">Sorting</button>
+            <button class="tab-btn" onclick="showTab('advanced')">Advanced</button>
+        </div>
+
+        <!-- ==================== BASIC OPERATIONS ==================== -->
+        <div id="basic" class="tab-content active">
+            
+            <div class="algo-card">
+                <h2>1. Array Initialization</h2>
+                <p>Declare and initialize an array with fixed size.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(n)</span>
+                </div>
+
+                <h3>Pseudocode</h3>
+                <div class="pseudocode">
+                    <pre>PROCEDURE initializeArray(array, size, value)
+    FOR i FROM 0 TO size-1 DO
+        array[i] = value
+    END FOR
+END PROCEDURE</pre>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-init">C</span>
+                    <code id="code-init"><span class="keyword">void</span> initArray(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size, <span class="keyword">int</span> value) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size; i++) {
+        arr[i] = value;
+    }
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>2. Array Traversal</h2>
+                <p>Visit each element of the array sequentially.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Algorithm Steps</h3>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Start from Index 0</div>
+                            <div class="step-desc">Initialize index i = 0</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Process Element</div>
+                            <div class="step-desc">Visit arr[i] and perform operation</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Increment Index</div>
+                            <div class="step-desc">i = i + 1</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Repeat</div>
+                            <div class="step-desc">Continue until i < size</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-traverse">C</span>
+                    <code id="code-traverse"><span class="keyword">void</span> traverseArray(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size; i++) {
+        <span class="function">printf</span>(<span class="string">"%d "</span>, arr[i]);
+    }
+    <span class="function">printf</span>(<span class="string">"\n"</span>);
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>3. Insert at End</h2>
+                <p>Insert an element at the end of the array.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(1)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Pseudocode</h3>
+                <div class="pseudocode">
+                    <pre>PROCEDURE insertEnd(array, size, element)
+    array[size] = element
+    size = size + 1
+END PROCEDURE</pre>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-insert-end">C</span>
+                    <code id="code-insert-end"><span class="keyword">void</span> insertEnd(<span class="keyword">int</span> arr[], <span class="keyword">int</span> *size, <span class="keyword">int</span> element) {
+    <span class="keyword">if</span>(*size < <span class="number">100</span>) {
+        arr[(*size)++] = element;
+    }
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>4. Delete from End</h2>
+                <p>Remove the last element from the array.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(1)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-delete-end">C</span>
+                    <code id="code-delete-end"><span class="keyword">int</span> deleteEnd(<span class="keyword">int</span> arr[], <span class="keyword">int</span> *size) {
+    <span class="keyword">if</span>(*size > <span class="number">0</span>) {
+        <span class="keyword">return</span> arr[--(*size)];
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SEARCHING ==================== -->
+        <div id="searching" class="tab-content">
+            
+            <div class="algo-card">
+                <h2>5. Linear Search</h2>
+                <p>Search for an element by checking each element sequentially.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                    <span class="badge badge-worst">Worst: O(n)</span>
+                    <span class="badge badge-best">Best: O(1)</span>
+                </div>
+
+                <h3>Algorithm Steps</h3>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Start from Beginning</div>
+                            <div class="step-desc">Set i = 0</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Compare Elements</div>
+                            <div class="step-desc">If arr[i] == key, return i</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Continue Search</div>
+                            <div class="step-desc">Increment i and repeat</div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Not Found</div>
+                            <div class="step-desc">Return -1 if end reached</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-linear-search">C</span>
+                    <code id="code-linear-search"><span class="keyword">int</span> linearSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size, <span class="keyword">int</span> key) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size; i++) {
+        <span class="keyword">if</span>(arr[i] == key) {
+            <span class="keyword">return</span> i;
+        }
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>6. Binary Search</h2>
+                <p>Efficient search on sorted array using divide and conquer.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(log n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-binary-search">C</span>
+                    <code id="code-binary-search"><span class="keyword">int</span> binarySearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size, <span class="keyword">int</span> key) {
+    <span class="keyword">int</span> left = <span class="number">0</span>, right = size - <span class="number">1</span>;
+    <span class="keyword">while</span>(left <= right) {
+        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;
+        <span class="keyword">if</span>(arr[mid] == key) <span class="keyword">return</span> mid;
+        <span class="keyword">else if</span>(arr[mid] < key) left = mid + <span class="number">1</span>;
+        <span class="keyword">else</span> right = mid - <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SORTING ==================== -->
+        <div id="sorting" class="tab-content">
+            
+            <div class="algo-card">
+                <h2>7. Bubble Sort</h2>
+                <p>Repeatedly swap adjacent elements if they are in wrong order.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n²)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-bubble-sort">C</span>
+                    <code id="code-bubble-sort"><span class="keyword">void</span> bubbleSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n-i-<span class="number">1</span>; j++) {
+            <span class="keyword">if</span>(arr[j] > arr[j+<span class="number">1</span>]) {
+                <span class="keyword">int</span> temp = arr[j];
+                arr[j] = arr[j+<span class="number">1</span>];
+                arr[j+<span class="number">1</span>] = temp;
+            }
+        }
+    }
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>8. Selection Sort</h2>
+                <p>Select minimum element from unsorted portion and place at beginning.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n²)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-selection-sort">C</span>
+                    <code id="code-selection-sort"><span class="keyword">void</span> selectionSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {
+        <span class="keyword">int</span> min_idx = i;
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j < n; j++) {
+            <span class="keyword">if</span>(arr[j] < arr[min_idx])
+                min_idx = j;
+        }
+        <span class="keyword">int</span> temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
+    }
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>9. Insertion Sort</h2>
+                <p>Build sorted portion by inserting elements one by one.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n²)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-insertion-sort">C</span>
+                    <code id="code-insertion-sort"><span class="keyword">void</span> insertionSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {
+        <span class="keyword">int</span> key = arr[i];
+        <span class="keyword">int</span> j = i - <span class="number">1</span>;
+        <span class="keyword">while</span>(j >= <span class="number">0</span> && arr[j] > key) {
+            arr[j+<span class="number">1</span>] = arr[j];
+            j--;
+        }
+        arr[j+<span class="number">1</span>] = key;
+    }
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== ADVANCED ==================== -->
+        <div id="advanced" class="tab-content">
+            
+            <div class="algo-card">
+                <h2>10. Insert at Position</h2>
+                <p>Insert element at specific position (requires shifting).</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-insert-pos">C</span>
+                    <code id="code-insert-pos"><span class="keyword">int</span> insertAtPos(<span class="keyword">int</span> arr[], <span class="keyword">int</span> *size, <span class="keyword">int</span> pos, <span class="keyword">int</span> element) {
+    <span class="keyword">if</span>(*size < <span class="number">100</span> && pos >= <span class="number">0</span> && pos <= *size) {
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = *size; i > pos; i--) {
+            arr[i] = arr[i-<span class="number">1</span>];
+        }
+        arr[pos] = element;
+        (*size)++;
+        <span class="keyword">return</span> <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> <span class="number">0</span>;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>11. Delete at Position</h2>
+                <p>Delete element at specific position (requires shifting).</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-delete-pos">C</span>
+                    <code id="code-delete-pos"><span class="keyword">int</span> deleteAtPos(<span class="keyword">int</span> arr[], <span class="keyword">int</span> *size, <span class="keyword">int</span> pos) {
+    <span class="keyword">if</span>(pos >= <span class="number">0</span> && pos < *size) {
+        <span class="keyword">int</span> deleted = arr[pos];
+        <span class="keyword">for</span>(<span class="keyword">int</span> i = pos; i < *size - <span class="number">1</span>; i++) {
+            arr[i] = arr[i+<span class="number">1</span>];
+        }
+        (*size)--;
+        <span class="keyword">return</span> deleted;
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>12. Find Maximum & Minimum</h2>
+                <p>Find largest and smallest elements in array.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-max-min">C</span>
+                    <code id="code-max-min"><span class="keyword">void</span> findMaxMin(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size, <span class="keyword">int</span> *max, <span class="keyword">int</span> *min) {
+    *max = *min = arr[<span class="number">0</span>];
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < size; i++) {
+        <span class="keyword">if</span>(arr[i] > *max) *max = arr[i];
+        <span class="keyword">if</span>(arr[i] < *min) *min = arr[i];
+    }
+}</code>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h2>13. Reverse Array</h2>
+                <p>Reverse the elements of an array in-place.</p>
+
+                <div class="complexity-badges">
+                    <span class="badge badge-time">Time: O(n/2)</span>
+                    <span class="badge badge-space">Space: O(1)</span>
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-reverse">C</span>
+                    <code id="code-reverse"><span class="keyword">void</span> reverseArray(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size / <span class="number">2</span>; i++) {
+        <span class="keyword">int</span> temp = arr[i];
+        arr[i] = arr[size - i - <span class="number">1</span>];
+        arr[size - i - <span class="number">1</span>] = temp;
+    }
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="../array/syntax.html" class="nav-btn secondary">← Syntax</a>
+            <a href="../array/complexity.html" class="nav-btn">Complexity →</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../array/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Tab functionality
+    function showTab(tabId) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab content
+        document.getElementById(tabId).classList.add('active');
+        
+        // Add active class to clicked button
+        const clickedButton = event ? event.target : document.querySelector(`[onclick="showTab('${tabId}')"]`);
+        if (clickedButton) {
+            clickedButton.classList.add('active');
+        }
+    }
+
+    // Language data for Array algorithms
+    const langData = {
+        c: {
+            'label-init': 'C',
+            'code-init': '<span class="keyword">void</span> initArray(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size, <span class="keyword">int</span> value) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size; i++) {\n        arr[i] = value;\n    }\n}',
+            'label-traverse': 'C',
+            'code-traverse': '<span class="keyword">void</span> traverseArray(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size; i++) {\n        <span class="function">printf</span>(<span class="string">"%d "</span>, arr[i]);\n    }\n    <span class="function">printf</span>(<span class="string">"\\n"</span>);\n}',
+            'label-insert-end': 'C',
+            'code-insert-end': '<span class="keyword">void</span> insertEnd(<span class="keyword">int</span> arr[], <span class="keyword">int</span> *size, <span class="keyword">int</span> element) {\n    <span class="keyword">if</span>(*size < <span class="number">100</span>) {\n        arr[(*size)++] = element;\n    }\n}',
+            'label-delete-end': 'C',
+            'code-delete-end': '<span class="keyword">int</span> deleteEnd(<span class="keyword">int</span> arr[], <span class="keyword">int</span> *size) {\n    <span class="keyword">if</span>(*size > <span class="number">0</span>) {\n        <span class="keyword">return</span> arr[--(*size)];\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-linear-search': 'C',
+            'code-linear-search': '<span class="keyword">int</span> linearSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size, <span class="keyword">int</span> key) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size; i++) {\n        <span class="keyword">if</span>(arr[i] == key) {\n            <span class="keyword">return</span> i;\n        }\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-binary-search': 'C',
+            'code-binary-search': '<span class="keyword">int</span> binarySearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size, <span class="keyword">int</span> key) {\n    <span class="keyword">int</span> left = <span class="number">0</span>, right = size - <span class="number">1</span>;\n    <span class="keyword">while</span>(left <= right) {\n        <span class="keyword">int</span> mid = left + (right - left) / <span class="number">2</span>;\n        <span class="keyword">if</span>(arr[mid] == key) <span class="keyword">return</span> mid;\n        <span class="keyword">if</span>(arr[mid] < key) left = mid + <span class="number">1</span>;\n        <span class="keyword">else</span> right = mid - <span class="number">1</span>;\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-bubble-sort': 'C',
+            'code-bubble-sort': '<span class="keyword">void</span> bubbleSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {\n        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n-i-<span class="number">1</span>; j++) {\n            <span class="keyword">if</span>(arr[j] > arr[j+<span class="number">1</span>]) {\n                <span class="keyword">int</span> temp = arr[j];\n                arr[j] = arr[j+<span class="number">1</span>];\n                arr[j+<span class="number">1</span>] = temp;\n            }\n        }\n    }\n}',
+            'label-selection-sort': 'C',
+            'code-selection-sort': '<span class="keyword">void</span> selectionSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {\n        <span class="keyword">int</span> min_idx = i;\n        <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j < n; j++) {\n            <span class="keyword">if</span>(arr[j] < arr[min_idx])\n                min_idx = j;\n        }\n        <span class="keyword">int</span> temp = arr[min_idx];\n        arr[min_idx] = arr[i];\n        arr[i] = temp;\n    }\n}',
+            'label-insertion-sort': 'C',
+            'code-insertion-sort': '<span class="keyword">void</span> insertionSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {\n        <span class="keyword">int</span> key = arr[i];\n        <span class="keyword">int</span> j = i - <span class="number">1</span>;\n        <span class="keyword">while</span>(j >= <span class="number">0</span> && arr[j] > key) {\n            arr[j+<span class="number">1</span>] = arr[j];\n            j--;\n        }\n        arr[j+<span class="number">1</span>] = key;\n    }\n}',
+            'label-insert-pos': 'C',
+            'code-insert-pos': '<span class="keyword">int</span> insertAtPos(<span class="keyword">int</span> arr[], <span class="keyword">int</span> *size, <span class="keyword">int</span> pos, <span class="keyword">int</span> element) {\n    <span class="keyword">if</span>(*size < <span class="number">100</span> && pos >= <span class="number">0</span> && pos <= *size) {\n        <span class="keyword">for</span>(<span class="keyword">int</span> i = *size; i > pos; i--) {\n            arr[i] = arr[i-<span class="number">1</span>];\n        }\n        arr[pos] = element;\n        (*size)++;\n        <span class="keyword">return</span> <span class="number">1</span>;\n    }\n    <span class="keyword">return</span> <span class="number">0</span>;\n}',
+            'label-delete-pos': 'C',
+            'code-delete-pos': '<span class="keyword">int</span> deleteAtPos(<span class="keyword">int</span> arr[], <span class="keyword">int</span> *size, <span class="keyword">int</span> pos) {\n    <span class="keyword">if</span>(pos >= <span class="number">0</span> && pos < *size) {\n        <span class="keyword">int</span> deleted = arr[pos];\n        <span class="keyword">for</span>(<span class="keyword">int</span> i = pos; i < *size - <span class="number">1</span>; i++) {\n            arr[i] = arr[i+<span class="number">1</span>];\n        }\n        (*size)--;\n        <span class="keyword">return</span> deleted;\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-max-min': 'C',
+            'code-max-min': '<span class="keyword">void</span> findMaxMin(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size, <span class="keyword">int</span> *max, <span class="keyword">int</span> *min) {\n    *max = *min = arr[<span class="number">0</span>];\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < size; i++) {\n        <span class="keyword">if</span>(arr[i] > *max) *max = arr[i];\n        <span class="keyword">if</span>(arr[i] < *min) *min = arr[i];\n    }\n}',
+            'label-reverse': 'C',
+            'code-reverse': '<span class="keyword">void</span> reverseArray(<span class="keyword">int</span> arr[], <span class="keyword">int</span> size) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size / <span class="number">2</span>; i++) {\n        <span class="keyword">int</span> temp = arr[i];\n        arr[i] = arr[size - i - <span class="number">1</span>];\n        arr[size - i - <span class="number">1</span>] = temp;\n    }\n}'
+        },
+        cpp: {
+            'label-init': 'C++', 'code-init': '<span class="keyword">int</span> arr[<span class="number">100</span>] = {<span class="number">0</span>};',
+            'label-traverse': 'C++', 'code-traverse': '<span class="keyword">for</span>(<span class="keyword">int</span> x : arr) cout << x << <span class="string">" "</span>;',
+            'label-insert-end': 'C++', 'code-insert-end': 'arr[size++] = element;',
+            'label-delete-end': 'C++', 'code-delete-end': 'return arr[--size];',
+            'label-linear-search': 'C++', 'code-linear-search': '<span class="keyword">auto</span> it = find(arr, arr+size, key); <span class="keyword">return</span> it != arr+size ? it-arr : -<span class="number">1</span>;',
+            'label-binary-search': 'C++', 'code-binary-search': 'return binary_search(arr, arr+size, key) ? lower_bound(arr, arr+size, key)-arr : -<span class="number">1</span>;',
+            'label-bubble-sort': 'C++', 'code-bubble-sort': 'sort(arr, arr+n); <span class="comment">// STL sort</span>',
+            'label-selection-sort': 'C++', 'code-selection-sort': '<span class="keyword">for</span>(<span class="keyword">int</span> i=0; i<n-1; i++) { <span class="keyword">auto</span> min_it = min_element(arr+i, arr+n); swap(*(arr+i), *min_it); }',
+            'label-insertion-sort': 'C++', 'code-insertion-sort': 'is_sorted = is_sorted(arr, arr+n);',
+            'label-insert-pos': 'C++', 'code-insert-pos': 'rotate(arr+pos, arr+pos+<span class="number">1</span>, arr+size); arr[pos] = element; size++;',
+            'label-delete-pos': 'C++', 'code-delete-pos': 'rotate(arr+pos, arr+pos+<span class="number">1</span>, arr+size); size--;',
+            'label-max-min': 'C++', 'code-max-min': '*max = *max_element(arr, arr+size); *min = *min_element(arr, arr+size);',
+            'label-reverse': 'C++', 'code-reverse': 'reverse(arr, arr+size);'
+        },
+        java: {
+            'label-init': 'Java', 'code-init': '<span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[size]; Arrays.fill(arr, value);',
+            'label-traverse': 'Java', 'code-traverse': 'Arrays.stream(arr).forEach(x -> System.out.print(x + " "));',
+            'label-insert-end': 'Java', 'code-insert-end': 'arr[size++] = element;',
+            'label-delete-end': 'Java', 'code-delete-end': 'return arr[--size];',
+            'label-linear-search': 'Java', 'code-linear-search': 'return Arrays.binarySearch(arr, <span class="number">0</span>, size, key) >= <span class="number">0</span> ? Arrays.binarySearch(arr, <span class="number">0</span>, size, key) : -<span class="number">1</span>;',
+            'label-binary-search': 'Java', 'code-binary-search': 'return Arrays.binarySearch(arr, <span class="number">0</span>, size, key);',
+            'label-bubble-sort': 'Java', 'code-bubble-sort': 'Arrays.sort(arr);',
+            'label-selection-sort': 'Java', 'code-selection-sort': 'Arrays.sort(arr);',
+            'label-insertion-sort': 'Java', 'code-insertion-sort': 'Arrays.sort(arr);',
+            'label-insert-pos': 'Java', 'code-insert-pos': 'System.arraycopy(arr, pos, arr, pos+<span class="number">1</span>, size-pos); arr[pos] = element; size++;',
+            'label-delete-pos': 'Java', 'code-delete-pos': 'System.arraycopy(arr, pos+<span class="number">1</span>, arr, pos, size-pos-<span class="number">1</span>); size--;',
+            'label-max-min': 'Java', 'code-max-min': 'Arrays.sort(arr); *max = arr[size-<span class="number">1</span>]; *min = arr[<span class="number">0</span>];',
+            'label-reverse': 'Java', 'code-reverse': 'Collections.reverse(Arrays.asList(arr));'
+        },
+        python: {
+            'label-init': 'Python', 'code-init': 'arr = [value] * size',
+            'label-traverse': 'Python', 'code-traverse': '[print(x, end=" ") <span class="keyword">for</span> x <span class="keyword">in</span> arr]; print()',
+            'label-insert-end': 'Python', 'code-insert-end': 'arr.append(element)',
+            'label-delete-end': 'Python', 'code-delete-end': 'return arr.pop()',
+            'label-linear-search': 'Python', 'code-linear-search': 'return arr.index(key) <span class="keyword">if</span> key <span class="keyword">in</span> arr <span class="keyword">else</span> -<span class="number">1</span>',
+            'label-binary-search': 'Python', 'code-binary-search': 'import bisect; return bisect.bisect_left(arr, key)',
+            'label-bubble-sort': 'Python', 'code-bubble-sort': 'arr.sort()',
+            'label-selection-sort': 'Python', 'code-selection-sort': 'arr.sort()',
+            'label-insertion-sort': 'Python', 'code-insertion-sort': 'arr.sort()',
+            'label-insert-pos': 'Python', 'code-insert-pos': 'arr.insert(pos, element)',
+            'label-delete-pos': 'Python', 'code-delete-pos': 'del arr[pos]',
+            'label-max-min': 'Python', 'code-max-min': 'max_val, min_val = max(arr), min(arr)',
+            'label-reverse': 'Python', 'code-reverse': 'arr.reverse() <span class="keyword">or</span> arr[::-<span class="number">1</span>]'
+        }
+    };
+
+    // Language selector
+    const langSelect = document.getElementById('lang-select');
+
+    function updateCode(lang) {
+        const data = langData[lang] || langData['c']; // Fallback to C
+        Object.entries(data).forEach(([id, code]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.innerHTML = code;
+            }
+        });
+    }
+
+    langSelect.addEventListener('change', function() {
+        updateCode(this.value);
+    });
+
+    // Initialize with C language and ensure first tab is active
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCode('c');
+        // Ensure first tab is active on load
+        document.querySelector('.tab-btn.active').click();
+    });
+</script>
+
+</body>
+</html>
+           

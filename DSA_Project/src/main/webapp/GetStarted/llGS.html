@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started with Linked Lists - Learn Linked List</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- Your existing style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        /* Theme 2.0 - Lighter Dark Theme */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34; /* Lighter shade of original #0A0F24 */
+            --bg-secondary: #252A4A; /* Lighter shade of original #161B3A */
+            --accent-purple: #8B6CF6; /* Slightly lighter purple */
+            --accent-blue: #4FC3F7; /* Slightly lighter blue */
+            --text-primary: #F1F5F9; /* Slightly lighter text */
+            --text-secondary: #A1AEB8; /* Slightly lighter secondary text */
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* ===================== NAVBAR ===================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4); /* Adjusted to match lighter purple */
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1); /* Adjusted to match lighter purple */
+        }
+
+        /* ===================== RESPONSIVE NAVBAR ===================== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .navbar .logo {
+                font-size: 18px;
+            }
+        }
+
+        /* ---------- SECTION SPACING ---------- */
+        section {
+            min-height: 70vh;
+            padding: 120px 20px 40px; /* Increased top padding for better spacing */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Changed to flex-start for better alignment */
+        }
+        
+        #language {
+            min-height: auto;
+            padding-bottom: 40px;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px; /* Added padding for content */
+            box-sizing: border-box;
+        }
+
+        /* ---------- LANGUAGE SELECTOR ---------- */
+        .language-selector {
+            text-align: center;
+            margin-bottom: 40px; /* Increased margin */
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+        }
+
+        .language-selector select {
+            padding: 12px; /* Increased padding */
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* ---------- LANGUAGE SELECTOR AND ARRAY INTRO ---------- */
+        .language-selector {
+            text-align: center;
+            margin-bottom: 40px; /* Increased margin */
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple in theme 2.0 */
+        }
+
+        .language-selector select {
+            padding: 12px; /* Increased padding */
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .array-intro {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            background: var(--bg-secondary); /* Changed to match language selector theme */
+            padding: 25px; /* Adjusted to match language selector */
+            border-radius: 12px; /* Adjusted to match language selector */
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple in theme 2.0 */
+        }
+
+        .intro-text {
+            flex: 1;
+        }
+
+        .intro-text h3 {
+            color: var(--accent-purple); /* Uses theme 2.0 accent purple */
+            margin-bottom: 10px;
+        }
+
+        .start-btn {
+            margin-top: 15px;
+            padding: 12px 22px;
+            border: none;
+            background: linear-gradient(135deg,#8B6CF6,#9f7aea); /* Adjusted to lighter purple in theme 2.0 */
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(139,108,246,0.6); /* Adjusted to match lighter purple in theme 2.0 */
+        }
+
+        /* Demo boxes */
+        .intro-demo {
+            display: flex;
+            gap: 12px;
+        }
+
+        .array-box {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-secondary); /* Uses theme 2.0 bg-secondary */
+            border: 2px solid var(--accent-purple); /* Uses theme 2.0 accent purple */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 0 12px rgba(139,108,246,0.4); /* Adjusted to match lighter purple in theme 2.0 */
+        }
+        /* ---------- THEORY SECTION ---------- */
+        .theory {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .theory h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .theory h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 10px;
+        }
+
+        .theory ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        .theory p {
+            margin-bottom: 15px; /* Added margin */
+        }
+
+        /* ---------- SYNTAX SECTION ---------- */
+        .syntax {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .syntax h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .syntax h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .syntax h4 {
+            color: var(--text-secondary);
+            margin-top: 20px; /* Increased margin */
+            margin-bottom: 10px;
+        }
+
+        .syntax pre {
+            background: #1e293b;
+            padding: 20px; /* Increased padding */
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9; /* Adjusted to match lighter text */
+            margin-bottom: 15px; /* Increased margin */
+        }
+
+        .syntax code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px; /* Set font size */
+        }
+
+        /* ---------- ALGORITHM SECTION ---------- */
+        .algorithm {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .algorithm h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .algorithm h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .algorithm ol {
+            padding-left: 25px; /* Increased padding */
+        }
+
+        .algorithm pre {
+            background: #1e293b;
+            padding: 20px; /* Increased padding */
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9; /* Adjusted to match lighter text */
+            margin-top: 10px;
+        }
+
+        /* ---------- FLOWCHART SECTION ---------- */
+        .flowchart {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .flowchart h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .flowchart h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0; /* Added margin */
+        }
+        
+        .mermaid svg path {
+            stroke-width: 2.5px !important;
+            filter: drop-shadow(0 0 4px #8b6cf6);
+        }
+        
+
+        /* ---------- TIME COMPLEXITY SECTION ---------- */
+        .complexity {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .complexity h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .complexity table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Increased margin */
+        }
+
+        .complexity th, .complexity td {
+            border: 1px solid var(--accent-purple);
+            padding: 12px; /* Increased padding */
+            text-align: left;
+        }
+
+        .complexity th {
+            background: var(--accent-purple);
+            color: var(--text-primary);
+        }
+
+        /* ---------- APPLICATIONS SECTION ---------- */
+        .applications {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .applications h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .applications ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        /* ---------- COMMON MISTAKES SECTION ---------- */
+        .mistakes {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .mistakes h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .mistakes ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        /* ---------- QUESTIONS SECTION ---------- */
+        .questions {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .questions h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .questions h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .questions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .questions li {
+            margin-bottom: 12px; /* Increased margin */
+        }
+
+        .questions a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .questions a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* ===================== RESPONSIVE BREAKPOINTS ===================== */
+        @media (max-width: 768px) {
+            section {
+                padding: 140px 15px 40px; /* Adjusted for mobile */
+            }
+            .section-content {
+                padding: 15px; /* Reduced padding */
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 12px;
+                padding: 15px; /* Adjusted padding */
+            }
+            .complexity table {
+                font-size: 12px;
+            }
+            .complexity th, .complexity td {
+                padding: 8px; /* Reduced padding */
+            }
+            .mermaid {
+                font-size: 12px; /* Smaller for mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .navbar .logo {
+                font-size: 16px;
+            }
+            .navbar nav ul {
+                gap: 8px;
+            }
+            .language-selector select {
+                width: 100%;
+                max-width: 200px;
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">CodeCanvas - Linked List</div>
+        <nav>
+            <ul>
+                <li><a href="../pages/linkedlist.html">Home</a></li>
+                <li><a href="#language">Language</a></li>
+                <li><a href="#theory">Learn</a></li>
+                <li><a href="#questions">Test</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Language Selector -->
+ <section id="language">
+    <div class="section-content">
+
+        <div class="language-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see syntax examples in that language. All code snippets will update dynamically.</p>
+            <select id="lang-select">
+                <option value="c">C</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+                <option value="cpp">C++</option>
+            </select>
+        </div>
+
+       <!-- NEW: LINKED LIST INTRO PANEL -->
+<div class="array-intro">
+    <div class="intro-text">
+        <h3>What is a Linked List?</h3>
+        <p>
+            A linked list is a linear data structure where elements are stored in nodes, each pointing to the next.
+            It allows dynamic memory allocation and efficient insertions/deletions.
+        </p>
+        <button class="start-btn">Start Visualization →</button>
+    </div>
+
+    <div class="intro-demo">
+        <div class="array-box">10</div>
+        <div class="array-box">→</div>
+        <div class="array-box">20</div>
+        <div class="array-box">→</div>
+        <div class="array-box">30</div>
+    </div>
+</div>
+
+</div>
+</section>
+
+<!-- Theory Section -->
+<section id="theory">
+    <div class="section-content">
+        <div class="theory">
+            <h2><a href="../LinkedList/theory.html" style="color: inherit; text-decoration: none;">What is a Linked List?</a></h2>
+            <p>A linked list is a linear data structure consisting of nodes where each node contains data and a pointer to the next node. Unlike arrays, linked lists allow dynamic memory allocation and efficient insertions/deletions. The first node is called the head, and the last node's pointer is null.</p>
+            <p>For example, a singly linked list: 10 → 20 → 30 → null.</p>
+            <h3>Properties of Linked Lists</h3>
+            <ul>
+                <li><strong>Dynamic Size:</strong> Can grow or shrink as needed.</li>
+                <li><strong>Node Structure:</strong> Each node has data and a next pointer.</li>
+                <li><strong>Types:</strong> Singly (one direction), Doubly (two directions), Circular (last points to first).</li>
+                <li><strong>No Random Access:</strong> Must traverse from head to access elements.</li>
+                <li><strong>Memory Overhead:</strong> Extra space for pointers.</li>
+            </ul>
+            <h3>Advantages of Linked Lists</h3>
+            <ul>
+                <li>Dynamic size without pre-allocation.</li>
+                <li>Efficient insertions/deletions (O(1) at ends).</li>
+                <li>No memory waste like in arrays.</li>
+                <li>Easy to implement stacks/queues.</li>
+            </ul>
+            <h3>Limitations of Linked Lists</h3>
+            <ul>
+                <li>No random access; O(n) for middle elements.</li>
+                <li>Extra memory for pointers.</li>
+                <li>Not cache-friendly due to scattered memory.</li>
+                <li>Traversal is sequential.</li>
+            </ul>
+            <h3>Types of Linked Lists</h3>
+            <ul>
+                <li><strong>Singly Linked List:</strong> Each node points to the next.</li>
+                <li><strong>Doubly Linked List:</strong> Each node has prev and next pointers.</li>
+                <li><strong>Circular Linked List:</strong> Last node points back to head.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Syntax Section -->
+<section id="syntax">
+    <div class="section-content">
+        <div class="syntax">
+            <h2><a href="../LinkedList/syntax.html" style="color: inherit; text-decoration: none;">Syntax for Linked List Operations</a></h2>
+            <p>Below are syntax examples for common linked list operations in the selected language. Note that implementations vary by type (singly, doubly).</p>
+            <h3>Linked List Operations</h3>
+            <h4>Node Structure</h4>
+            <pre><code id="ll-node">struct Node { int data; struct Node* next; };  // C</code></pre>
+            <h4>Insert at Beginning</h4>
+            <pre><code id="ll-insert-begin">// Insert at beginning: Node* newNode = createNode(data); newNode->next = head; head = newNode;  // C</code></pre>
+            <h4>Insert at End</h4>
+            <pre><code id="ll-insert-end">// Insert at end: Node* newNode = createNode(data); if (!head) head = newNode; else { Node* temp = head; while(temp->next) temp = temp->next; temp->next = newNode; }  // C</code></pre>
+            <h4>Delete from Beginning</h4>
+            <pre><code id="ll-delete-begin">// Delete from beginning: if (head) { Node* temp = head; head = head->next; free(temp); }  // C</code></pre>
+            <h4>Delete from End</h4>
+            <pre><code id="ll-delete-end">// Delete from end: if (!head) return; if (!head->next) { free(head); head = NULL; } else { Node* temp = head; while(temp->next->next) temp = temp->next; free(temp->next); temp->next = NULL; }  // C</code></pre>
+            <h4>Traverse</h4>
+            <pre><code id="ll-traverse">// Traverse: Node* temp = head; while(temp) { printf("%d ", temp->data); temp = temp->next; }  // C</code></pre>
+            <h4>Search</h4>
+            <pre><code id="ll-search">// Search: Node* temp = head; while(temp) { if(temp->data == key) return temp; temp = temp->next; } return NULL;  // C</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- Algorithm Section -->
+<section id="algorithm">
+    <div class="section-content">
+        <div class="algorithm">
+            <h2><a href="../LinkedList/algorithm.html" style="color: inherit; text-decoration: none;">Step-by-Step Algorithms</a></h2>
+            <p>Here are detailed algorithms for common linked list operations. These are essential for understanding how linked lists work internally.</p>
+            <h3>Insert at Beginning</h3>
+            <ol>
+                <li>Create a new node with the given data.</li>
+                <li>Set the new node's next to the current head.</li>
+                <li>Update head to point to the new node.</li>
+            </ol>
+            <pre><code>// Pseudocode
+newNode = createNode(data)
+newNode.next = head
+head = newNode</code></pre>
+
+            <h3>Insert at End</h3>
+            <ol>
+                <li>Create a new node with the given data.</li>
+                <li>If the list is empty, set head to the new node.</li>
+                <li>Otherwise, traverse to the last node and set its next to the new node.</li>
+            </ol>
+            <pre><code>// Pseudocode
+newNode = createNode(data)
+if head == null:
+    head = newNode
+else:
+    temp = head
+    while temp.next != null:
+        temp = temp.next
+    temp.next = newNode</code></pre>
+
+            <h3>Delete from Beginning</h3>
+            <ol>
+                <li>Check if the list is empty; if so, return.</li>
+                <li>Store the current head in a temp variable.</li>
+                <li>Update head to head.next.</li>
+                <li>Free the temp node.</li>
+            </ol>
+            <pre><code>// Pseudocode
+if head == null: return
+temp = head
+head = head.next
+free(temp)</code></pre>
+
+            <h3>Delete from End</h3>
+            <ol>
+                <li>Check if the list is empty; if so, return.</li>
+                <li>If only one node, free it and set head to null.</li>
+                <li>Otherwise, traverse to the second last node and set its next to null, then free the last node.</li>
+            </ol>
+            <pre><code>// Pseudocode
+if head == null: return
+if head.next == null:
+    free(head)
+    head = null
+else:
+    temp = head
+    while temp.next.next != null:
+        temp = temp.next
+    free(temp.next)
+    temp.next = null</code></pre>
+
+            <h3>Traverse the List</h3>
+            <ol>
+                <li>Start from the head.</li>
+                <li>While the current node is not null, process its data and move to the next node.</li>
+            </ol>
+            <pre><code>// Pseudocode
+temp = head
+while temp != null:
+    process(temp.data)
+    temp = temp.next</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- Flowchart Section -->
+<section id="flowchart">
+    <div class="section-content">
+        <div class="flowchart">
+            <h2><a href="../LinkedList/flowchart.html" style="color: inherit; text-decoration: none;">Flowcharts for Linked List Operations</a></h2>
+            <p>Flowcharts help visualize the logic of linked list operations. Below are interactive flowcharts created using Mermaid.</p>
+            <h3>Insert at Beginning</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B["Create new node"]
+                B --> C["newNode.next = head"]
+                C --> D["head = newNode"]
+                D --> E["End"]
+            </div>
+
+            <h3>Insert at End</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B["Create new node"]
+                B --> C{"head == null ?"}
+                C -->|Yes| D["head = newNode"]
+                C -->|No| E["temp = head"]
+                E --> F{"temp.next != null ?"}
+                F -->|Yes| G["temp = temp.next"]
+                G --> F
+                F -->|No| H["temp.next = newNode"]
+                H --> I["End"]
+            </div>
+
+            <h3>Delete from Beginning</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B{"head == null ?"}
+                B -->|Yes| C["Return"]
+                B -->|No| D["temp = head"]
+                D --> E["head = head.next"]
+                E --> F["Free temp"]
+                F --> G["End"]
+            </div>
+
+            <h3>Delete from End</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B{"head == null ?"}
+                B -->|Yes| C["Return"]
+                B -->|No| D{"head.next == null ?"}
+                D -->|Yes| E["Free head"]
+                E --> F["head = null"]
+                D -->|No| G["temp = head"]
+                G --> H{"temp.next.next != null ?"}
+                H -->|Yes| I["temp = temp.next"]
+                I --> H
+                H -->|No| J["Free temp.next"]
+                J --> K["temp.next = null"]
+                K --> L["End"]
+            </div>
+
+            <h3>Traverse the List</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B["temp = head"]
+                B --> C{"temp != null ?"}
+                C -->|Yes| D["Process temp.data"]
+                D --> E["temp = temp.next"]
+                E --> C
+                C -->|No| F["End"]
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Time Complexity Section -->
+<section id="complexity">
+    <div class="section-content">
+        <div class="complexity">
+            <h2><a href="../LinkedList/complexity.html" style="color: inherit; text-decoration: none;">Time Complexity of Linked List Operations</a></h2>
+            <p>Understanding time complexity helps in choosing the right implementation. Linked lists have varying complexities based on the operation and list type. Below is a detailed breakdown.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>List Type</th>
+                        <th>Best Case</th>
+                        <th>Average Case</th>
+                        <th>Worst Case</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Insert at Beginning</td>
+                        <td>Singly/Doubly</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct update of head.</td>
+                    </tr>
+                    <tr>
+                        <td>Insert at End</td>
+                        <td>Singly</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Traversal to end; O(1) with tail pointer.</td>
+                    </tr>
+                    <tr>
+                        <td>Insert at End</td>
+                        <td>Doubly</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct with tail pointer.</td>
+                    </tr>
+                    <tr>
+                        <td>Insert at Position</td>
+                        <td>All</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Traversal to position.</td>
+                    </tr>
+                    <tr>
+                        <td>Delete from Beginning</td>
+                        <td>All</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct update of head.</td>
+                    </tr>
+                    <tr>
+                        <td>Delete from End</td>
+                        <td>Singly</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Traversal to second last; O(1) with tail.</td>
+                    </tr>
+                    <tr>
+                        <td>Delete from End</td>
+                        <td>Doubly</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct with tail pointer.</td>
+                    </tr>
+                    <tr>
+                        <td>Delete at Position</td>
+                        <td>All</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Traversal to position.</td>
+                    </tr>
+                    <tr>
+                        <td>Traverse</td>
+                        <td>All</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Visit each node.</td>
+                    </tr>
+                    <tr>
+                        <td>Search</td>
+                        <td>All</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Linear search from head.</td>
+                    </tr>
+                    <tr>
+                        <td>Reverse (Singly)</td>
+                        <td>Singly</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Iterative reversal.</td>
+                    </tr>
+                    <tr>
+                        <td>Reverse (Doubly)</td>
+                        <td>Doubly</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Swap prev/next pointers.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Note:</strong> Singly linked lists are O(n) for end operations without a tail pointer. Doubly linked lists allow O(1) bidirectional traversal. Circular lists have similar complexities but wrap around. Space complexity is O(n) for data plus O(n) for pointers. Operations at known positions (e.g., head) are O(1), but random access requires traversal.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Applications Section -->
+<section id="applications">
+    <div class="section-content">
+        <div class="applications">
+            <h2><a href="../LinkedList/applications.html" style="color: inherit; text-decoration: none;">Applications of Linked Lists</a></h2>
+            <p>Linked lists are fundamental and used in a wide range of applications across computer science and software development.</p>
+            <ul>
+                <li><strong>Dynamic Memory Allocation:</strong> Implementing malloc/free in C.</li>
+                <li><strong>Undo Mechanisms:</strong> In text editors for undo/redo operations.</li>
+                <li><strong>Hash Tables:</strong> Separate chaining for collision resolution.</li>
+                <li><strong>Graphs:</strong> Adjacency lists for graph representation.</li>
+                <li><strong>Operating Systems:</strong> Process queues, memory management.</li>
+                <li><strong>Polynomial Representation:</strong> Storing coefficients and exponents.</li>
+                <li><strong>Music Playlists:</strong> Dynamic song lists with next/prev.</li>
+                <li><strong>Browser History:</strong> Forward/backward navigation.</li>
+            </ul>
+            <p>Linked lists are the building blocks for stacks, queues, and other data structures.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Common Mistakes Section -->
+<section id="mistakes">
+    <div class="section-content">
+        <div class="mistakes">
+            <h2><a href="../LinkedList/mistakes.html" style="color: inherit; text-decoration: none;">Common Mistakes and How to Avoid Them</h2>
+            <p>Working with linked lists can lead to bugs if not handled carefully. Here are common pitfalls and tips to avoid them.</p>
+            <ul>
+                <li><strong>Null Pointer Dereference:</strong> Accessing next on a null node. Always check if(temp) before temp->next.</li>
+                <li><strong>Memory Leaks:</strong> Forgetting to free deleted nodes in C/C++. Always free(temp) after use.</li>
+                <li><strong>Lost Head Pointer:</strong> Incorrectly updating head during insertions/deletions. Always assign head = newNode for beginning inserts.</li>
+                <li><strong>Infinite Loops in Traversal:</strong> Not checking for null. Use while(temp != NULL).</li>
+                <li><strong>Doubly Linked List Updates:</strong> Forgetting to update prev pointers. Set newNode->prev = temp; temp->next = newNode.</li>
+                <li><strong>Circular List Termination:</strong> Ensure last node points back to head, but avoid infinite loops in traversal.</li>
+                <li><strong>Edge Cases:</strong> Handle empty list, single node, and end operations. Test with head == NULL.</li>
+                <li><strong>Pointer Confusion:</strong> Mixing head and temp pointers. Use temp for traversal, keep head intact.</li>
+                <li><strong>Thread Safety:</strong> Linked lists are not thread-safe; use locks for multi-threaded access.</li>
+                <li><strong>Type Mismatches:</strong> Ensure data types match in nodes. Use consistent types.</li>
+            </ul>
+            <p><strong>Debugging Tip:</strong> Draw the list on paper, print node addresses/values during traversal. Use tools like Valgrind for memory leaks.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Questions Section -->
+<section id="questions">
+    <div class="section-content">
+        <div class="questions">
+            <h2><a href="../LinkedList/questions.html" style="color: inherit; text-decoration: none;">Placement-Based Important Questions</h2>
+            <p>Practice these questions from LeetCode, GeeksForGeeks, CodeChef, HackerRank, and other platforms to prepare for coding interviews and placements. Focus on understanding concepts rather than memorizing solutions.</p>
+            <h3>Easy (Beginner-friendly, focus on basics)</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/reverse-linked-list/">Reverse Linked List (LeetCode)</a> - Iterative reversal.</li>
+                <li><a href="https://www.geeksforgeeks.org/linked-list-set-1-introduction/">Linked List Introduction (GeeksForGeeks)</a> - Basic operations.</li>
+                <li><a href="https://leetcode.com/problems/merge-two-sorted-lists/">Merge Two Sorted Lists (LeetCode)</a> - Merge two lists.</li>
+                <li><a href="https://www.geeksforgeeks.org/write-a-function-to-get-nth-node-in-a-linked-list/">Find Nth Node (GeeksForGeeks)</a> - Access by position.</li>
+                <li><a href="https://leetcode.com/problems/remove-duplicates-from-sorted-list/">Remove Duplicates from Sorted List (LeetCode)</a> - Remove duplicates.</li>
+                <li><a href="https://www.geeksforgeeks.org/linked-list-vs-array/">Linked List vs Array (GeeksForGeeks)</a> - Comparison.</li>
+                <li><a href="https://leetcode.com/problems/palindrome-linked-list/">Palindrome Linked List (LeetCode)</a> - Check palindrome.</li>
+                <li><a href="https://www.geeksforgeeks.org/detect-loop-in-a-linked-list/">Detect Loop (GeeksForGeeks)</a> - Floyd's cycle detection.</li>
+            </ul>
+            <h3>Medium</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/add-two-numbers/">Add Two Numbers (LeetCode)</a> - Add numbers as lists.</li>
+                <li><a href="https://www.geeksforgeeks.org/reverse-a-linked-list/">Reverse Linked List (GeeksForGeeks)</a> - Recursive reversal.</li>
+                <li><a href="https://leetcode.com/problems/rotate-list/">Rotate List (LeetCode)</a> - Rotate by k positions.</li>
+                <li><a href="https://www.geeksforgeeks.org/sort-a-linked-list-of-0s-1s-or-2s/">Sort 0s, 1s, 2s (GeeksForGeeks)</a> - Sort linked list.</li>
+                <li><a href="https://leetcode.com/problems/intersection-of-two-linked-lists/">Intersection of Two Linked Lists (LeetCode)</a> - Find intersection.</li>
+                <li><a href="https://www.geeksforgeeks.org/flatten-a-linked-list-with-next-and-child-pointers/">Flatten Linked List (GeeksForGeeks)</a> - Flatten multilevel list.</li>
+                <li><a href="https://leetcode.com/problems/copy-list-with-random-pointer/">Copy List with Random Pointer (LeetCode)</a> - Deep copy with random pointers.</li>
+                <li><a href="https://www.geeksforgeeks.org/merge-sort-for-linked-list/">Merge Sort for Linked List (GeeksForGeeks)</a> - Sorting linked list.</li>
+            </ul>
+            <h3>Hard</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/reverse-nodes-in-k-group/">Reverse Nodes in K-Group (LeetCode)</a> - Reverse in groups.</li>
+                <li><a href="https://www.geeksforgeeks.org/merge-k-sorted-linked-lists/">Merge K Sorted Lists (GeeksForGeeks)</a> - Merge multiple lists.</li>
+                <li><a href="https://leetcode.com/problems/lru-cache/">LRU Cache (LeetCode)</a> - Using doubly linked list.</li>
+                <li><a href="https://www.geeksforgeeks.org/reverse-alternate-k-nodes-in-a-singly-linked-list/">Reverse Alternate K Nodes (GeeksForGeeks)</a> - Advanced reversal.</li>
+                <li><a href="https://leetcode.com/problems/sort-list/">Sort List (LeetCode)</a> - Sort unsorted list.</li>
+                <li><a href="https://www.geeksforgeeks.org/clone-a-linked-list-with-next-and-random-pointer/">Clone Linked List with Random (GeeksForGeeks)</a> - Clone with random pointers.</li>
+                <li><a href="https://leetcode.com/problems/reorder-list/">Reorder List (LeetCode)</a> - Reorder to alternate ends.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-the-minimum-and-maximum-value-node-from-a-circular-linked-list/">Min/Max in Circular List (GeeksForGeeks)</a> - Circular operations.</li>
+            </ul>
+            <p><strong>Tip:</strong> Solve these on paper first, then code. Focus on edge cases like empty lists, single nodes, and cycles. Use platforms like LeetCode for timed practice.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../LinkedList/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<script>
+    // Language selector functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const langSelect = document.getElementById('lang-select');
+        const codeBlocks = {
+            'll-node': {
+                c: 'struct Node { int data; struct Node* next; };',
+                java: 'class Node { int data; Node next; }',
+                python: 'class Node:\n    def __init__(self, data):\n        self.data = data\n        self.next = None',
+                cpp: 'struct Node { int data; Node* next; };'
+            },
+            'll-insert-begin': {
+                c: '// Insert at beginning: Node* newNode = (Node*)malloc(sizeof(Node)); newNode->data = data; newNode->next = head; head = newNode;',
+                java: '// Insert at beginning: Node newNode = new Node(data); newNode.next = head; head = newNode;',
+                python: '# Insert at beginning: new_node = Node(data); new_node.next = head; head = new_node',
+                cpp: '// Insert at beginning: Node* newNode = new Node(); newNode->data = data; newNode->next = head; head = newNode;'
+            },
+            'll-insert-end': {
+                c: '// Insert at end: Node* newNode = (Node*)malloc(sizeof(Node)); newNode->data = data; newNode->next = NULL; if (!head) head = newNode; else { Node* temp = head; while(temp->next) temp = temp->next; temp->next = newNode; }',
+                java: '// Insert at end: Node newNode = new Node(data); if (head == null) head = newNode; else { Node temp = head; while(temp.next != null) temp = temp.next; temp.next = newNode; }',
+                python: '# Insert at end: new_node = Node(data); if not head: head = new_node; else: temp = head; while temp.next: temp = temp.next; temp.next = new_node',
+                cpp: '// Insert at end: Node* newNode = new Node(); newNode->data = data; newNode->next = NULL; if (!head) head = newNode; else { Node* temp = head; while(temp->next) temp = temp->next; temp->next = newNode; }'
+            },
+            'll-delete-begin': {
+                c: '// Delete from beginning: if (head) { Node* temp = head; head = head->next; free(temp); }',
+                java: '// Delete from beginning: if (head != null) { head = head.next; }',
+                python: '# Delete from beginning: if head: head = head.next',
+                cpp: '// Delete from beginning: if (head) { Node* temp = head; head = head->next; delete temp; }'
+            },
+            'll-delete-end': {
+                c: '// Delete from end: if (!head) return; if (!head->next) { free(head); head = NULL; } else { Node* temp = head; while(temp->next->next) temp = temp->next; free(temp->next); temp->next = NULL; }',
+                java: '// Delete from end: if (head == null) return; if (head.next == null) head = null; else { Node temp = head; while(temp.next.next != null) temp = temp.next; temp.next = null; }',
+                python: '# Delete from end: if not head: return; if not head.next: head = None; else: temp = head; while temp.next.next: temp = temp.next; temp.next = None',
+                cpp: '// Delete from end: if (!head) return; if (!head->next) { delete head; head = NULL; } else { Node* temp = head; while(temp->next->next) temp = temp->next; delete temp->next; temp->next = NULL; }'
+            },
+            'll-traverse': {
+                c: '// Traverse: Node* temp = head; while(temp) { printf("%d ", temp->data); temp = temp->next; }',
+                java: '// Traverse: Node temp = head; while(temp != null) { System.out.print(temp.data + " "); temp = temp.next; }',
+                python: '# Traverse: temp = head; while temp: print(temp.data, end=" "); temp = temp.next',
+                cpp: '// Traverse: Node* temp = head; while(temp) { cout << temp->data << " "; temp = temp->next; }'
+            },
+            'll-search': {
+                c: '// Search: Node* temp = head; while(temp) { if(temp->data == key) return temp; temp = temp->next; } return NULL;',
+                java: '// Search: Node temp = head; while(temp != null) { if(temp.data == key) return temp; temp = temp.next; } return null;',
+                python: '# Search: temp = head; while temp: if temp.data == key: return temp; temp = temp.next; return None',
+                cpp: '// Search: Node* temp = head; while(temp) { if(temp->data == key) return temp; temp = temp->next; } return NULL;'
+            }
+        };
+
+        if (langSelect) {
+            langSelect.addEventListener('change', function() {
+                const selectedLang = this.value;
+                Object.keys(codeBlocks).forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = codeBlocks[id][selectedLang];
+                    }
+                });
+            });
+        } else {
+            console.error('Language selector not found');
+        }
+    });
+    
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: "base",
+        themeVariables: {
+            primaryColor: "#1e1e2f",
+            primaryBorderColor: "#8b6cf6",
+            primaryTextColor: "#ffffff",
+            lineColor: "#a78bfa",
+            secondaryColor: "#2a2a40",
+            tertiaryColor: "#141427",
+            edgeLabelBackground: "#1e1e2f"
+        }
+    });
+</script>
+</body>
+</html>

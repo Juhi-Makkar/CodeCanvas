@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* CSS Custom Properties for easy color management */
+:root {
+    --bg-primary: #0A0F24;
+    --bg-secondary: #161B3A;
+    --accent-purple: #7F5AF0;
+    --accent-blue: #38BDF8;
+    --text-primary: #E2E8F0;
+    --text-secondary: #94A3B8;
+    --shadow-color: rgba(127, 90, 240, 0.4);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* Subtle animated background pattern for depth */
+    background-image: radial-gradient(circle at 20% 50%, rgba(127, 90, 240, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(56, 189, 248, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 40% 80%, rgba(127, 90, 240, 0.05) 0%, transparent 50%);
+    background-size: 300px 300px;
+    animation: subtle-float 20s ease-in-out infinite;
+}
+
+@keyframes subtle-float {
+    0%, 100% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+}
+
+/* -------- NAVBAR -------- */
+.navbar {
+    text-align: center;
+    padding: 18px 10px;
+    background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+    box-shadow: 0 0 15px var(--shadow-color);
+}
+
+.title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 30px;
+    color: var(--accent-purple);
+    margin: 0;
+}
+
+.subtitle {
+    color: var(--accent-blue);
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* -------- MAIN CONTAINER (CENTER + USE SPACE) -------- */
+.container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* -------- MAIN CARD (BIGGER & CENTERED) -------- */
+.card {
+    background: var(--bg-secondary);
+    padding: 30px;
+    border-radius: 18px;
+    box-shadow: 0 0 25px rgba(127, 90, 240, 0.35);
+    width: 95%;          /* Almost full width on phone */
+    max-width: 1000px;   /* Big on desktop */
+    min-height: 65vh;    /* Makes it tall instead of tiny */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Smooth fade-in animation */
+    animation: fade-in 1s ease-out;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-primary);
+    text-align: center;
+    font-size: 28px;              /* bigger heading */
+    letter-spacing: 0.5px;
+    margin-bottom: 28px;
+    position: relative;           /* needed for underline */
+}
+
+h2::after {
+    content: "";
+    display: block;
+    width: 120px;
+    height: 3px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue)); /* Gradient underline */
+    margin: 10px auto 0; /* Center it */
+}
+
+/* -------- GRID (BUTTON LAYOUT) -------- */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Phone = vertical */
+    gap: 18px;
+    margin-top: 25px;
+}
+
+/* -------- BUTTONS (BIGGER & CLEANER) -------- */
+.btn {
+    text-decoration: none;
+    background: transparent;
+    border: 2px solid var(--accent-purple);
+    color: var(--text-primary);
+    padding: 18px;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    transition: all 0.3s ease; /* Smooth transitions */
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    display: inline-block;
+}
+
+.btn:hover {
+    background: var(--accent-purple);
+    color: white;
+    box-shadow: 0 0 15px var(--accent-purple);
+    transform: scale(1.05); /* Subtle scale on hover */
+}
+
+.btn:focus {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px; /* Accessibility: visible focus ring */
+}
+
+/* -------- FOOTER -------- */
+footer {
+    text-align: center;
+    padding: 15px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    background: var(--bg-secondary);
+    border-top: 1px solid rgba(127, 90, 240, 0.2);
+}
+
+/* ========== RESPONSIVENESS ========== */
+
+/* ---- TABLET ---- */
+@media (min-width: 700px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .title {
+        font-size: 32px;
+    }
+
+    .card {
+        width: 85%;
+        min-height: 60vh;
+    }
+
+    h2 {
+        font-size: 30px; /* Slightly larger for tablets */
+    }
+}
+
+/* ---- DESKTOP ---- */
+@media (min-width: 1000px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .title {
+        font-size: 36px;
+    }
+
+    .card {
+        width: 80%;
+        min-height: 55vh;
+    }
+
+    h2 {
+        font-size: 32px; /* Even larger for desktops */
+    }
+}
+
+.neon-footer{
+    width: 100%;
+    margin-top: 50px;
+    padding: 15px 0;
+    text-align: center;
+}
+
+.footer-line{
+    width: 100%;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0,
+        transparent
+    );
+
+    box-shadow:
+        0 0 6px #7F5AF0,
+        0 0 12px rgba(127,90,240,.4);
+}
+
+.footer-content{
+    padding: 16px 10px;
+}
+
+.footer-content h3{
+    margin: 0 0 8px;
+    font-size: 1.3rem;
+    font-weight: 600;
+
+    background: linear-gradient(90deg,#7F5AF0,#38BDF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.footer-links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    font-size: 0.85rem;
+    color: #94A3B8;
+}
+
+.footer-links span:nth-child(even){
+    color: #38BDF8;
+}
+
+.coming-soon-popup{
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    background: rgba(15,23,42,.95);
+    color: #E2E8F0;
+
+    padding: 15px 25px;
+    border-radius: 12px;
+
+    border: 1px solid #7F5AF0;
+
+    box-shadow:
+        0 0 15px rgba(127,90,240,.6),
+        0 0 30px rgba(56,189,248,.3);
+
+    z-index: 9999;
+    animation: slideDown .3s ease;
+}
+
+@keyframes slideDown{
+    from{
+        opacity:0;
+        transform:translate(-50%,-20px);
+    }
+    to{
+        opacity:1;
+        transform:translate(-50%,0);
+    }
+}

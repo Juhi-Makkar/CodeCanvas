@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Theory - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --success: #10B981;
+        --error: #EF4444;
+        --warning: #F59E0B;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1000px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .theory-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    h4 {
+        color: var(--accent-purple);
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    ul, ol {
+        list-style-position: inside;
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        padding-left: 10px;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+
+    /* ===================== VISUAL BOXES ===================== */
+    .visual-container {
+        background: #161b33;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 20px 0;
+        overflow-x: auto;
+        border: 1px solid var(--accent-purple);
+    }
+
+    .visual-title {
+        text-align:  center;
+        color: var(--accent-blue);
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    /* Stack Visual Representation */
+    .stack-visual {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        gap: 5px;
+        margin: 20px 0;
+        min-height: 300px;
+        justify-content: flex-end;
+    }
+
+    .stack-cell {
+        width: 120px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+        border: 2px solid var(--success);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--text-primary);
+        font-size: 16px;
+        border-radius: 8px 8px 4px 4px;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        transform: translateX(0);
+        transition: all 0.3s ease;
+    }
+
+    .stack-cell.top {
+        background: linear-gradient(135deg, var(--success), #059669);
+        border-color: var(--accent-blue);
+        box-shadow: 0 6px 12px rgba(16,185,129,0.4);
+        transform: translateX(0) scale(1.05);
+    }
+
+    .stack-cell::after {
+        content: attr(data-index);
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        font-size: 10px;
+        color: rgba(255,255,255,0.8);
+        font-weight: 500;
+    }
+
+    .stack-bottom {
+        width: 130px;
+        height: 40px;
+        background: linear-gradient(135deg, #6B7280, #4B5563);
+        border: 2px solid var(--warning);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--text-primary);
+        font-size: 14px;
+        border-radius: 4px 4px 8px 8px;
+        margin-bottom: 10px;
+    }
+
+    /* Memory Grid */
+    .memory-layout {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    .memory-block {
+        background: rgba(79, 195, 247, 0.15);
+        border: 1px solid var(--accent-blue);
+        padding: 15px;
+        text-align: center;
+        border-radius: 6px;
+        min-width: 100px;
+    }
+
+    .memory-block .addr {
+        font-size: 12px;
+        color: var(--accent-purple);
+    }
+
+    .memory-block .value {
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--text-primary);
+    }
+
+    .arrow-down {
+        text-align: center;
+        font-size: 30px;
+        color: var(--accent-purple);
+        margin: 10px 0;
+    }
+
+    /* Info Box */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid var(--warning);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--success);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .error-box {
+        background: rgba(239, 68, 68, 0.1);
+        border-left: 4px solid var(--error);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    .comparison-table th, .comparison-table td {
+        border: 1px solid var(--accent-purple);
+        padding: 12px;
+        text-align: left;
+    }
+
+    .comparison-table th {
+        background: var(--accent-purple);
+        color: var(--text-primary);
+    }
+
+    .comparison-table tr:nth-child(even) {
+        background: rgba(139,108,246,0.1);
+    }
+
+    /* Operation Animation Container */
+    .operation-container {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+    }
+
+    .operation-step {
+        text-align: center;
+        min-width: 200px;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+    <!-- Navbar -->
+<header class="navbar">
+    <a href="stackGS.html" class="logo">CodeCanvas - Stack</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/stackGS.html">Back to Stack</a></li>
+            <li><a href="../stack/theory.html" class="active">Theory</a></li>
+            <li><a href="../stack/syntax.html">Syntax</a></li>
+            <li><a href="../stack/algorithm.html">Algorithm</a></li>
+            <li><a href="../stack/complexity.html">Complexity</a></li>
+            <li><a href="../stack/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="theory">
+    <div class="section-content">
+
+        <!-- Header -->
+        <div class="theory-card">
+            <h2>Stacks - Complete Theory Guide</h2>
+            <p style="font-size: 18px; color: var(--text-primary);">
+                A Stack is a fundamental linear data structure that follows the Last In, First Out (LIFO) principle. 
+                It's one of the most important data structures used in algorithm design and system programming.
+            </p>
+        </div>
+
+        <!-- What is Stack -->
+        <div class="theory-card" id="what-is-stack">
+            <h3>1. What is a Stack?</h3>
+            <p>A <strong>Stack</strong> is a linear data structure that follows the <strong>Last In, First Out (LIFO)</strong> principle. 
+            The last element added to the stack will be the first one to be removed.</p>
+            
+            <div class="info-box">
+                <strong>Real-World Analogy:</strong> A stack of plates in a cafeteria. You can only add/remove plates from the top!
+            </div>
+
+            <div class="visual-container">
+                <div class="visual-title">Stack Visual Representation (LIFO)</div>
+                <div class="stack-visual" id="stackExample">
+                    <div class="stack-bottom">Bottom</div>
+                    <div class="stack-cell" data-index="0">10</div>
+                    <div class="stack-cell top" data-index="1">20</div>
+                </div>
+                <p style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                    <strong>Top → 20</strong> (Last added, first to be removed)
+                </p>
+            </div>
+
+            <p>Key Terms:</p>
+            <ul>
+                <li><strong>Top:</strong> Pointer to the topmost element of the stack</li>
+                <li><strong>Push:</strong> Add element to the top</li>
+                <li><strong>Pop:</strong> Remove element from the top</li>
+            </ul>
+        </div>
+
+        <!-- Why Use Stacks -->
+        <div class="theory-card" id="why-use">
+            <h3>2. Why Do We Need Stacks?</h3>
+            <p>Stacks solve problems that require processing data in reverse order or tracking history:</p>
+            
+            <ul>
+                <li><strong>Undo/Redo:</strong> Track user actions in reverse chronological order</li>
+                <li><strong>Function Calls:</strong> Track function call hierarchy (call stack)</li>
+                <li><strong>Expression Evaluation:</strong> Parse mathematical expressions</li>
+                <li><strong>Backtracking:</strong> Maze solving, recursion simulation</li>
+                <li><strong>Memory Management:</strong> Track allocated memory blocks</li>
+            </ul>
+
+            <div class="visual-container">
+                <div class="visual-title">Stack vs Queue Comparison</div>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Feature</th>
+                        <th>Stack (LIFO)</th>
+                        <th>Queue (FIFO)</th>
+                    </tr>
+                    <tr>
+                        <td>Order</td>
+                        <td>Last In, First Out</td>
+                        <td>First In, First Out</td>
+                    </tr>
+                    <tr>
+                        <td>Access Point</td>
+                        <td>Only Top</td>
+                        <td>Front & Rear</td>
+                    </tr>
+                    <tr>
+                        <td>Real Example</td>
+                        <td>Plate Stack</td>
+                        <td>Queue Line</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Characteristics -->
+        <div class="theory-card" id="characteristics">
+            <h3>3. Key Characteristics of Stacks</h3>
+            
+            <ul>
+                <li><strong>LIFO Principle:</strong> Last element inserted is first to be removed</li>
+                <li><strong>Single Access Point:</strong> Elements can only be added/removed from the top</li>
+                <li><strong>Dynamic Size:</strong> Can grow/shrink during runtime (in dynamic implementations)</li>
+                <li><strong>Sequential Access:</strong> Cannot access middle elements directly</li>
+                <li><strong>Homogeneous Elements:</strong> All elements are of same data type</li>
+                <li><strong>Two Main Operations:</strong> Push (insert) and Pop (delete)</li>
+            </ul>
+
+            <div class="success-box">
+                <strong>Stack States:</strong><br>
+                <strong>Empty:</strong> top = -1<br>
+                <strong>Full:</strong> top = maxSize - 1
+            </div>
+        </div>
+
+        <!-- Stack Operations -->
+        <div class="theory-card" id="operations">
+            <h3>4. Fundamental Stack Operations</h3>
+
+            <h4>a) Push Operation</h4>
+            <p>Adds a new element to the top of the stack. If stack is full, it's called <strong>Overflow</strong>.</p>
+
+            <h4>b) Pop Operation</h4>
+            <p>Removes and returns the top element. If stack is empty, it's called <strong>Underflow</strong>.</p>
+
+            <h4>c) Peek/Top Operation</h4>
+            <p>Returns the top element without removing it.</p>
+
+            <h4>d) isEmpty Operation</h4>
+            <p>Checks if stack is empty (top == -1).</p>
+
+            <h4>e) isFull Operation</h4>
+            <p>Checks if stack is full (top == maxSize - 1).</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Push-Pop Operation Sequence</div>
+                <div class="operation-container">
+                    <div class="operation-step">
+                        <div class="stack-visual">
+                            <div class="stack-bottom">Bottom</div>
+                        </div>
+                        <p><strong>1. Empty</strong></p>
+                    </div>
+                    <div class="operation-step">
+                        <div class="stack-visual">
+                            <div class="stack-bottom">Bottom</div>
+                            <div class="stack-cell top" data-index="0">10</div>
+                        </div>
+                        <p><strong>2. Push(10)</strong></p>
+                    </div>
+                    <div class="operation-step">
+                        <div class="stack-visual">
+                            <div class="stack-bottom">Bottom</div>
+                            <div class="stack-cell" data-index="0">10</div>
+                            <div class="stack-cell top" data-index="1">20</div>
+                        </div>
+                        <p><strong>3. Push(20)</strong></p>
+                    </div>
+                    <div class="operation-step">
+                        <div class="stack-visual">
+                            <div class="stack-bottom">Bottom</div>
+                            <div class="stack-cell top" data-index="0">10</div>
+                        </div>
+                        <p><strong>4. Pop() → 20</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Error Conditions:</strong>
+                <ul style="margin-top: 10px;">
+                    <li><strong>Overflow:</strong> Push on full stack</li>
+                    <li><strong>Underflow:</strong> Pop on empty stack</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Implementations -->
+        <div class="theory-card" id="implementations">
+            <h3>5. Stack Implementations</h3>
+
+            <h4>a) Array-Based Implementation</h4>
+            <p>Uses a fixed-size array with a 'top' index pointer.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Array-Based Stack Memory Layout</div>
+                <div class="memory-layout">
+                    <div class="memory-block">
+                        <div class="addr">top = 2</div>
+                        <div class="value">stack[2] = 30</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">stack[1]</div>
+                        <div class="value">20</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">stack[0]</div>
+                        <div class="value">10</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">stack[3..9]</div>
+                        <div class="value">Empty</div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>b) Linked List-Based Implementation</h4>
+            <p>Uses dynamic nodes with each node pointing to the previous one.</p>
+
+            <div class="info-box">
+                <strong>Array vs Linked List:</strong><br>
+                Array: Fixed size, faster access | Linked List: Dynamic size, extra memory overhead
+            </div>
+        </div>
+
+        <!-- Time Complexity -->
+        <div class="theory-card" id="complexity">
+            <h3>6. Time & Space Complexity</h3>
+
+            <div class="visual-container">
+                <table class="comparison-table">
+                    <tr>
+                        <th>Operation</th>
+                        <th>Time Complexity</th>
+                        <th>Space Complexity</th>
+                    </tr>
+                    <tr>
+                        <td>Push</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td>Pop</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td>Peek</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td>isEmpty/isFull</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="success-box">
+                <strong>All major operations are O(1)!</strong> This makes stacks extremely efficient.
+            </div>
+        </div>
+
+        <!-- Advantages and Disadvantages -->
+        <div class="theory-card" id="pros-cons">
+            <h3>7. Advantages and Disadvantages</h3>
+
+            <h4>Advantages:</h4>
+            <ul>
+                <li><strong>Constant Time Operations:</strong> O(1) for push, pop, peek</li>
+                <li><strong>Simple Implementation:</strong> Easy to understand and code</li>
+                <li><strong>Memory Efficient:</strong> No extra pointers needed in array implementation</li>
+                <li><strong>Natural LIFO Behavior:</strong> Perfect for recursive algorithms</li>
+                <li><strong>Cache Friendly:</strong> Array implementation has good locality</li>
+            </ul>
+
+            <h4>Disadvantages:</h4>
+            <ul>
+                <li><strong>Limited Access:</strong> Only top element accessible</li>
+                <li><strong>Fixed Size (Array):</strong> Overflow condition</li>
+                <li><strong>Extra Memory (Linked List):</strong> Pointer overhead</li>
+                <li><strong>No Random Access:</strong> Cannot access middle elements</li>
+            </ul>
+        </div>
+
+        <!-- Applications -->
+        <div class="theory-card" id="applications">
+            <h3>8. Real-World Applications</h3>
+
+            <h4>System Level:</h4>
+            <ul>
+                <li><strong>Function Call Stack:</strong> Tracks function calls and local variables</li>
+                <li><strong>Expression Parsing:</strong> Evaluating mathematical expressions</li>
+                <li><strong>Undo Mechanism:</strong> Text editors, software applications</li>
+            </ul>
+
+            <h4>Algorithmic Applications:</h4>
+            <ul>
+                <li><strong>Recursion Simulation:</strong> Converting recursive to iterative</li>
+                <li><strong>Depth-First Search (DFS):</strong> Graph/tree traversal</li>
+                <li><strong>Backtracking:</strong> N-Queens, Sudoku solver</li>
+                <li><strong>Parenthesis Matching:</strong> Syntax validation</li>
+            </ul>
+
+            <h4>Modern Applications:</h4>
+            <ul>
+                <li><strong>Browser History:</strong> Back/Forward navigation</li>
+                <li><strong>Game States:</strong> Save/load game progress</li>
+                <li><strong>Compiler Design:</strong> Syntax parsing, symbol tables</li>
+            </ul>
+        </div>
+
+        <!-- Summary -->
+        <div class="theory-card">
+            <h3>Summary</h3>
+            <p>Stacks are simple yet powerful data structures with O(1) operations following LIFO principle. 
+            They are essential for function calls, recursion, expression evaluation, and backtracking algorithms. 
+            Understanding stack behavior is crucial for system programming and algorithm design.</p>
+
+            <div class="nav-buttons">
+                <a href="../GetStarted/stackGS.html" class="nav-btn secondary">← Back to Home</a>
+                <a href="../stack/syntax.html" class="nav-btn">Next: Syntax Examples →</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../stack/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript for Theory Page -->
+<script>
+    // Navbar Active Link Highlighting
+    const currentPage = window.location.pathname.split("/").pop();
+    const navLinks = document.querySelectorAll('.navbar nav a');
+    
+    navLinks.forEach(link => {
+        if(link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+        }
+    });
+
+    // Smooth Scroll for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Stack Animation Demo
+    function animateStackDemo() {
+        const stackVisuals = document.querySelectorAll('.stack-visual');
+        stackVisuals.forEach((stack, index) => {
+            setTimeout(() => {
+                const cells = stack.querySelectorAll('.stack-cell');
+                cells.forEach(cell => cell.classList.add('top'));
+            }, index * 500);
+        });
+    }
+
+    // Auto-run demo after page load
+    window.addEventListener('load', animateStackDemo);
+</script>
+
+</body>
+</html>
+                       

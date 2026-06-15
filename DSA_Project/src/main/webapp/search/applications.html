@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searching Algorithms - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --accent-green: #10B981;
+            --accent-orange: #F59E0B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+
+        .navbar nav a.active {
+            color: var(--accent-purple);
+            background: rgba(139,108,246,0.2);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 150px 20px 80px;
+            text-align: center;
+            border-bottom: 2px solid var(--accent-purple);
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: var(--accent-purple);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Section Spacing */
+        section {
+            min-height: 70vh;
+            padding: 100px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Section Headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 36px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Algorithm Cards */
+        .algorithm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .algorithm-card {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--accent-purple);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .algorithm-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .algorithm-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .algorithm-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 30px rgba(139,108,246,0.4);
+        }
+
+        .algorithm-card h3 {
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .algorithm-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .algorithm-card code {
+            background: rgba(139,108,246,0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-purple);
+            font-size: 13px;
+            display: inline-block;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .category-linear { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+        .category-binary { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .category-advanced { background: rgba(139, 108, 246, 0.2); color: var(--accent-purple); }
+        .category-hash { background: rgba(79, 195, 247, 0.2); color: var(--accent-blue); }
+
+        /* Code Examples Section */
+        .code-section {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+        }
+
+        .code-section h2 {
+            color: var(--accent-blue);
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .code-block {
+            background: #1e1e2f;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid rgba(139,108,246,0.2);
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .code-block .keyword { color: #569cd6; }
+        .code-block .string { color: #ce9178; }
+        .code-block .comment { color: #6a9955; }
+        .code-block .function { color: #dcdcaa; }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, var(--bg-secondary), rgba(139,108,246,0.1));
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(139,108,246,0.2);
+        }
+
+        .info-card h4 {
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .algorithm-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="arrayGS.html" class="logo">CodeCanvas - Searching</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/searchingGS.html">Back to Search</a></li>
+            <li><a href="../search/theory.html">Theory</a></li>
+            <li><a href="../search/syntax.html">Syntax</a></li>
+            <li><a href="../search/algorithm.html">Algorithm</a></li>
+            <li><a href="../search/complexity.html">Complexity</a></li>
+            <li><a href="../search/flowchart.html">Flowchart</a></li>
+                <li><a href="../search/applications.html" class="active">Applications</a></li>
+                
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="section-content">
+            <h1>Searching Algorithms</h1>
+            <p>Master the art of finding elements efficiently. From simple linear searches to sophisticated algorithms, learn how to locate data optimally.</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">O(log n)</div>
+                    <div class="stat-label">Best Case</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Algorithms</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Search Success</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="introduction">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Why Searching Matters</h2>
+                <p>Searching is one of the most fundamental operations in computer science, powering everything from Google to your phone's contacts.</p>
+            </div>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>Essential Operation</h4>
+                    <p>Every application needs to find data quickly and efficiently.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Performance Critical</h4>
+                    <p>Search speed determines user experience and system responsiveness.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Algorithm Choice</h4>
+                    <p>Different algorithms excel in different scenarios and data conditions.</p>
+                </div>
+                <div class="info-card">
+                    <h4>Real-World Impact</h4>
+                    <p>Optimizing search can improve performance by orders of magnitude.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Searching Algorithms -->
+    <section id="algorithms">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Searching Algorithms</h2>
+                <p>Explore different searching techniques and their trade-offs.</p>
+            </div>
+            <div class="algorithm-grid" id="algorithm-grid">
+                <!-- Algorithm cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Examples Section -->
+    <section id="code-examples">
+        <div class="section-content">
+            <div class="section-header">
+                <h2>Code Examples</h2>
+                <p>Practical implementations of popular searching algorithms.</p>
+            </div>
+            <div class="code-section">
+                <h3>1. Linear Search</h3>
+                <div class="code-block">
+                    <pre><code><span class="keyword">function</span> <span class="function">linearSearch</span>(arr, target) {
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = 0; i < arr.length; i++) {
+        <span class="keyword">if</span> (arr[i] === target) {
+            <span class="keyword">return</span> i; <span class="comment">// Found at index i</span>
+        }
+    }
+    <span class="keyword">return</span> -1; <span class="comment">// Not found</span>
+}</code></pre>
+                </div>
+                
+                <h3>2. Binary Search</h3>
+                <div class="code-block">
+                    <pre><code><span class="keyword">function</span> <span class="function">binarySearch</span>(arr, target) {
+    <span class="keyword">let</span> left = 0, right = arr.length - 1;
+    
+    <span class="keyword">while</span> (left <= right) {
+        <span class="keyword">const</span> mid = Math.floor((left + right) / 2);
+        <span class="keyword">if</span> (arr[mid] === target) <span class="keyword">return</span> mid;
+        <span class="keyword">else</span> <span class="keyword">if</span> (arr[mid] < target) left = mid + 1;
+        <span class="keyword">else</span> right = mid - 1;
+    }
+    <span class="keyword">return</span> -1;
+}</code></pre>
+                </div>
+                
+                <h3>3. Hash Table Search</h3>
+                <div class="code-block">
+                    <pre><code><span class="keyword">class</span> <span class="function">HashTable</span> {
+    <span class="function">constructor</span>() {
+        <span class="keyword">this</span>.table = {};
+    }
+    
+    <span class="function">search</span>(key) {
+        <span class="keyword">const</span> index = <span class="function">hash</span>(key);
+        <span class="keyword">return</span> <span class="keyword">this</span>.table[index];
+    }
+}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../search/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Searching Algorithms Data
+        const searchAlgorithms = [
+            {
+                name: "Linear Search",
+                description: "Simple sequential search through unsorted data. Works on any array.",
+                code: "linearSearch(arr, target)",
+                complexity: "O(n)",
+                category: "linear"
+            },
+            {
+                name: "Binary Search",
+                description: "Divide and conquer algorithm for sorted arrays. Extremely efficient.",
+                code: "binarySearch(sortedArr, target)",
+                complexity: "O(log n)",
+                category: "binary"
+            },
+            {
+                name: "Jump Search",
+                description: "Optimized linear search using block jumps. Good for sorted arrays.",
+                code: "jumpSearch(arr, target)",
+                complexity: "O(√n)",
+                category: "advanced"
+            },
+            {
+                name: "Interpolation Search",
+                description: "Enhanced binary search for uniformly distributed data.",
+                code: "interpolationSearch(arr, target)",
+                complexity: "O(log log n)",
+                category: "advanced"
+            },
+            {
+                name: "Exponential Search",
+                description: "Finds range for binary search in unbounded arrays efficiently.",
+                code: "exponentialSearch(arr, target)",
+                complexity: "O(log n)",
+                category: "binary"
+            },
+            {
+                name: "Hash Table Search",
+                description: "Constant time average case lookup using hash functions.",
+                code: "hashTable.get(key)",
+                complexity: "O(1) avg",
+                category: "hash"
+            },
+            {
+                name: "Ternary Search",
+                description: "Divide array into three parts instead of two for unimodal functions.",
+                code: "ternarySearch(arr, target)",
+                complexity: "O(log₃ n)",
+                category: "advanced"
+            },
+            {
+                name: "Fibonacci Search",
+                description: "Uses Fibonacci numbers to divide search space efficiently.",
+                code: "fibonacciSearch(arr, target)",
+                complexity: "O(log n)",
+                category: "advanced"
+            },
+            {
+                name: "Boyer-Moore",
+                description: "Advanced string searching algorithm used in text editors.",
+                code: "boyerMoore(text, pattern)",
+                complexity: "O(n+m)",
+                category: "advanced"
+            },
+            {
+                name: "KMP Algorithm",
+                description: "Efficient string matching with preprocessing for patterns.",
+                code: "kmpSearch(text, pattern)",
+                complexity: "O(n+m)",
+                category: "advanced"
+            },
+            {
+                name: "Rabin-Karp",
+                description: "String matching using rolling hash functions.",
+                code: "rabinKarp(text, pattern)",
+                complexity: "O(n+m)",
+                category: "hash"
+            },
+            {
+                name: "Sentinel Linear Search",
+                description: "Optimized linear search by appending target to array.",
+                code: "sentinelSearch(arr, target)",
+                complexity: "O(n)",
+                category: "linear"
+            },
+            {
+                name: "Meta Binary Search",
+                description: "Template-based binary search handling edge cases automatically.",
+                code: "metaBinarySearch(arr, target)",
+                complexity: "O(log n)",
+                category: "binary"
+            },
+            {
+                name: "Lower/Upper Bound",
+                description: "Finds first/last position for insertion in sorted arrays.",
+                code: "lowerBound(arr, target)",
+                complexity: "O(log n)",
+                category: "binary"
+            }
+        ];
+
+        // Generate Algorithm Cards
+        function generateAlgorithmCards() {
+            const grid = document.getElementById('algorithm-grid');
+            searchAlgorithms.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'algorithm-card';
+                card.innerHTML = `
+                    <span class="category-badge category-${item.category}">${item.category.toUpperCase()}</span>
+                    <h3>${item.name}</h3>
+                    <p>${item.description}</p>
+                    <code>${item.code}</code>
+                    <div style="margin-top: 15px; font-size: 12px; color: var(--accent-green);">
+                        Complexity: <strong>${item.complexity}</strong>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Initialize on load
+        generateAlgorithmCards();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithms Syntax - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --code-bg: #0d1117;
+        --keyword: #c084fc;
+        --function: #38bdf8;
+        --number: #f472b6;
+        --string: #4ade80;
+        --comment: #6b7280;
+        --variable: #fbbf24;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1100px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .syntax-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    /* ===================== LANGUAGE SELECTOR ===================== */
+    .lang-selector {
+        background: var(--bg-secondary);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 2px solid var(--accent-purple);
+        box-shadow: 0 0 20px rgba(139,108,246,0.3);
+    }
+
+    .lang-selector h2 { margin-top: 0; margin-bottom: 10px; border: none; }
+    .lang-selector p { margin-bottom: 20px; }
+
+    .lang-selector select {
+        padding: 12px 25px;
+        border: 2px solid var(--accent-purple);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        min-width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .lang-selector select:hover, .lang-selector select:focus {
+        box-shadow: 0 0 15px rgba(139,108,246,0.5);
+        outline: none;
+    }
+
+    /* ===================== CODE BLOCKS ===================== */
+    .code-block {
+        background: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        border-left: 4px solid var(--accent-blue);
+        margin: 15px 0 25px 0;
+        position: relative;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #e2e8f0;
+        white-space: pre;
+    }
+
+    /* Syntax Highlighting */
+    .keyword { color: var(--keyword); }
+    .function { color: var(--function); }
+    .number { color: var(--number); }
+    .string { color: var(--string); }
+    .comment { color: var(--comment); font-style: italic; }
+
+    /* Code Label */
+    .code-label {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: var(--accent-purple);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* ===================== TABS ===================== */
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .tab-btn {
+        padding: 10px 20px;
+        background: var(--bg-primary);
+        border: 2px solid var(--accent-purple);
+        color: var(--text-primary);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn.active { background: var(--accent-purple); color: white; }
+    .tab-btn:hover { background: rgba(139,108,246,0.2); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===================== INFO BOXES ===================== */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #F59E0B;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .complexity-box {
+        background: rgba(34, 197, 94, 0.1);
+        border-left: 4px solid #22c55e;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* ===================== NAVIGATION ===================== */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <a href="arrayGS.html" class="logo">CodeCanvas - Sorting</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/sortGS.html">Back to Sorting</a></li>
+            <li><a href="../sort/theory.html" >Theory</a></li>
+            <li><a href="../sort/syntax.html" class="active">Syntax</a></li>
+            <li><a href="../sort/algorithm.html">Algorithm</a></li>
+            <li><a href="../sort/flowchart.html">Flowchart</a></li>
+            <li><a href="../sort/sorting.html">Sorting</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="sorting-syntax">
+    <div class="section-content">
+
+        <!-- Language Selector -->
+        <div class="lang-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see sorting algorithm implementations. Code updates dynamically with syntax highlighting.</p>
+            <select id="lang-select">
+                <option value="c">C Language</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('bubble')">Bubble Sort</button>
+            <button class="tab-btn" onclick="showTab('selection')">Selection Sort</button>
+            <button class="tab-btn" onclick="showTab('insertion')">Insertion Sort</button>
+            <button class="tab-btn" onclick="showTab('merge')">Merge Sort</button>
+            <button class="tab-btn" onclick="showTab('quick')">Quick Sort</button>
+        </div>
+
+        <!-- ==================== BUBBLE SORT ==================== -->
+        <div id="bubble" class="tab-content active">
+            <div class="syntax-card">
+                <h2>Bubble Sort</h2>
+                <p>Repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.</p>
+
+                <div class="complexity-box">
+                    <strong>Time Complexity:</strong> O(n²) | <strong>Space:</strong> O(1) | <strong>Stable:</strong> Yes
+                </div>
+
+                <h3>Basic Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-bubble-basic">C</span>
+                    <code id="code-bubble-basic"></code>
+                </div>
+
+                <h3>Optimized (with early termination)</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-bubble-optimized">C</span>
+                    <code id="code-bubble-optimized"></code>
+                </div>
+
+                <div class="info-box"><strong>Key Insight:</strong> Largest element "bubbles up" to the end in each pass.</div>
+            </div>
+        </div>
+
+        <!-- ==================== SELECTION SORT ==================== -->
+        <div id="selection" class="tab-content">
+            <div class="syntax-card">
+                <h2>Selection Sort</h2>
+                <p>Repeatedly finds the minimum element from unsorted part and puts it at the beginning.</p>
+
+                <div class="complexity-box">
+                    <strong>Time Complexity:</strong> O(n²) | <strong>Space:</strong> O(1) | <strong>Stable:</strong> No
+                </div>
+
+                <h3>Basic Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-selection">C</span>
+                    <code id="code-selection"></code>
+                </div>
+
+                <div class="info-box"><strong>Key Insight:</strong> Selects minimum element and swaps with first unsorted position.</div>
+            </div>
+        </div>
+
+        <!-- ==================== INSERTION SORT ==================== -->
+        <div id="insertion" class="tab-content">
+            <div class="syntax-card">
+                <h2>Insertion Sort</h2>
+                <p>Builds the sorted array one item at a time by inserting each element into its correct position.</p>
+
+                <div class="complexity-box">
+                    <strong>Time Complexity:</strong> O(n²) | <strong>Space:</strong> O(1) | <strong>Stable:</strong> Yes
+                </div>
+
+                <h3>Basic Implementation</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-insertion">C</span>
+                    <code id="code-insertion"></code>
+                </div>
+
+                <div class="info-box"><strong>Best for:</strong> Small or nearly sorted arrays. Adaptive algorithm.</div>
+            </div>
+        </div>
+
+        <!-- ==================== MERGE SORT ==================== -->
+        <div id="merge" class="tab-content">
+            <div class="syntax-card">
+                <h2>Merge Sort</h2>
+                <p>Divide and Conquer algorithm. Recursively divides array and merges sorted subarrays.</p>
+
+                <div class="complexity-box">
+                    <strong>Time Complexity:</strong> O(n log n) | <strong>Space:</strong> O(n) | <strong>Stable:</strong> Yes
+                </div>
+
+                <h3>Merge Function</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-merge-merge">C</span>
+                    <code id="code-merge-merge"></code>
+                </div>
+
+                <h3>Main MergeSort Function</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-merge-main">C</span>
+                    <code id="code-merge-main"></code>
+                </div>
+
+                <div class="warning-box"><strong>Note:</strong> Requires extra space for merging.</div>
+            </div>
+        </div>
+
+        <!-- ==================== QUICK SORT ==================== -->
+        <div id="quick" class="tab-content">
+            <div class="syntax-card">
+                <h2>Quick Sort</h2>
+                <p>Divide and Conquer. Picks pivot, partitions array around pivot, recursively sorts subarrays.</p>
+
+                <div class="complexity-box">
+                    <strong>Time Complexity:</strong> O(n log n) avg, O(n²) worst | <strong>Space:</strong> O(log n) | <strong>Stable:</strong> No
+                </div>
+
+                <h3>Partition Function</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-quick-partition">C</span>
+                    <code id="code-quick-partition"></code>
+                </div>
+
+                <h3>Main QuickSort Function</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-quick-main">C</span>
+                    <code id="code-quick-main"></code>
+                </div>
+
+                <div class="info-box"><strong>Pivot Choice:</strong> First, last, middle, or random element.</div>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="../sort/theory.html" class="nav-btn secondary">← Theory</a>
+            <a href="../sort/complexity.html" class="nav-btn">Complexity →</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../sort/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Tab functionality
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    // Sorting algorithms language data
+    const langData = {
+        c: {
+            // Bubble Sort
+            'label-bubble-basic': 'C',
+            'code-bubble-basic': `<span class="keyword">void</span> bubbleSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n-i-<span class="number">1</span>; j++) {
+            <span class="keyword">if</span>(arr[j] > arr[j+<span class="number">1</span>]) {
+                <span class="comment">// Swap</span>
+                <span class="keyword">int</span> temp = arr[j];
+                arr[j] = arr[j+<span class="number">1</span>];
+                arr[j+<span class="number">1</span>] = temp;
+            }
+        }
+    }
+}`,
+            'label-bubble-optimized': 'C',
+            'code-bubble-optimized': `<span class="keyword">void</span> bubbleSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">int</span> swapped;
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {
+        swapped = <span class="number">0</span>;
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n-i-<span class="number">1</span>; j++) {
+            <span class="keyword">if</span>(arr[j] > arr[j+<span class="number">1</span>]) {
+                <span class="keyword">int</span> temp = arr[j];
+                arr[j] = arr[j+<span class="number">1</span>];
+                arr[j+<span class="number">1</span>] = temp;
+                swapped = <span class="number">1</span>;
+            }
+        }
+        <span class="keyword">if</span>(swapped == <span class="number">0</span>) <span class="keyword">break</span>;
+    }
+}`,
+
+            // Selection Sort
+            'label-selection': 'C',
+            'code-selection': `<span class="keyword">void</span> selectionSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {
+        <span class="comment">// Find min in remaining unsorted array</span>
+        <span class="keyword">int</span> minIdx = i;
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j < n; j++) {
+            <span class="keyword">if</span>(arr[j] < arr[minIdx])
+                minIdx = j;
+        }
+        <span class="comment">// Swap</span>
+        <span class="keyword">int</span> temp = arr[minIdx];
+        arr[minIdx] = arr[i];
+        arr[i] = temp;
+    }
+}`,
+
+            // Insertion Sort
+            'label-insertion': 'C',
+            'code-insertion': `<span class="keyword">void</span> insertionSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {
+        <span class="keyword">int</span> key = arr[i];
+        <span class="keyword">int</span> j = i - <span class="number">1</span>;
+        
+        <span class="comment">// Move elements greater than key one position ahead</span>
+        <span class="keyword">while</span>(j >= <span class="number">0</span> && arr[j] > key) {
+            arr[j+<span class="number">1</span>] = arr[j];
+            j--;
+        }
+        arr[j+<span class="number">1</span>] = key;
+    }
+}`,
+
+            // Merge Sort
+            'label-merge-merge': 'C',
+            'code-merge-merge': `<span class="keyword">void</span> merge(<span class="keyword">int</span> arr[], <span class="keyword">int</span> l, <span class="keyword">int</span> m, <span class="keyword">int</span> r) {
+    <span class="keyword">int</span> n1 = m - l + <span class="number">1</span>;
+    <span class="keyword">int</span> n2 = r - m;
+    
+    <span class="keyword">int</span> L[n1], R[n2];
+    
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n1; i++)
+        L[i] = arr[l + i];
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n2; j++)
+        R[j] = arr[m + <span class="number">1</span> + j];
+        
+    <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, k = l;
+    
+    <span class="keyword">while</span>(i < n1 && j < n2) {
+        <span class="keyword">if</span>(L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        } <span class="keyword">else</span> {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+    
+    <span class="comment">// Copy remaining elements</span>
+    <span class="keyword">while</span>(i < n1) {
+        arr[k] = L[i];
+        i++; k++;
+    }
+    <span class="keyword">while</span>(j < n2) {
+        arr[k] = R[j];
+        j++; k++;
+    }
+}`,
+
+            'label-merge-main': 'C',
+            'code-merge-main': `<span class="keyword">void</span> mergeSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> l, <span class="keyword">int</span> r) {
+    <span class="keyword">if</span>(l < r) {
+        <span class="keyword">int</span> m = l + (r - l) / <span class="number">2</span>;
+        
+        mergeSort(arr, l, m);
+        mergeSort(arr, m+<span class="number">1</span>, r);
+        merge(arr, l, m, r);
+    }
+}`,
+
+            // Quick Sort
+            'label-quick-partition': 'C',
+            'code-quick-partition': `<span class="keyword">int</span> partition(<span class="keyword">int</span> arr[], <span class="keyword">int</span> low, <span class="keyword">int</span> high) {
+    <span class="keyword">int</span> pivot = arr[high];
+    <span class="keyword">int</span> i = (low - <span class="number">1</span>);
+    
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = low; j <= high - <span class="number">1</span>; j++) {
+        <span class="keyword">if</span>(arr[j] < pivot) {
+            i++;
+            <span class="keyword">int</span> temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+    }
+    <span class="keyword">int</span> temp = arr[i+<span class="number">1</span>];
+    arr[i+<span class="number">1</span>] = arr[high];
+    arr[high] = temp;
+    <span class="keyword">return</span> (i+<span class="number">1</span>);
+}`,
+
+            'label-quick-main': 'C',
+            'code-quick-main': `<span class="keyword">void</span> quickSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> low, <span class="keyword">int</span> high) {
+    <span class="keyword">if</span>(low < high) {
+        <span class="keyword">int</span> pi = partition(arr, low, high);
+        
+        quickSort(arr, low, pi - <span class="number">1</span>);
+        quickSort(arr, pi + <span class="number">1</span>, high);
+    }
+}`
+        },
+
+        cpp: {
+            // Bubble Sort
+            'label-bubble-basic': 'C++',
+            'code-bubble-basic': `<span class="keyword">void</span> bubbleSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++)
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n-i-<span class="number">1</span>; j++)
+            <span class="keyword">if</span>(arr[j] > arr[j+<span class="number">1</span>])
+                <span class="function">swap</span>(arr[j], arr[j+<span class="number">1</span>]);
+}`,
+            
+            'label-bubble-optimized': 'C++',
+            'code-bubble-optimized': `<span class="comment">// Use std::sort for better performance</span>\n<span class="function">sort</span>(arr, arr+n);`,
+
+            // Selection Sort
+            'label-selection': 'C++',
+            'code-selection': `<span class="keyword">void</span> selectionSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {
+        <span class="keyword">int</span> minIdx = i;
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j < n; j++)
+            <span class="keyword">if</span>(arr[j] < arr[minIdx])
+                minIdx = j;
+        <span class="function">swap</span>(arr[i], arr[minIdx]);
+    }
+}`,
+
+            // Insertion Sort
+            'label-insertion': 'C++',
+            'code-insertion': `<span class="keyword">void</span> insertionSort(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {
+        <span class="keyword">int</span> key = arr[i];
+        <span class="keyword">int</span> j = i - <span class="number">1</span>;
+        <span class="keyword">while</span>(j >= <span class="number">0</span> && arr[j] > key) {
+            arr[j+<span class="number">1</span>] = arr[j];
+            j--;
+        }
+        arr[j+<span class="number">1</span>] = key;
+    }
+}`,
+
+            // Merge Sort
+            'label-merge-merge': 'C++',
+            'code-merge-merge': `<span class="comment">// std::merge requires sorted ranges</span>\n<span class="function">merge</span>(left.begin(), left.end(), right.begin(), right.end(), result.begin());`,
+
+            'label-merge-main': 'C++',
+            'code-merge-main': `<span class="comment">// Use std::stable_sort</span>\n<span class="function">stable_sort</span>(arr, arr+n);`,
+
+            // Quick Sort
+            'label-quick-partition': 'C++',
+            'code-quick-partition': `<span class="comment">// std::partition handles this</span>\n<span class="function">partition</span>(arr, arr+n, predicate);`,
+
+            'label-quick-main': 'C++',
+            'code-quick-main': `<span class="comment">// Use std::sort (hybrid quicksort)</span>\n<span class="function">sort</span>(arr, arr+n);`
+        },
+
+        java: {
+            // Bubble Sort
+            'label-bubble-basic': 'Java',
+            'code-bubble-basic': `<span class="keyword">void</span> bubbleSort(<span class="keyword">int</span>[] arr) {
+    <span class="keyword">int</span> n = arr.length;
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n-i-<span class="number">1</span>; j++) {
+            <span class="keyword">if</span>(arr[j] > arr[j+<span class="number">1</span>]) {
+                <span class="keyword">int</span> temp = arr[j];
+                arr[j] = arr[j+<span class="number">1</span>];
+                arr[j+<span class="number">1</span>] = temp;
+            }
+        }
+    }
+}`,
+            
+            'label-bubble-optimized': 'Java',
+            'code-bubble-optimized': `<span class="comment">// Use Arrays.sort</span>\n<span class="function">Arrays</span>.<span class="function">sort</span>(arr);`,
+
+            // Selection Sort
+            'label-selection': 'Java',
+            'code-selection': `<span class="keyword">void</span> selectionSort(<span class="keyword">int</span>[] arr) {
+    <span class="keyword">int</span> n = arr.length;
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n-<span class="number">1</span>; i++) {
+        <span class="keyword">int</span> minIdx = i;
+        <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j < n; j++) {
+            <span class="keyword">if</span>(arr[j] < arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        <span class="keyword">int</span> temp = arr[minIdx];
+        arr[minIdx] = arr[i];
+        arr[i] = temp;
+    }
+}`,
+
+            // Insertion Sort
+            'label-insertion': 'Java',
+            'code-insertion': `<span class="keyword">void</span> insertionSort(<span class="keyword">int</span>[] arr) {
+    <span class="keyword">int</span> n = arr.length;
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; ++i) {
+        <span class="keyword">int</span> key = arr[i];
+        <span class="keyword">int</span> j = i - <span class="number">1</span>;
+        <span class="keyword">while</span>(j >= <span class="number">0</span> && arr[j] > key) {
+            arr[j+<span class="number">1</span>] = arr[j];
+            j--;
+        }
+        arr[j+<span class="number">1</span>] = key;
+    }
+}`,
+
+            // Merge Sort
+            'label-merge-merge': 'Java',
+            'code-merge-merge': `<span class="comment">// Part of Arrays.sort implementation</span>`,
+            'label-merge-main': 'Java',
+            'code-merge-main': `<span class="function">Arrays</span>.<span class="function">sort</span>(arr);`,
+
+            // Quick Sort
+            'label-quick-partition': 'Java',
+            'code-quick-partition': `<span class="comment">// Internal to Arrays.sort</span>`,
+            'label-quick-main': 'Java',
+            'code-quick-main': `<span class="function">Arrays</span>.<span class="function">sort</span>(arr);`
+        },
+
+        python: {
+            // Bubble Sort
+            'label-bubble-basic': 'Python',
+            'code-bubble-basic': `def bubble_sort(arr):
+    n = <span class="function">len</span>(arr)
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(n-<span class="number">1</span>):
+        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(n-i-<span class="number">1</span>):
+            <span class="keyword">if</span> arr[j] > arr[j+<span class="number">1</span>]:
+                arr[j], arr[j+<span class="number">1</span>] = arr[j+<span class="number">1</span>], arr[j]
+    <span class="keyword">return</span> arr`,
+
+            'label-bubble-optimized': 'Python',
+            'code-bubble-optimized': `def bubble_sort_optimized(arr):
+    n = <span class="function">len</span>(arr)
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(n-<span class="number">1</span>):
+        swapped = <span class="keyword">False</span>
+        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(n-i-<span class="number">1</span>):
+            <span class="keyword">if</span> arr[j] > arr[j+<span class="number">1</span>]:
+                arr[j], arr[j+<span class="number">1</span>] = arr[j+<span class="number">1</span>], arr[j]
+                swapped = <span class="keyword">True</span>
+        <span class="keyword">if</span> <span class="keyword">not</span> swapped:
+            <span class="keyword">break</span>`,
+
+            // Selection Sort
+            'label-selection': 'Python',
+            'code-selection': `def selection_sort(arr):
+    n = <span class="function">len</span>(arr)
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(n-<span class="number">1</span>):
+        min_idx = i
+        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(i+<span class="number">1</span>, n):
+            <span class="keyword">if</span> arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]`,
+
+            // Insertion Sort
+            'label-insertion': 'Python',
+            'code-insertion': `def insertion_sort(arr):
+    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">1</span>, <span class="function">len</span>(arr)):
+        key = arr[i]
+        j = i - <span class="number">1</span>
+        <span class="keyword">while</span> j >= <span class="number">0</span> <span class="keyword">and</span> key < arr[j]:
+            arr[j + <span class="number">1</span>] = arr[j]
+            j -= <span class="number">1</span>
+        arr[j + <span class="number">1</span>] = key`,
+
+            // Merge Sort
+            'label-merge-merge': 'Python',
+            'code-merge-merge': `def merge(left, right):
+    result = []
+    i = j = <span class="number">0</span>
+    
+    <span class="keyword">while</span> i < <span class="function">len</span>(left) <span class="keyword">and</span> j < <span class="function">len</span>(right):
+        <span class="keyword">if</span> left[i] <= right[j]:
+            result.append(left[i])
+            i += <span class="number">1</span>
+        <span class="keyword">else</span>:
+            result.append(right[j])
+            j += <span class="number">1</span>
+    
+    result.extend(left[i:])
+    result.extend(right[j:])
+    <span class="keyword">return</span> result`,
+
+            'label-merge-main': 'Python',
+            'code-merge-main': `def merge_sort(arr):
+    <span class="keyword">if</span> <span class="function">len</span>(arr) <= <span class="number">1</span>:
+        <span class="keyword">return</span> arr
+    
+    mid = <span class="function">len</span>(arr) // <span class="number">2</span>
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    
+    <span class="keyword">return</span> merge(left, right)`,
+
+            // Quick Sort
+            'label-quick-partition': 'Python',
+            'code-quick-partition': `def partition(arr, low, high):
+    pivot = arr[high]
+    i = low - <span class="number">1</span>
+    
+    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="function">range</span>(low, high):
+        <span class="keyword">if</span> arr[j] < pivot:
+            i += <span class="number">1</span>
+            arr[i], arr[j] = arr[j], arr[i]
+    
+    arr[i+<span class="number">1</span>], arr[high] = arr[high], arr[i+<span class="number">1</span>]
+    <span class="keyword">return</span> i+<span class="number">1</span>`,
+
+            'label-quick-main': 'Python',
+            'code-quick-main': `def quick_sort(arr, low=<span class="number">0</span>, high=None):
+    <span class="keyword">if</span> high <span class="keyword">is</span> None:
+        high = <span class="function">len</span>(arr) - <span class="number">1</span>
+    
+    <span class="keyword">if</span> low < high:
+        pi = partition(arr, low, high)
+        quick_sort(arr, low, pi - <span class="number">1</span>)
+        quick_sort(arr, pi + <span class="number">1</span>, high)`
+        }
+    };
+
+    // Language selector
+    const langSelect = document.getElementById('lang-select');
+
+    function updateCode(lang) {
+        const data = langData[lang];
+        if (data) {
+            for (const [id, code] of Object.entries(data)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.innerHTML = code;
+                }
+            }
+        }
+    }
+
+    langSelect.addEventListener('change', function() {
+        updateCode(this.value);
+    });
+
+    // Initialize with C
+    updateCode('c');
+</script>
+
+</body>
+</html>

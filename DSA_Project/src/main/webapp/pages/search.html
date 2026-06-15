@@ -1,0 +1,1549 @@
+<!-- Built again -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Searching Algorithms - Learn Searching</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- Your existing style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <style>
+        /* Embedded theme-specific styles (overrides/additions to style.css) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+ 
+        :root {
+            --bg-primary: #0A0F24;
+            --bg-secondary: #161B3A;
+            --accent-purple: #7F5AF0;
+            --accent-blue: #38BDF8;
+            --text-primary: #E2E8F0;
+            --text-secondary: #94A3B8;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+/* ===================== NAVBAR (FINAL CLEAN VERSION) ===================== */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+    box-shadow: 0 0 15px rgba(127,90,240,0.4);
+    z-index: 1000;
+
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Spacing */
+    padding: 15px 60px;   /* good left-right spacing */
+    height: 70px;
+
+    box-sizing: border-box;
+}
+
+/* Center container effect */
+.navbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    max-width: 1400px;
+    margin: auto;
+    pointer-events: none;
+}
+
+/* Logo */
+.navbar .logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-purple);
+    letter-spacing: 0.5px;
+    
+}
+
+/* Navigation list */
+.navbar nav ul {
+    list-style: none;
+    display: flex;
+    gap: 35px;      /* space between menu items */
+    margin: 0;
+    padding: 0;
+}
+
+/* Links */
+.navbar nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 12px;   /* bigger clickable area */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    
+}
+
+/* Hover effect */
+.navbar nav a:hover {
+    color: var(--accent-blue);
+    background: rgba(127,90,240,0.1);
+}
+ 
+/* NAV LOGO CONTAINER */
+
+.nav-logo{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    
+}
+
+/* LOGO IMAGE */
+
+.nav-logo-img{
+    width:82px;
+    height:82px;
+    object-fit:contain;
+    border-radius:50%;
+    filter:drop-shadow(0 0 14px rgba(217,70,239,0.55))brightness(1.08)contrast(1.08);
+    transition:0.3s ease;
+    margin-top:-2px;
+}
+
+/* HOVER EFFECT */
+
+.nav-logo-img:hover{
+    transform:scale(1.05);
+    filter:
+    drop-shadow(0 0 18px rgba(0,217,255,0.65))brightness(1.1)contrast(1.1);
+}
+
+/* TITLE */
+
+.nav-logo h1{
+
+    font-size:32px;
+    font-weight:700;
+    background:
+    linear-gradient(
+    90deg,
+    #b86cff,
+    #00d9ff);
+    -webkit-background-clip:text; 
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===================== RESPONSIVE NAVBAR ===================== */
+
+@media (max-width: 900px) {
+    .navbar {
+        padding: 15px 25px;
+    }
+
+    .navbar nav ul {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 12px 15px;
+    }
+
+    .navbar nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 8px;
+    }
+}
+
+
+
+        /* Sections */
+        section {
+            min-height: 70vh;
+            padding: 90px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #home { padding-bottom: 30px; }
+        #working { padding-top: 50px; }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Home Section */
+        #home .section-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding-top: 40px;
+        }
+
+        .home-left {
+            text-align: left;
+            max-width: 550px;
+        }
+
+        .search-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .search-element {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: fade-in 1s ease-out forwards;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .search-element.target {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; }
+        }
+        
+        /* ---------- BUTTONS IN HOME ---------- */
+        .home-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 51px;
+            justify-content: center;
+        }
+
+
+        /* Working Section */
+        .search-viz {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .viz-element {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.5s;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .viz-element.active {
+            box-shadow: 0 0 20px var(--accent-purple);
+        }
+
+        .viz-element.found {
+            background: var(--success);
+            color: white;
+        }
+
+        .viz-element.not-found {
+            background: var(--error);
+            color: white;
+        }
+
+        .input-section {
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .input-section input {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .input-section select {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--accent-purple);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(127,90,240,0.35);
+            margin: 30px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        .correct { color: var(--success); }
+        .incorrect { color: var(--error); }
+
+        /* FAQ Section */
+        .faq-item {
+            background: var(--bg-secondary);
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 18px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(127,90,240,0.1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 18px;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 18px;
+        }
+
+/* ================= FOOTER ================= */
+
+.footer{
+  position:relative;
+  background:linear-gradient(to bottom,#050816,#0B1023);
+  padding:45px 6%;
+  overflow:hidden;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+
+/* GLOW OVERLAY */
+
+.footer-overlay{
+  position:absolute;
+  inset:0;
+  background:  
+  radial-gradient(circle at top left,
+  rgba(168,85,247,0.15),
+  transparent 30%),
+  radial-gradient(circle at bottom right,
+  rgba(0,255,255,0.12),
+  transparent 30%);
+  pointer-events:none;
+}
+
+/* CONTAINER */
+
+.footer-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+  position:relative;
+  z-index:2;
+}
+
+/* LOGO */
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  
+}
+
+/* LOGO IMAGE */
+
+.logo-img{
+  width:65px;
+  height:65px;
+  object-fit:contain;
+  border-radius:50%;
+  filter: drop-shadow(0 0 10px rgba(217,70,239,0.45));
+  transition:0.3s ease;
+}
+
+/* HOVER EFFECT */
+
+.logo-img:hover{
+  transform:scale(1.05);
+  filter:drop-shadow(0 0 16px rgba(0,217,255,0.55));
+}
+
+.logo h2{
+  color:white;
+  font-size:30px;
+}
+
+.logo p{
+  color:#aaa;
+}
+
+.brand-text{
+  color:#bbb;
+  line-height:1.8;
+  margin-bottom:25px;
+}
+
+/* SOCIALS */
+
+.socials{
+  display:flex;
+  gap:15px;
+}
+
+.socials a{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.15);
+  transition:0.4s;
+  text-decoration:none;
+  backdrop-filter:blur(10px);
+}
+
+.socials a:hover{
+  transform:translateY(-5px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 40px #d946ef;
+  border-color:#00ffff;
+}
+
+/* FOOTER HEADINGS */
+
+.footer-section h3{
+  color:white;
+  margin-bottom:25px;
+  font-size:22px;
+}
+
+/* LINKS */
+
+.footer-section ul{
+  list-style:none;
+}
+
+.footer-section ul li{
+  margin-bottom:15px;
+  color:#bbb;
+  transition:0.3s;
+  cursor:pointer;
+}
+
+.footer-section ul li a{
+  text-decoration:none;
+  color:#bbb;
+}
+
+.footer-section ul li:hover{
+  color:#00ffff;
+  transform:translateX(8px);
+}
+
+/* ACTIVITY CARD */
+
+.activity-card{
+    width:100%;
+    max-width:320px;
+    padding:28px 24px;
+    border-radius:24px;
+    background:
+    rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    backdrop-filter:blur(10px);
+    box-shadow:
+    0 0 18px rgba(217,70,239,0.12);
+}
+
+/* TITLE */
+
+.activity-card p{
+    color:white;
+    font-size:20px;
+    font-weight:600;
+    text-align:center;
+    margin:0;
+}
+
+/* BARS */
+
+.bars{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:12px;
+    height:120px;
+}
+
+/* EACH BAR */
+
+.bars span{
+    width:18px;
+    border-radius:20px;
+    background:
+    linear-gradient(
+    to top,
+    #00d9ff,
+    #d946ef);
+    animation:bars 1.6s infinite ease-in-out;
+}
+
+/* DIFFERENT HEIGHTS */
+
+.bars span:nth-child(1){height:50px;}
+.bars span:nth-child(2){height:90px;}
+.bars span:nth-child(3){height:70px;}
+.bars span:nth-child(4){height:120px;}
+.bars span:nth-child(5){height:95px;}
+.bars span:nth-child(6){height:75px;}
+.bars span:nth-child(7){height:135px;}
+
+/* BAR ANIMATION */
+
+@keyframes bars{
+
+    0%,100%{
+    transform:scaleY(1);
+    }
+    50%{
+        transform:scaleY(0.75);
+    }
+
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    color:#ff4dff;
+    font-size:17px;
+    font-weight:500;
+}
+
+/* DOT */
+
+.dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#ff00ff;
+    box-shadow:
+    0 0 12px #ff00ff;
+    animation:pulse 1s infinite;
+}
+
+/* DOT ANIMATION */
+
+@keyframes pulse{
+
+    0%{transform:scale(1);}
+    50%{transform:scale(1.25);}
+    100%{transform:scale(1);}
+}
+
+/* STATS */
+
+.stats-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:25px;
+  margin-top:70px;
+}
+
+.stat-card{
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  text-align:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.stat-card:hover{
+  transform:translateY(-10px);
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px rgba(168,85,247,0.5);
+}
+
+.stat-card h2{
+  font-size:28px;
+  color:#00ffff;
+}
+
+/* QUOTE */
+
+.quote-section{
+  text-align:center;
+  margin-top:40px;
+  color:white;
+}
+
+.quote-icon{
+  font-size:60px;
+  color:#d946ef;
+  text-shadow:0 0 20px #d946ef;
+}
+
+.quote-section p{
+  font-size:18px;
+  max-width:900px;
+  margin:20px auto;
+  line-height:1.8;
+  color:#ddd;
+}
+
+.quote-section h4{
+  color:#ff66ff;
+}
+
+/* TECH STACK */
+
+.tech-stack{
+  margin-top:70px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.tech-card{
+  padding:12px 18px;
+  border-radius:15px;
+  color:white;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.tech-card:hover{
+  transform:translateY(-8px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 30px #d946ef;
+}
+
+
+
+/* WAVE */
+
+.wave{
+  width:100%;
+  height:4px;
+  margin-top:80px;
+  background:linear-gradient(
+  90deg,
+  #00ffff,
+  #d946ef,
+  #00ffff);
+  animation:wave 4s linear infinite;
+  background-size:300% 100%;
+  border-radius:10px;
+}
+
+@keyframes wave{
+  0%{
+    background-position:0%;
+  }
+  100%{
+    background-position:300%;
+  }
+}
+
+/* SCROLL BUTTON */
+
+#scrollTopBtn{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:65px;
+  height:65px;
+  border:none;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00ffff,#d946ef);
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px #d946ef;
+  transition:0.4s;
+}
+
+#scrollTopBtn:hover{
+  transform:scale(1.1);
+}
+
+/* COPYRIGHT */
+
+.copyright{
+  margin-top:50px;
+  padding-top:25px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:15px;
+  color:#aaa;
+  position:relative;
+  z-index:2;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .footer{
+    padding:70px 6%;
+  }
+
+  .quote-section p{
+    font-size:18px;
+  }
+
+  .copyright{
+    flex-direction:column;
+    text-align:center;
+  }
+
+}
+
+      
+
+        /* Responsiveness */
+        @media (min-width: 768px) {
+            #home .section-content {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .home-left, .home-right {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-element, .viz-element { width: 50px; height: 50px; }
+            .search-diagram, .search-viz { gap: 5px; }
+            .input-section { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+       <!-- Navbar -->
+    <header class="navbar">
+        <div class="nav-logo">
+
+        <img
+        src="../image/CC_icon.png"
+        alt="CodeCanvas Logo"
+        class="nav-logo-img">
+        <div class="logo">CodeCanvas - Searching Algorithm</div> </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#working">Working</a></li>
+                <li><a href="#quiz">Quiz</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="section-content">
+            <div class="home-left">
+                <h1>What are Searching Algorithms?</h1>
+                <p>
+                    <b>Searching algorithms</b> are methods to find a target element in a data structure like an array. They vary in efficiency and requirements (e.g., sorted array).
+                </p>
+                <h3>Key Algorithms</h3>
+                <ul>
+                    <li>Linear Search: Checks each element sequentially (O(n))</li>
+                    <li>Binary Search: Divides array in half (O(log n), requires sorted)</li>
+                    <li>Jump Search: Jumps ahead by fixed steps (O(√n), requires sorted)</li>
+                    <li>Interpolation Search: Estimates position based on values (O(log log n), requires sorted)</li>
+                    <li>Exponential Search: Finds range then binary search (O(log n), requires sorted)</li>
+                </ul>
+                <h3>Applications</h3>
+                <ul>
+                    <li>Finding elements in databases</li>
+                    <li>Search engines</li>
+                    <li>Sorting and retrieval</li>
+                </ul>
+            </div>
+            <div class="home-right">
+                <div class="search-diagram">
+                    <!-- Example Array -->
+                    <div class="search-element">1</div>
+                    <div class="search-element">3</div>
+                    <div class="search-element">5</div>
+                    <div class="search-element target">7</div>
+                    <div class="search-element">9</div>
+                </div>
+                <div class="home-buttons">
+    <a href="../GetStarted/searchingGS.html" class="btn">Get Started</a>
+    <a href="../search/questions.html" class="btn">Test</a>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Working Section -->
+    <section id="working">
+        <div class="section-content">
+            <h1>How Searching Algorithms Work</h1>
+            <div class="input-section">
+                <input type="text" id="array-input" placeholder="Enter array (e.g., 1,3,5,7,9)">
+                <input type="number" id="search-input" placeholder="Enter search value">
+                <select id="algorithm">
+                    <option value="linear">Linear Search</option>
+                    <option value="binary">Binary Search</option>
+                    <option value="jump">Jump Search</option>
+                    <option value="interpolation">Interpolation Search</option>
+                    <option value="exponential">Exponential Search</option>
+                </select>
+                <button class="btn" onclick="startSearch()">Start Search</button>
+                <button class="btn" onclick="resetSearch()">Reset</button>
+            </div>
+            <div class="search-viz" id="search-viz">
+                <!-- Dynamic elements will be added here -->
+            </div>
+            <div class="result" id="result"></div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz">
+        <div class="section-content">
+            <h1>Searching Algorithms Quiz</h1>
+            <div class="quiz-question" id="quiz-container">
+                <!-- Questions loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+   <!-- FAQ Section -->
+<section id="faq">
+  <div class="section-content">
+    <h1>Frequently Asked Questions</h1>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">What is linear search?</button>
+      <div class="faq-answer">
+        Linear search is a simple searching algorithm that checks each element of an array one by one 
+        from start to end until the target element is found or the list is exhausted.  
+        It works on both sorted and unsorted arrays but takes O(n) time in the worst case.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">What is binary search?</button>
+      <div class="faq-answer">
+        Binary search is an efficient searching algorithm that repeatedly divides the search interval in half.  
+        It works only on sorted arrays and runs in O(log n) time by eliminating half of the search space at each step.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">When to use jump search?</button>
+      <div class="faq-answer">
+        Jump search is useful for large sorted arrays where elements are uniformly distributed.  
+        It jumps ahead by fixed steps of √n and then performs linear search within the selected block, giving O(√n) time.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">What is interpolation search?</button>
+      <div class="faq-answer">
+        Interpolation search estimates the probable position of the target based on the values of elements.  
+        It works best on uniformly distributed sorted data and can perform faster than binary search in such cases.
+      </div>
+    </div>
+
+    <!-- REPLACED QUESTION -->
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">Best source to learn Searching Algorithms?</button>
+      <div class="faq-answer">
+        You can learn searching algorithms from structured tutorials, animations, and coding platforms 
+        that provide clear explanations and practice problems.  
+        <b>
+          <a href="https://www.geeksforgeeks.org/search/?gq=searching" target="_blank" style="color:#38BDF8;">
+            Click here
+          </a>
+        </b>
+        to visit the recommended resource.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- FUTURISTIC FOOTER START -->
+<!-- ========================= -->
+
+<footer class="footer">
+  <div class="footer-overlay"></div>
+
+  <div class="footer-container">
+
+    <!-- LEFT BRAND SECTION -->
+    <div class="footer-section brand">
+      <div class="logo">
+        <img src="../image/CC_logo.png" alt="CodeCanvas Logo" class="logo-img">
+        <div>
+          <h2>CodeCanvas</h2>
+          <p>Algorithm Visualizer</p>
+        </div>
+      </div>
+
+      <p class="brand-text">
+        A platform to visualize, learn and master computer science algorithms.
+      </p>
+
+      <div class="socials">
+        <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com" target="_blank"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../pages/array.html">Array</a></li>
+        <li><a href="../pages/stack.html">Stack</a></li>
+        <li><a href="../pages/queue.html">Queue</a></li>
+        <li><a href="../pages/linkedlist.html">LinkedList</a></li>
+        <li><a href="../pages/search.html">Searching</a></li>
+        <li><a href="../pages/sort.html">Sorting</a></li>
+      </ul>
+    </div>
+
+    <!-- ALGORITHMS -->
+    <div class="footer-section">
+      <h3>Algorithms</h3>
+      <ul>
+        <li>Sorting Algorithms</li>
+        <li>Searching Algorithms</li>
+        <li>Graph Algorithms</li>
+        <li>Dynamic Programming</li>
+        <li>Greedy Algorithms</li>
+        <li>Backtracking</li>
+      </ul>
+    </div>
+
+    <!-- LIVE ACTIVITY -->
+    <div class="footer-section activity">
+      <h3>Live Activity</h3>
+        
+      <div class="activity-card">
+      
+        <p>Sorting in Progress...</p> 
+
+        <div class="bars">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="status">
+          <div class="dot"></div>
+          Visualizing...
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-container">
+
+    <div class="stat-card">
+      <h2>25+</h2>
+      <p>Algorithms</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>120+</h2>
+      <p>Animations</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>500K+</h2>
+      <p>Executions</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>10K+</h2>
+      <p>Users</p>
+    </div>
+
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-section">
+    <span class="quote-icon">❝</span>
+
+    <p>
+      A good programmer is someone who always looks both ways before crossing a one-way street.
+    </p>
+
+    <h4>— Doug Linder</h4>
+  </div>
+
+  <!-- TECH STACK 
+  <div class="tech-stack">
+
+    <div class="tech-card">HTML5</div>
+    <div class="tech-card">CSS3</div>
+    <div class="tech-card">JavaScript</div>
+    <div class="tech-card">React</div>
+    <div class="tech-card">Canvas API</div>
+
+  </div>  -->
+
+  <!-- SCROLL TOP -->
+  <button id="scrollTopBtn">↑</button>
+
+  <!-- WAVES -->
+  <div class="wave"></div>
+
+  <!-- COPYRIGHT -->
+  <div class="copyright">
+    <p>© 2026 CodeCanvas | Designed & Developed with 💜 by Juhi Makkar</p>
+    <span>Stay curious. Keep coding. Keep learning.</span>
+  </div>
+
+</footer>
+
+    <script>
+        // Search state
+        let arrayData = [];
+        let searchValue = null;
+        let vizContainer = document.getElementById('search-viz');
+        let resultDiv = document.getElementById('result');
+
+        // Start search
+        function startSearch() {
+            const arrayInput = document.getElementById('array-input').value;
+            const searchInput = document.getElementById('search-input').value;
+            const algorithm = document.getElementById('algorithm').value;
+
+            arrayData = arrayInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+            searchValue = parseInt(searchInput);
+
+            if (arrayData.length === 0 || isNaN(searchValue)) {
+                alert('Please enter a valid array and search value.');
+                return;
+            }
+
+            // Sort for algorithms that require it
+            if (['binary', 'jump', 'interpolation', 'exponential'].includes(algorithm)) {
+                arrayData.sort((a, b) => a - b);
+            }
+
+            updateViz();
+            resultDiv.textContent = 'Searching...';
+
+            // Perform search based on algorithm
+            switch (algorithm) {
+                case 'linear':
+                    linearSearch();
+                    break;
+                case 'binary':
+                    binarySearch();
+                    break;
+                case 'jump':
+                    jumpSearch();
+                    break;
+                case 'interpolation':
+                    interpolationSearch();
+                    break;
+                case 'exponential':
+                    exponentialSearch();
+                    break;
+            }
+        }
+
+        // Linear Search - Modified to find all occurrences
+        async function linearSearch() {
+            let foundIndices = [];
+            for (let i = 0; i < arrayData.length; i++) {
+                highlightElement(i, 'active');
+                await sleep(500);
+                if (arrayData[i] === searchValue) {
+                    foundIndices.push(i);
+                    highlightElement(i, 'found');
+                }
+            }
+            if (foundIndices.length > 0) {
+                resultDiv.textContent = `Found at indices: ${foundIndices.join(', ')}`;
+            } else {
+                resultDiv.textContent = 'Not found';
+            }
+        }
+
+        // Binary Search - Modified to find all occurrences
+        async function binarySearch() {
+            let foundIndices = [];
+            let low = 0, high = arrayData.length - 1;
+            while (low <= high) {
+                let mid = Math.floor((low + high) / 2);
+                highlightElement(mid, 'active');
+                await sleep(500);
+                if (arrayData[mid] === searchValue) {
+                    foundIndices.push(mid);
+                    // Search left for duplicates
+                    let left = mid - 1;
+                    while (left >= 0 && arrayData[left] === searchValue) {
+                        foundIndices.push(left);
+                        left--;
+                    }
+                    // Search right for duplicates
+                    let right = mid + 1;
+                    while (right < arrayData.length && arrayData[right] === searchValue) {
+                        foundIndices.push(right);
+                        right++;
+                    }
+                    foundIndices.sort((a, b) => a - b); // Sort indices
+                    resultDiv.textContent = `Found at indices: ${foundIndices.join(', ')}`;
+                    foundIndices.forEach(idx => highlightElement(idx, 'found'));
+                    return;
+                } else if (arrayData[mid] < searchValue) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+            resultDiv.textContent = 'Not found';
+        }
+
+        // Jump Search - Modified to find all occurrences
+        async function jumpSearch() {
+            let foundIndices = [];
+            let step = Math.floor(Math.sqrt(arrayData.length));
+            let prev = 0;
+            while (arrayData[Math.min(step, arrayData.length) - 1] < searchValue) {
+                prev = step;
+                step += Math.floor(Math.sqrt(arrayData.length));
+                if (prev >= arrayData.length) break;
+            }
+            for (let i = prev; i < Math.min(step, arrayData.length); i++) {
+                highlightElement(i, 'active');
+                await sleep(500);
+                if (arrayData[i] === searchValue) {
+                    foundIndices.push(i);
+                    // Search left for duplicates
+                    let left = i - 1;
+                    while (left >= 0 && arrayData[left] === searchValue) {
+                        foundIndices.push(left);
+                        left--;
+                    }
+                    // Search right for duplicates
+                    let right = i + 1;
+                    while (right < arrayData.length && arrayData[right] === searchValue) {
+                        foundIndices.push(right);
+                        right++;
+                    }
+                    foundIndices.sort((a, b) => a - b); // Sort indices
+                    resultDiv.textContent = `Found at indices: ${foundIndices.join(', ')}`;
+                    foundIndices.forEach(idx => highlightElement(idx, 'found'));
+                    return;
+                }
+            }
+            resultDiv.textContent = 'Not found';
+        }
+
+        // Interpolation Search - Modified to find all occurrences
+        async function interpolationSearch() {
+            let foundIndices = [];
+            let low = 0, high = arrayData.length - 1;
+            while (low <= high && searchValue >= arrayData[low] && searchValue <= arrayData[high]) {
+                let pos = low + Math.floor(((searchValue - arrayData[low]) * (high - low)) / (arrayData[high] - arrayData[low]));
+                highlightElement(pos, 'active');
+                await sleep(500);
+                if (arrayData[pos] === searchValue) {
+                    foundIndices.push(pos);
+                    // Search left for duplicates
+                    let left = pos - 1;
+                    while (left >= 0 && arrayData[left] === searchValue) {
+                        foundIndices.push(left);
+                        left--;
+                    }
+                    // Search right for duplicates
+                    let right = pos + 1;
+                    while (right < arrayData.length && arrayData[right] === searchValue) {
+                        foundIndices.push(right);
+                        right++;
+                    }
+                    foundIndices.sort((a, b) => a - b); // Sort indices
+                    resultDiv.textContent = `Found at indices: ${foundIndices.join(', ')}`;
+                    foundIndices.forEach(idx => highlightElement(idx, 'found'));
+                    return;
+                } else if (arrayData[pos] < searchValue) {
+                    low = pos + 1;
+                } else {
+                    high = pos - 1;
+                }
+            }
+            resultDiv.textContent = 'Not found';
+        }
+
+        // Exponential Search - Modified to find all occurrences
+        async function exponentialSearch() {
+            let foundIndices = [];
+            if (arrayData[0] === searchValue) {
+                foundIndices.push(0);
+            }
+            let i = 1;
+            while (i < arrayData.length && arrayData[i] <= searchValue) {
+                if (arrayData[i] === searchValue) {
+                    foundIndices.push(i);
+                }
+                i *= 2;
+            }
+            let low = i / 2, high = Math.min(i, arrayData.length - 1);
+            while (low <= high) {
+                let mid = Math.floor((low + high) / 2);
+                highlightElement(mid, 'active');
+                await sleep(500);
+                if (arrayData[mid] === searchValue) {
+                    foundIndices.push(mid);
+                    // Search left for duplicates
+                    let left = mid - 1;
+                    while (left >= 0 && arrayData[left] === searchValue) {
+                        foundIndices.push(left);
+                        left--;
+                    }
+                    // Search right for duplicates
+                    let right = mid + 1;
+                    while (right < arrayData.length && arrayData[right] === searchValue) {
+                        foundIndices.push(right);
+                        right++;
+                    }
+                    foundIndices = [...new Set(foundIndices)].sort((a, b) => a - b); // Remove duplicates and sort
+                    resultDiv.textContent = `Found at indices: ${foundIndices.join(', ')}`;
+                    foundIndices.forEach(idx => highlightElement(idx, 'found'));
+                    return;
+                } else if (arrayData[mid] < searchValue) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
+            }
+            if (foundIndices.length > 0) {
+                resultDiv.textContent = `Found at indices: ${foundIndices.join(', ')}`;
+                foundIndices.forEach(idx => highlightElement(idx, 'found'));
+            } else {
+                resultDiv.textContent = 'Not found';
+            }
+        }
+
+        // Helper functions
+        function highlightElement(index, className) {
+            const elements = document.querySelectorAll('.viz-element');
+            if (className === 'found') {
+                // For found, add without removing others
+                if (index >= 0 && index < elements.length) {
+                    elements[index].classList.add(className);
+                }
+            } else {
+                elements.forEach(el => el.classList.remove('active', 'not-found'));
+                if (index >= 0 && index < elements.length) {
+                    elements[index].classList.add(className);
+                }
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function updateViz() {
+            vizContainer.innerHTML = '';
+            arrayData.forEach((val, idx) => {
+                const element = document.createElement('div');
+                element.className = 'viz-element';
+                element.textContent = val;
+                vizContainer.appendChild(element);
+            });
+        }
+
+        function resetSearch() {
+            arrayData = [];
+            searchValue = null;
+            updateViz();
+            resultDiv.textContent = '';
+        }
+
+        // Quiz logic
+ const questions = [
+    { q: "Q1. What is the time complexity of linear search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Linear search checks each element, so O(n)." },
+    { q: "Q2. Which search requires a sorted array?", options: ["Linear Search", "Binary Search", "Both", "None"], correct: 1, exp: "Binary search requires the array to be sorted." },
+    { q: "Q3. What is the best case for binary search?", options: ["O(1)", "O(n)", "O(log n)", "O(n log n)"], correct: 0, exp: "Best case is when the element is in the middle." },
+    { q: "Q4. Jump search is better than linear for what?", options: ["Small arrays", "Large arrays", "Sorted arrays", "Unsorted arrays"], correct: 1, exp: "Jump search is efficient for large sorted arrays." },
+    { q: "Q5. Interpolation search works best on what data?", options: ["Random", "Uniformly distributed", "Reversed", "Duplicates"], correct: 1, exp: "It estimates position based on uniform distribution." },
+    { q: "Q6. What is the worst case for linear search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Always O(n), checks all elements if not found." },
+    { q: "Q7. Which search uses divide and conquer?", options: ["Linear", "Binary", "Jump", "Interpolation"], correct: 1, exp: "Binary search divides the array." },
+    { q: "Q8. What is the space complexity of binary search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Iterative binary search uses O(1) space." },
+    { q: "Q9. Jump search jumps by what size?", options: ["1", "sqrt(n)", "n/2", "log n"], correct: 1, exp: "Jumps by sqrt(n) blocks." },
+    { q: "Q10. Which search is adaptive to data distribution?", options: ["Linear", "Binary", "Interpolation", "Jump"], correct: 2, exp: "Interpolation search adapts to uniform data." },
+    { q: "Q11. What is the output of binary search on [1,2,3,4,5] for 3?", options: ["Index 2", "Index 1", "Not found", "Error"], correct: 0, exp: "3 is at index 2." },
+    { q: "Q12. Linear search is also called?", options: ["Sequential search", "Binary search", "Jump search", "Exponential search"], correct: 0, exp: "Sequential search." },
+    { q: "Q13. What is the time for binary search in worst case?", options: ["O(1)", "O(n)", "O(log n)", "O(n log n)"], correct: 2, exp: "Logarithmic time." },
+    { q: "Q14. Which search can be used on unsorted arrays?", options: ["Binary", "Interpolation", "Linear", "Fibonacci"], correct: 2, exp: "Linear search works on unsorted." },
+    { q: "Q15. Exponential search is good for?", options: ["Infinite arrays", "Small arrays", "Sorted arrays", "Unsorted arrays"], correct: 0, exp: "Finds range exponentially." },
+    { q: "Q16. What is the best case for linear search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "First element." },
+    { q: "Q17. Which search uses Fibonacci numbers?", options: ["Linear", "Binary", "Fibonacci", "Jump"], correct: 2, exp: "Fibonacci search divides by Fibonacci." },
+    { q: "Q18. What is the space for linear search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Constant space." },
+    { q: "Q19. Binary search can be implemented how?", options: ["Iterative", "Recursive", "Both", "None"], correct: 2, exp: "Both ways." },
+    { q: "Q20. What is the output of linear search on [5,3,8,1] for 8?", options: ["Index 2", "Index 0", "Not found", "Error"], correct: 0, exp: "8 is at index 2." },
+    { q: "Q21. Which search has O(sqrt(n)) time?", options: ["Linear", "Binary", "Jump", "Interpolation"], correct: 2, exp: "Jump search." },
+    { q: "Q22. Interpolation search assumes what?", options: ["Random", "Uniform", "Exponential", "Linear"], correct: 1, exp: "Uniform distribution." },
+    { q: "Q23. What is the worst case for jump search?", options: ["O(1)", "O(n)", "O(sqrt(n))", "O(log n)"], correct: 1, exp: "If element at end of block." },
+    { q: "Q24. Which search is fastest on average for sorted?", options: ["Linear", "Binary", "Jump", "Interpolation"], correct: 1, exp: "Binary search." },
+    { q: "Q25. What is ternary search?", options: ["Two divisions", "Three divisions", "One division", "No division"], correct: 1, exp: "Divides into three parts." },
+    { q: "Q26. Linear search works on what?", options: ["Arrays", "Lists", "Both", "None"], correct: 2, exp: "Both arrays and lists." },
+    { q: "Q27. What is the time for interpolation search?", options: ["O(1)", "O(n)", "O(log log n)", "O(log n)"], correct: 2, exp: "Better than binary in uniform data." },
+    { q: "Q28. Which search uses hashing?", options: ["Linear", "Binary", "Hash search", "Jump"], correct: 2, exp: "Hash table search." },
+    { q: "Q29. What is the output of binary search for 6 in [1,2,4,5,7]?", options: ["Index 4", "Not found", "Index 3", "Error"], correct: 1, exp: "6 not present." },
+    { q: "Q30. Jump search requires what?", options: ["Sorted", "Unsorted", "Uniform", "Random"], correct: 0, exp: "Must be sorted." },
+    { q: "Q31. What is the space complexity of recursive binary search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 2, exp: "Recursion stack." },
+    { q: "Q32. Which search is O(n) always?", options: ["Binary", "Interpolation", "Linear", "Fibonacci"], correct: 2, exp: "Linear search." },
+    { q: "Q33. Exponential search combines what?", options: ["Linear and binary", "Jump and binary", "Interpolation and binary", "None"], correct: 0, exp: "Exponential then binary." },
+    { q: "Q34. What is the best case for jump search?", options: ["O(1)", "O(n)", "O(sqrt(n))", "O(log n)"], correct: 0, exp: "First block." },
+    { q: "Q35. Which search is not comparison-based?", options: ["Linear", "Binary", "Hash", "Interpolation"], correct: 2, exp: "Hash uses keys." },
+    { q: "Q36. What is the output of interpolation search on [1,2,3,4,5] for 3?", options: ["Index 2", "Index 1", "Not found", "Error"], correct: 0, exp: "Estimates position." },
+    { q: "Q37. Linear search is good for?", options: ["Small lists", "Large sorted", "Infinite", "Uniform"], correct: 0, exp: "Small or unsorted." },
+    { q: "Q38. What is the time for Fibonacci search?", options: ["O(1)", "O(n)", "O(log n)", "O(n log n)"], correct: 2, exp: "Similar to binary." },
+    { q: "Q39. Which search uses mid calculation?", options: ["Linear", "Binary", "Jump", "Hash"], correct: 1, exp: "Binary uses mid." },
+    { q: "Q40. What is the worst case for interpolation search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "If not uniform." },
+    { q: "Q41. Binary search divides by?", options: ["2", "3", "sqrt(n)", "n"], correct: 0, exp: "Half each time." },
+    { q: "Q42. What is the output of linear search for 9 in [1,2,3]?", options: ["Index 2", "Not found", "Index 0", "Error"], correct: 1, exp: "9 not in list." },
+    { q: "Q43. Which search is used in databases?", options: ["Linear", "Binary", "Hash", "All"], correct: 2, exp: "Hash for fast lookup." },
+    { q: "Q44. What is the space for jump search?", options: ["O(1)", "O(n)", "O(sqrt(n))", "O(log n)"], correct: 0, exp: "Constant space." },
+    { q: "Q45. Interpolation search is better than binary when?", options: ["Data is uniform", "Data is random", "Array is small", "Array is large"], correct: 0, exp: "Uniform distribution." },
+    { q: "Q46. What is the time for ternary search?", options: ["O(1)", "O(n)", "O(log3 n)", "O(log n)"], correct: 2, exp: "Log base 3." },
+    { q: "Q47. Which search can handle infinite arrays?", options: ["Linear", "Binary", "Exponential", "Jump"], correct: 2, exp: "Exponential search." },
+    { q: "Q48. What is the best case for linear search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "First element." },
+    { q: "Q49. Binary search requires what order?", options: ["Ascending", "Descending", "Both", "None"], correct: 2, exp: "Sorted in any order." },
+    { q: "Q50. What is the output of jump search on [1,2,3,4,5] for 4?", options: ["Index 3", "Index 2", "Not found", "Error"], correct: 0, exp: "4 at index 3." },
+    { q: "Q51. Which search uses probe positions?", options: ["Linear", "Binary", "Interpolation", "Jump"], correct: 2, exp: "Interpolation probes." },
+    { q: "Q52. What is the space complexity of linear search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "O(1)." },
+    { q: "Q53. Exponential search is a variant of?", options: ["Linear", "Binary", "Jump", "Interpolation"], correct: 1, exp: "Binary search variant." },
+    { q: "Q54. What is the worst case for Fibonacci search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 2, exp: "Logarithmic." },
+    { q: "Q55. Which search is slowest?", options: ["Binary", "Interpolation", "Linear", "Jump"], correct: 2, exp: "Linear is O(n)." },
+    { q: "Q56. What is the output of binary search for 2 in [1,3,5]?", options: ["Index 1", "Not found", "Index 0", "Error"], correct: 1, exp: "2 not present." },
+    { q: "Q57. Jump search block size is?", options: ["n", "sqrt(n)", "log n", "n/2"], correct: 1, exp: "sqrt(n)." },
+    { q: "Q58. Which search assumes sorted data?", options: ["Linear", "Binary", "Hash", "All except linear"], correct: 3, exp: "Binary, jump, interpolation require sorted." },
+    { q: "Q59. What is the time for hash search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Average O(1)." },
+    { q: "Q60. Interpolation search formula uses?", options: ["Mid", "Position estimate", "Random", "End"], correct: 1, exp: "Estimates position." },
+    { q: "Q61. What is the best case for exponential search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "First element." },
+    { q: "Q62. Which search is recursive by nature?", options: ["Linear", "Binary recursive", "Jump", "Interpolation"], correct: 1, exp: "Recursive binary." },
+    { q: "Q63. What is the output of linear search for 1 in [1,2,3]?", options: ["Index 0", "Index 1", "Not found", "Error"], correct: 0, exp: "1 at index 0." },
+    { q: "Q64. Ternary search divides into?", options: ["2", "3", "4", "1"], correct: 1, exp: "Three parts." },
+    { q: "Q65. Which search is good for large sorted arrays?", options: ["Linear", "Binary", "Jump", "All"], correct: 1, exp: "Binary search." },
+    { q: "Q66. What is the space for interpolation search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Constant." },
+    { q: "Q67. Fibonacci search uses what sequence?", options: ["Arithmetic", "Geometric", "Fibonacci", "Prime"], correct: 2, exp: "Fibonacci numbers." },
+    { q: "Q68. What is the worst case for linear search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Last or not found." },
+    { q: "Q69. Which search can be used on linked lists?", options: ["Binary", "Linear", "Jump", "Interpolation"], correct: 1, exp: "Linear search." },
+    { q: "Q70. What is the output of binary search for 4 in [1,2,3,4,5]?", options: ["Index 3", "Index 2", "Not found", "Error"], correct: 0, exp: "4 at index 3." },
+    { q: "Q71. Jump search is a compromise between?", options: ["Linear and binary", "Binary and interpolation", "Hash and linear", "None"], correct: 0, exp: "Linear and binary." },
+    { q: "Q72. What is the time complexity of ternary search?", options: ["O(1)", "O(n)", "O(log3 n)", "O(log n)"], correct: 2, exp: "Log base 3." },
+    { q: "Q73. Which search requires no extra space?", options: ["Linear", "Binary", "Hash", "All"], correct: 3, exp: "All can be O(1)." },
+    { q: "Q74. What is the best case for interpolation search?", options: ["O(1)", "O(n)", "O(log log n)", "O(log n)"], correct: 0, exp: "Direct hit." },
+    { q: "Q75. Exponential search starts with?", options: ["1", "2", "n", "sqrt(n)"], correct: 1, exp: "Powers of 2." },
+    { q: "Q76. What is the output of linear search for 0 in [1,2,3]?", options: ["Index 0", "Not found", "Index 1", "Error"], correct: 1, exp: "0 not in list." },
+    { q: "Q77. Which search is O(log n) worst case?", options: ["Linear", "Binary", "Jump", "Interpolation"], correct: 1, exp: "Binary search." },
+    { q: "Q78. Fibonacci search is similar to?", options: ["Binary", "Ternary", "Jump", "Interpolation"], correct: 0, exp: "Like binary but Fibonacci." },
+    { q: "Q79. What is the space for hash search?", options: ["O(1)", "O(n)", "O(hash size)", "O(n^2)"], correct: 2, exp: "Depends on hash table." },
+    { q: "Q80. Which search fails on unsorted?", options: ["Linear", "Binary", "Hash", "All except linear"], correct: 3, exp: "Binary, jump, etc. require sorted." },
+    { q: "Q81. What is the output of jump search for 5 in [1,2,3,4,5]?", options: ["Index 4", "Index 3", "Not found", "Error"], correct: 0, exp: "5 at index 4." },
+    { q: "Q82. Interpolation search is best for?", options: ["Integers", "Strings", "Floats", "All"], correct: 0, exp: "Numeric keys." },
+    { q: "Q83. What is the time for linear search in best case?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "First element found in O(1)." },
+    { q: "Q84. Which search uses exponential jumps?", options: ["Linear", "Binary", "Exponential", "Jump"], correct: 2, exp: "Exponential search jumps exponentially." },
+    { q: "Q85. What is the output of interpolation search for 10 in [1,2,3,4,5]?", options: ["Index 4", "Not found", "Index 3", "Error"], correct: 1, exp: "10 not in list." },
+    { q: "Q86. Binary search can be used on?", options: ["Arrays", "Lists", "Both", "None"], correct: 0, exp: "Requires random access." },
+    { q: "Q87. What is the worst case for jump search?", options: ["O(1)", "O(n)", "O(sqrt(n))", "O(log n)"], correct: 1, exp: "Element at end of last block." },
+    { q: "Q88. Which search is O(1) average for hash?", options: ["Linear", "Binary", "Hash", "Interpolation"], correct: 2, exp: "Hash table lookup." },
+    { q: "Q89. What is the output of linear search for 3 in [1,2,3,4]?", options: ["Index 2", "Index 1", "Not found", "Error"], correct: 0, exp: "3 at index 2." },
+    { q: "Q90. Ternary search is better than binary for?", options: ["Small n", "Large n", "Uniform", "None"], correct: 3, exp: "Generally not better." },
+    { q: "Q91. Which search requires sorted and uniform data?", options: ["Linear", "Binary", "Interpolation", "Jump"], correct: 2, exp: "Interpolation assumes uniform." },
+    { q: "Q92. What is the space for exponential search?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Constant space." },
+    { q: "Q93. Fibonacci search divides by?", options: ["2", "Fib ratios", "3", "sqrt(n)"], correct: 1, exp: "Uses Fibonacci ratios." },
+    { q: "Q94. What is the best case for ternary search?", options: ["O(1)", "O(n)", "O(log3 n)", "O(log n)"], correct: 0, exp: "Element at division point." },
+    { q: "Q95. Which search is used in symbol tables?", options: ["Linear", "Binary", "Hash", "Jump"], correct: 2, exp: "Hash for fast lookup." },
+    { q: "Q96. What is the output of binary search for 0 in [1,2,3]?", options: ["Index 0", "Not found", "Index 1", "Error"], correct: 1, exp: "0 not present." },
+    { q: "Q97. Jump search is a type of?", options: ["Linear", "Block search", "Divide and conquer", "Hash"], correct: 1, exp: "Block-based search." },
+    { q: "Q98. What is the time for hash search in worst case?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Collisions can make O(n)." },
+    { q: "Q99. Which search can handle duplicates?", options: ["Linear", "Binary", "All", "None"], correct: 2, exp: "All can, but binary may not find all." },
+    { q: "Q100. What is the most efficient search for sorted data?", options: ["Linear", "Binary", "Jump", "Interpolation"], correct: 1, exp: "Binary search is standard." }
+];
+        let currentQ = 0;
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('quiz-container').innerHTML = `
+                <h3>${q.q}</h3>
+                <div class="options">
+                    ${q.options.map((opt, i) => `<label class="option"><input type="radio" name="answer" value="${i}"> ${opt}</label>`).join('')}
+                </div>
+                <button class="btn" onclick="checkAnswer()">Check Answer</button>
+                <div class="feedback" id="feedback"></div>
+            `;
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) return;
+            const ans = parseInt(selected.value);
+            const feedback = document.getElementById('feedback');
+            if (ans === questions[currentQ].correct) {
+                feedback.innerHTML = '<span class="correct">✓ Correct! Moving to next question.</span>';
+                setTimeout(() => { currentQ = (currentQ + 1) % questions.length; loadQuestion(); }, 2000);
+            } else {
+                feedback.innerHTML = `<span class="incorrect">✗ Incorrect. ${questions[currentQ].exp} Try again.</span>`;
+            }
+        }
+
+        // FAQ toggle
+        function toggleFAQ(btn) {
+            btn.parentElement.classList.toggle('active');
+        }
+
+        // Initialize
+        loadQuestion();
+        updateViz();
+        
+        /* SCROLL TO TOP */
+
+        const scrollBtn = document.getElementById("scrollTopBtn");
+
+        scrollBtn.addEventListener("click", () => {
+          window.scrollTo({
+            top:0,
+            behavior:"smooth"
+          });
+        });
+    </script>
+</body>
+</html>               

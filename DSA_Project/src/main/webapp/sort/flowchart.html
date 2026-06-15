@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowcharts for Sorting Algorithms - CodeCanvas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+
+        .navbar nav a.active {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.2);
+        }
+
+        /* Section Spacing */
+        section {
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(139,108,246,0.4);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-container h2 {
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .search-container p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+        }
+
+        .search-container input {
+            padding: 15px 20px;
+            width: 400px;
+            max-width: 70%;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-radius: 10px;
+            font-size: 16px;
+            margin-right: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 15px rgba(79, 195, 247, 0.3);
+        }
+
+        .search-container button {
+            padding: 15px 30px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent-purple), #A78BFA);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .search-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139,108,246,0.4);
+        }
+
+        #results {
+            margin-top: 15px;
+            min-height: 20px;
+        }
+
+        /* Flowchart Container */
+        .flowchart-container {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(139,108,246,0.4);
+            margin-bottom: 30px;
+            border: 1px solid rgba(139,108,246,0.2);
+        }
+
+        .flowchart-container h3 {
+            color: var(--accent-purple);
+            margin: 0 0 20px 0;
+            font-size: 24px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Complexity Card */
+        .complexity-card {
+            background: linear-gradient(135deg, var(--success), #059669);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .complexity-card h4 {
+            color: white;
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        .complexity-card p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        /* Mermaid */
+        .mermaid {
+            margin: 25px 0;
+            text-align: center;
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(139,108,246,0.3);
+        }
+
+        /* Quick Access Cards */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .quick-card {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 0 20px rgba(139,108,246,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            height: 100%;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(139,108,246,0.5);
+            border-color: var(--accent-purple);
+        }
+
+        .quick-card h4 {
+            color: var(--accent-blue);
+            margin: 0 0 12px 0;
+            font-size: 18px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .quick-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        /* Explanation */
+        .explanation {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(139,108,246,0.4);
+            margin-bottom: 40px;
+            border: 1px solid rgba(139,108,246,0.2);
+        }
+
+        .explanation h2 {
+            color: var(--accent-blue);
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .explanation ul {
+            color: var(--text-primary);
+            padding-left: 25px;
+        }
+
+        .explanation li {
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid rgba(139,108,246,0.3);
+            margin-top: 60px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+                gap: 15px;
+            }
+            
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            .search-container input {
+                width: 100%;
+                margin-bottom: 15px;
+                margin-right: 0;
+            }
+            
+            .section-content {
+                padding: 10px;
+            }
+            
+            .quick-access {
+                grid-template-columns: 1fr;
+            }
+            
+            .flowchart-container, .explanation {
+                padding: 20px;
+            }
+        }
+
+        /* Loading state */
+        .loading {
+            color: var(--accent-blue);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="#" class="logo">CodeCanvas - Sorting</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/sortGS.html">Back to Sorting</a></li>
+            <li><a href="../sort/theory.html">Theory</a></li>
+            <li><a href="../sort/syntax.html">Syntax</a></li>
+            <li><a href="../sort/algorithm.html">Algorithm</a></li>
+            <li><a href="../sort/flowchart.html" class="active">Flowchart</a></li>
+            <li><a href="../sort/sorting.html">Sorting</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search Section -->
+    <section id="search">
+        <div class="section-content">
+            <div class="search-container">
+                <h2>🔍 Search Sorting Flowcharts</h2>
+                <p>Enter algorithm name to generate interactive flowchart (e.g., "Bubble Sort", "Quick Sort")</p>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; align-items: center;">
+                    <input type="text" id="search-input" placeholder="Type sorting algorithm name...">
+                    <button id="search-btn">🚀 Generate</button>
+                </div>
+                <div id="results"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access Section -->
+    <section id="quick-access">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 30px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 32px;">
+                ⚡ Quick Access
+            </h2>
+            <div class="quick-access" id="quick-access-grid">
+                <!-- Quick cards populated by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Flowchart Display Section -->
+    <section id="flowcharts">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 30px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 32px;">
+                📊 Generated Flowcharts
+            </h2>
+            <div id="flowchart-display">
+                <div style="text-align: center; color: var(--text-secondary); padding: 60px;">
+                    <h3>Search or click quick access to generate flowcharts</h3>
+                    <p>Try "Bubble Sort" or "Quick Sort" 🎯</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explanation Section -->
+    <section id="explanation">
+        <div class="section-content">
+            <div class="explanation">
+                <h2>📚 What are Sorting Flowcharts?</h2>
+                <p>Visual representations of sorting algorithms showing the step-by-step logic of comparison, swapping, and termination conditions.</p>
+                <p><strong>🔑 Key Algorithm Categories:</strong></p>
+                <ul>
+                    <li><strong>💭 Comparison-based:</strong> Bubble, Selection, Insertion, Quick, Merge</li>
+                    <li><strong>📊 Distribution-based:</strong> Counting, Radix, Bucket</li>
+                    <li><strong>🔄 Hybrid:</strong> Shell, Timsort, Heap</li>
+                    <li><strong>🎪 Fun/Obscure:</strong> Bogo, Pancake, Stooge</li>
+                </ul>
+                <p>Each flowchart reveals unique optimization strategies and trade-offs in time/space complexity.</p>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../sort/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Initialize Mermaid FIRST with custom theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "base",
+            themeVariables: {
+                primaryColor: "#1e1e2f",
+                primaryTextColor: "#ffffff",
+                primaryBorderColor: "#8b6cf6",
+                lineColor: "#a78bfa",
+                secondaryColor: "#2a2a40",
+                tertiaryColor: "#141427",
+                noteBkgColor: "#1e1e2f",
+                noteBorderColor: "#8b6cf6",
+                edgeLabelBackground: "#2a2a40"
+            },
+            securityLevel: 'loose'
+        });
+
+        // Wait for Mermaid to be ready
+        mermaid.init();
+
+        // Comprehensive sorting algorithms flowcharts database (ALL FIXED)
+        const sortingFlowcharts = {
+            "Bubble Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = 0"]
+                B --> C{"i < n-1 ?"}
+                C -->|Yes| D["j = 0"]
+                D --> E{"j < n-i-1 ?"}
+                E -->|Yes| F{"arr[j] > arr[j+1] ?"}
+                F -->|Yes| G["Swap arr[j], arr[j+1]"]
+                F -->|No| H["j++"]
+                G --> H
+                H --> E
+                E -->|No| I["i++"]
+                I --> C
+                C -->|No| J["End"]`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "Repeatedly swap adjacent elements if wrong order. Largest 'bubble up' to end each pass."
+            },
+            "Optimized Bubble Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["swapped = false, i = 0"]
+                B --> C{"i < n-1 ?"}
+                C -->|Yes| D["j = 0"]
+                D --> E{"j < n-i-1 ?"}
+                E -->|Yes| F{"arr[j] > arr[j+1] ?"}
+                F -->|Yes| G["Swap & swapped = true"]
+                F -->|No| I["j++"]
+                G --> I
+                I --> E
+                E -->|No| J{"swapped ?"}
+                J -->|No| K["Break"]
+                J -->|Yes| L["swapped = false, i++"]
+                L --> C
+                K --> N["End"]`,
+                complexity: "Time: O(n) best | O(n²) worst | Space: O(1)",
+                explanation: "Early termination if no swaps (already sorted). Adaptive algorithm."
+            },
+            "Selection Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = 0"]
+                B --> C{"i < n-1 ?"}
+                C -->|Yes| D["minIdx = i"]
+                D --> E["j = i+1"]
+                E --> F{"j < n ?"}
+                F -->|Yes| G{"arr[j] < arr[minIdx] ?"}
+                G -->|Yes| H["minIdx = j"]
+                G -->|No| I["j++"]
+                H --> I
+                I --> F
+                F -->|No| J["Swap arr[i], arr[minIdx]"]
+                J --> K["i++"]
+                K --> C
+                C -->|No| L["End"]`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "Find minimum in unsorted portion, place at beginning each iteration."
+            },
+            "Insertion Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = 1"]
+                B --> C{"i < n ?"}
+                C -->|Yes| D["key = arr[i]"]
+                D --> E["j = i-1"]
+                E --> F{"j >= 0 && arr[j] > key ?"}
+                F -->|Yes| G["arr[j+1] = arr[j]"]
+                G --> H["j--"]
+                H --> F
+                F -->|No| I["arr[j+1] = key"]
+                I --> J["i++"]
+                J --> C
+                C -->|No| K["End"]`,
+                complexity: "Time: O(n) best | O(n²) worst | Space: O(1)",
+                explanation: "Builds sorted array one item at a time by inserting into correct position."
+            },
+            "Merge Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B{"n <= 1 ?"}
+                B -->|Yes| C["Return"]
+                B -->|No| D["mid = n/2"]
+                D --> E["MergeSort(left)"]
+                E --> F["MergeSort(right)"]
+                F --> G["Merge(left, right)"]
+                G --> H["End"]`,
+                complexity: "Time: O(n log n) | Space: O(n)",
+                explanation: "Divide & conquer: split, recursively sort halves, merge sorted results."
+            },
+            "Quick Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B{"low < high ?"}
+                B -->|No| C["Return"]
+                B -->|Yes| D["pivot = arr[high]"]
+                D --> E["i = low-1"]
+                E --> F["j = low"]
+                F --> G{"j < high ?"}
+                G -->|Yes| H{"arr[j] <= pivot ?"}
+                H -->|Yes| I["i++, Swap arr[i], arr[j]"]
+                H -->|No| K["j++"]
+                I --> K
+                K --> G
+                G -->|No| L["Swap arr[i+1], arr[high]"]
+                L --> M["QuickSort(low, i)"]
+                M --> N["QuickSort(i+2, high)"]
+                N --> O["End"]`,
+                complexity: "Time: O(n log n) avg | O(n²) worst | Space: O(log n)",
+                explanation: "Partition around pivot, recursively sort both partitions."
+            },
+            "Heap Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Build Max Heap"]
+                B --> C["i = n-1"]
+                C --> D{"i >= 0 ?"}
+                D -->|Yes| E["Swap arr[0], arr[i]"]
+                E --> F["Heapify(0, i)"]
+                F --> G["i--"]
+                G --> D
+                D -->|No| H["End"]`,
+                complexity: "Time: O(n log n) | Space: O(1)",
+                explanation: "Build max heap, extract max repeatedly, heapify remainder."
+            },
+            "Counting Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Find min, max"]
+                B --> C["countArray = [0]*(max-min+1)"]
+                C --> D["Count occurrences"]
+                D --> E["Cumulative count"]
+                E --> F["Build output from right"]
+                F --> G["Copy to original"]
+                G --> H["End"]`,
+                complexity: "Time: O(n+k) | Space: O(k)",
+                explanation: "Non-comparison sort. Counts values, reconstructs sorted array."
+            },
+            "Radix Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["maxLen = max digits"]
+                B --> C["d = 1"]
+                C --> D{"d <= maxLen ?"}
+                D -->|Yes| E["CountSort by d-th digit"]
+                E --> F["d++"]
+                F --> D
+                D -->|No| G["End"]`,
+                complexity: "Time: O(d(n+k)) | Space: O(n+k)",
+                explanation: "Sorts digits LSD to MSD using stable counting sort."
+            },
+            "Bucket Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create n buckets"]
+                B --> C["Distribute elements"]
+                C --> D["Sort each bucket"]
+                D --> E["Concatenate buckets"]
+                E --> F["End"]`,
+                complexity: "Time: O(n+k) avg | Space: O(n)",
+                explanation: "Distribute to buckets, sort individually, concatenate."
+            },
+            "Shell Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["gap = n/2"]
+                B --> C{"gap > 0 ?"}
+                C -->|Yes| D["i = gap"]
+                D --> E{"i < n ?"}
+                E -->|Yes| F["Insertion Sort with gap"]
+                F --> G["i++"]
+                G --> E
+                E -->|No| H["gap = gap/2"]
+                H --> C
+                C -->|No| I["End"]`,
+                complexity: "Time: O(n^1.3) avg | Space: O(1)",
+                explanation: "Insertion sort with decreasing gaps (far-to-close elements)."
+            },
+            "Cocktail Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["swapped = true"]
+                B --> C{"swapped ?"}
+                C -->|No| D["End"]
+                C -->|Yes| E["swapped = false"]
+                E --> F["Forward pass"]
+                F --> G["Backward pass"]
+                G --> C`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "Bi-directional bubble sort (small & large values both directions)."
+            },
+            "Comb Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["gap = n"]
+                B --> C{"gap > 1 ?"}
+                C -->|Yes| D["gap = gap/1.3"]
+                D --> E["Bubble Sort with gap"]
+                E --> C
+                C -->|No| F["Bubble Sort"]
+                F --> G["End"]`,
+                complexity: "Time: O(n log n) | Space: O(1)",
+                explanation: "Bubble sort with shrinking gaps (eliminates small inversions)."
+            },
+            "Gnome Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = 1, j = 2"]
+                B --> C{"i < n ?"}
+                C -->|Yes| D{"arr[i-1] > arr[i] ?"}
+                D -->|Yes| E["Swap arr[i-1], arr[i]"]
+                E --> F["i--"]
+                D -->|No| G["i = j"]
+                G --> H["j++"]
+                F --> I{"i == 0 ?"}
+                I -->|Yes| H
+                I -->|No| C
+                C -->|No| J["End"]`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "'Stupid sort' - insertion sort that moves backward on swap."
+            },
+            "Odd-Even Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["sorted = false"]
+                B --> C{"sorted == false ?"}
+                C -->|No| D["End"]
+                C -->|Yes| E["sorted = true"]
+                E --> F["Odd indexed pairs"]
+                F --> G["Even indexed pairs"]
+                G --> C`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "Parallel bubble sort variant (odd-even indexed pairs)."
+            },
+            "Patience Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create empty piles"]
+                B --> C["For each element"]
+                C --> D{"Find pile top >= element ?"}
+                D -->|Yes| E["Place on pile"]
+                D -->|No| F["New pile"]
+                E --> G["Extract piles sorted"]
+                G --> H["End"]`,
+                complexity: "Time: O(n log n) | Space: O(n)",
+                explanation: "Piles where tops are smallest possible. Finds LIS length."
+            },
+            "Stooge Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B{"n < 2 ?"}
+                B -->|Yes| C["Return"]
+                B -->|No| D["t = n/3"]
+                D --> E["StoogeSort(0, n-t)"]
+                E --> F["StoogeSort(t, n)"]
+                F --> G["StoogeSort(0, n-t)"]
+                G --> H["End"]`,
+                complexity: "Time: O(n^2.7095) | Space: O(log n)",
+                explanation: "Recursive thirds division. Very slow but interesting."
+            },
+            "Cycle Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["writes = 0"]
+                B --> C["For i = 0 to n-2"]
+                C --> D["item = arr[i]"]
+                D --> E["pos = correct position"]
+                E --> F{"pos == i ?"}
+                F -->|No| G["Cycle rotation"]
+                F -->|Yes| H["i++"]
+                G --> C
+                H --> I["End"]`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "Minimizes writes by rotating cycles to correct positions."
+            },
+            "Pancake Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = n-1"]
+                B --> C{"i > 0 ?"}
+                C -->|Yes| D["Find max in 0..i"]
+                D --> E["Flip max to front"]
+                E --> F["Flip max to i"]
+                F --> G["i--"]
+                G --> C
+                C -->|No| H["End"]`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "Only prefix flips (pancake flips) to sort stack."
+            },
+            "Bogo Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Array sorted ?"}
+                B -->|Yes| C["End"]
+                B -->|No| D["Random shuffle"]
+                D --> B`,
+                complexity: "Time: O(n!) avg | Space: O(1)",
+                explanation: "Shuffle randomly until sorted. Guaranteed but impractical."
+            },
+            "Tim Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Identify natural runs"]
+                B --> C["Extend runs (galloping)"]
+                C --> D["Optimal merge strategy"]
+                D --> E["End"]`,
+                complexity: "Time: O(n log n) | Space: O(n)",
+                explanation: "Hybrid: merge + insertion + galloping. Python/Java default."
+            },
+            "Binary Insertion Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["i = 1"]
+                B --> C{"i < n ?"}
+                C -->|Yes| D["key = arr[i]"]
+                D --> E["Binary search position in 0..i-1"]
+                E --> F["Shift elements right"]
+                F --> G["arr[pos] = key"]
+                G --> H["i++"]
+                H --> C
+                C -->|No| I["End"]`,
+                complexity: "Time: O(n log n) comparisons | O(n²) shifts | Space: O(1)",
+                explanation: "Insertion sort with binary search for position (fewer comparisons, same shifts)."
+            },
+
+            "Bitonic Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create bitonic sequence"]
+                B --> C["Comparator networks"]
+                C --> D["Merge bitonic halves"]
+                D --> E{"More passes ?"}
+                E -->|Yes| F["Next comparator stage"]
+                F --> D
+                E -->|No| G["End"]`,
+                complexity: "Time: O(log² n) | Space: O(n) | Parallel: O(log² n)",
+                explanation: "Parallel sorting network for power-of-2 sizes. Bitonic merger."
+            },
+
+            "3-Way Quick Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B{"low < high ?"}
+                B -->|No| C["Return"]
+                B -->|Yes| D["Partition: <pivot | =pivot | >pivot"]
+                D --> E["Recurse on left"]
+                E --> F["Recurse on right"]
+                F --> G["End"]`,
+                complexity: "Time: O(n log n) avg | Handles duplicates well",
+                explanation: "3-way partitioning handles many duplicates efficiently."
+            },
+
+            "Intro Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B{"depth limit ?"}
+                B -->|No| C["Heap Sort"]
+                B -->|Yes| D{"partition bad ?"}
+                D -->|Yes| E["Heap Sort"]
+                D -->|No| F["Quick Sort"]
+                E --> G["End"]
+                F --> G`,
+                complexity: "Time: O(n log n) worst | Space: O(log n)",
+                explanation: "Hybrid: QuickSort → HeapSort when recursion too deep."
+            },
+
+            "Spread Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Bucket by spread (range/size)"]
+                B --> C["Recurse on non-empty buckets"]
+                C --> D["Merge sorted buckets"]
+                D --> E["End"]`,
+                complexity: "Time: O(n log k) where k=spread | Space: O(n)",
+                explanation: "Adaptive radix-like sort based on data spread."
+            },
+
+            "Library Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Insert gaps = √2 * n"]
+                B --> C["Binary search gap position"]
+                C --> D["Insert into gap"]
+                D --> E["Maintain gap invariants"]
+                E --> F["End"]`,
+                complexity: "Time: O(n log n) avg | Space: O(n)",
+                explanation: "Insertion sort with √2*n gaps for amortized O(log n)."
+            },
+
+            "Block Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Block selection sort"]
+                B --> C["Rotate blocks to position"]
+                C --> D["Merge adjacent blocks"]
+                D --> E["End"]`,
+                complexity: "Time: O(n log n) | Space: O(1)",
+                explanation: "Grail sort variant. In-place block selection + rotation."
+            },
+
+            "Wiki Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Bottom-up merge sort"]
+                B --> C["Use existing runs"]
+                C --> D["Stable block merge"]
+                D --> E["Rotate for cache"]
+                E --> F["End"]`,
+                complexity: "Time: O(n log n) | Space: O(1)",
+                explanation: "Cache-oblivious, stable, in-place merge sort."
+            },
+
+            "MSB Radix Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["maxLen = max digits"]
+                B --> C["d = maxLen"]
+                C --> D{"d >= 1 ?"}
+                D -->|Yes| E["CountSort by d-th digit (MSB)"]
+                E --> F["d--"]
+                F --> D
+                D -->|No| G["End"]`,
+                complexity: "Time: O(d(n+k)) | Space: O(n+k)",
+                explanation: "Radix sort MSD (most significant digit first)."
+            },
+
+            "Flash Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Count distribution"]
+                B --> C["Permutation array"]
+                C --> D["One-pass scatter"]
+                D --> E["Few insertion sort passes"]
+                E --> F["End"]`,
+                complexity: "Time: O(n) avg | Space: O(n)",
+                explanation: "Distribution counting + permutation for uniform data."
+            },
+
+            "Smooth Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Build Leonardo heap"]
+                B --> C["Sift up/down"]
+                C --> D["Heap order maintenance"]
+                D --> E["Extract max repeatedly"]
+                E --> F["End"]`,
+                complexity: "Time: O(n log n) worst | O(n) adaptive",
+                explanation: "Leonardo numbers heap. Adaptive like heapsort."
+            },
+
+            "Strand Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Extract sorted sublists"]
+                B --> C["Merge with result"]
+                C --> D{"Source not empty ?"}
+                D -->|Yes| B
+                D -->|No| E["End"]`,
+                complexity: "Time: O(n log n) | Space: O(n)",
+                explanation: "Repeatedly extract monotonic subsequences, merge."
+            },
+
+            "Cartesian Tree Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Build Cartesian tree"]
+                B --> C["Inorder traversal"]
+                C --> D["End"]`,
+                complexity: "Time: O(n log n) | Space: O(n)",
+                explanation: "Build binary tree by stack, inorder gives sorted order."
+            },
+
+            "Natural Merge Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Find natural runs"]
+                B --> C["Merge adjacent runs"]
+                C --> D["Bottom-up merge"]
+                D --> E["End"]`,
+                complexity: "Time: O(n log n) | Adaptive to runs",
+                explanation: "Uses existing sorted runs, merges like Timsort."
+            },
+
+            "Polyphase Merge Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Multiple output tapes"]
+                B --> C["Distribute runs to tapes"]
+                C --> D["Merge k-way"]
+                D --> E["Rotate tapes"]
+                E --> F["End"]`,
+                complexity: "Time: O(n log n) | External sort",
+                explanation: "Tape-based merge sort for external memory."
+            },
+
+            "Patric Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Build Patricia trie"]
+                B --> C["Traverse trie inorder"]
+                C --> D["End"]`,
+                complexity: "Time: O(n log k) | Space: O(n)",
+                explanation: "Trie-based radix sort variant."
+            },
+
+            "Queue Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Enqueue all elements"]
+                B --> C["Dequeue to sorted array"]
+                C --> D["Maintain queue invariants"]
+                D --> E["End"]`,
+                complexity: "Time: O(n²) | Space: O(n)",
+                explanation: "Queue-based selection sort variant."
+            },
+
+            "Double Selection Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["left=0, right=n-1"]
+                B --> C{"left <= right ?"}
+                C -->|Yes| D["Find min & max"]
+                D --> E["Swap min to left, max to right"]
+                E --> F["left++, right--"]
+                F --> C
+                C -->|No| G["End"]`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "Simultaneous min/max selection from both ends."
+            },
+
+            "Brick Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Odd-Even transposition"]
+                B --> C["Phase 1: Odd indices"]
+                C --> D["Phase 2: Even indices"]
+                D --> E{"Sorted ?"}
+                E -->|No| B
+                E -->|Yes| F["End"]`,
+                complexity: "Time: O(n²) | Space: O(1)",
+                explanation: "Odd-even transposition sort (parallel variant)."
+            },
+
+            "VisuAlgo Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Adaptive quicksort"]
+                B --> C{"Small array ?"}
+                C -->|Yes| D["Insertion sort"]
+                C -->|No| E["3-way partition"]
+                D --> F["End"]
+                E --> F`,
+                complexity: "Time: O(n log n) | Educational",
+                explanation: "Educational hybrid sort with visualization focus."
+            },
+
+            "JavaScript Sort": {
+                mermaid: `graph TD
+                A["Start"] --> B["Timsort (V8) or IntroSort"]
+                B --> C["Adaptive hybrid"]
+                C --> D["Use natural runs"]
+                D --> E["Optimal merging"]
+                E --> F["End"]`,
+                complexity: "Time: O(n log n) | Space: O(n)",
+                explanation: "Browser-native sort (usually Timsort/IntroSort)."
+            }
+        };
+
+        // Fuse.js for fuzzy search
+        const fuse = new Fuse(Object.keys(sortingFlowcharts), { 
+            threshold: 0.3,
+            distance: 1000
+        });
+
+        // Safe Mermaid render function
+        function renderMermaid() {
+            try {
+                const elements = document.querySelectorAll('.mermaid:not(.rendered)');
+                if (elements.length > 0) {
+                    mermaid.init(undefined, elements);
+                    elements.forEach(el => el.classList.add('rendered'));
+                }
+            } catch (e) {
+                console.warn('Mermaid render failed:', e);
+            }
+        }
+
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBtn = document.getElementById('search-btn');
+            const searchInput = document.getElementById('search-input');
+            const resultsDiv = document.getElementById('results');
+            const displayDiv = document.getElementById('flowchart-display');
+
+            // Search button
+            searchBtn.addEventListener('click', function() {
+                const query = searchInput.value.trim();
+                displayDiv.innerHTML = '';
+                resultsDiv.innerHTML = '<span class="loading">🔍 Searching...</span>';
+
+                if (!query) {
+                    resultsDiv.innerHTML = '<p style="color: var(--error);">❌ Please enter a sorting algorithm name.</p>';
+                    return;
+                }
+
+                const matches = fuse.search(query);
+                setTimeout(() => {
+                    if (matches.length > 0) {
+                        const algorithm = matches[0].item;
+                        const data = sortingFlowcharts[algorithm];
+                        
+                        displayDiv.innerHTML = `
+                            <div class="flowchart-container">
+                                <h3>📊 ${algorithm}</h3>
+                                <div class="complexity-card">
+                                    <h4>⚡ Complexity</h4>
+                                    <p>${data.complexity}</p>
+                                </div>
+                                <div class="mermaid">${data.mermaid}</div>
+                                <p style="color: var(--text-secondary); font-style: italic;">${data.explanation}</p>
+                            </div>
+                        `;
+                        
+                        resultsDiv.innerHTML = '<p style="color: var(--success);">✅ Flowchart generated! 🎉</p>';
+                        setTimeout(renderMermaid, 100);
+                    } else {
+                        resultsDiv.innerHTML = `<p style="color: var(--error);">❌ No match found. Try: ${Object.keys(sortingFlowcharts).slice(0, 5).join(', ')}...</p>`;
+                    }
+                }, 300);
+            });
+
+            // Enter key support
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBtn.click();
+                }
+            });
+
+            // Generate Quick Access Cards
+            function generateQuickAccess() {
+                const grid = document.getElementById('quick-access-grid');
+                const sampleAlgorithms = Object.keys(sortingFlowcharts).slice(0, 12);
+                grid.innerHTML = sampleAlgorithms.map(algorithm => `
+                    <div class="quick-card" onclick="selectAlgorithm('${algorithm.replace(/'/g, "\\'")}')">
+                        <h4>${algorithm}</h4>
+                        <p>${sortingFlowcharts[algorithm].explanation.substring(0, 100)}...</p>
+                        <div style="margin-top: 15px; font-size: 13px; opacity: 0.8; color: var(--accent-blue); font-weight: 500;">
+                            ${sortingFlowcharts[algorithm].complexity}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Global select function
+            window.selectAlgorithm = function(algorithm) {
+                searchInput.value = algorithm;
+                const data = sortingFlowcharts[algorithm];
+                const displayDiv = document.getElementById('flowchart-display');
+                displayDiv.innerHTML = `
+                    <div class="flowchart-container">
+                        <h3>📊 ${algorithm}</h3>
+                        <div class="complexity-card">
+                            <h4>⚡ Complexity</h4>
+                            <p>${data.complexity}</p>
+                        </div>
+                        <div class="mermaid">${data.mermaid}</div>
+                        <p style="color: var(--text-secondary); font-style: italic;">${data.explanation}</p>
+                    </div>
+                `;
+                document.getElementById('results').innerHTML = '<p style="color: var(--success);">✅ Quick selected! 🎉</p>';
+                setTimeout(renderMermaid, 100);
+            };
+
+            // Initialize
+            generateQuickAccess();
+            
+            // Initial demo
+            setTimeout(() => {
+                selectAlgorithm('Bubble Sort');
+            }, 1000);
+        });
+
+        // Show all flowcharts button (optional)
+        window.showAllFlowcharts = function() {
+            const displayDiv = document.getElementById('flowchart-display');
+            let html = '<h3 style="text-align: center; color: var(--accent-purple);">📚 All Sorting Algorithms</h3>';
+            
+            Object.entries(sortingFlowcharts).forEach(([algorithm, data]) => {
+                html += `
+                    <div class="flowchart-container">
+                        <h3>${algorithm}</h3>
+                        <div class="complexity-card">
+                            <h4>⚡ Complexity</h4>
+                            <p>${data.complexity}</p>
+                        </div>
+                        <div class="mermaid">${data.mermaid}</div>
+                        <p style="color: var(--text-secondary); font-style: italic;">${data.explanation}</p>
+                    </div>
+                `;
+            });
+            displayDiv.innerHTML = html;
+            setTimeout(renderMermaid, 500);
+        };
+    </script>
+</body>
+</html>

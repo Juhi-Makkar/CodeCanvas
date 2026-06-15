@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Syntax - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&family=Fira+Code:wght@400;500&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --code-bg: #0d1117;
+        --keyword: #c084fc;
+        --function: #38bdf8;
+        --number: #f472b6;
+        --string: #4ade80;
+        --comment: #6b7280;
+        --variable: #fbbf24;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1100px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .syntax-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 20px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    /* ===================== LANGUAGE SELECTOR ===================== */
+    .lang-selector {
+        background: var(--bg-secondary);
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 2px solid var(--accent-purple);
+        box-shadow: 0 0 20px rgba(139,108,246,0.3);
+    }
+
+    .lang-selector h2 { margin-top: 0; margin-bottom: 10px; border: none; }
+    .lang-selector p { margin-bottom: 20px; }
+
+    .lang-selector select {
+        padding: 12px 25px;
+        border: 2px solid var(--accent-purple);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        min-width: 180px;
+        transition: all 0.3s ease;
+    }
+
+    .lang-selector select:hover, .lang-selector select:focus {
+        box-shadow: 0 0 15px rgba(139,108,246,0.5);
+        outline: none;
+    }
+
+    /* ===================== CODE BLOCKS ===================== */
+    .code-block {
+        background: var(--code-bg);
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        border-left: 4px solid var(--accent-blue);
+        margin: 15px 0 25px 0;
+        position: relative;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #e2e8f0;
+        white-space: pre;
+    }
+
+    /* Syntax Highlighting */
+    .keyword { color: var(--keyword); }
+    .function { color: var(--function); }
+    .number { color: var(--number); }
+    .string { color: var(--string); }
+    .comment { color: var(--comment); font-style: italic; }
+
+    /* Code Label */
+    .code-label {
+        position: absolute;
+        top: -10px;
+        right: 15px;
+        background: var(--accent-purple);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* ===================== TABS ===================== */
+    .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .tab-btn {
+        padding: 10px 20px;
+        background: var(--bg-primary);
+        border: 2px solid var(--accent-purple);
+        color: var(--text-primary);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn.active { background: var(--accent-purple); color: white; }
+    .tab-btn:hover { background: rgba(139,108,246,0.2); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ===================== INFO BOXES ===================== */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid #F59E0B;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* ===================== NAVIGATION ===================== */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+    <a href="arrayGS.html" class="logo">CodeCanvas - Array</a>
+    <nav>
+        <ul>
+                <li><a href="../GetStarted/arrayGS.html">Back To Array</a></li>
+                <li><a href="../array/theory.html">Theory</a></li>
+                <li><a href="../array/syntax.html" class="active">Syntax</a></li>
+                <li><a href="../array/algorithm.html">Algorithm</a></li>
+                <li><a href="../array/complexity.html">Complexity</a></li>
+                <li><a href="../array/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="syntax">
+    <div class="section-content">
+
+        <!-- Language Selector -->
+        <div class="lang-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see the syntax for array operations. The code will update dynamically.</p>
+            <select id="lang-select">
+                <option value="c">C Language</option>
+                <option value="cpp">C++</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+            </select>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('1d')">1D Array</button>
+            <button class="tab-btn" onclick="showTab('2d')">2D Array</button>
+        </div>
+
+        <!-- ==================== 1D ARRAY ==================== -->
+        <div id="1d" class="tab-content active">
+            
+            <!-- Declaration -->
+            <div class="syntax-card">
+                <h2>1. Declaration & Initialization</h2>
+                <p>Learn how to declare and initialize arrays in different programming languages.</p>
+
+                <h3>Declaration</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-declare-1d">C</span>
+                    <code id="code-declare-1d"><span class="keyword">int</span> arr[<span class="number">5</span>];</code>
+                </div>
+
+                <h3>Initialization</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-init-1d">C</span>
+                    <code id="code-init-1d"><span class="keyword">int</span> arr[<span class="number">5</span>] = {<span class="number">1, 2, 3, 4, 5</span>};</code>
+                </div>
+
+                <h3>Auto Size</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-init-no-size">C</span>
+                    <code id="code-init-no-size"><span class="keyword">int</span> arr[] = {<span class="number">10, 20, 30</span>};  <span class="comment">// Size is 3</span></code>
+                </div>
+
+                <div class="warning-box"><strong>Important:</strong> In C/C++, size must be known at compile time for static arrays.</div>
+            </div>
+
+            <!-- Accessing -->
+            <div class="syntax-card">
+                <h2>2. Accessing & Updating</h2>
+                
+                <h3>Read Element</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-access">C</span>
+                    <code id="code-access"><span class="keyword">int</span> x = arr[<span class="number">0</span>];  <span class="comment">// First element</span></code>
+                </div>
+
+                <h3>Update Element</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-update">C</span>
+                    <code id="code-update">arr[<span class="number">0</span>] = <span class="number">100</span>;  <span class="comment">// Change to 100</span></code>
+                </div>
+
+                <h3>Get Size</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-length">C</span>
+                    <code id="code-length"><span class="keyword">int</span> n = <span class="keyword">sizeof</span>(arr) / <span class="keyword">sizeof</span>(arr[<span class="number">0</span>]);</code>
+                </div>
+
+                <div class="info-box"><strong>Note:</strong> Array indices start from 0. Always check bounds!</div>
+            </div>
+
+            <!-- Traversing -->
+            <div class="syntax-card">
+                <h2>3. Traversing an Array</h2>
+                
+                <h3>For Loop</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-traverse-for">C</span>
+                    <code id="code-traverse-for"><span class="keyword">int</span> n = <span class="number">5</span>;
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {
+    <span class="function">printf</span>(<span class="string">"%d "</span>, arr[i]);
+}</code>
+                </div>
+
+                <h3>While Loop</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-traverse-while">C</span>
+                    <code id="code-traverse-while"><span class="keyword">int</span> i = <span class="number">0</span>;
+<span class="keyword">while</span>(i < n) {
+    <span class="function">printf</span>(<span class="string">"%d "</span>, arr[i]);
+    i++;
+}</code>
+                </div>
+            </div>
+
+                       <!-- Insertion -->
+            <div class="syntax-card">
+                <h2>4. Insertion Operations</h2>
+                
+                <h3>Insert at End</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-insert-end">C</span>
+                    <code id="code-insert-end">arr[size] = <span class="number">50</span>;
+size++;</code>
+                </div>
+
+                <h3>Insert at Beginning</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-insert-begin">C</span>
+                    <code id="code-insert-begin"><span class="keyword">for</span>(<span class="keyword">int</span> i = size; i > <span class="number">0</span>; i--) {
+    arr[i] = arr[i-<span class="number">1</span>];
+}
+arr[<span class="number">0</span>] = <span class="number">99</span>;
+size++;</code>
+                </div>
+
+                <h3>Insert at Position</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-insert-pos">C</span>
+                    <code id="code-insert-pos"><span class="keyword">for</span>(<span class="keyword">int</span> i = size; i > pos; i--) {
+    arr[i] = arr[i-<span class="number">1</span>];
+}
+arr[pos] = <span class="number">100</span>;
+size++;</code>
+                </div>
+
+                <div class="warning-box"><strong>Time Complexity:</strong> O(n)</div>
+            </div>
+
+            <!-- Deletion -->
+            <div class="syntax-card">
+                <h2>5. Deletion Operations</h2>
+                
+                <h3>Delete from End</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-delete-end">C</span>
+                    <code id="code-delete-end">size--;</code>
+                </div>
+
+                <h3>Delete from Beginning</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-delete-begin">C</span>
+                    <code id="code-delete-begin"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size - <span class="number">1</span>; i++) {
+    arr[i] = arr[i+<span class="number">1</span>];
+}
+size--;</code>
+                </div>
+
+                <h3>Delete from Position</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-delete-pos">C</span>
+                    <code id="code-delete-pos"><span class="keyword">for</span>(<span class="keyword">int</span> i = pos; i < size - <span class="number">1</span>; i++) {
+    arr[i] = arr[i+<span class="number">1</span>];
+}
+size--;</code>
+                </div>
+            </div>
+
+            <!-- Searching -->
+            <div class="syntax-card">
+                <h2>6. Searching Operations</h2>
+                
+                <h3>Linear Search</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-search-linear">C</span>
+                    <code id="code-search-linear"><span class="keyword">int</span> linearSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> key) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {
+        <span class="keyword">if</span>(arr[i] == key) <span class="keyword">return</span> i;
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+
+                <h3>Binary Search</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-search-binary">C</span>
+                    <code id="code-search-binary"><span class="keyword">int</span> binarySearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> key) {
+    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>;
+
+    <span class="keyword">while</span>(low <= high) {
+        <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;
+        
+        <span class="keyword">if</span>(arr[mid] == key) <span class="keyword">return</span> mid;
+        <span class="keyword">else if</span>(arr[mid] < key) low = mid + <span class="number">1</span>;
+        <span class="keyword">else</span> high = mid - <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> -<span class="number">1</span>;
+}</code>
+                </div>
+
+                <div class="info-box"><strong>Binary Search:</strong> Only works on sorted arrays!</div>
+            </div>
+
+            <!-- Sorting -->
+            <div class="syntax-card">
+                <h2>7. Sorting Operations</h2>
+                
+                <h3>Bubble Sort</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-sort-bubble">C</span>
+                    <code id="code-sort-bubble"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n - <span class="number">1</span>; i++) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n - i - <span class="number">1</span>; j++) {
+        <span class="keyword">if</span>(arr[j] > arr[j+<span class="number">1</span>]) {
+            <span class="keyword">int</span> temp = arr[j];
+            arr[j] = arr[j+<span class="number">1</span>];
+            arr[j+<span class="number">1</span>] = temp;
+        }
+    }
+}</code>
+                </div>
+
+                <h3>Selection Sort</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-sort-selection">C</span>
+                    <code id="code-sort-selection"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n - <span class="number">1</span>; i++) {
+    <span class="keyword">int</span> minIdx = i;
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j < n; j++) {
+        <span class="keyword">if</span>(arr[j] < arr[minIdx]) minIdx = j;
+    }
+    <span class="keyword">int</span> temp = arr[minIdx];
+    arr[minIdx] = arr[i];
+    arr[i] = temp;
+}</code>
+                </div>
+
+                <h3>Insertion Sort</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-sort-insertion">C</span>
+                    <code id="code-sort-insertion"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {
+    <span class="keyword">int</span> key = arr[i];
+    <span class="keyword">int</span> j = i - <span class="number">1</span>;
+
+    <span class="keyword">while</span>(j >= <span class="number">0</span> && arr[j] > key) {
+        arr[j+<span class="number">1</span>] = arr[j];
+        j--;
+    }
+    arr[j+<span class="number">1</span>] = key;
+}</code>
+                </div>
+            </div>
+
+            <!-- Additional Operations -->
+            <div class="syntax-card">
+                <h2>8. Additional Operations</h2>
+                
+                <h3>Find Maximum</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-max">C</span>
+                    <code id="code-max"><span class="keyword">int</span> max = arr[<span class="number">0</span>];
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {
+    <span class="keyword">if</span>(arr[i] > max) max = arr[i];
+}</code>
+                </div>
+
+                <h3>Find Minimum</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-min">C</span>
+                    <code id="code-min"><span class="keyword">int</span> min = arr[<span class="number">0</span>];
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {
+    <span class="keyword">if</span>(arr[i] < min) min = arr[i];
+}</code>
+                </div>
+
+                <h3>Reverse Array</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-reverse">C</span>
+                    <code id="code-reverse"><span class="keyword">int</span> start = <span class="number">0</span>, end = n - <span class="number">1</span>;
+<span class="keyword">while</span>(start < end) {
+    <span class="keyword">int</span> temp = arr[start];
+    arr[start] = arr[end];
+    arr[end] = temp;
+    start++;
+    end--;
+}</code>
+                </div>
+
+                <h3>Sum of Elements</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-sum">C</span>
+                    <code id="code-sum"><span class="keyword">int</span> sum = <span class="number">0</span>;
+<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {
+    sum += arr[i];
+}</code>
+                </div>
+            </div>
+
+        </div> <!-- End 1D Array -->
+
+        <!-- ==================== 2D ARRAY ==================== -->
+        <div id="2d" class="tab-content">
+            
+            <div class="syntax-card">
+                <h2>2D Arrays</h2>
+                <p>Two-dimensional arrays are arrays of arrays, commonly used to represent matrices.</p>
+                
+                <h3>Declaration</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-2d-declare">C</span>
+                    <code id="code-2d-declare"><span class="keyword">int</span> matrix[<span class="number">3</span>][<span class="number">3</span>];</code>
+                </div>
+
+                <h3>Initialization</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-2d-init">C</span>
+                    <code id="code-2d-init"><span class="keyword">int</span> matrix[<span class="number">3</span>][<span class="number">3</span>] = {{<span class="number">1,2,3</span>}, {<span class="number">4,5,6</span>}, {<span class="number">7,8,9</span>}};</code>
+                </div>
+
+                <h3>Access Element</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-2d-access">C</span>
+                    <code id="code-2d-access"><span class="keyword">int</span> x = matrix[<span class="number">0</span>][<span class="number">0</span>];  <span class="comment">// First row, first col</span></code>
+                </div>
+
+                <h3>Row-wise Traversal</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-2d-traverse-row">C</span>
+                    <code id="code-2d-traverse-row"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {
+        <span class="function">printf</span>(<span class="string">"%d "</span>, matrix[i][j]);
+    }
+}</code>
+                </div>
+
+                <h3>Column-wise Traversal</h3>
+                <div class="code-block">
+                    <span class="code-label" id="label-2d-traverse-col">C</span>
+                    <code id="code-2d-traverse-col"><span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {
+    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {
+        <span class="function">printf</span>(<span class="string">"%d "</span>, matrix[i][j]);
+    }
+}</code>
+                </div>
+            </div>
+
+        </div> <!-- End 2D Array -->
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <a href="../array/theory.html" class="nav-btn secondary">← Theory</a>
+            <a href="../array/algorithm.html" class="nav-btn">Algorithm →</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../array/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Tab functionality
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+ // Language data
+    const langData = {
+        c: {
+            'label-declare-1d': 'C', 
+            'code-declare-1d': '<span class="keyword">int</span> arr[<span class="number">5</span>];',
+            'label-init-1d': 'C', 
+            'code-init-1d': '<span class="keyword">int</span> arr[<span class="number">5</span>] = {<span class="number">1, 2, 3, 4, 5</span>};',
+            'label-init-no-size': 'C', 
+            'code-init-no-size': '<span class="keyword">int</span> arr[] = {<span class="number">10, 20, 30</span>};  <span class="comment">// Size is 3</span>',
+            'label-access': 'C', 
+            'code-access': '<span class="keyword">int</span> x = arr[<span class="number">0</span>];  <span class="comment">// First element</span>',
+            'label-update': 'C', 
+            'code-update': 'arr[<span class="number">0</span>] = <span class="number">100</span>;  <span class="comment">// Change to 100</span>',
+            'label-length': 'C', 
+            'code-length': '<span class="keyword">int</span> n = <span class="keyword">sizeof</span>(arr) / <span class="keyword">sizeof</span>(arr[<span class="number">0</span>]);',
+            'label-traverse-for': 'C', 
+            'code-traverse-for': '<span class="keyword">int</span> n = <span class="number">5</span>;\n<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {\n    <span class="function">printf</span>(<span class="string">"%d "</span>, arr[i]);\n}',
+            'label-traverse-while': 'C', 
+            'code-traverse-while': '<span class="keyword">int</span> i = <span class="number">0</span>;\n<span class="keyword">while</span>(i < n) {\n    <span class="function">printf</span>(<span class="string">"%d "</span>, arr[i]);\n    i++;\n}',
+            'label-insert-end': 'C', 
+            'code-insert-end': 'arr[size] = <span class="number">50</span>;\nsize++;',
+            'label-insert-begin': 'C', 
+            'code-insert-begin': '<span class="keyword">for</span>(<span class="keyword">int</span> i = size; i > <span class="number">0</span>; i--) {\n    arr[i] = arr[i-<span class="number">1</span>];\n}\narr[<span class="number">0</span>] = <span class="number">99</span>;\nsize++;',
+            'label-insert-pos': 'C', 
+            'code-insert-pos': '<span class="keyword">for</span>(<span class="keyword">int</span> i = size; i > pos; i--) {\n    arr[i] = arr[i-<span class="number">1</span>];\n}\narr[pos] = <span class="number">100</span>;\nsize++;',
+            'label-delete-end': 'C', 
+            'code-delete-end': 'size--;',
+            'label-delete-begin': 'C', 
+            'code-delete-begin': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < size - <span class="number">1</span>; i++) {\n    arr[i] = arr[i+<span class="number">1</span>];\n}\nsize--;',
+            'label-delete-pos': 'C', 
+            'code-delete-pos': '<span class="keyword">for</span>(<span class="keyword">int</span> i = pos; i < size - <span class="number">1</span>; i++) {\n    arr[i] = arr[i+<span class="number">1</span>];\n}\nsize--;',
+            'label-search-linear': 'C', 
+            'code-search-linear': '<span class="keyword">int</span> linearSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> key) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {\n        <span class="keyword">if</span>(arr[i] == key) <span class="keyword">return</span> i;\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-search-binary': 'C', 
+            'code-search-binary': '<span class="keyword">int</span> binarySearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> key) {\n    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>;\n    <span class="keyword">while</span>(low <= high) {\n        <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;\n        <span class="keyword">if</span>(arr[mid] == key) <span class="keyword">return</span> mid;\n        <span class="keyword">else if</span>(arr[mid] < key) low = mid + <span class="number">1</span>;\n        <span class="keyword">else</span> high = mid - <span class="number">1</span>;\n    }\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-sort-bubble': 'C', 
+            'code-sort-bubble': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n - <span class="number">1</span>; i++) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < n - i - <span class="number">1</span>; j++) {\n        <span class="keyword">if</span>(arr[j] > arr[j+<span class="number">1</span>]) {\n            <span class="keyword">int</span> temp = arr[j];\n            arr[j] = arr[j+<span class="number">1</span>];\n            arr[j+<span class="number">1</span>] = temp;\n        }\n    }\n}',
+            'label-sort-selection': 'C', 
+            'code-sort-selection': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n - <span class="number">1</span>; i++) {\n    <span class="keyword">int</span> minIdx = i;\n    <span class="keyword">for</span>(<span class="keyword">int</span> j = i + <span class="number">1</span>; j < n; j++) {\n        <span class="keyword">if</span>(arr[j] < arr[minIdx]) minIdx = j;\n    }\n    <span class="keyword">int</span> temp = arr[minIdx];\n    arr[minIdx] = arr[i];\n    arr[i] = temp;\n}',
+            'label-sort-insertion': 'C', 
+            'code-sort-insertion': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {\n    <span class="keyword">int</span> key = arr[i];\n    <span class="keyword">int</span> j = i - <span class="number">1</span>;\n    <span class="keyword">while</span>(j >= <span class="number">0</span> && arr[j] > key) {\n        arr[j+<span class="number">1</span>] = arr[j];\n        j--;\n    }\n    arr[j+<span class="number">1</span>] = key;\n}',
+            'label-max': 'C', 
+            'code-max': '<span class="keyword">int</span> max = arr[<span class="number">0</span>];\n<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {\n    <span class="keyword">if</span>(arr[i] > max) max = arr[i];\n}',
+            'label-min': 'C', 
+            'code-min': '<span class="keyword">int</span> min = arr[<span class="number">0</span>];\n<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i < n; i++) {\n    <span class="keyword">if</span>(arr[i] < min) min = arr[i];\n}',
+            'label-reverse': 'C', 
+            'code-reverse': '<span class="keyword">int</span> start = <span class="number">0</span>, end = n - <span class="number">1</span>;\n<span class="keyword">while</span>(start < end) {\n    <span class="keyword">int</span> temp = arr[start];\n    arr[start] = arr[end];\n    arr[end] = temp;\n    start++;\n    end--;\n}',
+            'label-sum': 'C', 
+            'code-sum': '<span class="keyword">int</span> sum = <span class="number">0</span>;\n<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {\n    sum += arr[i];\n}',
+            'label-2d-declare': 'C', 
+            'code-2d-declare': '<span class="keyword">int</span> matrix[<span class="number">3</span>][<span class="number">3</span>];',
+            'label-2d-init': 'C', 
+            'code-2d-init': '<span class="keyword">int</span> matrix[<span class="number">3</span>][<span class="number">3</span>] = {{<span class="number">1,2,3</span>}, {<span class="number">4,5,6</span>}, {<span class="number">7,8,9</span>}};',
+            'label-2d-access': 'C', 
+            'code-2d-access': '<span class="keyword">int</span> x = matrix[<span class="number">0</span>][<span class="number">0</span>];  <span class="comment">// First element</span>',
+            'label-2d-traverse-row': 'C', 
+            'code-2d-traverse-row': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {\n        <span class="function">printf</span>(<span class="string">"%d "</span>, matrix[i][j]);\n    }\n}',
+            'label-2d-traverse-col': 'C', 
+            'code-2d-traverse-col': '<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {\n        <span class="function">printf</span>(<span class="string">"%d "</span>, matrix[i][j]);\n    }\n}'
+        },
+        cpp: {
+            'label-declare-1d': 'C++', 
+            'code-declare-1d': '<span class="keyword">int</span> arr[<span class="number">5</span>];',
+            'label-init-1d': 'C++', 
+            'code-init-1d': '<span class="keyword">int</span> arr[<span class="number">5</span>] = {<span class="number">1, 2, 3, 4, 5</span>};',
+            'label-init-no-size': 'C++', 
+            'code-init-no-size': '<span class="keyword">int</span> arr[] = {<span class="number">10, 20, 30</span>};',
+            'label-access': 'C++', 
+            'code-access': '<span class="keyword">int</span> x = arr[<span class="number">0</span>];',
+            'label-update': 'C++', 
+            'code-update': 'arr[<span class="number">0</span>] = <span class="number">100</span>;',
+            'label-length': 'C++', 
+            'code-length': '<span class="keyword">int</span> n = <span class="keyword">sizeof</span>(arr)/<span class="keyword">sizeof</span>(arr[<span class="number">0</span>]);',
+            'label-traverse-for': 'C++', 
+            'code-traverse-for': '<span class="keyword">int</span> n = <span class="number">5</span>;\n<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++)\n    cout << arr[i] << <span class="string">" "</span>;',
+            'label-traverse-while': 'C++', 
+            'code-traverse-while': '<span class="keyword">int</span> i = <span class="number">0</span>;\n<span class="keyword">while</span>(i < n) {\n    cout << arr[i];\n    i++;\n}',
+            'label-insert-end': 'C++', 
+            'code-insert-end': '<span class="comment">// Use vector: v.push_back(50);</span>',
+            'label-insert-begin': 'C++', 
+            'code-insert-begin': '<span class="comment">// Use vector: v.insert(v.begin(), 99);</span>',
+            'label-insert-pos': 'C++', 
+            'code-insert-pos': '<span class="comment">// Use vector: v.insert(v.begin()+pos, 100);</span>',
+            'label-delete-end': 'C++', 
+            'code-delete-end': '<span class="comment">// Use vector: v.pop_back();</span>',
+            'label-delete-begin': 'C++', 
+            'code-delete-begin': '<span class="comment">// Use vector: v.erase(v.begin());</span>',
+            'label-delete-pos': 'C++', 
+            'code-delete-pos': '<span class="comment">// Use vector: v.erase(v.begin()+pos);</span>',
+            'label-search-linear': 'C++', 
+            'code-search-linear': '<span class="keyword">int</span> linearSearch(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> key) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++)\n        <span class="keyword">if</span>(arr[i] == key) <span class="keyword">return</span> i;\n    <span class="keyword">return</span> -<span class="number">1</span>;\n}',
+            'label-search-binary': 'C++', 
+            'code-search-binary': '<span class="comment">// Use std::binary_search</span>\n<span class="function">binary_search</span>(arr, arr+n, key);',
+            'label-sort-bubble': 'C++', 
+            'code-sort-bubble': '<span class="comment">// Use std::sort</span>\n<span class="function">sort</span>(arr, arr+n);',
+            'label-sort-selection': 'C++', 
+            'code-sort-selection': '<span class="function">sort</span>(arr, arr+n);',
+            'label-sort-insertion': 'C++', 
+            'code-sort-insertion': '<span class="function">sort</span>(arr, arr+n);',
+            'label-max': 'C++', 
+            'code-max': '<span class="comment">// Use *max_element</span>\n*<span class="function">max_element</span>(arr, arr+n);',
+            'label-min': 'C++', 
+            'code-min': '<span class="comment">// Use *min_element</span>\n*<span class="function">min_element</span>(arr, arr+n);',
+            'label-reverse': 'C++', 
+            'code-reverse': '<span class="function">reverse</span>(arr, arr+n);',
+            'label-sum': 'C++', 
+            'code-sum': '<span class="function">accumulate</span>(arr, arr+n, <span class="number">0</span>);',
+            'label-2d-declare': 'C++', 
+            'code-2d-declare': '<span class="keyword">int</span> matrix[<span class="number">3</span>][<span class="number">3</span>];',
+            'label-2d-init': 'C++', 
+            'code-2d-init': '<span class="keyword">int</span> m[<span class="number">3</span>][<span class="number">3</span>] = {{<span class="number">1,2,3</span>}, {<span class="number">4,5,6</span>}, {<span class="number">7,8,9</span>}};',
+            'label-2d-access': 'C++', 
+            'code-2d-access': '<span class="keyword">int</span> x = matrix[<span class="number">0</span>][<span class="number">0</span>];',
+            'label-2d-traverse-row': 'C++', 
+            'code-2d-traverse-row': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++)\n    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++)\n        cout << matrix[i][j];',
+            'label-2d-traverse-col': 'C++', 
+            'code-2d-traverse-col': '<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++)\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++)\n        cout << matrix[i][j];'
+        },
+        java: {
+            'label-declare-1d': 'Java', 
+            'code-declare-1d': '<span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];',
+            'label-init-1d': 'Java', 
+            'code-init-1d': '<span class="keyword">int</span>[] arr = {<span class="number">1, 2, 3, 4, 5</span>};',
+            'label-init-no-size': 'Java', 
+            'code-init-no-size': '<span class="keyword">int</span>[] arr = {<span class="number">10, 20, 30</span>};',
+            'label-access': 'Java', 
+            'code-access': '<span class="keyword">int</span> x = arr[<span class="number">0</span>];',
+            'label-update': 'Java', 
+            'code-update': 'arr[<span class="number">0</span>] = <span class="number">100</span>;',
+            'label-length': 'Java', 
+            'code-length': '<span class="keyword">int</span> n = arr.length;',
+            'label-traverse-for': 'Java', 
+            'code-traverse-for': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {\n    System.out.print(arr[i]);\n}',
+            'label-traverse-while': 'Java', 
+            'code-traverse-while': '<span class="keyword">int</span> i = <span class="number">0</span>;\n<span class="keyword">while</span>(i < n) {\n    System.out.print(arr[i]);\n    i++;\n}',
+            'label-insert-end': 'Java', 
+            'code-insert-end': '<span class="comment">// Use ArrayList</span>\narrList.add(<span class="number">50</span>);',
+            'label-insert-begin': 'Java', 
+            'code-insert-begin': '<span class="comment">// Use ArrayList</span>\narrList.add(<span class="number">0</span>, <span class="number">99</span>);',
+            'label-insert-pos': 'Java', 
+            'code-insert-pos': '<span class="comment">// Use ArrayList</span>\narrList.add(pos, <span class="number">100</span>);',
+            'label-delete-end': 'Java', 
+            'code-delete-end': '<span class="comment">// arrList.remove(arrList.size()-1);</span>',
+            'label-delete-begin': 'Java', 
+            'code-delete-begin': '<span class="comment">// arrList.remove(0);</span>',
+            'label-delete-pos': 'Java', 
+            'code-delete-pos': '<span class="comment">// arrList.remove(pos);</span>',
+            'label-search-linear': 'Java', 
+            'code-search-linear': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {\n    <span class="keyword">if</span>(arr[i] == key) <span class="keyword">return</span> i;\n}',
+            'label-search-binary': 'Java', 
+            'code-search-binary': 'Arrays.binarySearch(arr, key);',
+            'label-sort-bubble': 'Java', 
+            'code-sort-bubble': 'Arrays.sort(arr);',
+            'label-sort-selection': 'Java', 
+            'code-sort-selection': 'Arrays.sort(arr);',
+            'label-sort-insertion': 'Java', 
+            'code-sort-insertion': 'Arrays.sort(arr);',
+            'label-max': 'Java', 
+            'code-max': 'Arrays.stream(arr).max().getAsInt();',
+            'label-min': 'Java', 
+            'code-min': 'Arrays.stream(arr).min().getAsInt();',
+            'label-reverse': 'Java', 
+            'code-reverse': '<span class="comment">// Collections.reverse(list);</span>',
+            'label-sum': 'Java', 
+            'code-sum': 'Arrays.stream(arr).sum();',
+            'label-2d-declare': 'Java', 
+            'code-2d-declare': '<span class="keyword">int</span>[][] matrix = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>][<span class="number">3</span>];',
+            'label-2d-init': 'Java', 
+            'code-2d-init': '<span class="keyword">int</span>[][] m = {{<span class="number">1,2,3</span>}, {<span class="number">4,5,6</span>}, {<span class="number">7,8,9</span>}};',
+            'label-2d-access': 'Java', 
+            'code-2d-access': '<span class="keyword">int</span> x = matrix[<span class="number">0</span>][<span class="number">0</span>];',
+            'label-2d-traverse-row': 'Java', 
+            'code-2d-traverse-row': '<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {\n        System.out.print(m[i][j]);\n    }\n}',
+            'label-2d-traverse-col': 'Java', 
+            'code-2d-traverse-col': '<span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j < <span class="number">3</span>; j++) {\n    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i < <span class="number">3</span>; i++) {\n        System.out.print(m[i][j]);\n    }\n}'
+        },
+        python: {
+            'label-declare-1d': 'Python', 
+            'code-declare-1d': 'arr = [<span class="number">0</span>] * <span class="number">5</span>',
+            'label-init-1d': 'Python', 
+            'code-init-1d': 'arr = [<span class="number">1, 2, 3, 4, 5</span>]',
+            'label-init-no-size': 'Python', 
+            'code-init-no-size': 'arr = [<span class="number">10, 20, 30</span>]',
+            'label-access': 'Python', 
+            'code-access': 'x = arr[<span class="number">0</span>]',
+            'label-update': 'Python', 
+            'code-update': 'arr[<span class="number">0</span>] = <span class="number">100</span>',
+            'label-length': 'Python', 
+            'code-length': 'n = <span class="function">len</span>(arr)',
+            'label-traverse-for': 'Python', 
+            'code-traverse-for': '<span class="keyword">for</span> i <span class="keyword">in</span> arr:\n    <span class="function">print</span>(i, end=<span class="string">" "</span>)',
+            'label-traverse-while': 'Python', 
+            'code-traverse-while': 'i = <span class="number">0</span>\n<span class="keyword">while</span> i < <span class="function">len</span>(arr):\n    <span class="function">print</span>(arr[i])\n    i += <span class="number">1</span>',
+            'label-insert-end': 'Python', 
+            'code-insert-end': 'arr.append(<span class="number">50</span>)',
+            'label-insert-begin': 'Python', 
+            'code-insert-begin': 'arr.insert(<span class="number">0</span>, <span class="number">99</span>)',
+            'label-insert-pos': 'Python', 
+            'code-insert-pos': 'arr.insert(pos, <span class="number">100</span>)',
+            'label-delete-end': 'Python', 
+            'code-delete-end': 'arr.pop()',
+            'label-delete-begin': 'Python', 
+            'code-delete-begin': 'arr.pop(<span class="number">0</span>)',
+            'label-delete-pos': 'Python', 
+            'code-delete-pos': 'arr.pop(pos)',
+            'label-search-linear': 'Python', 
+            'code-search-linear': '<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(arr)):\n    <span class="keyword">if</span> arr[i] == key:\n        <span class="keyword">return</span> i',
+            'label-search-binary': 'Python', 
+            'code-search-binary': '<span class="function">binary_search</span>(arr, key)',
+            'label-sort-bubble': 'Python', 
+            'code-sort-bubble': 'arr.sort()',
+            'label-sort-selection': 'Python', 
+            'code-sort-selection': 'arr.sort()',
+            'label-sort-insertion': 'Python', 
+            'code-sort-insertion': 'arr.sort()',
+            'label-max': 'Python', 
+            'code-max': '<span class="function">max</span>(arr)',
+            'label-min': 'Python', 
+            'code-min': '<span class="function">min</span>(arr)',
+            'label-reverse': 'Python', 
+            'code-reverse': 'arr.reverse()',
+            'label-sum': 'Python', 
+            'code-sum': '<span class="function">sum</span>(arr)',
+            'label-2d-declare': 'Python', 
+            'code-2d-declare': 'matrix = [[<span class="number">0</span>] * <span class="number">3</span> <span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">3</span>)]',
+            'label-2d-init': 'Python', 
+            'code-2d-init': 'matrix = [[<span class="number">1,2,3</span>], [<span class="number">4,5,6</span>], [<span class="number">7,8,9</span>]]',
+            'label-2d-access': 'Python', 
+            'code-2d-access': 'x = matrix[<span class="number">0</span>][<span class="number">0</span>]',
+            'label-2d-traverse-row': 'Python', 
+            'code-2d-traverse-row': '<span class="keyword">for</span> row <span class="keyword">in</span> matrix:\n    <span class="keyword">for</span> val <span class="keyword">in</span> row:\n        <span class="function">print</span>(val, end=<span class="string">" "</span>)',
+            'label-2d-traverse-col': 'Python', 
+            'code-2d-traverse-col': '<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">3</span>):\n    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):\n        <span class="function">print</span>(matrix[i][j])'
+        }
+    };
+
+    // Language selector
+    const langSelect = document.getElementById('lang-select');
+
+    function updateCode(lang) {
+        const data = langData[lang];
+        if (data) {
+            for (const [id, code] of Object.entries(data)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.innerHTML = code;
+                }
+            }
+        }
+    }
+
+    langSelect.addEventListener('change', function() {
+        updateCode(this.value);
+    });
+
+    // Initialize with C
+    updateCode('c');
+    </script>
+
+    </body>
+    </html>

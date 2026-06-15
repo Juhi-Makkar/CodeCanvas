@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowcharts for Stack - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+
+       .navbar nav a.active {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.2);
+       }
+
+        /* Section Spacing */
+        section {
+            min-height: auto;
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Search Bar */
+        .search-container {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .search-container h2 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .search-container input {
+            padding: 12px;
+            width: 60%;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .search-container button {
+            padding: 12px 22px;
+            border: none;
+            background: linear-gradient(135deg, #8B6CF6, #9f7aea);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .search-container button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(139,108,246,0.6);
+        }
+
+        /* Flowchart Container */
+        .flowchart-container {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .flowchart-container h3 {
+            color: var(--accent-purple);
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Explanation */
+        .explanation {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .explanation h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .explanation p {
+            margin-bottom: 15px;
+        }
+
+        /* Quick Access Cards */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .quick-card {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(139,108,246,0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(139,108,246,0.5);
+            border-color: var(--accent-purple);
+        }
+
+        .quick-card h4 {
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+        }
+
+        .quick-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .search-container input {
+                width: 80%;
+            }
+            .mermaid {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="stackGS.html" class="logo">CodeCanvas - Stack</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/stackGS.html">Back to Stack</a></li>
+            <li><a href="../stack/theory.html">Theory</a></li>
+            <li><a href="../stack/syntax.html">Syntax</a></li>
+            <li><a href="../stack/algorithm.html">Algorithm</a></li>
+            <li><a href="../stack/complexity.html">Complexity</a></li>
+            <li><a href="../stack/flowchart.html" class="active">Flowchart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search Section -->
+    <section id="search">
+        <div class="section-content">
+            <div class="search-container">
+                <h2>Search for a Stack Flowchart Concept</h2>
+                <p>Enter a concept (e.g., "Push Operation", "Pop Operation", "Peek", "Is Empty") to generate its flowchart.</p>
+                <input type="text" id="search-input" placeholder="Type a concept...">
+                <button id="search-btn">Generate Flowchart</button>
+                <div id="results"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access Section -->
+    <section id="quick-access">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 20px;">Quick Access</h2>
+            <div class="quick-access" id="quick-access-grid">
+                <!-- Quick cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Explanation Section -->
+    <section id="explanation">
+        <div class="section-content">
+            <div class="explanation">
+                <h2>What are Stack Flowcharts?</h2>
+                <p>Stacks follow LIFO (Last In, First Out) principle. Flowcharts visualize core operations: push (add to top), pop (remove from top), peek (view top), and stack management (empty/full checks). These diagrams use standard symbols: rectangles for processes, diamonds for decisions, and arrows for flow direction.</p>
+                <p><strong>Key Stack Symbols:</strong></p>
+                <ul>
+                    <li><strong>Rectangle:</strong> Operations like "stack[top] = data" or "top++"</li>
+                    <li><strong>Diamond:</strong> Conditions like "Is Empty?" or "Is Full?"</li>
+                    <li><strong>Oval:</strong> Start/End points</li>
+                    <li><strong>Arrow:</strong> Execution flow</li>
+                </ul>
+                <p><strong>Core Operations:</strong> PUSH adds to top, POP removes from top, PEEK views top element without removal.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flowchart Display Section -->
+    <section id="flowcharts">
+        <div class="section-content">
+            <h2 style="color: var(--accent-purple); margin-bottom: 20px;">All Stack Flowcharts</h2>
+            <div id="flowchart-display"></div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../stack/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Comprehensive stack flowcharts database
+        const flowcharts = {
+            "Push Operation": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is Full?"}
+                B -->|Yes| C["Overflow Error"]
+                B -->|No| D["top++"]
+                D --> E["stack[top] = data"]
+                E --> F["End"]`,
+                explanation: "Push adds element to top of stack. Check for overflow first, then increment top and insert data."
+            },
+            "Pop Operation": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is Empty?"}
+                B -->|Yes| C["Underflow Error"]
+                B -->|No| D["data = stack[top]"]
+                D --> E["top--"]
+                E --> F["Return data"]
+                F --> G["End"]`,
+                explanation: "Pop removes and returns top element. Check for underflow, save data, decrement top."
+            },
+            "Peek Operation": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is Empty?"}
+                B -->|Yes| C["Underflow Error"]
+                B -->|No| D["Return stack[top]"]
+                D --> E["End"]`,
+                explanation: "Peek returns top element without removing it. Simply check if empty and return stack[top]."
+            },
+            "Is Empty Check": {
+                mermaid: `graph TD
+                A["Start"] --> B{"top == -1 ?"}
+                B -->|Yes| C["Return true"]
+                B -->|No| D["Return false"]
+                D --> E["End"]
+                C --> E`,
+                explanation: "Check if stack is empty by verifying if top == -1 (initial state before any push)."
+            },
+            "Is Full Check": {
+                mermaid: `graph TD
+                A["Start"] --> B{"top == maxSize-1 ?"}
+                B -->|Yes| C["Return true"]
+                B -->|No| D["Return false"]
+                D --> E["End"]
+                C --> E`,
+                explanation: "Check if stack is full by verifying if top has reached maximum capacity - 1."
+            },
+            "Display Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is Empty?"}
+                B -->|Yes| C["Stack Empty"]
+                B -->|No| D["i = top"]
+                D --> E{"i >= 0 ?"}
+                E -->|Yes| F["Print stack[i]"]
+                F --> G["i--"]
+                G --> E
+                E -->|No| H["End"]
+                C --> H`,
+                explanation: "Display stack from top to bottom. Start from top index and print until reaching -1."
+            },
+            "Stack Initialization": {
+                mermaid: `graph TD
+                A["Start"] --> B["top = -1"]
+                B --> C["stack[maxSize] allocated"]
+                C --> D["End"]`,
+                explanation: "Initialize stack with top pointer at -1 indicating empty stack."
+            },
+            "Copy Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create newStack"]
+                B --> C{"source.top >= 0 ?"}
+                C -->|Yes| D["Push source.stack[source.top] to newStack"]
+                D --> E["source.top--"]
+                E --> C
+                C -->|No| F["End"]`,
+                explanation: "Create copy by popping from source and pushing to destination until source is empty."
+            },
+            "Count Stack Elements": {
+                mermaid: `graph TD
+                A["Start"] --> B["count = 0, temp = top"]
+                B --> C{"temp >= 0 ?"}
+                C -->|Yes| D["count++"]
+                D --> E["temp--"]
+                E --> C
+                C -->|No| F["Return count"]
+                F --> G["End"]`,
+                explanation: "Count elements by traversing from top to bottom without modifying stack."
+            },
+            "Find Element in Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Is Empty?"}
+                B -->|Yes| C["Not Found"]
+                B -->|No| D["temp = top"]
+                D --> E{"temp >= 0 ?"}
+                E -->|Yes| F{"stack[temp] == key ?"}
+                F -->|Yes| G["Found at position"]
+                F -->|No| H["temp--"]
+                H --> E
+                E -->|No| I["Not Found"]
+                G --> J["End"]
+                C --> J
+                I --> J`,
+                explanation: "Search from top to bottom until key is found or stack end is reached."
+            },
+            "Stack from Array": {
+                mermaid: `graph TD
+                A["Start"] --> B["top = -1"]
+                B --> C["i = 0"]
+                C --> D{"i < arraySize ?"}
+                D -->|Yes| E["Push array[i]"]
+                E --> F["i++"]
+                F --> D
+                D -->|No| G["End"]`,
+                explanation: "Convert array to stack by pushing each element sequentially."
+            },
+            "Reverse Stack using Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create tempStack"]
+                B --> C{"source.top >= 0 ?"}
+                C -->|Yes| D["Push source.top to tempStack"]
+                D --> E["Pop from source"]
+                E --> C
+                C -->|No| F["Copy tempStack back to source"]
+                F --> G["End"]`,
+                explanation: "Reverse by using temporary stack: pop from source → push to temp → copy back."
+            },
+            "Check Two Stacks Equal": {
+                mermaid: `graph TD
+                A["Start"] --> B{"Sizes equal?"}
+                B -->|No| C["Not Equal"]
+                B -->|Yes| D{"Both Empty?"}
+                D -->|Yes| E["Equal"]
+                D -->|No| F{"stack1.top == stack2.top ?"}
+                F -->|No| G["Not Equal"]
+                F -->|Yes| H["Pop both stacks"]
+                H --> I{"Both Empty?"}
+                I -->|Yes| E
+                I -->|No| F`,
+                explanation: "Compare sizes first, then compare elements from top while popping both stacks."
+            },
+            "Sort Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B["tempStack = empty"]
+                B --> C{"inputStack empty?"}
+                C -->|No| D["tmp = pop inputStack"]
+                D --> E{"tempStack empty OR tmp >= tempStack.top?"}
+                E -->|Yes| F["Push tmp to tempStack"]
+                E -->|No| G["Push tempStack.top to inputStack"]
+                F --> C
+                G --> E
+                C -->|Yes| H["Copy tempStack to inputStack"]
+                H --> I["End"]`,
+                explanation: "Insertion sort variant using temporary stack to maintain sorted order."
+            },
+            "Next Greater Element": {
+                mermaid: `graph TD
+                A["Start"] --> B["result = empty array"]
+                B --> C["i = n-1"]
+                C --> D{"i >= 0 ?"}
+                D -->|Yes| E["stack = empty"]
+                E --> F{"stack empty OR arr[stack.top()] <= arr[i] ?"}
+                F -->|Yes| G["result[i] = -1"]
+                F -->|No| H["result[i] = arr[stack.top()]"]
+                G --> I["Push i to stack"]
+                H --> I
+                I --> J["i--"]
+                J --> D
+                D -->|No| K["End"]`,
+                explanation: "Find next greater element to right using stack. Traverse right-to-left, maintain decreasing order stack."
+            },
+            "Balanced Parentheses": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack = empty"]
+                B --> C["i = 0"]
+                C --> D{"i < length ?"}
+                D -->|Yes| E{"s[i] == '(' OR '[' OR '{' ?"}
+                E -->|Yes| F["Push s[i]"]
+                E -->|No| G{"Matching closing bracket ?"}
+                G -->|Yes| H["Pop stack"]
+                G -->|No| I["Invalid"]
+                H --> J{"Stack empty ?"}
+                J -->|Yes| I
+                J -->|No| K["i++"]
+                I --> L["End"]
+                K --> D
+                D -->|No| M{"Stack empty ?"}
+                M -->|Yes| N["Valid"]
+                M -->|No| I`,
+                explanation: "Use stack to match opening/closing brackets. Push opening, pop on matching closing."
+            },
+            "Infix to Postfix": {
+                mermaid: `graph TD
+                A["Start"] --> B["output = empty, stack = empty"]
+                B --> C["Process each token"]
+                C --> D{"Operand ?"}
+                D -->|Yes| E["Add to output"]
+                D -->|No| F{"'(' ?"}
+                F -->|Yes| G["Push to stack"]
+                F -->|No| H{"')' ?"}
+                H -->|Yes| I["Pop until '('"]
+                H -->|No| J{"Operator ?"}
+                J -->|Yes| K["Pop higher/equal precedence"]
+                K --> L["Push current operator"]
+                I --> M["i++"]
+                G --> M
+                E --> M
+                L --> M
+                M --> C
+                C -->|No| N["Pop all operators to output"]
+                N --> O["End"]`,
+                explanation: "Convert infix to postfix using operator precedence stack. Handle parentheses specially."
+            },
+            "Decimal to Binary": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack = empty"]
+                B --> C{"num > 0 ?"}
+                C -->|Yes| D["rem = num % 2"]
+                D --> E["Push rem"]
+                E --> F["num = num / 2"]
+                F --> C
+                C -->|No| G["binary = empty"]
+                G --> H{"stack empty ?"}
+                H -->|No| I["Pop digit, append to binary"]
+                I --> H
+                H -->|Yes| J["End"]`,
+                explanation: "Convert decimal to binary using stack. Remainders give digits from LSB to MSB."
+            },
+            "Evaluate Postfix": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack = empty"]
+                B --> C["Process each token"]
+                C --> D{"Operand ?"}
+                D -->|Yes| E["Push to stack"]
+                D -->|No| F["Operator ?"]
+                F -->|Yes| G["Pop 2 operands"]
+                G --> H["Apply operator"]
+                H --> I["Push result"]
+                I --> J["Next token"]
+                E --> J
+                J --> C
+                C -->|No| K["Pop result"]
+                K --> L["End"]`,
+                explanation: "Evaluate postfix by pushing operands, popping two for each operator, pushing result."
+            },
+            "Tower of Hanoi": {
+                mermaid: `graph TD
+                A["Start"] --> B{"n == 1 ?"}
+                B -->|Yes| C["Move disk from src to dest"]
+                B -->|No| D["Tower(n-1, src, dest, aux)"]
+                D --> E["Move disk from src to dest"]
+                E --> F["Tower(n-1, aux, src, dest)"]
+                C --> G["End"]
+                F --> G`,
+                explanation: "Recursive solution: move n-1 to aux, move nth to dest, move n-1 from aux to dest."
+            },
+            "Stack Overflow Check": {
+                mermaid: `graph TD
+                A["Start"] --> B["Push operation"]
+                B --> C{"top == maxSize-1 ?"}
+                C -->|Yes| D["Stack Overflow!"]
+                C -->|No| E["Continue push"]
+                D --> F["End"]
+                E --> F`,
+                explanation: "Before every push, check if top equals capacity-1 to prevent overflow."
+            },
+            "Stack Underflow Check": {
+                mermaid: `graph TD
+                A["Start"] --> B["Pop operation"]
+                B --> C{"top == -1 ?"}
+                C -->|Yes| D["Stack Underflow!"]
+                C -->|No| E["Continue pop"]
+                D --> F["End"]
+                E --> F`,
+                explanation: "Before every pop, check if top == -1 to prevent underflow."
+            },
+            "Delete Middle Element": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create tempStack"]
+                B --> C["Push elements until middle"]
+                C --> D["Pop middle element"]
+                D --> E["Push remaining elements back"]
+                E --> F["End"]`,
+                explanation: "Delete middle element by using temporary stack to track first half, skip middle, restore rest."
+            },
+            "Sort Stack (Recursive)": {
+                mermaid: `graph TD
+                A["Start"] --> B{"stack empty?"}
+                B -->|Yes| C["Return"]
+                B -->|No| D["tmp = pop()"]
+                D --> E["Sort()"]
+                E --> F["Push smaller elements"]
+                F --> G["Push tmp"]
+                G --> H["End"]`,
+                explanation: "Recursive sort: pop element, recursively sort rest, insert at correct position."
+            },
+            "Largest Element in Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B["max = -∞, tempStack"]
+                B --> C{"stack empty?"}
+                C -->|No| D["tmp = pop()"]
+                D --> E{"tmp > max?"}
+                E -->|Yes| F["max = tmp"]
+                E -->|No| G["Push tmp to tempStack"]
+                F --> H["Push back to original"]
+                G --> C
+                H --> C
+                C -->|Yes| I["Return max"]`,
+                explanation: "Find max by popping all elements to temp stack, track maximum, restore original."
+            },
+            "Check Palindrome": {
+                mermaid: `graph TD
+                A["Start"] --> B["tempStack, halfSize"]
+                B --> C["Push first half to temp"]
+                C --> D["Pop original & compare with temp"]
+                D --> E{"Match?"}
+                E -->|No| F["Not Palindrome"]
+                E -->|Yes| G{"All compared?"}
+                G -->|No| D
+                G -->|Yes| H["Palindrome"]`,
+                explanation: "Push first half to temp stack, compare popped elements from both stacks."
+            },
+            "Insert at Bottom": {
+                mermaid: `graph TD
+                A["Start"] --> B["tempStack"]
+                B --> C{"stack empty?"}
+                C -->|No| D["Push top to tempStack"]
+                D --> E["Repeat until empty"]
+                E --> F["Push new element"]
+                F --> G{"tempStack empty?"}
+                G -->|No| H["Pop tempStack back"]
+                H --> G`,
+                explanation: "Move all to temp stack, push new element, move back to insert at bottom."
+            },
+            "Reverse Stack (Recursive)": {
+                mermaid: `graph TD
+                A["Start"] --> B{"stack empty?"}
+                B -->|Yes| C["Return"]
+                B -->|No| D["tmp = pop()"]
+                D --> E["reverse()"]
+                E --> F["Push tmp"]`,
+                explanation: "Recursive reversal: pop top, reverse rest, push original top at end."
+            },
+            "Remove Duplicates": {
+                mermaid: `graph TD
+                A["Start"] --> B["tempStack, seen"]
+                B --> C{"stack empty?"}
+                C -->|No| D["tmp = pop()"]
+                D --> E{"tmp in seen?"}
+                E -->|Yes| F["Discard"]
+                E -->|No| G["Add to seen, push back"]
+                F --> C
+                G --> C`,
+                explanation: "Pop elements, track seen values, only push back unique elements."
+            },
+            "Kth Element from Top": {
+                mermaid: `graph TD
+                A["Start"] --> B{"k <= 0 OR empty?"}
+                B -->|Yes| C["Invalid"]
+                B -->|No| D["count = 1"]
+                D --> E{"count == k?"}
+                E -->|Yes| F["Return top"]
+                E -->|No| G["Push top to temp"]
+                G --> H["count++"]
+                H --> I{"empty?"}
+                I -->|No| E`,
+                explanation: "Pop k times or use counter to find kth element from top."
+            },
+            "Move Middle to Top": {
+                mermaid: `graph TD
+                A["Start"] --> B["tempStack"]
+                B --> C["Push first half"]
+                C --> D["Push middle"]
+                D --> E["Push second half back"]
+                E --> F["End"]`,
+                explanation: "Use temp stack to reorder: first half → middle → second half."
+            },
+            "Convert to Max Heap": {
+                mermaid: `graph TD
+                A["Start"] --> B["tempStack"]
+                B --> C{"stack empty?"}
+                C -->|No| D["tmp = pop()"]
+                D --> E{"tmp > tempStack.top()?"}
+                E -->|Yes| F["Push tmp"]
+                E -->|No| G["Pop tempStack, push tmp, push rest"]
+                F --> C
+                G --> C`,
+                explanation: "Maintain max heap property in stack using temporary stack."
+            },
+            "Stock Span Problem": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack = empty"]
+                B --> C{"prices empty?"}
+                C -->|No| D{"stack empty OR prices[i] >= prices[stack.top()]?"}
+                D -->|Yes| E["Pop until condition fails"]
+                D -->|No| F["span[i] = i - stack.top()"]
+                F --> G["Push i"]
+                E --> F`,
+                explanation: "Calculate consecutive days with smaller/equal prices using monotonic stack."
+            },
+            "Trap Rain Water": {
+                mermaid: `graph TD
+                A["Start"] --> B["maxLeft, maxRight, stack"]
+                B --> C["i = 0"]
+                C --> D{"i < n?"}
+                D -->|Yes| E["Update maxLeft, maxRight"]
+                E --> F{"stack empty OR height[i] >= height[stack.top()]?"}
+                F -->|Yes| G["Calculate trapped water"]
+                F -->|No| H["Push i"]
+                G --> I["i++"]
+                H --> I
+                I --> D`,
+                explanation: "Use stack to track increasing heights, calculate trapped water between bars."
+            },
+            "Minimum Element Stack": {
+                mermaid: `graph TD
+                A["Push"] --> B{"minStack needed?"}
+                B -->|Yes| C["Push 2*value - currentMin"]
+                B -->|No| D["Push value"]
+                D["Pop"] --> E{"value < currentMin?"}
+                E -->|Yes| F["Pop 2*value - currentMin"]
+                E -->|No| G["Pop value"]`,
+                explanation: "Maintain minStack with special encoding to get O(1) minimum access."
+            },
+            "Two Stacks Queue": {
+                mermaid: `graph TD
+                A["Enqueue"] --> B["Push to stack1"]
+                B --> C["End"]
+                D["Dequeue"] --> E{"stack2 empty?"}
+                E -->|Yes| F["Pop all stack1 to stack2"]
+                E -->|No| G["Pop stack2"]
+                F --> G`,
+                explanation: "Use stack1 for enqueue, stack2 for dequeue. Transfer when stack2 empty."
+            },
+            "Stack Permutation": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack, expected = 1"]
+                B --> C{"input & output empty?"}
+                C -->|No| D{"stack.top() == expected?"}
+                D -->|Yes| E["Pop stack, expected++"]
+                D -->|No| F{"input empty?"}
+                F -->|Yes| G["Invalid"]
+                F -->|No| H["Push input[0]"]
+                E --> C
+                H --> C`,
+                explanation: "Check if input sequence can produce output using valid stack operations."
+            },
+            "Asteroid Collision": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack"]
+                B --> C{"asteroids empty?"}
+                C -->|No| D{"stack empty OR both right OR left > stack.top()?"}
+                D -->|Yes| E["Push asteroid"]
+                D -->|No| F{"Destroy both?"}
+                F -->|Yes| G["Pop stack"]
+                F -->|No| H["Skip current"]
+                E --> I["Next"]
+                G --> D
+                H --> D`,
+                explanation: "Simulate asteroid collisions using stack to track surviving asteroids."
+            },
+            "Daily Temperatures": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack, result"]
+                B --> C{"temps empty?"}
+                C -->|No| D{"stack empty OR temps[i] >= temps[stack.top()]?"}
+                D -->|Yes| E["Push i"]
+                D -->|No| F["Pop until warmer found"]
+                F --> G["result[stack.top()] = i - stack.top()"]
+                E --> H["i++"]
+                G --> H`,
+                explanation: "Find days until warmer temperature using monotonic increasing stack."
+            },
+            "Remove K Digits": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack, k"]
+                B --> C{"num empty?"}
+                C -->|No| D{"stack empty OR k==0 OR non-decreasing?"}
+                D -->|Yes| E["Push digit"]
+                D -->|No| F["Pop stack, k--"]
+                F --> G{"k>0 & stack non-empty?"}
+                G -->|Yes| F
+                G -->|No| E
+                E --> H["Next digit"]`,
+                explanation: "Remove k digits to form smallest number using monotonic stack."
+            },
+            "Valid Parentheses": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack"]
+                B --> C{"s empty?"}
+                C -->|No| D{"opening bracket?"}
+                D -->|Yes| E["Push"]
+                D -->|No| F{"matching closing?"}
+                F -->|Yes| G["Pop"]
+                F -->|No| H["Invalid"]
+                G --> I{"stack empty?"}
+                I -->|Yes| H
+                E --> J["Next"]
+                J --> C
+                C -->|Yes| K{"stack empty?"}
+                K -->|Yes| L["Valid"]
+                K -->|No| H`,
+                explanation: "Standard parentheses validation using stack matching."
+            },
+            "Rotate Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B["k positions"]
+                B --> C["tempStack"]
+                C --> D["Pop k elements to temp"]
+                D --> E["Pop remaining to aux"]
+                E --> F["Push temp back"]
+                F --> G["Push aux back"]
+                G --> H["End"]`,
+                explanation: "Rotate stack k positions: move top k to temp, rest to aux, restore in rotated order."
+            },
+            "Sum of Stack Elements": {
+                mermaid: `graph TD
+                A["Start"] --> B["sum = 0, tempStack"]
+                B --> C{"stack empty?"}
+                C -->|No| D["tmp = pop()"]
+                D --> E["sum += tmp"]
+                E --> F["Push tmp to tempStack"]
+                F --> C
+                C -->|Yes| G["Return sum"]`,
+                explanation: "Calculate sum by popping all elements, tracking total, restoring stack."
+            },
+            "Max Area Rectangle": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack"]
+                B --> C["i = 0"]
+                C --> D{"i < n?"}
+                D -->|Yes| E{"height[i] < height[stack.top()]?"}
+                E -->|Yes| F["Calculate area with stack.top()"]
+                E -->|No| G["Push i"]
+                F --> H["i++"]
+                G --> H
+                H --> D
+                D -->|No| I["Empty stack calculating areas"]`,
+                explanation: "Largest rectangle in histogram using stack to track increasing heights."
+            },
+            "Sliding Window Maximum": {
+                mermaid: `graph TD
+                A["Start"] --> B["deque"]
+                B --> C["For each element"]
+                C --> D["Remove smaller from back"]
+                D --> E["Remove out-of-window"]
+                E --> F["Max = front"]
+                F --> G["Push index"]`,
+                explanation: "Maintain deque of indices for O(1) maximum in sliding window."
+            },
+            "Longest Valid Parentheses": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack[-1] = -1"]
+                B --> C["maxLen = 0"]
+                C --> D{"s empty?"}
+                D -->|No| E{"opening?"}
+                E -->|Yes| F["Push index"]
+                E -->|No| G["Pop matching"]
+                G --> H{"stack empty?"}
+                H -->|Yes| I["last = -1"]
+                H -->|No| J["Update maxLen"]
+                F --> K["Next"]
+                J --> K
+                I --> K`,
+                explanation: "Track valid parentheses spans using stack of indices."
+            },
+            "Expression Evaluation (Prefix)": {
+                mermaid: `graph TD
+                A["Start"] --> B["Reverse prefix to postfix"]
+                B --> C["Evaluate postfix"]
+                C --> D["Operands → Push"]
+                D --> E["Operator → Pop 2, apply, push"]`,
+                explanation: "Convert prefix to postfix by reversing, then standard postfix evaluation."
+            },
+            "Factorial using Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B["Push 1 to n"]
+                B --> C{"stack empty?"}
+                C -->|No| D["Pop n"]
+                D --> E{"n == 1?"}
+                E -->|Yes| F["Return 1"]
+                E -->|No| G["result = n * factorial(n-1)"]`,
+                explanation: "Iterative factorial using stack for recursion simulation."
+            },
+            "Fibonacci using Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B["Push 0, 1"]
+                B --> C{"count < n?"}
+                C -->|Yes| D["Pop 2"]
+                D --> E["Push sum"]
+                E --> F["count++"]
+                F --> C`,
+                explanation: "Generate Fibonacci sequence using stack instead of recursion."
+            },
+            "Inorder Traversal (Iterative)": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack"]
+                B --> C["Push root, left"]
+                C --> D{"stack empty?"}
+                D -->|No| E["Pop node"]
+                E --> F["Visit node"]
+                F --> G["Push right child"]
+                G --> C`,
+                explanation: "Iterative inorder traversal using stack to simulate recursion."
+            },
+            "Preorder Traversal (Iterative)": {
+                mermaid: `graph TD
+                A["Start"] --> B{"root null?"}
+                B -->|No| C["Push root"]
+                C --> D{"stack empty?"}
+                D -->|No| E["Pop node"]
+                E --> F["Visit node"]
+                F --> G["Push right, left"]`,
+                explanation: "Iterative preorder: visit → right → left using stack."
+            },
+            "Postorder Traversal (Iterative)": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack1, stack2"]
+                B --> C["Push root to stack1"]
+                C --> D{"stack1 empty?"}
+                D -->|No| E["Pop stack1 → stack2"]
+                E --> F{"stack2.top() has no children?"}
+                F -->|Yes| G["Pop & visit"]
+                F -->|No| H["Push left/right to stack1"]`,
+                explanation: "Two-stack postorder: simulate recursion with child tracking."
+            },
+            "Level Order using Stack": {
+                mermaid: `graph TD
+                A["Start"] --> B["Push root"]
+                B --> C{"stack empty?"}
+                C -->|No| D["Pop node"]
+                D --> E["Process node"]
+                E --> F["Push right, left"]`,
+                explanation: "Reverse level order traversal using single stack."
+            },
+            "Check Redundant Brackets": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack"]
+                B --> C{"expr empty?"}
+                C -->|No| D{"'('?"}
+                D -->|Yes| E["Push index"]
+                D -->|No| F{"')'?"}
+                F -->|Yes| G["Pop until '('"]
+                G --> H{"Only '(' popped?"}
+                H -->|Yes| I["Redundant"]`,
+                explanation: "Detect redundant brackets by checking empty expressions between matching pairs."
+            },
+            "Convert to Binary Tree": {
+                mermaid: `graph TD
+                A["Start"] --> B["Create root"]
+                B --> C["Push root"]
+                C --> D{"stack empty?"}
+                D -->|No| E["Pop parent"]
+                E --> F["Create left child"]
+                F --> G["Push left"]
+                G --> H["Create right"]
+                H --> I["Push right"]`,
+                explanation: "Build complete binary tree from stack-based level order construction."
+            },
+            "Stack Sorting Validation": {
+                mermaid: `graph TD
+                A["Start"] --> B["input, output"]
+                B --> C{"Can produce output?"}
+                C -->|Yes| D["Push input[0]"]
+                C -->|No| E{"stack.top() == output[0]?"}
+                E -->|Yes| F["Pop & consume output"]
+                E -->|No| G["Invalid"]`,
+                explanation: "Validate if input sequence can produce given output via stack."
+            },
+            "Expression Tree Construction": {
+                mermaid: `graph TD
+                A["Start"] --> B["Reverse postfix"]
+                B --> C["stack of trees"]
+                C --> D{"Operand?"}
+                D -->|Yes| E["Create leaf"]
+                D -->|No| F["Pop 2 subtrees"]
+                F --> G["Create operator node"]
+                G --> H["Push new tree"]`,
+                explanation: "Build expression tree from postfix notation using stack."
+            },
+            "Graph Cycle Detection (DFS)": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack"]
+                B --> C["Push start node"]
+                C --> D{"stack empty?"}
+                D -->|No| E["Pop node"]
+                E --> F{"In recursion stack?"}
+                F -->|Yes| G["Cycle detected"]
+                F -->|No| H["Push neighbors"]`,
+                explanation: "DFS cycle detection using stack to track recursion path."
+            },
+            "Topological Sort (DFS)": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack, visited"]
+                B --> C["DFS visit"]
+                C --> D["Push node to stack"]
+                D --> E["Visit unvisited neighbors"]`,
+                explanation: "DFS topological sort: finish order reversed gives topological order."
+            },
+            "Parentheses Score": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack, score"]
+                B --> C{"'('?"}
+                C -->|Yes| D["Push score"]
+                C -->|No| E{"Valid match?"}
+                E -->|Yes| F["score = 2 * stack.pop() + 1"]`,
+                explanation: "Calculate maximum parentheses score using stack tracking."
+            },
+            "Remove Outermost Parentheses": {
+                mermaid: `graph TD
+                A["Start"] --> B["stack, level = 0"]
+                B --> C{"s empty?"}
+                C -->|No| D{"'(' & level == 0?"}
+                D -->|Yes| E["Skip"]
+                D -->|No| F{"')' & level == 1?"}
+                F -->|Yes| G["Skip"]
+                F -->|No| H["Add char"]`,
+                explanation: "Remove outermost parentheses by tracking nesting level."
+            },
+            "Decode String": {
+                mermaid: `graph TD
+                A["Start"] --> B["numStack, strStack"]
+                B --> C{"digit?"}
+                C -->|Yes| D["Build number"]
+                C -->|No| E{"letter?"}
+                E -->|Yes| F["Push to strStack"]
+                E -->|No| G{"'['?"}
+                G -->|Yes| H["Push strStack"]
+                G -->|No| I["']'?"}
+                I -->|Yes| J["Repeat string num times"]`,
+                explanation: "Decode nested strings like '3[a]2[bc]' using two stacks."
+            } 
+        };
+
+        // Fuse.js for fuzzy search
+        const fuse = new Fuse(Object.keys(flowcharts), { threshold: 0.4 });
+
+        // Search functionality (Main Search)
+        document.getElementById('search-btn').addEventListener('click', function() {
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('results');
+            const displayDiv = document.getElementById('flowchart-display');
+            displayDiv.innerHTML = '';
+
+            if (!query) {
+                resultsDiv.innerHTML = '<p style="color: var(--error);">Please enter a concept.</p>';
+                return;
+            }
+
+            const matches = fuse.search(query);
+            if (matches.length > 0) {
+                const concept = matches[0].item;
+                const data = flowcharts[concept];
+                displayDiv.innerHTML = `
+                    <div class="flowchart-container">
+                        <h3>${concept}</h3>
+                        <div class="mermaid">${data.mermaid}</div>
+                        <p>${data.explanation}</p>
+                    </div>
+                `;
+                resultsDiv.innerHTML = '<p style="color: var(--success);">Flowchart generated below!</p>';
+                mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            } else {
+                resultsDiv.innerHTML = `<p style="color: var(--error);">No match found. Try: ${Object.keys(flowcharts).slice(0, 5).join(', ')}...</p>`;
+            }
+        });
+
+        // Generate Quick Access Cards
+        function generateQuickAccess() {
+            const grid = document.getElementById('quick-access-grid');
+            const sampleConcepts = Object.keys(flowcharts).slice(0, 8);
+            grid.innerHTML = sampleConcepts.map(concept => `
+                <div class="quick-card" onclick="selectConcept('${concept}')">
+                    <h4>${concept}</h4>
+                    <p>${flowcharts[concept].explanation.substring(0, 80)}...</p>
+                </div>
+            `).join('');
+        }
+
+        // Select concept from quick access
+        window.selectConcept = function(concept) {
+            document.getElementById('search-input').value = concept;
+            const data = flowcharts[concept];
+            document.getElementById('flowchart-display').innerHTML = `
+                <div class="flowchart-container">
+                    <h3>${concept}</h3>
+                    <div class="mermaid">${data.mermaid}</div>
+                    <p>${data.explanation}</p>
+                </div>
+            `;
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+        };
+
+        // Initialize Mermaid with custom theme
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "base",
+            themeVariables: {
+                primaryColor: "#1e1e2f",
+                primaryBorderColor: "#8b6cf6",
+                primaryTextColor: "#ffffff",
+                lineColor: "#a78bfa",
+                secondaryColor: "#2a2a40",
+                tertiaryColor: "#141427",
+                edgeLabelBackground: "#1e1e2f"
+            }
+        });
+
+        // Initialize on load
+        generateQuickAccess();
+    </script>
+</body>
+</html>

@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List Theory - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --success: #10B981;
+        --error: #EF4444;
+        --warning: #F59E0B;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1000px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .theory-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    h4 {
+        color: var(--accent-purple);
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    ul, ol {
+        list-style-position: inside;
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        padding-left: 10px;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+
+    /* ===================== VISUAL BOXES ===================== */
+    .visual-container {
+        background: #161b33;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 20px 0;
+        overflow-x: auto;
+        border: 1px solid var(--accent-purple);
+    }
+
+    .visual-title {
+        text-align: center;
+        color: var(--accent-blue);
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    /* Linked List Node Visual */
+    .linked-list-visual {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        justify-content: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+    }
+
+    .node {
+        background: linear-gradient(135deg, var(--bg-secondary), #2d3558);
+        border: 2px solid var(--accent-blue);
+        border-radius: 8px;
+        padding: 15px 20px;
+        min-width: 120px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 4px 12px rgba(79,195,247,0.2);
+    }
+
+    .node-data {
+        font-weight: bold;
+        font-size: 20px;
+        color: var(--text-primary);
+        margin-bottom: 5px;
+    }
+
+    .node-pointer {
+        font-size: 12px;
+        color: var(--accent-purple);
+        font-family: 'Courier New', monospace;
+    }
+
+    .arrow {
+        font-size: 24px;
+        color: var(--success);
+        font-weight: bold;
+        margin: 0 10px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .null-pointer {
+        color: var(--error);
+        font-weight: bold;
+    }
+
+    /* Memory Layout */
+    .memory-layout {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .memory-block {
+        background: rgba(139, 108, 246, 0.15);
+        border: 1px solid var(--accent-purple);
+        padding: 15px;
+        text-align: center;
+        border-radius: 6px;
+        min-width: 120px;
+    }
+
+    .memory-block .addr {
+        font-size: 11px;
+        color: var(--accent-purple);
+    }
+
+    .memory-block .value {
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--text-primary);
+    }
+
+    .memory-block .pointer {
+        font-size: 12px;
+        color: var(--accent-blue);
+        font-family: 'Courier New', monospace;
+    }
+
+    /* Info Box */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid var(--warning);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--success);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .error-box {
+        background: rgba(239, 68, 68, 0.1);
+        border-left: 4px solid var(--error);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    .comparison-table th, .comparison-table td {
+        border: 1px solid var(--accent-purple);
+        padding: 12px;
+        text-align: left;
+    }
+
+    .comparison-table th {
+        background: var(--accent-purple);
+        color: var(--text-primary);
+    }
+
+    .comparison-table tr:nth-child(even) {
+        background: rgba(139,108,246,0.1);
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+    <!-- Navbar -->
+<header class="navbar">
+    <a href="linkedlistGS.html" class="logo">CodeCanvas - Linked List</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/llGS.html">Back to Linked Lists</a></li>
+            <li><a href="../LinkedList/theory.html" class="active">Theory</a></li>
+            <li><a href="../LinkedList/syntax.html">Syntax</a></li>
+            <li><a href="../LinkedList/algorithm.html">Algorithm</a></li>
+            <li><a href="../LinkedList/complexity.html">Complexity</a></li>
+            <li><a href="../LinkedList/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="theory">
+    <div class="section-content">
+
+        <!-- Header -->
+        <div class="theory-card">
+            <h2>Linked Lists - Complete Theory Guide</h2>
+            <p style="font-size: 18px; color: var(--text-primary);">
+                A Linked List is a fundamental dynamic data structure that consists of a sequence of nodes, 
+                where each node contains data and a reference (pointer) to the next node in the sequence.
+            </p>
+        </div>
+
+        <!-- What is Linked List -->
+        <div class="theory-card" id="what-is-linkedlist">
+            <h3>1. What is a Linked List?</h3>
+            <p>A <strong>Linked List</strong> is a linear data structure where elements (called <strong>nodes</strong>) are not stored at contiguous memory locations. Each node contains:</p>
+            
+            <ul>
+                <li><strong>Data:</strong> The actual value stored</li>
+                <li><strong>Next Pointer:</strong> Address of the next node</li>
+            </ul>
+
+            <div class="info-box">
+                <strong>Simple Definition:</strong> A linked list is like a treasure hunt. Each clue (node) tells you where to find the next clue until you reach the end (NULL).
+            </div>
+
+            <div class="visual-container">
+                <div class="visual-title">Visual Representation of a Linked List</div>
+                <div class="linked-list-visual">
+                    <div class="node">
+                        <div class="node-data">10</div>
+                        <div class="node-pointer">↓</div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="node">
+                        <div class="node-data">20</div>
+                        <div class="node-pointer">↓</div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="node">
+                        <div class="node-data">30</div>
+                        <div class="node-pointer">NULL</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                    HEAD → [10|↓] → [20|↓] → [30|NULL]
+                </p>
+            </div>
+        </div>
+
+        <!-- Why Use Linked Lists -->
+        <div class="theory-card" id="why-use">
+            <h3>2. Why Do We Need Linked Lists?</h3>
+            <p>Linked Lists solve the limitations of arrays. Here's why they're essential:</p>
+            
+            <ul>
+                <li><strong>Dynamic Size:</strong> Can grow or shrink during runtime</li>
+                <li><strong>Efficient Insertion/Deletion:</strong> O(1) if you have pointer to the node</li>
+                <li><strong>No Wasted Memory:</strong> Only uses memory for actual elements</li>
+                <li><strong>Easy Implementation:</strong> Of stacks, queues, and other data structures</li>
+                <li><strong>Non-Contiguous Memory:</strong> No need for large contiguous blocks</li>
+            </ul>
+
+            <div class="visual-container">
+                <div class="visual-title">Array vs Linked List Comparison</div>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Feature</th>
+                        <th>Array</th>
+                        <th>Linked List</th>
+                    </tr>
+                    <tr>
+                        <td>Memory Allocation</td>
+                        <td>Contiguous</td>
+                        <td>Scattered</td>
+                    </tr>
+                    <tr>
+                        <td>Size Change</td>
+                        <td>Fixed (static)</td>
+                        <td>Dynamic</td>
+                    </tr>
+                    <tr>
+                        <td>Access Time</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                    </tr>
+                    <tr>
+                        <td>Insert/Delete</td>
+                        <td>O(n)</td>
+                        <td>O(1)*</td>
+                    </tr>
+                </table>
+                <p style="font-size: 12px; color: var(--text-secondary); text-align: center;">
+                    *O(1) if you have pointer to the node
+                </p>
+            </div>
+        </div>
+
+        <!-- Node Structure -->
+        <div class="theory-card" id="node-structure">
+            <h3>3. Node Structure</h3>
+            <p>Each node in a linked list is a structure containing two parts:</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Single Node Structure</div>
+                <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                    <div class="node">
+                        <div class="node-data">Data</div>
+                        <div class="node-pointer">next →</div>
+                    </div>
+                    <div style="font-family: 'Courier New', monospace; background: rgba(16,185,129,0.2); padding: 20px; border-radius: 8px; border-left: 4px solid var(--success);">
+                        <div>struct Node {</div>
+                        <div style="margin-left: 20px;">int data;</div>
+                        <div style="margin-left: 20px;">struct Node* next;</div>
+                        <div>};</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Key Point:</strong> The <code>next</code> pointer stores the <strong>memory address</strong> of the next node, not its index.
+            </div>
+        </div>
+
+        <!-- Types of Linked Lists -->
+        <div class="theory-card" id="types">
+            <h3>4. Types of Linked Lists</h3>
+
+            <h4>a) Singly Linked List</h4>
+            <p>Each node contains a pointer to the next node only. Traversal is unidirectional.</p>
+
+            <h4>b) Doubly Linked List</h4>
+            <p>Each node contains two pointers: <code>next</code> and <code>prev</code>. Bidirectional traversal.</p>
+
+            <h4>c) Circular Linked List</h4>
+            <p>The last node points back to the first node, forming a circle. No NULL at the end.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Singly vs Doubly Linked List</div>
+                <div style="display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;">
+                    <div>
+                        <p style="text-align: center; color: var(--accent-blue);">Singly Linked List</p>
+                        <div class="linked-list-visual">
+                            <div class="node">
+                                <div class="node-data">10</div>
+                                <div class="node-pointer">next</div>
+                            </div>
+                            <div class="arrow">→</div>
+                                                        <div class="node">
+                                <div class="node-data">20</div>
+                                <div class="node-pointer">next</div>
+                            </div>
+                            <div class="arrow">→</div>
+                            <div class="node">
+                                <div class="node-data">30</div>
+                                <div class="node-pointer">NULL</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <p style="text-align: center; color: var(--accent-blue);">Doubly Linked List</p>
+                        <div class="linked-list-visual">
+                            <div class="node">
+                                <div class="node-data">10</div>
+                                <div class="node-pointer">← prev | next →</div>
+                            </div>
+                            <div class="arrow">↔</div>
+                            <div class="node">
+                                <div class="node-data">20</div>
+                                <div class="node-pointer">← prev | next →</div>
+                            </div>
+                            <div class="arrow">↔</div>
+                            <div class="node">
+                                <div class="node-data">30</div>
+                                <div class="node-pointer">← prev | NULL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory Representation -->
+        <div class="theory-card" id="memory">
+            <h3>5. Memory Representation</h3>
+            <p>Unlike arrays, linked list nodes are stored in <strong>scattered memory locations</strong>. Each node knows where the next one is through pointers.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Memory Layout of Linked List</div>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px;">
+                    Linked List: HEAD → 10 → 20 → 30
+                </p>
+                <div class="memory-layout">
+                    <div class="memory-block">
+                        <div class="addr">Addr: 1000</div>
+                        <div class="value">HEAD</div>
+                        <div class="pointer">→ 2000</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">Addr: 2000</div>
+                        <div class="value">data: 10</div>
+                        <div class="pointer">→ 3500</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">Addr: 3500</div>
+                        <div class="value">data: 20</div>
+                        <div class="pointer">→ 5000</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">Addr: 5000</div>
+                        <div class="value">data: 30</div>
+                        <div class="pointer">→ NULL</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>Key Difference:</strong><br>
+                Arrays: <code>arr[i] = base + i × sizeof(element)</code><br>
+                Linked Lists: <code>node.next</code> contains actual memory address
+            </div>
+        </div>
+
+        <!-- Basic Operations -->
+        <div class="theory-card" id="operations">
+            <h3>6. Basic Operations on Linked Lists</h3>
+
+            <div class="visual-container">
+                <div class="visual-title">Common Operations Time Complexity</div>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Operation</th>
+                        <th>Array</th>
+                        <th>Linked List</th>
+                    </tr>
+                    <tr>
+                        <td>Access by index</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                    </tr>
+                    <tr>
+                        <td>Search</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                    </tr>
+                    <tr>
+                        <td>Insert at beginning</td>
+                        <td>O(n)</td>
+                        <td>O(1)</td>
+                    </tr>
+                    <tr>
+                        <td>Insert at end</td>
+                        <td>O(n)</td>
+                        <td>O(n)*</td>
+                    </tr>
+                    <tr>
+                        <td>Delete at beginning</td>
+                        <td>O(n)</td>
+                        <td>O(1)</td>
+                    </tr>
+                </table>
+                <p style="font-size: 12px; color: var(--text-secondary); text-align: center;">
+                    *O(1) if tail pointer is maintained
+                </p>
+            </div>
+
+            <h4>Key Operations:</h4>
+            <ul>
+                <li><strong>Traversal:</strong> Visit each node from HEAD to NULL</li>
+                <li><strong>Insertion:</strong> At beginning, end, or specific position</li>
+                <li><strong>Deletion:</strong> By value or position</li>
+                <li><strong>Search:</strong> Find a node with specific value</li>
+                <li><strong>Reverse:</strong> Reverse the links</li>
+            </ul>
+        </div>
+
+        <!-- Advantages and Disadvantages -->
+        <div class="theory-card" id="pros-cons">
+            <h3>7. Advantages and Disadvantages</h3>
+
+            <h4>Advantages:</h4>
+            <ul>
+                <li><strong>Dynamic Size:</strong> Grows/shrinks at runtime</li>
+                <li><strong>Efficient Insert/Delete:</strong> O(1) at known positions</li>
+                <li><strong>Memory Efficient:</strong> No wasted space</li>
+                <li><strong>Non-Contiguous:</strong> No large block requirement</li>
+                <li><strong>Easy Implementation:</strong> Of stacks, queues, etc.</li>
+            </ul>
+
+            <h4>Disadvantages:</h4>
+            <ul>
+                <li><strong>Slow Access:</strong> O(n) random access</li>
+                <li><strong>Extra Memory:</strong> For storing pointers</li>
+                <li><strong>No Cache Friendly:</strong> Scattered memory locations</li>
+                <li><strong>Sequential Access Only:</strong> No random access</li>
+                <li><strong>NULL Pointer Errors:</strong> Common bugs</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>Memory Overhead:</strong> Each node requires extra space for pointer(s) (~8 bytes on 64-bit systems)
+            </div>
+        </div>
+
+        <!-- Applications -->
+        <div class="theory-card" id="applications">
+            <h3>8. Real-World Applications</h3>
+            <p>Linked Lists are used extensively where dynamic size and efficient insertions/deletions are needed:</p>
+
+            <ul>
+                <li><strong>Undo/Redo:</strong> Browser history, text editors</li>
+                <li><strong>Music/Video Playlists:</strong> Next/previous song navigation</li>
+                <li><strong>Implementation:</strong> Stacks, Queues, Deques</li>
+                <li><strong>Hash Tables:</strong> Separate chaining for collision resolution</li>
+                <li><strong>Graph Algorithms:</strong> Adjacency lists</li>
+                <li><strong>Operating Systems:</strong> Process scheduling, file systems</li>
+                <li><strong>LRU Cache:</strong> Most Recently Used cache eviction</li>
+                <li><strong>Polynomial Arithmetic:</strong> Represent polynomials</li>
+            </ul>
+        </div>
+
+        <!-- Summary -->
+        <div class="theory-card">
+            <h3>Summary</h3>
+            <p>Linked Lists provide dynamic memory allocation and efficient insertion/deletion operations at the cost of slower random access. They are ideal when you need frequent size changes and don't require fast random access. Understanding pointer manipulation is crucial for mastering linked lists.</p>
+
+            <div class="nav-buttons">
+                <a href="../GetStarted/llGS.html" class="nav-btn secondary">← Back to Home</a>
+                <a href="../LinkedList/syntax.html" class="nav-btn">Next: Syntax Examples →</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../LinkedList/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript -->
+<script>
+// Navbar Active Link Highlighting
+const currentPage = window.location.pathname.split("/").pop();
+const navLinks = document.querySelectorAll('.navbar nav a');
+
+navLinks.forEach(link => {
+    if(link.getAttribute('href') === currentPage) {
+        link.classList.add('active');
+    }
+});
+
+// Smooth Scroll for Anchor Links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+ 
+</script>
+
+</body>
+</html>

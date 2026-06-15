@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List - Learn Linked Lists</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- Your existing style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <style>
+        /* Embedded theme-specific styles (overrides/additions to style.css) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root { 
+            --bg-primary: #0A0F24;
+            --bg-secondary: #161B3A;
+            --accent-purple: #7F5AF0;
+            --accent-blue: #38BDF8;
+            --text-primary: #E2E8F0;
+            --text-secondary: #94A3B8;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+    box-shadow: 0 0 15px rgba(127,90,240,0.4);
+    z-index: 1000;
+
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Spacing */
+    padding: 15px 60px;   /* good left-right spacing */
+    height: 70px;
+
+    box-sizing: border-box;
+}
+
+/* Center container effect */
+.navbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    max-width: 1400px;
+    margin: auto;
+    pointer-events: none;
+}
+
+/* Logo */
+.navbar .logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-purple);
+    letter-spacing: 0.5px;
+    
+}
+
+/* Navigation list */
+.navbar nav ul {
+    list-style: none;
+    display: flex;
+    gap: 35px;      /* space between menu items */
+    margin: 0;
+    padding: 0;
+}
+
+/* Links */
+.navbar nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 12px;   /* bigger clickable area */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    
+}
+
+/* Hover effect */
+.navbar nav a:hover {
+    color: var(--accent-blue);
+    background: rgba(127,90,240,0.1);
+}
+ 
+/* NAV LOGO CONTAINER */
+
+.nav-logo{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    
+}
+
+/* LOGO IMAGE */
+
+.nav-logo-img{
+    width:82px;
+    height:82px;
+    object-fit:contain;
+    border-radius:50%;
+    filter:drop-shadow(0 0 14px rgba(217,70,239,0.55))brightness(1.08)contrast(1.08);
+    transition:0.3s ease;
+    margin-top:-2px;
+}
+
+/* HOVER EFFECT */
+
+.nav-logo-img:hover{
+    transform:scale(1.05);
+    filter:
+    drop-shadow(0 0 18px rgba(0,217,255,0.65))brightness(1.1)contrast(1.1);
+}
+
+/* TITLE */
+
+.nav-logo h1{
+
+    font-size:32px;
+    font-weight:700;
+    background:
+    linear-gradient(
+    90deg,
+    #b86cff,
+    #00d9ff);
+    -webkit-background-clip:text; 
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===================== RESPONSIVE NAVBAR ===================== */
+
+@media (max-width: 900px) {
+    .navbar {
+        padding: 15px 25px;
+    }
+
+    .navbar nav ul {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 12px 15px;
+    }
+
+    .navbar nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 8px;
+    }
+}
+
+        /* Sections */
+        section {
+            min-height: 70vh;
+            padding: 90px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #home { padding-bottom: 30px; }
+        #working { padding-top: 50px; }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Home Section */
+        #home .section-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding-top: 40px;
+        }
+
+        .home-left {
+            text-align: left;
+            max-width: 550px;
+        }
+
+        .linked-list-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-top: 50px;
+        }
+
+        .diagram-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .diagram-section h4 {
+            margin: 0;
+            color: var(--accent-blue);
+        }
+
+        .node {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: fade-in 1s ease-out forwards;
+        }
+
+        .node .data {
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        .node .pointer {
+            font-size: 10px;
+            color: var(--accent-blue);
+            position: absolute;
+            bottom: -15px;
+        }
+
+        .node .prev-pointer {
+            top: -15px;
+        }
+
+        .arrow {
+            font-size: 24px;
+            color: var(--accent-purple);
+            margin: 0 10px;
+        }
+
+        .circular-arrow {
+            position: relative;
+            font-size: 20px;
+            color: var(--accent-purple);
+            margin-left: 10px;
+        }
+
+        .circular-arrow::after {
+            content: "↻";
+            position: absolute;
+            top: -10px;
+            left: 10px;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; }
+        }
+        
+        /* ---------- BUTTONS IN HOME ---------- */
+        .home-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 51px;
+            justify-content: center;
+        }
+        
+
+        /* Working Section */
+        .list-viz {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .viz-node {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.5s;
+        }
+
+        .viz-node.active {
+            box-shadow: 0 0 20px var(--accent-purple);
+        }
+
+        .input-section {
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .input-section input {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .input-section select {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--accent-purple);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        .tooltip {
+            position: absolute;
+            top: -40px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .viz-node:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(127,90,240,0.35);
+            margin: 30px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        .correct { color: var(--success); }
+        .incorrect { color: var(--error); }
+
+        /* FAQ Section */
+        .faq-item {
+            background: var(--bg-secondary);
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 18px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(127,90,240,0.1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 18px;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 18px;
+        }
+
+/* ================= FOOTER ================= */
+
+.footer{
+  position:relative;
+  background:linear-gradient(to bottom,#050816,#0B1023);
+  padding:45px 6%;
+  overflow:hidden;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+
+/* GLOW OVERLAY */
+
+.footer-overlay{
+  position:absolute;
+  inset:0;
+  background:  
+  radial-gradient(circle at top left,
+  rgba(168,85,247,0.15),
+  transparent 30%),
+  radial-gradient(circle at bottom right,
+  rgba(0,255,255,0.12),
+  transparent 30%);
+  pointer-events:none;
+}
+
+/* CONTAINER */
+
+.footer-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+  position:relative;
+  z-index:2;
+}
+
+/* LOGO */
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  
+}
+
+/* LOGO IMAGE */
+
+.logo-img{
+  width:65px;
+  height:65px;
+  object-fit:contain;
+  border-radius:50%;
+  filter: drop-shadow(0 0 10px rgba(217,70,239,0.45));
+  transition:0.3s ease;
+}
+
+/* HOVER EFFECT */
+
+.logo-img:hover{
+  transform:scale(1.05);
+  filter:drop-shadow(0 0 16px rgba(0,217,255,0.55));
+}
+
+.logo h2{
+  color:white;
+  font-size:30px;
+}
+
+.logo p{
+  color:#aaa;
+}
+
+.brand-text{
+  color:#bbb;
+  line-height:1.8;
+  margin-bottom:25px;
+}
+
+/* SOCIALS */
+
+.socials{
+  display:flex;
+  gap:15px;
+}
+
+.socials a{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.15);
+  transition:0.4s;
+  text-decoration:none;
+  backdrop-filter:blur(10px);
+}
+
+.socials a:hover{
+  transform:translateY(-5px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 40px #d946ef;
+  border-color:#00ffff;
+}
+
+/* FOOTER HEADINGS */
+
+.footer-section h3{
+  color:white;
+  margin-bottom:25px;
+  font-size:22px;
+}
+
+/* LINKS */
+
+.footer-section ul{
+  list-style:none;
+}
+
+.footer-section ul li{
+  margin-bottom:15px;
+  color:#bbb;
+  transition:0.3s;
+  cursor:pointer;
+}
+
+.footer-section ul li a{
+  text-decoration:none;
+  color:#bbb;
+}
+
+.footer-section ul li:hover{
+  color:#00ffff;
+  transform:translateX(8px);
+}
+
+/* ACTIVITY CARD */
+
+.activity-card{
+    width:100%;
+    max-width:320px;
+    padding:28px 24px;
+    border-radius:24px;
+    background:
+    rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    backdrop-filter:blur(10px);
+    box-shadow:
+    0 0 18px rgba(217,70,239,0.12);
+}
+
+/* TITLE */
+
+.activity-card p{
+    color:white;
+    font-size:20px;
+    font-weight:600;
+    text-align:center;
+    margin:0;
+}
+
+/* BARS */
+
+.bars{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:12px;
+    height:120px;
+}
+
+/* EACH BAR */
+
+.bars span{
+    width:18px;
+    border-radius:20px;
+    background:
+    linear-gradient(
+    to top,
+    #00d9ff,
+    #d946ef);
+    animation:bars 1.6s infinite ease-in-out;
+}
+
+/* DIFFERENT HEIGHTS */
+
+.bars span:nth-child(1){height:50px;}
+.bars span:nth-child(2){height:90px;}
+.bars span:nth-child(3){height:70px;}
+.bars span:nth-child(4){height:120px;}
+.bars span:nth-child(5){height:95px;}
+.bars span:nth-child(6){height:75px;}
+.bars span:nth-child(7){height:135px;}
+
+/* BAR ANIMATION */
+
+@keyframes bars{
+
+    0%,100%{
+    transform:scaleY(1);
+    }
+    50%{
+        transform:scaleY(0.75);
+    }
+
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    color:#ff4dff;
+    font-size:17px;
+    font-weight:500;
+}
+
+/* DOT */
+
+.dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#ff00ff;
+    box-shadow:
+    0 0 12px #ff00ff;
+    animation:pulse 1s infinite;
+}
+
+/* DOT ANIMATION */
+
+@keyframes pulse{
+
+    0%{transform:scale(1);}
+    50%{transform:scale(1.25);}
+    100%{transform:scale(1);}
+}
+
+/* STATS */
+
+.stats-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:25px;
+  margin-top:70px;
+}
+
+.stat-card{
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  text-align:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.stat-card:hover{
+  transform:translateY(-10px);
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px rgba(168,85,247,0.5);
+}
+
+.stat-card h2{
+  font-size:28px;
+  color:#00ffff;
+}
+
+/* QUOTE */
+
+.quote-section{
+  text-align:center;
+  margin-top:40px;
+  color:white;
+}
+
+.quote-icon{
+  font-size:60px;
+  color:#d946ef;
+  text-shadow:0 0 20px #d946ef;
+}
+
+.quote-section p{
+  font-size:18px;
+  max-width:900px;
+  margin:20px auto;
+  line-height:1.8;
+  color:#ddd;
+}
+
+.quote-section h4{
+  color:#ff66ff;
+}
+
+/* TECH STACK */
+
+.tech-stack{
+  margin-top:70px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.tech-card{
+  padding:12px 18px;
+  border-radius:15px;
+  color:white;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.tech-card:hover{
+  transform:translateY(-8px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 30px #d946ef;
+}
+
+/* WAVE */
+
+.wave{
+  width:100%;
+  height:4px;
+  margin-top:80px;
+  background:linear-gradient(
+  90deg,
+  #00ffff,
+  #d946ef,
+  #00ffff);
+  animation:wave 4s linear infinite;
+  background-size:300% 100%;
+  border-radius:10px;
+}
+
+@keyframes wave{
+  0%{
+    background-position:0%;
+  }
+  100%{
+    background-position:300%;
+  }
+}
+
+/* SCROLL BUTTON */
+
+#scrollTopBtn{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:65px;
+  height:65px;
+  border:none;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00ffff,#d946ef);
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px #d946ef;
+  transition:0.4s;
+}
+
+#scrollTopBtn:hover{
+  transform:scale(1.1);
+}
+
+/* COPYRIGHT */
+
+.copyright{
+  margin-top:50px;
+  padding-top:25px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:15px;
+  color:#aaa;
+  position:relative;
+  z-index:2;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .footer{
+    padding:70px 6%;
+  }
+
+  .quote-section p{
+    font-size:18px;
+  }
+
+  .copyright{
+    flex-direction:column;
+    text-align:center;
+  }
+
+}
+
+
+
+        /* Responsiveness */
+        @media (min-width: 768px) {
+            #home .section-content {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .home-left, .home-right {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .node, .viz-node { width: 60px; height: 60px; }
+            .linked-list-diagram, .list-viz { gap: 10px; }
+            .input-section { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+     <!-- Navbar -->
+    <header class="navbar">
+        <div class="nav-logo">
+
+        <img
+        src="../image/CC_icon.png"
+        alt="CodeCanvas Logo"
+        class="nav-logo-img">
+        <div class="logo">CodeCanvas - LinkedList</div> </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#working">Working</a></li>
+                <li><a href="#quiz">Quiz</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="section-content">
+            <div class="home-left">
+                <h1>What is a Linked List?</h1>
+                <p>
+                    A <b>linked list</b> is a linear data structure where elements are stored in nodes, each containing data and a reference (pointer) to the next node. Unlike arrays, linked lists do not require contiguous memory.
+                </p>
+                <h3>Key Properties</h3>
+                <ul>
+                    <li>Dynamic size</li>
+                    <li>No contiguous memory needed</li>
+                    <li>Efficient insertions/deletions</li>
+                    <li>Slower access (O(n))</li>
+                </ul>
+                <h3>Types of Linked Lists</h3>
+                <ul>
+                    <li>Singly Linked List (one-way pointers)</li>
+                    <li>Doubly Linked List (two-way pointers)</li>
+                    <li>Circular Linked List (last points to first)</li>
+                </ul>
+            </div>
+            <div class="home-right">
+                <div class="linked-list-diagram">
+                    <div class="diagram-section">
+                        <h4>Singly Linked List</h4>
+                        <div style="display: flex; align-items: center;">
+                            <div class="node"><div class="data">10</div><div class="pointer">next</div></div>
+                            <span class="arrow">→</span>
+                            <div class="node"><div class="data">20</div><div class="pointer">next</div></div>
+                            <span class="arrow">→</span>
+                            <div class="node"><div class="data">30</div><div class="pointer">null</div></div>
+                        </div>
+                    </div>
+                    <div class="diagram-section">
+                        <h4>Doubly Linked List</h4>
+                        <div style="display: flex; align-items: center;">
+                            <div class="node"><div class="data">10</div><div class="pointer prev-pointer">prev</div><div class="pointer">next</div></div>
+                            <span class="arrow">↔</span>
+                            <div class="node"><div class="data">20</div><div class="pointer prev-pointer">prev</div><div class="pointer">next</div></div>
+                            <span class="arrow">↔</span>
+                            <div class="node"><div class="data">30</div><div class="pointer prev-pointer">prev</div><div class="pointer">null</div></div>
+                        </div>
+                    </div>
+                    <div class="diagram-section">
+                        <h4>Circular Linked List</h4>
+                        <div style="display: flex; align-items: center;">
+                            <div class="node"><div class="data">10</div><div class="pointer">next</div></div>
+                            <span class="arrow">→</span>
+                            <div class="node"><div class="data">20</div><div class="pointer">next</div></div>
+                            <span class="arrow">→</span>
+                            <div class="node"><div class="data">30</div><div class="pointer">head</div></div>
+                            <span class="circular-arrow"></span>
+                        </div>
+                    </div>
+                    <div class="home-buttons">
+    <a href="../GetStarted/llGS.html" class="btn">Get Started</a>
+    <a href="../LinkedList/questions.html" class="btn">Test</a>
+</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Working Section -->
+    <section id="working">
+        <div class="section-content">
+            <h1>How Linked Lists Work</h1>
+            <div class="input-section">
+                <select id="list-type">
+                    <option value="singly">Singly Linked List</option>
+                    <option value="doubly">Doubly Linked List</option>
+                    <option value="circular">Circular Linked List</option>
+                </select>
+                <input type="number" id="list-input" placeholder="Enter a number">
+                <select id="operation">
+                    <option value="insert-begin">Insert at Beginning</option>
+                    <option value="insert-end">Insert at End</option>
+                    <option value="insert-middle">Insert at Position</option>
+                    <option value="delete-begin">Delete from Beginning</option>
+                    <option value="delete-end">Delete from End</option>
+                    <option value="delete-middle">Delete at Position</option>
+                    <option value="search">Search</option>
+                </select>
+                <input type="number" id="position" placeholder="Position (for insert/delete)" style="display: none;">
+                <button class="btn" onclick="performOperation()">Execute</button>
+                <button class="btn" onclick="resetList()">Reset List</button>
+            </div>
+            <div class="list-viz" id="list-viz">
+                <!-- Dynamic nodes will be added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz">
+        <div class="section-content">
+            <h1>Linked List Quiz</h1>
+            <div class="quiz-question" id="quiz-container">
+                <!-- Questions loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq">
+        <div class="section-content">
+            <h1>Frequently Asked Questions</h1>
+            <div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is a linked list?</button>
+    <div class="faq-answer">
+        A linked list is a linear data structure made up of nodes, where each node contains data and a pointer (reference) to the next node in the sequence. 
+        Unlike arrays, linked lists do not require contiguous memory.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What are the advantages of linked lists?</button>
+    <div class="faq-answer">
+        Linked lists are dynamic in size, meaning they can grow or shrink at runtime. 
+        They allow efficient insertion and deletion of elements without shifting data, and they do not require contiguous memory.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is the difference between singly and doubly linked lists?</button>
+    <div class="faq-answer">
+        In a singly linked list, each node contains data and a pointer to the next node only.  
+        In a doubly linked list, each node contains two pointers: one to the next node and one to the previous node, enabling traversal in both directions.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is a circular linked list?</button>
+    <div class="faq-answer">
+        In a circular linked list, the last node does not point to NULL; instead, it points back to the first node, forming a circular structure.
+        This is useful in applications like round-robin scheduling.
+    </div>
+</div>
+
+<!-- REPLACED QUESTION -->
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">Best source to learn Linked List?</button>
+    <div class="faq-answer">
+        You can learn linked lists from structured tutorials, visual explanations, and coding platforms that provide examples and practice problems.  
+        <b>
+          <a href="PASTE_YOUR_LINK_HERE" target="_blank" style="color:#38BDF8;">
+            Click here
+          </a>
+        </b>
+        to visit the recommended resource.
+    </div>
+</div>
+
+        </div>
+    </section>
+
+<!-- ========================= -->
+<!-- FUTURISTIC FOOTER START -->
+<!-- ========================= -->
+
+<footer class="footer">
+  <div class="footer-overlay"></div>
+
+  <div class="footer-container">
+
+    <!-- LEFT BRAND SECTION -->
+    <div class="footer-section brand">
+      <div class="logo">
+        <img src="../image/CC_logo.png" alt="CodeCanvas Logo" class="logo-img">
+        <div>
+          <h2>CodeCanvas</h2>
+          <p>Algorithm Visualizer</p>
+        </div>
+      </div>
+
+      <p class="brand-text">
+        A platform to visualize, learn and master computer science algorithms.
+      </p>
+
+      <div class="socials">
+        <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com" target="_blank"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../pages/array.html">Array</a></li>
+        <li><a href="../pages/stack.html">Stack</a></li>
+        <li><a href="../pages/queue.html">Queue</a></li>
+        <li><a href="../pages/linkedlist.html">LinkedList</a></li>
+        <li><a href="../pages/search.html">Searching</a></li>
+        <li><a href="../pages/sort.html">Sorting</a></li>
+      </ul>
+    </div>
+
+    <!-- ALGORITHMS -->
+    <div class="footer-section">
+      <h3>Algorithms</h3>
+      <ul>
+        <li>Sorting Algorithms</li>
+        <li>Searching Algorithms</li>
+        <li>Graph Algorithms</li>
+        <li>Dynamic Programming</li>
+        <li>Greedy Algorithms</li>
+        <li>Backtracking</li>
+      </ul>
+    </div>
+
+    <!-- LIVE ACTIVITY -->
+    <div class="footer-section activity">
+      <h3>Live Activity</h3>
+
+      <div class="activity-card">
+        <p>Sorting in Progress...</p> 
+
+        <div class="bars">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="status">
+          <div class="dot"></div>
+          Visualizing...
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-container">
+
+    <div class="stat-card">
+      <h2>25+</h2>
+      <p>Algorithms</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>120+</h2>
+      <p>Animations</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>500K+</h2>
+      <p>Executions</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>10K+</h2>
+      <p>Users</p>
+    </div>
+
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-section">
+    <span class="quote-icon">❝</span>
+
+    <p>
+      A good programmer is someone who always looks both ways before crossing a one-way street.
+    </p>
+
+    <h4>— Doug Linder</h4>
+  </div>
+
+  <!-- TECH STACK 
+  <div class="tech-stack">
+
+    <div class="tech-card">HTML5</div>
+    <div class="tech-card">CSS3</div>
+    <div class="tech-card">JavaScript</div>
+    <div class="tech-card">React</div>
+    <div class="tech-card">Canvas API</div>
+
+  </div>  -->
+
+  <!-- SCROLL TOP -->
+  <button id="scrollTopBtn">↑</button>
+
+  <!-- WAVES -->
+  <div class="wave"></div>
+
+  <!-- COPYRIGHT -->
+  <div class="copyright">
+    <p>© 2026 CodeCanvas | Designed & Developed with 💜 by Juhi Makkar</p>
+    <span>Stay curious. Keep coding. Keep learning.</span>
+  </div>
+
+</footer>
+
+    <script>
+        // Linked List state
+        let listData = [];
+        let listType = 'singly';
+        const maxNodes = 10;
+        const vizContainer = document.getElementById('list-viz');
+
+        // Update list type
+        document.getElementById('list-type').addEventListener('change', (e) => {
+            listType = e.target.value;
+            updateViz();
+        });
+
+        // Show/hide position input
+        document.getElementById('operation').addEventListener('change', (e) => {
+            const posInput = document.getElementById('position');
+            if (['insert-middle', 'delete-middle'].includes(e.target.value)) {
+                posInput.style.display = 'inline-block';
+            } else {
+                posInput.style.display = 'none';
+            }
+        });
+
+        // Perform operation
+        function performOperation() {
+            const input = document.getElementById('list-input');
+            const operation = document.getElementById('operation').value;
+            const value = parseInt(input.value);
+            const position = parseInt(document.getElementById('position').value) || 0;
+
+            if (isNaN(value) && operation !== 'delete-begin' && operation !== 'delete-end' && operation !== 'delete-middle') return;
+
+            switch (operation) {
+                case 'insert-begin':
+                    listData.unshift(value);
+                    break;
+                case 'insert-end':
+                    listData.push(value);
+                    break;
+                case 'insert-middle':
+                    if (position >= 0 && position <= listData.length) {
+                        listData.splice(position, 0, value);
+                    }
+                    break;
+                case 'delete-begin':
+                    listData.shift();
+                    break;
+                case 'delete-end':
+                    listData.pop();
+                    break;
+                case 'delete-middle':
+                    if (position >= 0 && position < listData.length) {
+                        listData.splice(position, 1);
+                    }
+                    break;
+                case 'search':
+                    const index = listData.indexOf(value);
+                    alert(index !== -1 ? `Found at index ${index}` : 'Not found');
+                    return;
+            }
+
+            updateViz();
+            input.value = '';
+        }
+
+        // Reset list
+        function resetList() {
+            listData = [];
+            updateViz();
+        }
+
+        // Update visualization
+        function updateViz() {
+            vizContainer.innerHTML = '';
+            listData.forEach((val, idx) => {
+                const node = document.createElement('div');
+                node.className = 'viz-node';
+                let pointers = '';
+                if (listType === 'singly') {
+                    pointers = `<div class="pointer">${idx === listData.length - 1 ? 'null' : 'next'}</div>`;
+                } else if (listType === 'doubly') {
+                    pointers = `<div class="pointer prev-pointer">${idx === 0 ? 'null' : 'prev'}</div><div class="pointer">${idx === listData.length - 1 ? 'null' : 'next'}</div>`;
+                } else if (listType === 'circular') {
+                    pointers = `<div class="pointer">${idx === listData.length - 1 ? 'head' : 'next'}</div>`;
+                }
+                node.innerHTML = `<div class="data">${val}</div>${pointers}<div class="tooltip">Node ${idx}: ${val}</div>`;
+                vizContainer.appendChild(node);
+                if (idx < listData.length - 1) {
+                    const arrow = document.createElement('span');
+                    arrow.className = 'arrow';
+                    arrow.textContent = listType === 'doubly' ? '↔' : '→';
+                    vizContainer.appendChild(arrow);
+                }
+                setTimeout(() => node.classList.add('active'), 100 * idx);
+            });
+        }
+
+        // Quiz logic
+        const questions = [
+    { q: "Q1. What is a linked list?", options: ["A contiguous memory structure", "A node-based structure", "A fixed-size array", "A stack"], correct: 1, exp: "Linked lists consist of nodes linked by pointers." },
+    { q: "Q2. What is the time complexity for inserting at the beginning of a singly linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Insertion at head is O(1) since no traversal is needed." },
+    { q: "Q3. Which type of linked list allows traversal in both directions?", options: ["Singly", "Doubly", "Circular", "None"], correct: 1, exp: "Doubly linked lists have prev and next pointers." },
+    { q: "Q4. In a circular linked list, what does the last node point to?", options: ["Null", "First node", "Last node", "Random node"], correct: 1, exp: "The last node points back to the head." },
+    { q: "Q5. Why are linked lists preferred over arrays for dynamic insertions?", options: ["Faster access", "No shifting needed", "Contiguous memory", "Fixed size"], correct: 1, exp: "Insertions don't require shifting elements." },
+    { q: "Q6. What is the main disadvantage of linked lists compared to arrays?", options: ["Fixed size", "Slow random access", "No dynamic size", "Contiguous memory"], correct: 1, exp: "Random access is O(n) due to traversal." },
+    { q: "Q7. In a singly linked list, each node contains?", options: ["Data only", "Data and next pointer", "Data and prev pointer", "Two pointers"], correct: 1, exp: "Nodes have data and a next pointer." },
+    { q: "Q8. What is the time complexity for searching an element in a linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Linear search requires traversal." },
+    { q: "Q9. Which operation is easier in linked lists than arrays?", options: ["Random access", "Insertion at middle", "Sorting", "Binary search"], correct: 1, exp: "No shifting needed for insertions." },
+    { q: "Q10. What is a doubly linked list?", options: ["Circular list", "List with two pointers per node", "Singly linked", "Array-based"], correct: 1, exp: "Each node has prev and next pointers." },
+    { q: "Q11. In a circular singly linked list, how many pointers does each node have?", options: ["0", "1", "2", "3"], correct: 1, exp: "One next pointer, pointing to the next or head." },
+    { q: "Q12. What is the space complexity of a linked list with n nodes?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Each node takes O(1) space." },
+    { q: "Q13. Which linked list type is best for implementing a queue?", options: ["Singly", "Doubly", "Circular", "All"], correct: 0, exp: "Singly linked list for FIFO." },
+    { q: "Q14. What happens when you delete the head node in a singly linked list?", options: ["List becomes empty", "Head points to next", "Error", "Nothing"], correct: 1, exp: "Head is updated to the next node." },
+    { q: "Q15. In C, how do you define a node for a singly linked list?", options: ["struct Node { int data; };", "struct Node { int data; struct Node* next; };", "int Node;", "None"], correct: 1, exp: "Correct structure with data and next pointer." },
+    { q: "Q16. What is the output of traversing an empty linked list?", options: ["Null", "Error", "Nothing", "Head"], correct: 2, exp: "No nodes to traverse." },
+    { q: "Q17. Which linked list allows O(1) deletion at both ends?", options: ["Singly", "Doubly", "Circular singly", "None"], correct: 1, exp: "Doubly linked list has prev pointers." },
+    { q: "Q18. What is a sentinel node in linked lists?", options: ["Dummy node", "Head node", "Tail node", "Random node"], correct: 0, exp: "A dummy node to simplify operations." },
+    { q: "Q19. In Python, how do you create a linked list node?", options: ["class Node: pass", "Node = []", "node = Node()", "None"], correct: 0, exp: "Using a class definition." },
+    { q: "Q20. What is the time complexity for reversing a singly linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Traverse and reverse pointers." },
+    { q: "Q21. Which is not a type of linked list?", options: ["Singly", "Doubly", "Circular", "Binary"], correct: 3, exp: "Binary is a tree, not a list." },
+    { q: "Q22. In a doubly linked list, what does the prev pointer of the head point to?", options: ["Null", "Tail", "Head", "Next"], correct: 0, exp: "Head's prev is null." },
+    { q: "Q23. What is the advantage of circular linked lists?", options: ["Faster traversal", "No end", "Easier loops", "All"], correct: 1, exp: "Can traverse continuously." },
+    { q: "Q24. How many pointers are in a doubly circular linked list node?", options: ["1", "2", "3", "0"], correct: 1, exp: "Prev and next pointers." },
+    { q: "Q25. What is the output of len(linked_list) in Python for a list with 3 nodes?", options: ["0", "3", "Error", "1"], correct: 2, exp: "Linked list doesn't have built-in len; it's not a list." },
+    { q: "Q26. In Java, how do you implement a linked list?", options: ["ArrayList", "LinkedList", "Vector", "Stack"], correct: 1, exp: "LinkedList class." },
+    { q: "Q27. What is the time complexity for inserting at the end of a singly linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Need to traverse to the end." },
+    { q: "Q28. Which linked list is used in LRU cache?", options: ["Singly", "Doubly", "Circular", "None"], correct: 1, exp: "Doubly for easy removal." },
+    { q: "Q29. What is a self-referential structure?", options: ["Points to itself", "Has pointers to same type", "No pointers", "Array"], correct: 1, exp: "Nodes point to other nodes of the same type." },
+    { q: "Q30. In C++, what is std::list?", options: ["Array", "Doubly linked list", "Vector", "Queue"], correct: 1, exp: "Doubly linked list." },
+    { q: "Q31. What is the worst-case time for finding the middle of a linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Traverse to find length or use two pointers." },
+    { q: "Q32. Which operation is O(1) in a doubly linked list?", options: ["Insert at head", "Delete at tail", "Search", "Sort"], correct: 0, exp: "Direct pointers." },
+    { q: "Q33. What is a skip list?", options: ["Linked list with shortcuts", "Array", "Tree", "Graph"], correct: 0, exp: "Multi-level linked list for fast search." },
+    { q: "Q34. In a singly linked list, how do you detect a cycle?", options: ["Floyd's algorithm", "Traversal", "Count nodes", "None"], correct: 0, exp: "Tortoise and hare method." },
+    { q: "Q35. What is the space overhead in linked lists compared to arrays?", options: ["Less", "More", "Same", "None"], correct: 1, exp: "Extra space for pointers." },
+    { q: "Q36. Which linked list is best for undo operations?", options: ["Singly", "Doubly", "Circular", "None"], correct: 1, exp: "Can traverse backwards." },
+    { q: "Q37. In Python, what does node.next = None do?", options: ["Creates node", "Sets end", "Deletes node", "Copies"], correct: 1, exp: "Marks the end of the list." },
+    { q: "Q38. What is the time complexity for merging two sorted linked lists?", options: ["O(1)", "O(n)", "O(n log n)", "O(n^2)"], correct: 1, exp: "Traverse and merge." },
+    { q: "Q39. Which is true for circular doubly linked list?", options: ["Head.prev = tail", "Tail.next = head", "Both", "None"], correct: 2, exp: "Both pointers connect head and tail." },
+    { q: "Q40. What is a dummy head in linked lists?", options: ["Real head", "Sentinel node", "Tail", "Middle"], correct: 1, exp: "Dummy node to avoid null checks." },
+    { q: "Q41. In JavaScript, how do you traverse a linked list?", options: ["for loop", "while loop with next", "map", "filter"], correct: 1, exp: "Use a loop with next pointers." },
+    { q: "Q42. What is the output of deleting a node in the middle of a singly linked list?", options: ["List breaks", "Pointers updated", "Error", "Nothing"], correct: 1, exp: "Update next pointers." },
+    { q: "Q43. Which linked list type has no null pointers?", options: ["Singly", "Doubly", "Circular", "None"], correct: 2, exp: "Circular lists have no null ends." },
+    { q: "Q44. What is the time complexity for sorting a linked list?", options: ["O(n)", "O(n log n)", "O(n^2)", "O(1)"], correct: 1, exp: "Merge sort is O(n log n)." },
+    { q: "Q45. In C, what is malloc used for in linked lists?", options: ["Allocate nodes", "Free memory", "Traverse", "Sort"], correct: 0, exp: "Dynamic memory allocation." },
+    { q: "Q46. What is a XOR linked list?", options: ["Uses XOR for pointers", "Normal list", "Doubly", "Circular"], correct: 0, exp: "Space-efficient doubly linked list." },
+    { q: "Q47. Which operation is faster in arrays than linked lists?", options: ["Insertion", "Random access", "Deletion", "Traversal"], correct: 1, exp: "O(1) vs O(n)." },
+    { q: "Q48. What is the length of a linked list with 5 nodes?", options: ["4", "5", "6", "0"], correct: 1, exp: "Number of nodes." },
+    { q: "Q49. In Python, how do you reverse a linked list?", options: ["reverse()", "Iterative method", "Both", "None"], correct: 1, exp: "Using loops to reverse pointers." },
+    { q: "Q50. What is a singly linked list's tail?", options: ["First node", "Last node", "Middle", "Head"], correct: 1, exp: "Node with next = null." },
+    { q: "Q51. Which linked list is used in adjacency lists for graphs?", options: ["Singly", "Doubly", "Circular", "All"], correct: 0, exp: "Simple and efficient." },
+    { q: "Q52. What is the output of inserting at position 0 in a singly linked list?", options: ["Becomes head", "Becomes tail", "Error", "Nothing"], correct: 0, exp: "New head." },
+    { q: "Q53. In Java, what is LinkedList.add() time?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Amortized O(1) for add." },
+    { q: "Q54. What is a linked list iterator?", options: ["Pointer", "Object to traverse", "Node", "List"], correct: 1, exp: "Used to iterate through nodes." },
+    { q: "Q55. Which is true for linked list vs array?", options: ["Linked list has O(1) access", "Array has O(n) insertion", "Linked list has O(n) access", "Both same"], correct: 2, exp: "Linked list access is O(n)." },
+    { q: "Q56. What is the memory layout of linked lists?", options: ["Contiguous", "Scattered", "Fixed", "Sorted"], correct: 1, exp: "Nodes can be anywhere." },
+    { q: "Q57. In C++, what is list::push_back()?", options: ["Add to front", "Add to end", "Remove", "Sort"], correct: 1, exp: "Adds to the back." },
+    { q: "Q58. What is the time for finding the nth node in a singly linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Traverse n-1 nodes." },
+    { q: "Q59. Which linked list allows bidirectional iteration?", options: ["Singly", "Doubly", "Circular singly", "None"], correct: 1, exp: "Doubly linked." },
+    { q: "Q60. What is a linked list palindrome check time?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Traverse and compare." },
+    { q: "Q61. In Python, what does node = Node(data) do?", options: ["Creates node", "Deletes node", "Copies", "None"], correct: 0, exp: "Instantiates a node." },
+    { q: "Q62. What is the output of reversing a list with one node?", options: ["Same", "Empty", "Error", "Two nodes"], correct: 0, exp: "Remains the same." },
+    { q: "Q63. Which is not an advantage of linked lists?", options: ["Dynamic size", "Fast access", "Easy insertion", "No waste space"], correct: 1, exp: "Access is slow." },
+    { q: "Q64. What is a linked list merge sort?", options: ["O(n)", "O(n log n)", "O(n^2)", "O(1)"], correct: 1, exp: "Divide and conquer." },
+    { q: "Q65. In JavaScript, what is node.next.next?", options: ["Next next", "Error", "Head", "Tail"], correct: 0, exp: "Accesses the node after next." },
+    { q: "Q66. What is the space for a doubly linked list node?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Constant space per node." },
+    { q: "Q67. Which linked list is used for browser history?", options: ["Singly", "Doubly", "Circular", "None"], correct: 1, exp: "Back and forward." },
+    { q: "Q68. What is the output of deleting head in an empty list?", options: ["Error", "Nothing", "Null", "Head"], correct: 0, exp: "Underflow error." },
+    { q: "Q69. In C, what is free(node) used for?", options: ["Allocate", "Deallocate", "Traverse", "Sort"], correct: 1, exp: "Free memory." },
+    { q: "Q70. What is a linked list's node structure?", options: ["Data + pointer", "Only data", "Only pointer", "Array"], correct: 0, exp: "Data and link." },
+    { q: "Q71. Which is true for circular linked list?", options: ["No head", "Infinite loop possible", "Fixed end", "None"], correct: 1, exp: "Traversal can loop forever." },
+    { q: "Q72. What is the time for inserting in sorted linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Find position and insert." },
+    { q: "Q73. In Python, what is the type of a linked list?", options: ["list", "object", "class", "None"], correct: 1, exp: "Custom object." },
+    { q: "Q74. What is a linked list's length?", options: ["Fixed", "Dynamic", "Zero", "Infinite"], correct: 1, exp: "Can grow." },
+    { q: "Q75. Which operation uses two pointers in linked lists?", options: ["Cycle detection", "Traversal", "Insertion", "Deletion"], correct: 0, exp: "Floyd's cycle detection." },
+    { q: "Q76. What is the output of printing a linked list?", options: ["Nodes", "Addresses", "Data", "All"], correct: 2, exp: "Data values." },
+    { q: "Q77. In Java, what is LinkedList.size()?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Maintains size." },
+    { q: "Q78. What is a linked list's middle node?", options: ["Head", "Tail", "n/2 th node", "Random"], correct: 2, exp: "Using slow-fast pointers." },
+    { q: "Q79. Which linked list has O(1) append?", options: ["Singly with tail", "Doubly", "Circular", "None"], correct: 0, exp: "Keep tail pointer." },
+    { q: "Q80. What is the time for linked list concatenation?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Traverse to end." },
+    { q: "Q81. In C++, what is list::erase()?", options: ["Add", "Remove", "Sort", "Copy"], correct: 1, exp: "Removes element." },
+    { q: "Q82. What is a linked list's node count?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Traversal to count." },
+    { q: "Q83. Which linked list is used for implementing stacks?", options: ["Singly", "Doubly", "Circular", "All"], correct: 0, exp: "LIFO with head operations." },
+    { q: "Q84. What is the output of node.next = node in a singly linked list?", options: ["Cycle", "Error", "Null", "Head"], correct: 0, exp: "Creates a self-loop." },
+    { q: "Q85. In JavaScript, what does linked list traversal use?", options: ["Recursion", "Iteration", "Both", "None"], correct: 2, exp: "Can use loops or recursion." },
+    { q: "Q86. What is the space complexity of a circular linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Proportional to nodes." },
+    { q: "Q87. Which is true for linked list deletion?", options: ["O(1) at head", "O(n) at end", "Both", "None"], correct: 2, exp: "Depends on position." },
+    { q: "Q88. What is a linked list's head pointer?", options: ["Points to first node", "Points to last", "Null", "Random"], correct: 0, exp: "Reference to start." },
+    { q: "Q89. In Python, how to implement a linked list?", options: ["List", "Class", "Dict", "Tuple"], correct: 1, exp: "Using Node class." },
+    { q: "Q90. What is the time for linked list copy?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Create new nodes." },
+    { q: "Q91. Which linked list allows O(1) insertion at both ends?", options: ["Singly", "Doubly", "Circular doubly", "None"], correct: 2, exp: "With head and tail pointers." },
+    { q: "Q92. What is the output of reversing an empty linked list?", options: ["Null", "Head", "Error", "Same"], correct: 0, exp: "Remains null." },
+    { q: "Q93. In C, what is the data type of next in struct Node?", options: ["int", "struct Node*", "void", "char"], correct: 1, exp: "Pointer to Node." },
+    { q: "Q94. What is a linked list's tail pointer?", options: ["Points to last", "Points to first", "Null", "Middle"], correct: 0, exp: "Reference to end." },
+    { q: "Q95. Which operation is O(n) in doubly linked list?", options: ["Insert at head", "Search", "Delete at tail", "Traverse"], correct: 1, exp: "Linear search." },
+    { q: "Q96. What is the output of linked list sort?", options: ["Sorted list", "Reversed", "Shuffled", "Error"], correct: 0, exp: "Elements in order." },
+    { q: "Q97. In Java, what is LinkedList.get(index)?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Traversal to index." },
+    { q: "Q98. What is a linked list's cycle?", options: ["Loop", "Straight", "Tree", "Graph"], correct: 0, exp: "When a node points back." },
+    { q: "Q99. Which linked list is memory efficient?", options: ["Singly", "Doubly", "Circular", "XOR"], correct: 3, exp: "XOR uses less space." },
+    { q: "Q100. What is the final output of a linked list after all operations?", options: ["Data", "Pointers", "Nodes", "All"], correct: 0, exp: "The stored values." }
+    ];
+        let currentQ = 0;
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('quiz-container').innerHTML = `
+                <h3>${q.q}</h3>
+                <div class="options">
+                    ${q.options.map((opt, i) => `<label class="option"><input type="radio" name="answer" value="${i}"> ${opt}</label>`).join('')}
+                </div>
+                <button class="btn" onclick="checkAnswer()">Check Answer</button>
+                <div class="feedback" id="feedback"></div>
+            `;
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) return;
+            const ans = parseInt(selected.value);
+            const feedback = document.getElementById('feedback');
+            if (ans === questions[currentQ].correct) {
+                feedback.innerHTML = '<span class="correct">✓ Correct! Moving to next question.</span>';
+                setTimeout(() => { currentQ = (currentQ + 1) % questions.length; loadQuestion(); }, 2000);
+            } else {
+                feedback.innerHTML = `<span class="incorrect">✗ Incorrect. ${questions[currentQ].exp} Try again.</span>`;
+            }
+        }
+
+        // FAQ toggle
+        function toggleFAQ(btn) {
+            btn.parentElement.classList.toggle('active');
+        }
+
+        // Initialize
+        loadQuestion();
+        updateViz();
+        
+        
+        /* SCROLL TO TOP */
+
+        const scrollBtn = document.getElementById("scrollTopBtn");
+
+        scrollBtn.addEventListener("click", () => {
+          window.scrollTo({
+            top:0,
+            behavior:"smooth"
+          });
+        });
+    </script>
+</body>
+</html>

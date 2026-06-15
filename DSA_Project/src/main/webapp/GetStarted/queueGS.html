@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started with Queues - Learn Queue</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- Your existing style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        /* Theme 2.0 - Lighter Dark Theme */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34; /* Lighter shade of original #0A0F24 */
+            --bg-secondary: #252A4A; /* Lighter shade of original #161B3A */
+            --accent-purple: #8B6CF6; /* Slightly lighter purple */
+            --accent-blue: #4FC3F7; /* Slightly lighter blue */
+            --text-primary: #F1F5F9; /* Slightly lighter text */
+            --text-secondary: #A1AEB8; /* Slightly lighter secondary text */
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* ===================== NAVBAR ===================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4); /* Adjusted to match lighter purple */
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1); /* Adjusted to match lighter purple */
+        }
+
+        /* ===================== RESPONSIVE NAVBAR ===================== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .navbar .logo {
+                font-size: 18px;
+            }
+        }
+
+        /* ---------- SECTION SPACING ---------- */
+        section {
+            min-height: 70vh;
+            padding: 120px 20px 40px; /* Increased top padding for better spacing */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Changed to flex-start for better alignment */
+        }
+        
+        #language {
+            min-height: auto;
+            padding-bottom: 40px;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px; /* Added padding for content */
+            box-sizing: border-box;
+        }
+
+        /* ---------- LANGUAGE SELECTOR ---------- */
+        .language-selector {
+            text-align: center;
+            margin-bottom: 40px; /* Increased margin */
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+        }
+
+        .language-selector select {
+            padding: 12px; /* Increased padding */
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* ---------- LANGUAGE SELECTOR AND ARRAY INTRO ---------- */
+        .language-selector {
+            text-align: center;
+            margin-bottom: 40px; /* Increased margin */
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple in theme 2.0 */
+        }
+
+        .language-selector select {
+            padding: 12px; /* Increased padding */
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .array-intro {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            background: var(--bg-secondary); /* Changed to match language selector theme */
+            padding: 25px; /* Adjusted to match language selector */
+            border-radius: 12px; /* Adjusted to match language selector */
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple in theme 2.0 */
+        }
+
+        .intro-text {
+            flex: 1;
+        }
+
+        .intro-text h3 {
+            color: var(--accent-purple); /* Uses theme 2.0 accent purple */
+            margin-bottom: 10px;
+        }
+
+        .start-btn {
+            margin-top: 15px;
+            padding: 12px 22px;
+            border: none;
+            background: linear-gradient(135deg,#8B6CF6,#9f7aea); /* Adjusted to lighter purple in theme 2.0 */
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(139,108,246,0.6); /* Adjusted to match lighter purple in theme 2.0 */
+        }
+
+        /* Demo boxes */
+        .intro-demo {
+            display: flex;
+            gap: 12px;
+        }
+
+        .array-box {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-secondary); /* Uses theme 2.0 bg-secondary */
+            border: 2px solid var(--accent-purple); /* Uses theme 2.0 accent purple */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 0 12px rgba(139,108,246,0.4); /* Adjusted to match lighter purple in theme 2.0 */
+        }
+        /* ---------- THEORY SECTION ---------- */
+        .theory {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .theory h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .theory h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 10px;
+        }
+
+        .theory ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        .theory p {
+            margin-bottom: 15px; /* Added margin */
+        }
+
+        /* ---------- SYNTAX SECTION ---------- */
+        .syntax {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .syntax h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .syntax h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .syntax h4 {
+            color: var(--text-secondary);
+            margin-top: 20px; /* Increased margin */
+            margin-bottom: 10px;
+        }
+
+        .syntax pre {
+            background: #1e293b;
+            padding: 20px; /* Increased padding */
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9; /* Adjusted to match lighter text */
+            margin-bottom: 15px; /* Increased margin */
+        }
+
+        .syntax code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px; /* Set font size */
+        }
+
+        /* ---------- ALGORITHM SECTION ---------- */
+        .algorithm {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .algorithm h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .algorithm h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .algorithm ol {
+            padding-left: 25px; /* Increased padding */
+        }
+
+        .algorithm pre {
+            background: #1e293b;
+            padding: 20px; /* Increased padding */
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9; /* Adjusted to match lighter text */
+            margin-top: 10px;
+        }
+
+        /* ---------- FLOWCHART SECTION ---------- */
+        .flowchart {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .flowchart h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .flowchart h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0; /* Added margin */
+        }
+        
+        .mermaid svg path {
+            stroke-width: 2.5px !important;
+            filter: drop-shadow(0 0 4px #8b6cf6);
+        }
+        
+
+        /* ---------- TIME COMPLEXITY SECTION ---------- */
+        .complexity {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .complexity h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .complexity table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Increased margin */
+        }
+
+        .complexity th, .complexity td {
+            border: 1px solid var(--accent-purple);
+            padding: 12px; /* Increased padding */
+            text-align: left;
+        }
+
+        .complexity th {
+            background: var(--accent-purple);
+            color: var(--text-primary);
+        }
+
+        /* ---------- APPLICATIONS SECTION ---------- */
+        .applications {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .applications h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .applications ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        /* ---------- COMMON MISTAKES SECTION ---------- */
+        .mistakes {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .mistakes h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .mistakes ul {
+            list-style-type: disc;
+            padding-left: 25px; /* Increased padding */
+        }
+
+        /* ---------- QUESTIONS SECTION ---------- */
+        .questions {
+            background: var(--bg-secondary);
+            padding: 25px; /* Increased padding */
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35); /* Adjusted to match lighter purple */
+            margin-bottom: 40px; /* Increased margin */
+        }
+
+        .questions h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px; /* Increased margin */
+        }
+
+        .questions h3 {
+            color: var(--accent-purple);
+            margin-top: 25px; /* Increased margin */
+            margin-bottom: 15px;
+        }
+
+        .questions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .questions li {
+            margin-bottom: 12px; /* Increased margin */
+        }
+
+        .questions a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .questions a:hover {
+            text-decoration: underline;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+} 
+
+        /* ===================== RESPONSIVE BREAKPOINTS ===================== */
+        @media (max-width: 768px) {
+            section {
+                padding: 140px 15px 40px; /* Adjusted for mobile */
+            }
+            .section-content {
+                padding: 15px; /* Reduced padding */
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 12px;
+                padding: 15px; /* Adjusted padding */
+            }
+            .complexity table {
+                font-size: 12px;
+            }
+            .complexity th, .complexity td {
+                padding: 8px; /* Reduced padding */
+            }
+            .mermaid {
+                font-size: 12px; /* Smaller for mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .navbar .logo {
+                font-size: 16px;
+            }
+            .navbar nav ul {
+                gap: 8px;
+            }
+            .language-selector select {
+                width: 100%;
+                max-width: 200px;
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">CodeCanvas - Queue</div>
+        <nav>
+            <ul>
+                <li><a href="../pages/queue.html">Home</a></li>
+                <li><a href="#language">Language</a></li>
+                <li><a href="#theory">Learn</a></li>
+                <li><a href="#questions">Test</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Language Selector -->
+ <section id="language">
+    <div class="section-content">
+
+        <div class="language-selector">
+            <h2>Select Programming Language</h2>
+            <p>Choose a language to see syntax examples in that language. All code snippets will update dynamically.</p>
+            <select id="lang-select">
+                <option value="c">C</option>
+                <option value="java">Java</option>
+                <option value="python">Python</option>
+                <option value="cpp">C++</option>
+            </select>
+        </div>
+
+        <!-- NEW: QUEUE INTRO PANEL -->
+<div class="array-intro">
+    <div class="intro-text">
+        <h3>What is a Queue?</h3>
+        <p>
+            A queue is a linear data structure that follows the First In First Out (FIFO) principle.
+            Elements are added at the rear and removed from the front.
+        </p>
+        <button class="start-btn">Start Visualization →</button>
+    </div>
+
+    <div class="intro-demo">
+        <div class="array-box">10</div>
+        <div class="array-box">20</div>
+        <div class="array-box">30</div>
+    </div>
+</div>
+
+</div>
+</section>
+
+<!-- Theory Section -->
+<section id="theory">
+    <div class="section-content">
+        <div class="theory">
+            <h2><a href="../queue/theory.html" style="color: inherit; text-decoration: none;">What is a Queue?</a></h2>
+            <p>A queue is a linear data structure that follows the First In First Out (FIFO) principle, where the first element added is the first to be removed. It supports two main operations: enqueue (add an element to the rear) and dequeue (remove the front element). Queues are used in scheduling, breadth-first search, and print job management.</p>
+            <p>For example, a queue of people in line: the first person in line is served first.</p>
+            <h3>Properties of Queues</h3>
+            <ul>
+                <li><strong>FIFO Principle:</strong> First In, First Out.</li>
+                <li><strong>Front and Rear Pointers:</strong> Front points to the first element, rear to the last.</li>
+                <li><strong>Operations:</strong> Enqueue, Dequeue, Peek (view front), IsEmpty, IsFull.</li>
+                <li><strong>Dynamic Size:</strong> Can grow or shrink as needed.</li>
+                <li><strong>Implementation:</strong> Using arrays or linked lists.</li>
+            </ul>
+            <h3>Advantages of Queues</h3>
+            <ul>
+                <li>Simple and efficient for FIFO operations.</li>
+                <li>Easy to implement and understand.</li>
+                <li>Used in resource sharing and scheduling.</li>
+                <li>Memory efficient for dynamic operations.</li>
+            </ul>
+            <h3>Limitations of Queues</h3>
+            <ul>
+                <li>Limited access: only front element is accessible.</li>
+                <li>Can overflow if not managed properly.</li>
+                <li>Not suitable for random access.</li>
+                <li>Queue overflow in fixed-size implementations.</li>
+            </ul>
+            <h3>Types of Queues</h3>
+            <ul>
+                <li><strong>Linear Queue:</strong> Simple FIFO queue.</li>
+                <li><strong>Circular Queue:</strong> Rear connects to front, efficient for fixed size.</li>
+                <li><strong>Priority Queue:</strong> Elements dequeued based on priority.</li>
+                <li><strong>Deque (Double-Ended Queue):</strong> Elements can be added/removed from both ends.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Syntax Section -->
+<section id="syntax">
+    <div class="section-content">
+        <div class="syntax">
+            <h2><a href="../queue/syntax.html" style="color: inherit; text-decoration: none;">Syntax for Queue Operations</a></h2>
+            <p>Below are syntax examples for common queue operations in the selected language. Note that some languages have built-in queue classes.</p>
+            <h3>Queue Operations</h3>
+            <h4>Declaration</h4>
+            <pre><code id="queue-declare">Queue<int> q;  // C++</code></pre>
+            <h4>Enqueue (Add Element)</h4>
+            <pre><code id="queue-enqueue">q.push(10);  // C++</code></pre>
+            <h4>Dequeue (Remove Front Element)</h4>
+            <pre><code id="queue-dequeue">q.pop();  // C++</code></pre>
+            <h4>Peek (View Front Element)</h4>
+            <pre><code id="queue-peek">int front = q.front();  // C++</code></pre>
+            <h4>Check if Empty</h4>
+            <pre><code id="queue-empty">bool isEmpty = q.empty();  // C++</code></pre>
+            <h4>Get Size</h4>
+            <pre><code id="queue-size">int size = q.size();  // C++</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- Algorithm Section -->
+<section id="algorithm">
+    <div class="section-content">
+        <div class="algorithm">
+            <h2><a href="../queue/algorithm.html" style="color: inherit; text-decoration: none;">Step-by-Step Algorithms</a></h2>
+            <p>Here are detailed algorithms for common queue operations. These are essential for understanding how queues work internally.</p>
+            <h3>Enqueue Operation</h3>
+            <ol>
+                <li>Check if the queue is full (for static queues).</li>
+                <li>Increment the rear pointer.</li>
+                <li>Add the new element at the rear position.</li>
+            </ol>
+            <pre><code>// Pseudocode
+if (rear == capacity - 1) return error
+rear++
+queue[rear] = element</code></pre>
+
+            <h3>Dequeue Operation</h3>
+            <ol>
+                <li>Check if the queue is empty.</li>
+                <li>Retrieve the front element.</li>
+                <li>Increment the front pointer.</li>
+                <li>Return the retrieved element.</li>
+            </ol>
+            <pre><code>// Pseudocode
+if (front == -1 || front > rear) return error
+element = queue[front]
+front++
+return element</code></pre>
+
+            <h3>Peek Operation</h3>
+            <ol>
+                <li>Check if the queue is empty.</li>
+                <li>Return the front element without removing it.</li>
+            </ol>
+            <pre><code>// Pseudocode
+if (front == -1 || front > rear) return error
+return queue[front]</code></pre>
+
+            <h3>Check if Empty</h3>
+            <ol>
+                <li>Return true if front == -1 or front > rear, else false.</li>
+            </ol>
+            <pre><code>// Pseudocode
+return front == -1 || front > rear</code></pre>
+
+            <h3>Check if Full</h3>
+            <ol>
+                <li>Return true if rear == capacity - 1, else false.</li>
+            </ol>
+            <pre><code>// Pseudocode
+return rear == capacity - 1</code></pre>
+        </div>
+    </div>
+</section>
+
+<!-- Flowchart Section -->
+<section id="flowchart">
+    <div class="section-content">
+        <div class="flowchart">
+            <h2><a href="../queue/flowchart.html" style="color: inherit; text-decoration: none;">Flowcharts for Queue Operations</a></h2>
+            <p>Flowcharts help visualize the logic of queue operations. Below are interactive flowcharts created using Mermaid.</p>
+            <h3>Enqueue Operation</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B{"Is full?"}
+                B -->|Yes| C["Error: Queue Overflow"]
+                B -->|No| D["rear++"]
+                D --> E["queue[rear] = element"]
+                E --> F["End"]
+            </div>
+
+            <h3>Dequeue Operation</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B{"Is empty?"}
+                B -->|Yes| C["Error: Queue Underflow"]
+                B -->|No| D["element = queue[front]"]
+                D --> E["front++"]
+                E --> F["Return element"]
+                F --> G["End"]
+            </div>
+
+            <h3>Peek Operation</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B{"Is empty?"}
+                B -->|Yes| C["Error: Queue Empty"]
+                B -->|No| D["Return queue[front]"]
+                D --> E["End"]
+            </div>
+
+            <h3>Check if Empty</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B{"front == -1 or front > rear ?"}
+                B -->|Yes| C["Return true"]
+                B -->|No| D["Return false"]
+                C --> E["End"]
+                D --> E
+            </div>
+
+            <h3>Check if Full</h3>
+            <div class="mermaid">
+                graph TD
+                A["Start"] --> B{"rear == capacity-1 ?"}
+                B -->|Yes| C["Return true"]
+                B -->|No| D["Return false"]
+                C --> E["End"]
+                D --> E
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Time Complexity Section -->
+<section id="complexity">
+    <div class="section-content">
+        <div class="complexity">
+            <h2><a href="../queue/complexity.html" style="color: inherit; text-decoration: none;">Time Complexity of Queue Operations</a></h2>
+            <p>Understanding time complexity helps in choosing the right implementation. Queues have efficient operations, but complexities can vary based on the type of queue and implementation. Below is a detailed breakdown.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Implementation</th>
+                        <th>Best Case</th>
+                        <th>Average Case</th>
+                        <th>Worst Case</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Enqueue</td>
+                        <td>Array-based</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct addition at rear; may require resizing in dynamic arrays (amortized O(1)).</td>
+                    </tr>
+                    <tr>
+                        <td>Enqueue</td>
+                        <td>Linked List-based</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Always O(1) as no resizing needed.</td>
+                    </tr>
+                    <tr>
+                        <td>Dequeue</td>
+                        <td>Array-based</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct removal from front.</td>
+                    </tr>
+                    <tr>
+                        <td>Dequeue</td>
+                        <td>Linked List-based</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Direct removal from front.</td>
+                    </tr>
+                    <tr>
+                        <td>Peek</td>
+                        <td>All</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>View front element without removal.</td>
+                    </tr>
+                    <tr>
+                        <td>IsEmpty</td>
+                        <td>All</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Check pointers or size.</td>
+                    </tr>
+                    <tr>
+                        <td>IsFull</td>
+                        <td>Array-based</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Check against capacity.</td>
+                    </tr>
+                    <tr>
+                        <td>Search (Linear)</td>
+                        <td>All</td>
+                        <td>O(1)</td>
+                        <td>O(n)</td>
+                        <td>O(n)</td>
+                        <td>Traverse entire queue; not typical for queues.</td>
+                    </tr>
+                    <tr>
+                        <td>Insert (Priority Queue)</td>
+                        <td>Heap-based</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)</td>
+                        <td>Heap insertion for priority-based dequeue.</td>
+                    </tr>
+                    <tr>
+                        <td>Delete (Priority Queue)</td>
+                        <td>Heap-based</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)</td>
+                        <td>O(log n)</td>
+                        <td>Heap extraction for highest priority.</td>
+                    </tr>
+                    <tr>
+                        <td>Enqueue/Deque (Deque)</td>
+                        <td>All</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>O(1)</td>
+                        <td>Operations at both ends.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Note:</strong> Basic queue operations (enqueue, dequeue, peek) are O(1) for both array and linked list implementations. Array-based queues may have amortized O(1) for dynamic resizing, while linked lists avoid overflow issues. Priority queues use heaps, leading to O(log n) for insert/delete. Space complexity is O(n) for storing elements in all cases. For circular queues, operations remain O(1) but avoid wasted space. Always consider the context: e.g., searching in a queue is O(n) as it's not designed for random access.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Applications Section -->
+<section id="applications">
+    <div class="section-content">
+        <div class="applications">
+            <h2><a href="../queue/applications.html" style="color: inherit; text-decoration: none;">Applications of Queues</a></h2>
+            <p>Queues are fundamental and used in a wide range of applications across computer science and software development.</p>
+            <ul>
+                <li><strong>Process Scheduling:</strong> CPU scheduling in operating systems (e.g., round-robin).</li>
+                <li><strong>Breadth-First Search (BFS):</strong> Graph traversal algorithm.</li>
+                <li><strong>Print Job Management:</strong> Printer queues in operating systems.</li>
+                <li><strong>Resource Sharing:</strong> Managing shared resources like network buffers.</li>
+                <li><strong>Call Center Systems:</strong> Handling customer calls in order.</li>
+                <li><strong>Keyboard Buffers:</strong> Storing keystrokes in order.</li>
+                <li><strong>Simulation:</strong> Modeling real-world queues (e.g., traffic, bank lines).</li>
+                <li><strong>Web Server Request Handling:</strong> Processing HTTP requests.</li>
+            </ul>
+            <p>Queues are the basis for more complex data structures and algorithms.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Common Mistakes Section -->
+<section id="mistakes">
+    <div class="section-content">
+        <div class="mistakes">
+            <h2><a href="../queue/mistakes.html" style="color: inherit; text-decoration: none;">Common Mistakes and How to Avoid Them</a></h2>
+            <p>Working with queues can lead to bugs if not handled carefully. Here are common pitfalls and tips to avoid them.</p>
+            <ul>
+                <li><strong>Queue Overflow:</strong> Enqueuing too many elements. Check isFull before enqueue.</li>
+                <li><strong>Queue Underflow:</strong> Dequeuing from empty queue. Check isEmpty before dequeue.</li>
+                <li><strong>Forgetting Pointer Initialization:</strong> Initialize front to -1, rear to -1. Always set correctly.</li>
+                <li><strong>Misusing Peek:</strong> Peek doesn't remove; use dequeue for removal.</li>
+                <li><strong>Array Bounds:</strong> In array implementation, ensure indices are within bounds.</li>
+                <li><strong>Thread Safety:</strong> Queues are not thread-safe; use synchronization if needed.</li>
+                <li><strong>Choosing Wrong Implementation:</strong> Use circular queue for efficiency, linked list for dynamic size.</li>
+                <li><strong>Not Handling Edge Cases:</strong> Test with empty queue, single element, full queue.</li>
+            </ul>
+            <p><strong>Debugging Tip:</strong> Print queue contents after each operation during development.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Questions Section -->
+<section id="questions">
+    <div class="section-content">
+        <div class="questions">
+            <h2><a href="../queue/questions.html" style="color: inherit; text-decoration: none;">Placement-Based Important Questions</a></h2>
+            <p>Practice these questions from LeetCode, GeeksForGeeks, CodeChef, HackerRank, and other platforms to prepare for coding interviews and placements. Focus on understanding concepts rather than memorizing solutions.</p>
+            <h3>Easy (Beginner-friendly, focus on basics)</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/implement-queue-using-stacks/">Implement Queue using Stacks (LeetCode)</a> - Using two stacks.</li>
+                <li><a href="https://www.geeksforgeeks.org/queue-data-structure/">Queue Introduction (GeeksForGeeks)</a> - Basic operations.</li>
+                <li><a href="https://leetcode.com/problems/design-circular-queue/">Design Circular Queue (LeetCode)</a> - Circular queue implementation.</li>
+                <li><a href="https://www.geeksforgeeks.org/queue-using-stacks/">Queue using Stacks (GeeksForGeeks)</a> - Stack-based queue.</li>
+                <li><a href="https://leetcode.com/problems/number-of-recent-calls/">Number of Recent Calls (LeetCode)</a> - Queue for timestamps.</li>
+                <li><a href="https://www.geeksforgeeks.org/queue-set-1introduction-and-array-implementation/">Queue Array Implementation (GeeksForGeeks)</a> - Basic array-based queue.</li>
+                <li><a href="https://leetcode.com/problems/implement-queue-using-arrays/">Implement Queue using Arrays (LeetCode)</a> - Simple array queue.</li>
+                <li><a href="https://www.geeksforgeeks.org/queue-linked-list-implementation/">Queue Linked List Implementation (GeeksForGeeks)</a> - Linked list-based queue.</li>
+            </ul>
+            <h3>Medium</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/sliding-window-maximum/">Sliding Window Maximum (LeetCode)</a> - Deque for maximum.</li>
+                <li><a href="https://www.geeksforgeeks.org/level-order-traversal/">Level Order Traversal (GeeksForGeeks)</a> - BFS with queue.</li>
+                <li><a href="https://leetcode.com/problems/open-the-lock/">Open the Lock (LeetCode)</a> - BFS with queue.</li>
+                <li><a href="https://www.geeksforgeeks.org/reverse-first-k-elements-of-queue/">Reverse First K Elements (GeeksForGeeks)</a> - Queue reversal.</li>
+                <li><a href="https://leetcode.com/problems/perfect-squares/">Perfect Squares (LeetCode)</a> - BFS for minimum steps.</li>
+                <li><a href="https://www.geeksforgeeks.org/first-negative-integer-every-window-size-k/">First Negative in Window (GeeksForGeeks)</a> - Queue for sliding window.</li>
+                <li><a href="https://leetcode.com/problems/reveal-cards-in-increasing-order/">Reveal Cards In Increasing Order (LeetCode)</a> - Queue simulation.</li>
+                <li><a href="https://www.geeksforgeeks.org/interleave-first-half-queue-second-half/">Interleave Queue Halves (GeeksForGeeks)</a> - Queue manipulation.</li>
+            </ul>
+            <h3>Hard</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/sliding-window-maximum/">Sliding Window Maximum (LeetCode)</a> - Advanced deque.</li>
+                <li><a href="https://www.geeksforgeeks.org/find-maximum-of-minimum-for-every-window-size/">Maximum of Minimums (GeeksForGeeks)</a> - Stack/queue hybrid.</li>
+                <li><a href="https://leetcode.com/problems/bus-routes/">Bus Routes (LeetCode)</a> - BFS with queue.</li>
+                <li><a href="https://www.geeksforgeeks.org/minimum-time-required-to-rot-all-oranges/">Rotten Oranges (GeeksForGeeks)</a> - Multi-source BFS.</li>
+                <li><a href="https://leetcode.com/problems/shortest-path-in-binary-matrix/">Shortest Path in Binary Matrix (LeetCode)</a> - BFS with queue.</li>
+                <li><a href="https://www.geeksforgeeks.org/snake-and-ladder-problem/">Snake and Ladder Problem (GeeksForGeeks)</a> - BFS with queue.</li>
+                <li><a href="https://leetcode.com/problems/word-ladder/">Word Ladder (LeetCode)</a> - BFS for shortest transformation.</li>
+                <li><a href="https://www.geeksforgeeks.org/minimum-steps-reach-target-knight/">Minimum Steps for Knight (GeeksForGeeks)</a> - BFS with queue.</li>
+            </ul>
+            <p><strong>Tip:</strong> Solve these on paper first, then code. Focus on edge cases like empty queue, single element, and maximum constraints. Use platforms like LeetCode for timed practice.</p>
+        </div>
+    </div>
+</section>
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../queue/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<script>
+    // Language selector functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const langSelect = document.getElementById('lang-select');
+        const codeBlocks = {
+            'queue-declare': {
+                c: 'struct Queue { int front, rear, size; int* array; };',
+                java: 'Queue<Integer> queue = new LinkedList<>();',
+                python: 'from collections import deque\nqueue = deque()',
+                cpp: 'queue<int> q;'
+            },
+            'queue-enqueue': {
+                c: 'queue->array[++queue->rear] = item;',
+                java: 'queue.add(item);',
+                python: 'queue.append(item)',
+                cpp: 'q.push(item);'
+            },
+            'queue-dequeue': {
+                c: 'if (queue->front == -1) return -1; return queue->array[queue->front++];',
+                java: 'queue.remove();',
+                python: 'queue.popleft()',
+                cpp: 'q.pop();'
+            },
+            'queue-peek': {
+                c: 'if (queue->front == -1) return -1; return queue->array[queue->front];',
+                java: 'queue.peek();',
+                python: 'queue[0]',
+                cpp: 'q.front();'
+            },
+            'queue-empty': {
+                c: 'return queue->front == -1 || queue->front > queue->rear;',
+                java: 'queue.isEmpty();',
+                python: 'len(queue) == 0',
+                cpp: 'q.empty();'
+            },
+            'queue-size': {
+                c: 'return queue->rear - queue->front + 1;',
+                java: 'queue.size();',
+                python: 'len(queue)',
+                cpp: 'q.size();'
+            }
+        };
+
+        if (langSelect) {
+            langSelect.addEventListener('change', function() {
+                const selectedLang = this.value;
+                Object.keys(codeBlocks).forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.textContent = codeBlocks[id][selectedLang];
+                    }
+                });
+            });
+        } else {
+            console.error('Language selector not found');
+        }
+    });
+    
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: "base",
+        themeVariables: {
+            primaryColor: "#1e1e2f",
+            primaryBorderColor: "#8b6cf6",
+            primaryTextColor: "#ffffff",
+            lineColor: "#a78bfa",
+            secondaryColor: "#2a2a40",
+            tertiaryColor: "#141427",
+            edgeLabelBackground: "#1e1e2f"
+        }
+    });
+</script>
+</body>
+</html>

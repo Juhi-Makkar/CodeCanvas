@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common Queue Mistakes - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2/dist/fuse.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --accent-red: #EF4444;
+            --accent-green: #10B981;
+            --accent-orange: #F59E0B;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+
+        .navbar nav a.active {
+            color: var(--accent-purple);
+            background: rgba(139,108,246,0.2);
+        }
+
+        /* Hero Section - Queue Themed */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+            padding: 150px 20px 80px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-red);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(245,158,11,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: var(--accent-red);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            background: rgba(245,158,11,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--accent-red);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Mistake Categories */
+        .categories {
+            padding: 80px 20px;
+            background: var(--bg-secondary);
+        }
+
+        .categories-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .categories-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .categories-header h2 {
+            font-size: 36px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .category-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .category-tab {
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: 2px solid transparent;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .category-tab:hover {
+            transform: translateY(-2px);
+        }
+
+        .category-tab.active {
+            border-color: var(--accent-red);
+            background: rgba(245,158,11,0.1);
+            color: var(--accent-red);
+        }
+
+        .category-tab.safety { border-color: var(--accent-red); }
+        .category-tab.performance { border-color: var(--accent-orange); }
+        .category-tab.logic { border-color: var(--accent-purple); }
+
+        /* Mistake Cards */
+        .mistake-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .mistake-item {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid var(--accent-red);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .mistake-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(245,158,11,0.2);
+        }
+
+        .mistake-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .mistake-title {
+            color: var(--accent-red);
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .mistake-type {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .mistake-type.safety { background: rgba(239,68,68,0.2); color: var(--accent-red); }
+        .mistake-type.performance { background: rgba(245,158,11,0.2); color: var(--accent-orange); }
+        .mistake-type.logic { background: rgba(139,108,246,0.2); color: var(--accent-purple); }
+
+        .mistake-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .mistake-code {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .mistake-code .bad {
+            color: var(--accent-red);
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .mistake-code .good {
+            color: var(--accent-green);
+            font-size: 13px;
+            display: block;
+        }
+
+        .mistake-code code {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+        }
+
+        .tips-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tips-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .tips-header h2 {
+            font-size: 36px;
+            color: var(--accent-green);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-box {
+            background: var(--bg-primary);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(16,185,129,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tip-box:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-3px);
+        }
+
+        .tip-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .tip-box h3 {
+            color: var(--accent-green);
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .tip-box p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            padding: 80px 20px;
+            background: var(--bg-secondary);
+        }
+
+        .comparison-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .comparison-header h2 {
+            font-size: 36px;
+            color: var(--accent-blue);
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .comparison-card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 30px;
+        }
+
+        .comparison-card.wrong {
+            border: 2px solid var(--accent-red);
+        }
+
+        .comparison-card.right {
+            border: 2px solid var(--accent-green);
+        }
+
+        .comparison-card h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comparison-card.wrong h3 {
+            color: var(--accent-red);
+        }
+
+        .comparison-card.right h3 {
+            color: var(--accent-green);
+        }
+
+        .comparison-card code {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+            .hero-badges {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .mistake-list {
+                grid-template-columns: 1fr;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="queueGS.html" class="logo">CodeCanvas - Queue</a>
+        <nav>
+            <ul>
+            <li><a href="../GetStarted/queueGS.html">Back to Queue</a></li>
+            <li><a href="../queue/theory.html" >Theory</a></li>
+            <li><a href="../queue/syntax.html">Syntax</a></li>
+            <li><a href="../queue/algorithm.html">Algorithm</a></li>
+            <li><a href="../queue/complexity.html">Complexity</a></li>
+            <li><a href="../queue/flowchart.html">Flowchart</a></li>
+                <li><a href="../queue/applications.html">Applications</a></li>
+                <li><a href="../queue/mistakes.html" class="active">Mistakes</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="section-content">
+            <h1>Common Queue Mistakes</h1>
+            <p>Master queue operations by avoiding these frequent errors. Learn the right way to implement FIFO data structures.</p>
+            <div class="hero-badges">
+                <div class="hero-badge">⚠️ 15+ Queue Errors</div>
+                <div class="hero-badge">✅ FIFO Discipline</div>
+                <div class="hero-badge">🚀 Reliable Code</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mistake Categories -->
+    <section class="categories">
+        <div class="categories-container">
+            <div class="categories-header">
+                <h2>Explore Queue Mistakes by Category</h2>
+                <p>Click on a category to filter the mistakes</p>
+            </div>
+            <div class="category-tabs">
+                <div class="category-tab active safety" data-filter="all">All Mistakes</div>
+                <div class="category-tab safety" data-filter="safety">Safety</div>
+                <div class="category-tab performance" data-filter="performance">Performance</div>
+                <div class="category-tab logic" data-filter="logic">Logic</div>
+            </div>
+            <div class="mistake-list" id="mistake-list">
+                <!-- Mistake cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section class="tips-section">
+        <div class="tips-container">
+            <div class="tips-header">
+                <h2>Best Practices for Queue Operations</h2>
+                <p>Follow these guidelines to implement reliable and efficient queue data structures</p>
+            </div>
+            <div class="tips-grid">
+                <div class="tip-box">
+                    <div class="tip-icon">🔍</div>
+                    <h3>Always Check Empty State</h3>
+                    <p>Verify queue is not empty before dequeue or peek operations to prevent errors.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">⚡</div>
+                    <h3>Use Circular Buffer</h3>
+                    <p>Implement circular queue to avoid linear shifting and optimize space usage.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">📏</div>
+                    <h3>Track Size Properly</h3>
+                    <p>Maintain accurate size counter instead of relying on array length alone.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">🔄</div>
+                    <h3>Handle Wrap Around</h3>
+                    <p>Correctly implement modular arithmetic for circular queue operations.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">🛡️</div>
+                    <h3>Validate Capacity</h3>
+                    <p>Check if queue is full before enqueue to prevent buffer overflow.</p>
+                </div>
+                <div class="tip-box">
+                    <div class="tip-icon">🎯</div>
+                    <h3>Use Deque for Flexibility</h3>
+                    <p>Consider double-ended queue when both ends need operations frequently.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <div class="comparison-container">
+            <div class="comparison-header">
+                <h2>Wrong vs Right Queue Implementation</h2>
+                <p>See the difference between common mistakes and correct queue solutions</p>
+            </div>
+            <div class="comparison-grid">
+                <div class="comparison-card wrong">
+                    <h3>❌ Common Mistake</h3>
+                    <code>
+// Linear queue - inefficient shifting
+class Queue {
+    constructor() { this.items = []; }
+    enqueue(item) { this.items.push(item); }
+    dequeue() { return this.items.shift(); } // O(n)
+}
+
+// No empty check
+queue.dequeue(); // Runtime error
+                    </code>
+                    <p style="color: var(--accent-red); font-size: 13px; margin-top: 10px;">
+                        Shift operation is O(n) and no safety checks.
+                    </p>
+                </div>
+                <div class="comparison-card right">
+                    <h3>✅ Correct Approach</h3>
+                    <code>
+// Circular queue - O(1) operations
+class Queue {
+    constructor(size) { 
+        this.size = size;
+        this.items = new Array(size);
+        this.front = -1;
+        this.rear = -1;
+    }
+    enqueue(item) {
+        if (this.isFull()) return false;
+        if (this.isEmpty()) this.front = 0;
+        this.rear = (this.rear + 1) % this.size;
+        this.items[this.rear] = item;
+        return true;
+    }
+    dequeue() {
+        if (this.isEmpty()) return null;
+        const item = this.items[this.front];
+        this.front = (this.front + 1) % this.size;
+        return item;
+    }
+}
+                    </code>
+                    <p style="color: var(--accent-green); font-size: 13px; margin-top: 10px;">
+                        O(1) operations with proper bounds checking and circular implementation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../queue/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Common Queue Mistakes Data
+        const mistakes = [
+            {
+                name: "Dequeue on Empty Queue",
+                description: "Attempting to dequeue from an empty queue causes runtime errors.",
+                badCode: "queue.dequeue() without empty check",
+                goodCode: "if (!queue.isEmpty()) queue.dequeue()",
+                type: "safety"
+            },
+            {
+                name: "Linear Queue Shifting",
+                description: "Using shift() for dequeue causes O(n) time complexity.",
+                badCode: "this.items.shift() // O(n)",
+                goodCode: "Use circular queue with front/rear pointers",
+                type: "performance"
+            },
+            {
+                name: "Enqueue on Full Queue",
+                description: "No capacity check leads to buffer overflow.",
+                badCode: "queue.enqueue(item) without full check",
+                goodCode: "if (!queue.isFull()) queue.enqueue(item)",
+                type: "safety"
+            },
+            {
+                name: "Wrong Wrap Around Logic",
+                description: "Incorrect modular arithmetic in circular queues.",
+                badCode: "rear = rear + 1; if (rear == size) rear = 0",
+                goodCode: "rear = (rear + 1) % size",
+                type: "logic"
+            },
+            {
+                name: "Not Resetting Front Pointer",
+                description: "Failing to update front after dequeue in circular queue.",
+                badCode: "return items[front]; // front unchanged",
+                goodCode: "front = (front + 1) % size",
+                type: "logic"
+            },
+            {
+                name: "Using Array.pop() for Queue",
+                description: "pop() gives LIFO behavior, not FIFO.",
+                badCode: "queue.pop() // Stack behavior",
+                goodCode: "Implement proper queue with front/rear",
+                type: "logic"
+            },
+            {
+                name: "Incorrect isFull() Check",
+                description: "Wrong condition for detecting full circular queue.",
+                badCode: "front == -1 || rear == front",
+                goodCode: "(rear + 1) % size == front",
+                type: "logic"
+            },
+            {
+                name: "No Size Tracking",
+                description: "Relying on array.length ignores logical size.",
+                badCode: "return this.items.length",
+                goodCode: "Maintain separate size counter",
+                type: "performance"
+            },
+            {
+                name: "Peek on Empty Queue",
+                description: "Accessing front without empty check.",
+                badCode: "return this.items[this.front]",
+                goodCode: "if (!isEmpty()) return items[front]",
+                type: "safety"
+            },
+            {
+                name: "Uninitialized Pointers",
+                description: "Not setting front/rear = -1 initially.",
+                badCode: "front = 0; rear = 0; // Wrong for empty",
+                goodCode: "front = rear = -1; // Empty state",
+                type: "logic"
+            },
+            {
+                name: "Using Queue as Stack",
+                description: "Enqueuing and dequeuing from same end.",
+                badCode: "enqueue/pop from rear only",
+                goodCode: "FIFO: enqueue rear, dequeue front",
+                type: "logic"
+            },
+            {
+                name: "Memory Leaks in Array",
+                description: "Not clearing dequeued elements in fixed array.",
+                badCode: "items[front] = undefined after dequeue",
+                goodCode: "Leave slots empty, reuse in circular fashion",
+                type: "performance"
+            },
+            {
+                name: "Wrong Empty Check",
+                description: "Incorrect condition for empty circular queue.",
+                badCode: "front == rear && size == 0",
+                goodCode: "front == -1 || (front == (rear + 1) % size)",
+                type: "logic"
+            },
+            {
+                name: "Fixed Size Without Resize",
+                description: "Array-based queue can't grow dynamically.",
+                badCode: "throw error when full",
+                goodCode: "Use dynamic array or linked list implementation",
+                type: "performance"
+            },
+            {
+                name: "Race Conditions in Multi-thread",
+                description: "Not using atomic operations for concurrent access.",
+                badCode: "shared queue without locks",
+                goodCode: "Use mutex/locks for thread safety",
+                type: "safety"
+            }
+        ];
+
+        // Helper function to get type class
+        function getTypeClass(type) {
+            if (type === 'safety') return 'safety';
+            if (type === 'performance') return 'performance';
+            if (type === 'logic') return 'logic';
+            return '';
+        }
+
+        // Generate Mistake Cards
+        function generateMistakeCards(filter = 'all') {
+            const list = document.getElementById('mistake-list');
+            list.innerHTML = '';
+            
+            const filteredMistakes = filter === 'all' 
+                ? mistakes 
+                : mistakes.filter(m => m.type === filter);
+            
+            filteredMistakes.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'mistake-item';
+                card.innerHTML = `
+                    <div class="mistake-header">
+                        <h4 class="mistake-title">${item.name}</h4>
+                        <span class="mistake-type ${getTypeClass(item.type)}">${item.type.toUpperCase()}</span>
+                    </div>
+                    <p class="mistake-description">${item.description}</p>
+                    <div class="mistake-code">
+                        <span class="bad">❌ Wrong:</span>
+                        <code>${item.badCode}</code>
+                        <span class="good">✅ Correct:</span>
+                        <code>${item.goodCode}</code>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // Category Tab Filtering
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                // Filter mistakes
+                const filter = this.getAttribute('data-filter');
+                generateMistakeCards(filter);
+            });
+        });
+
+        // Initialize on load
+        generateMistakeCards('all');
+    </script>
+</body>
+</html>

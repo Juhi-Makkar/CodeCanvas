@@ -1,0 +1,1841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Algorithms - Learn Sorting</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- Your existing style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <style>
+        /* Embedded theme-specific styles (overrides/additions to style.css) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #0A0F24;
+            --bg-secondary: #161B3A;
+            --accent-purple: #7F5AF0;
+            --accent-blue: #38BDF8;
+            --text-primary: #E2E8F0;
+            --text-secondary: #94A3B8;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary); 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+/* ===================== NAVBAR (FINAL CLEAN VERSION) ===================== */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+    box-shadow: 0 0 15px rgba(127,90,240,0.4);
+    z-index: 1000;
+
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Spacing */
+    padding: 15px 60px;   /* good left-right spacing */
+    height: 70px;
+
+    box-sizing: border-box;
+}
+
+/* Center container effect */
+.navbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    max-width: 1400px;
+    margin: auto;
+    pointer-events: none;
+}
+
+/* Logo */
+.navbar .logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-purple);
+    letter-spacing: 0.5px;
+    
+}
+
+/* Navigation list */
+.navbar nav ul {
+    list-style: none;
+    display: flex;
+    gap: 35px;      /* space between menu items */
+    margin: 0;
+    padding: 0;
+}
+
+/* Links */
+.navbar nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 12px;   /* bigger clickable area */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    
+}
+
+/* Hover effect */
+.navbar nav a:hover {
+    color: var(--accent-blue);
+    background: rgba(127,90,240,0.1);
+}
+ 
+/* NAV LOGO CONTAINER */
+
+.nav-logo{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    
+}
+
+/* LOGO IMAGE */
+
+.nav-logo-img{
+    width:82px;
+    height:82px;
+    object-fit:contain;
+    border-radius:50%;
+    filter:drop-shadow(0 0 14px rgba(217,70,239,0.55))brightness(1.08)contrast(1.08);
+    transition:0.3s ease;
+    margin-top:-2px;
+}
+
+/* HOVER EFFECT */
+
+.nav-logo-img:hover{
+    transform:scale(1.05);
+    filter:
+    drop-shadow(0 0 18px rgba(0,217,255,0.65))brightness(1.1)contrast(1.1);
+}
+
+/* TITLE */
+
+.nav-logo h1{
+
+    font-size:32px;
+    font-weight:700;
+    background:
+    linear-gradient(
+    90deg,
+    #b86cff,
+    #00d9ff);
+    -webkit-background-clip:text; 
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===================== RESPONSIVE NAVBAR ===================== */
+
+@media (max-width: 900px) {
+    .navbar {
+        padding: 15px 25px;
+    }
+
+    .navbar nav ul {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 12px 15px;
+    }
+
+    .navbar nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 8px;
+    }
+}
+
+
+        /* Sections */
+        section {
+            min-height: 70vh;
+            padding: 90px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #home { padding-bottom: 30px; }
+        #working { padding-top: 50px; }
+        #comparison { padding-top: 50px; }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Home Section */
+        #home .section-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding-top: 40px;
+        }
+
+        .home-left {
+            text-align: left;
+            max-width: 550px;
+        }
+
+        .sort-diagram {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .sort-element {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: fade-in 1s ease-out forwards;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; }
+        }
+
+        /* ---------- BUTTONS IN HOME ---------- */
+        .home-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 51px;
+            justify-content: center;
+        }
+
+
+        /* Working Section */
+        .sort-viz {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .viz-element {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.5s;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .viz-element.active {
+            box-shadow: 0 0 20px var(--accent-purple);
+        }
+
+        .viz-element.sorted {
+            background: var(--success);
+            color: white;
+        }
+
+        .input-section {
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .input-section input {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .input-section select {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--accent-purple);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .step-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Comparison Section */
+        .comparison-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .comparison-item {
+            flex: 1;
+            min-width: 300px;
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(127,90,240,0.35);
+        }
+
+        .comparison-item h3 {
+            margin-top: 0;
+        }
+
+        .comparison-viz {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .comp-element {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .comp-element.active {
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        .comp-element.sorted {
+            background: var(--success);
+            color: white;
+        }
+
+        .comp-step-info {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(127,90,240,0.35);
+            margin: 30px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        .correct { color: var(--success); }
+        .incorrect { color: var(--error); }
+
+        /* FAQ Section */
+        .faq-item {
+            background: var(--bg-secondary);
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 18px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(127,90,240,0.1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 18px;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 18px;
+        }
+
+ /* ================= FOOTER ================= */
+
+.footer{
+  position:relative;
+  background:linear-gradient(to bottom,#050816,#0B1023);
+  padding:45px 6%;
+  overflow:hidden;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+
+/* GLOW OVERLAY */
+
+.footer-overlay{
+  position:absolute;
+  inset:0;
+  background:  
+  radial-gradient(circle at top left,
+  rgba(168,85,247,0.15),
+  transparent 30%),
+  radial-gradient(circle at bottom right,
+  rgba(0,255,255,0.12),
+  transparent 30%);
+  pointer-events:none;
+}
+
+/* CONTAINER */
+
+.footer-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+  position:relative;
+  z-index:2;
+}
+
+/* LOGO */
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  
+}
+
+/* LOGO IMAGE */
+
+.logo-img{
+  width:65px;
+  height:65px;
+  object-fit:contain;
+  border-radius:50%;
+  filter: drop-shadow(0 0 10px rgba(217,70,239,0.45));
+  transition:0.3s ease;
+}
+
+/* HOVER EFFECT */
+
+.logo-img:hover{
+  transform:scale(1.05);
+  filter:drop-shadow(0 0 16px rgba(0,217,255,0.55));
+}
+
+.logo h2{
+  color:white;
+  font-size:30px;
+}
+
+.logo p{
+  color:#aaa;
+}
+
+.brand-text{
+  color:#bbb;
+  line-height:1.8;
+  margin-bottom:25px;
+}
+
+/* SOCIALS */
+
+.socials{
+  display:flex;
+  gap:15px;
+}
+
+.socials a{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.15);
+  transition:0.4s;
+  text-decoration:none;
+  backdrop-filter:blur(10px);
+}
+
+.socials a:hover{
+  transform:translateY(-5px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 40px #d946ef;
+  border-color:#00ffff;
+}
+
+/* FOOTER HEADINGS */
+
+.footer-section h3{
+  color:white;
+  margin-bottom:25px;
+  font-size:22px;
+}
+
+/* LINKS */
+
+.footer-section ul{
+  list-style:none;
+}
+
+.footer-section ul li{
+  margin-bottom:15px;
+  color:#bbb;
+  transition:0.3s;
+  cursor:pointer;
+}
+
+.footer-section ul li a{
+  text-decoration:none;
+  color:#bbb;
+}
+
+.footer-section ul li:hover{
+  color:#00ffff;
+  transform:translateX(8px);
+}
+
+/* ACTIVITY CARD */
+
+.activity-card{
+    width:100%;
+    max-width:320px;
+    padding:28px 24px;
+    border-radius:24px;
+    background:
+    rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    backdrop-filter:blur(10px);
+    box-shadow:
+    0 0 18px rgba(217,70,239,0.12);
+}
+
+/* TITLE */
+
+.activity-card p{
+    color:white;
+    font-size:20px;
+    font-weight:600;
+    text-align:center;
+    margin:0;
+}
+
+/* BARS */
+
+.bars{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:12px;
+    height:120px;
+}
+
+/* EACH BAR */
+
+.bars span{
+    width:18px;
+    border-radius:20px;
+    background:
+    linear-gradient(
+    to top,
+    #00d9ff,
+    #d946ef);
+    animation:bars 1.6s infinite ease-in-out;
+}
+
+/* DIFFERENT HEIGHTS */
+
+.bars span:nth-child(1){height:50px;}
+.bars span:nth-child(2){height:90px;}
+.bars span:nth-child(3){height:70px;}
+.bars span:nth-child(4){height:120px;}
+.bars span:nth-child(5){height:95px;}
+.bars span:nth-child(6){height:75px;}
+.bars span:nth-child(7){height:135px;}
+
+/* BAR ANIMATION */
+
+@keyframes bars{
+
+    0%,100%{
+    transform:scaleY(1);
+    }
+    50%{
+        transform:scaleY(0.75);
+    }
+
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    color:#ff4dff;
+    font-size:17px;
+    font-weight:500;
+}
+
+/* DOT */
+
+.dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#ff00ff;
+    box-shadow:
+    0 0 12px #ff00ff;
+    animation:pulse 1s infinite;
+}
+
+/* DOT ANIMATION */
+
+@keyframes pulse{
+
+    0%{transform:scale(1);}
+    50%{transform:scale(1.25);}
+    100%{transform:scale(1);}
+}
+
+/* STATS */
+
+.stats-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:25px;
+  margin-top:70px;
+}
+
+.stat-card{
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  text-align:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.stat-card:hover{
+  transform:translateY(-10px);
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px rgba(168,85,247,0.5);
+}
+
+.stat-card h2{
+  font-size:28px;
+  color:#00ffff;
+}
+
+/* QUOTE */
+
+.quote-section{
+  text-align:center;
+  margin-top:40px;
+  color:white;
+}
+
+.quote-icon{
+  font-size:60px;
+  color:#d946ef;
+  text-shadow:0 0 20px #d946ef;
+}
+
+.quote-section p{
+  font-size:18px;
+  max-width:900px;
+  margin:20px auto;
+  line-height:1.8;
+  color:#ddd;
+}
+
+.quote-section h4{
+  color:#ff66ff;
+}
+
+/* TECH STACK */
+
+.tech-stack{
+  margin-top:70px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.tech-card{
+  padding:12px 18px;
+  border-radius:15px;
+  color:white;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.tech-card:hover{
+  transform:translateY(-8px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 30px #d946ef;
+}
+
+
+
+/* WAVE */
+
+.wave{
+  width:100%;
+  height:4px;
+  margin-top:80px;
+  background:linear-gradient(
+  90deg,
+  #00ffff,
+  #d946ef,
+  #00ffff);
+  animation:wave 4s linear infinite;
+  background-size:300% 100%;
+  border-radius:10px;
+}
+
+@keyframes wave{
+  0%{
+    background-position:0%;
+  }
+  100%{
+    background-position:300%;
+  }
+}
+
+/* SCROLL BUTTON */
+
+#scrollTopBtn{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:65px;
+  height:65px;
+  border:none;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00ffff,#d946ef);
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px #d946ef;
+  transition:0.4s;
+}
+
+#scrollTopBtn:hover{
+  transform:scale(1.1);
+}
+
+/* COPYRIGHT */
+
+.copyright{
+  margin-top:50px;
+  padding-top:25px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:15px;
+  color:#aaa;
+  position:relative;
+  z-index:2;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .footer{
+    padding:70px 6%;
+  }
+
+  .quote-section p{
+    font-size:18px;
+  }
+
+  .copyright{
+    flex-direction:column;
+    text-align:center;
+  }
+
+}
+
+        
+
+ 
+        /* Responsiveness */
+        @media (min-width: 768px) {
+            #home .section-content {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .home-left, .home-right {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sort-element, .viz-element, .comp-element { width: 40px; height: 40px; }
+            .sort-diagram, .sort-viz, .comparison-viz { gap: 5px; }
+            .input-section { flex-direction: column; align-items: center; }
+            .comparison-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="nav-logo">
+
+        <img
+        src="../image/CC_icon.png"
+        alt="CodeCanvas Logo"
+        class="nav-logo-img">
+        <div class="logo">CodeCanvas - Sorting Algorithm</div> </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#working">Working</a></li>
+                <li><a href="#quiz">Quiz</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="section-content">
+            <div class="home-left">
+                <h1>What are Sorting Algorithms?</h1>
+                <p>
+                    <b>Sorting algorithms</b> arrange elements in a specific order (ascending or descending). They vary in efficiency, stability, and space usage.
+                </p>
+                <h3>Key Algorithms</h3>
+                <ul>
+                    <li>Bubble Sort: Swaps adjacent elements (O(n²))</li>
+                    <li>Selection Sort: Finds min and swaps (O(n²))</li>
+                    <li>Insertion Sort: Builds sorted array (O(n²))</li>
+                    <li>Merge Sort: Divides and merges (O(n log n))</li>
+                    <li>Quick Sort: Partitions around pivot (O(n log n))</li>
+                    <li>Heap Sort: Uses heap structure (O(n log n))</li>
+                </ul>
+                <h3>Applications</h3>
+                <ul>
+                    <li>Data organization</li>
+                    <li>Search optimization</li>
+                    <li>Database queries</li>
+                </ul>
+            </div>
+            <div class="home-right">
+                <div class="sort-diagram">
+                    <!-- Example Unsorted Array -->
+                    <div class="sort-element">5</div>
+                    <div class="sort-element">3</div>
+                    <div class="sort-element">8</div>
+                    <div class="sort-element">1</div>
+                    <div class="sort-element">9</div>
+                </div>
+                <div class="home-buttons">
+    <a href="../GetStarted/sortGS.html" class="btn">Get Started</a>
+    <a href="../sort/questions.html" class="btn">Test</a>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Working Section -->
+    <section id="working">
+        <div class="section-content">
+            <h1>How Sorting Algorithms Work</h1>
+            <div class="input-section">
+                <input type="text" id="array-input" placeholder="Enter array (e.g., 5,3,8,1,9)">
+                <select id="algorithm">
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="quick">Quick Sort</option>
+                    <option value="heap">Heap Sort</option>
+                </select>
+                <button class="btn" onclick="startSort()">Start Sort</button>
+                <button class="btn" onclick="resetSort()">Reset</button>
+            </div>
+            <div class="sort-viz" id="sort-viz">
+                <!-- Dynamic elements will be added here -->
+            </div>
+            <div class="result" id="result"></div>
+            <div class="step-info" id="step-info"></div>
+        </div>
+    </section>
+
+ 
+
+    <!-- Quiz Section -->
+    <section id="quiz">
+        <div class="section-content">
+            <h1>Sorting Algorithms Quiz</h1>
+            <div class="quiz-question" id="quiz-container">
+                <!-- Questions loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+   <section id="faq">
+  <div class="section-content">
+    <h1>Frequently Asked Questions</h1>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">What is bubble sort?</button>
+      <div class="faq-answer">
+        Bubble sort is a simple comparison-based sorting algorithm that repeatedly compares 
+        adjacent elements and swaps them if they are in the wrong order.  
+        It is easy to understand but inefficient for large datasets with a time complexity of O(n²).
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">What is the fastest sorting algorithm?</button>
+      <div class="faq-answer">
+        Merge sort, quick sort, and heap sort are among the fastest general-purpose sorting algorithms 
+        with an average time complexity of O(n log n). The best choice depends on the use case and memory constraints.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">What is stable sorting?</button>
+      <div class="faq-answer">
+        A stable sorting algorithm preserves the relative order of elements with equal values.  
+        For example, merge sort is stable, while quick sort is not stable by default.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">When to use insertion sort?</button>
+      <div class="faq-answer">
+        Insertion sort is best suited for small datasets or nearly sorted arrays because it performs 
+        very efficiently in those cases and is simple to implement.
+      </div>
+    </div>
+
+    <!-- REPLACED QUESTION -->
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFAQ(this)">Best source to learn Sorting Algorithms?</button>
+      <div class="faq-answer">
+        You can learn sorting algorithms through structured tutorials, visual animations, and coding platforms 
+        that provide step-by-step explanations and practice problems.  
+        <b>
+          <a href="https://www.geeksforgeeks.org/dsa/sorting-algorithms/" target="_blank" style="color:#38BDF8;">
+            Click here
+          </a>
+        </b>
+        to visit the recommended resource.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ========================= -->
+<!-- FUTURISTIC FOOTER START -->
+<!-- ========================= -->
+
+<footer class="footer">
+  <div class="footer-overlay"></div>
+
+  <div class="footer-container">
+
+    <!-- LEFT BRAND SECTION -->
+    <div class="footer-section brand">
+      <div class="logo">
+        <img src="../image/CC_logo.png" alt="CodeCanvas Logo" class="logo-img">
+        <div>
+          <h2>CodeCanvas</h2>
+          <p>Algorithm Visualizer</p>
+        </div>
+      </div>
+
+      <p class="brand-text">
+        A platform to visualize, learn and master computer science algorithms.
+      </p>
+
+      <div class="socials">
+        <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com" target="_blank"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../pages/array.html">Array</a></li>
+        <li><a href="../pages/stack.html">Stack</a></li>
+        <li><a href="../pages/queue.html">Queue</a></li>
+        <li><a href="../pages/linkedlist.html">LinkedList</a></li>
+        <li><a href="../pages/search.html">Searching</a></li>
+        <li><a href="../pages/sort.html">Sorting</a></li>
+      </ul>
+    </div>
+
+    <!-- ALGORITHMS -->
+    <div class="footer-section">
+      <h3>Algorithms</h3>
+      <ul>
+        <li>Sorting Algorithms</li>
+        <li>Searching Algorithms</li>
+        <li>Graph Algorithms</li>
+        <li>Dynamic Programming</li>
+        <li>Greedy Algorithms</li>
+        <li>Backtracking</li>
+      </ul>
+    </div>
+
+    <!-- LIVE ACTIVITY -->
+    <div class="footer-section activity">
+      <h3>Live Activity</h3>
+        
+      <div class="activity-card">
+      
+        <p>Sorting in Progress...</p> 
+
+        <div class="bars">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="status">
+          <div class="dot"></div>
+          Visualizing...
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-container">
+
+    <div class="stat-card">
+      <h2>25+</h2>
+      <p>Algorithms</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>120+</h2>
+      <p>Animations</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>500K+</h2>
+      <p>Executions</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>10K+</h2>
+      <p>Users</p>
+    </div>
+
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-section">
+    <span class="quote-icon">❝</span>
+
+    <p>
+      A good programmer is someone who always looks both ways before crossing a one-way street.
+    </p>
+
+    <h4>— Doug Linder</h4>
+  </div>
+
+  <!-- TECH STACK 
+  <div class="tech-stack">
+
+    <div class="tech-card">HTML5</div>
+    <div class="tech-card">CSS3</div>
+    <div class="tech-card">JavaScript</div>
+    <div class="tech-card">React</div>
+    <div class="tech-card">Canvas API</div>
+
+  </div>  -->
+
+  <!-- SCROLL TOP -->
+  <button id="scrollTopBtn">↑</button>
+
+  <!-- WAVES -->
+  <div class="wave"></div>
+
+  <!-- COPYRIGHT -->
+  <div class="copyright">
+    <p>© 2026 CodeCanvas | Designed & Developed with 💜 by Juhi Makkar</p>
+    <span>Stay curious. Keep coding. Keep learning.</span>
+  </div>
+
+</footer>
+
+    <script>
+    // Sort state
+    let arrayData = [];
+    let vizContainer = document.getElementById('sort-viz');
+    let resultDiv = document.getElementById('result');
+    let stepInfoDiv = document.getElementById('step-info');
+
+    // Start sort
+    function startSort() {
+        const arrayInput = document.getElementById('array-input').value;
+        const algorithm = document.getElementById('algorithm').value;
+
+        arrayData = arrayInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+
+        if (arrayData.length === 0) {
+            alert('Please enter a valid array.');
+            return;
+        }
+
+        updateViz();
+        resultDiv.textContent = 'Sorting...';
+        stepInfoDiv.textContent = '';
+
+        // Perform sort based on algorithm
+        switch (algorithm) {
+            case 'bubble':
+                bubbleSort();
+                break;
+            case 'selection':
+                selectionSort();
+                break;
+            case 'insertion':
+                insertionSort();
+                break;
+            case 'merge':
+                mergeSort();
+                break;
+            case 'quick':
+                quickSort();
+                break;
+            case 'heap':
+                heapSort();
+                break;
+        }
+    }
+
+    // Bubble Sort
+    async function bubbleSort() {
+        let arr = [...arrayData];
+        let n = arr.length;
+        let swapped;
+        for (let i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (let j = 0; j < n - i - 1; j++) {
+                highlightElement(j, 'active');
+                highlightElement(j + 1, 'active');
+                stepInfoDiv.textContent = `Comparing ${arr[j]} and ${arr[j + 1]} at positions ${j} and ${j + 1}`;
+                await sleep(1500);
+                if (arr[j] > arr[j + 1]) {
+                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                    swapped = true;
+                    updateViz(arr);
+                    stepInfoDiv.textContent = `Swapped ${arr[j + 1]} and ${arr[j]}: ${arr.join(', ')}`;
+                    await sleep(1500);
+                }
+                highlightElement(j, '');
+                highlightElement(j + 1, '');
+            }
+            if (!swapped) break;
+            highlightElement(n - i - 1, 'sorted');
+            stepInfoDiv.textContent = `Pass ${i + 1} complete. Largest element ${arr[n - i - 1]} is now in place.`;
+            await sleep(1500);
+        }
+        resultDiv.textContent = 'Sorted!';
+        stepInfoDiv.textContent = 'Bubble Sort Complete!';
+    }
+
+    // Selection Sort
+    async function selectionSort() {
+        let arr = [...arrayData];
+        let n = arr.length;
+        for (let i = 0; i < n - 1; i++) {
+            let minIdx = i;
+            highlightElement(i, 'active');
+            stepInfoDiv.textContent = `Finding minimum from index ${i} to ${n - 1}`;
+            await sleep(1500);
+            for (let j = i + 1; j < n; j++) {
+                highlightElement(j, 'active');
+                stepInfoDiv.textContent = `Comparing ${arr[j]} at index ${j} with current min ${arr[minIdx]} at index ${minIdx}`;
+                await sleep(800);
+                if (arr[j] < arr[minIdx]) {
+                    minIdx = j;
+                    stepInfoDiv.textContent = `New minimum found: ${arr[minIdx]} at index ${minIdx}`;
+                }
+                highlightElement(j, '');
+            }
+            if (minIdx !== i) {
+                [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+                updateViz(arr);
+                stepInfoDiv.textContent = `Swapped ${arr[i]} and ${arr[minIdx]}: ${arr.join(', ')}`;
+                await sleep(1500);
+            }
+            highlightElement(i, 'sorted');
+            stepInfoDiv.textContent = `Position ${i} is now sorted with ${arr[i]}`;
+            await sleep(1500);
+        }
+        resultDiv.textContent = 'Sorted!';
+        stepInfoDiv.textContent = 'Selection Sort Complete!';
+    }
+
+    // Insertion Sort
+    async function insertionSort() {
+        let arr = [...arrayData];
+        let n = arr.length;
+        for (let i = 1; i < n; i++) {
+            let key = arr[i];
+            let j = i - 1;
+            highlightElement(i, 'active');
+            stepInfoDiv.textContent = `Inserting ${key} from index ${i} into sorted portion`;
+            await sleep(1500);
+            while (j >= 0 && arr[j] > key) {
+                highlightElement(j, 'active');
+                stepInfoDiv.textContent = `Shifting ${arr[j]} from index ${j} to ${j + 1}`;
+                arr[j + 1] = arr[j];
+                updateViz(arr);
+                await sleep(1500);
+                highlightElement(j, '');
+                j--;
+            }
+            arr[j + 1] = key;
+            updateViz(arr);
+            stepInfoDiv.textContent = `Inserted ${key} at position ${j + 1}: ${arr.join(', ')}`;
+            await sleep(1500);
+            for (let k = 0; k <= i; k++) {
+                highlightElement(k, 'sorted');
+            }
+        }
+        resultDiv.textContent = 'Sorted!';
+        stepInfoDiv.textContent = 'Insertion Sort Complete!';
+    }
+
+    // Merge Sort
+    async function mergeSort() {
+        let arr = [...arrayData];
+        await mergeSortHelper(arr, 0, arr.length - 1);
+        resultDiv.textContent = 'Sorted!';
+        stepInfoDiv.textContent = 'Merge Sort Complete!';
+    }
+
+    async function mergeSortHelper(arr, left, right) {
+        if (left >= right) return;
+        let mid = Math.floor((left + right) / 2);
+        stepInfoDiv.textContent = `Dividing array from ${left} to ${right}, mid at ${mid}`;
+        await sleep(1500);
+        await mergeSortHelper(arr, left, mid);
+        await mergeSortHelper(arr, mid + 1, right);
+        await merge(arr, left, mid, right);
+    }
+
+    async function merge(arr, left, mid, right) {
+        let n1 = mid - left + 1;
+        let n2 = right - mid;
+        let L = arr.slice(left, mid + 1);
+        let R = arr.slice(mid + 1, right + 1);
+        let i = 0, j = 0, k = left;
+        stepInfoDiv.textContent = `Merging left: ${L.join(', ')} and right: ${R.join(', ')}`;
+        await sleep(1500);
+        while (i < n1 && j < n2) {
+            highlightElement(k, 'active');
+            stepInfoDiv.textContent = `Comparing ${L[i]} and ${R[j]}, placing smaller in position ${k}`;
+            await sleep(1500);
+            if (L[i] <= R[j]) {
+                arr[k] = L[i++];
+            } else {
+                arr[k] = R[j++];
+            }
+            updateViz(arr);
+            highlightElement(k, 'sorted');
+            k++;
+            await sleep(1500);
+        }
+        while (i < n1) {
+            arr[k] = L[i++];
+            updateViz(arr);
+            k++;
+        }
+        while (j < n2) {
+            arr[k] = R[j++];
+            updateViz(arr);
+            k++;
+        }
+        stepInfoDiv.textContent = `Merged: ${arr.slice(left, right + 1).join(', ')}`;
+        await sleep(1500);
+    }
+
+    // Quick Sort
+    async function quickSort() {
+        let arr = [...arrayData];
+        await quickSortHelper(arr, 0, arr.length - 1);
+        resultDiv.textContent = 'Sorted!';
+        stepInfoDiv.textContent = 'Quick Sort Complete!';
+    }
+
+    async function quickSortHelper(arr, low, high) {
+        if (low < high) {
+            let pi = await partition(arr, low, high);
+            await quickSortHelper(arr, low, pi - 1);
+            await quickSortHelper(arr, pi + 1, high);
+        }
+    }
+
+    async function partition(arr, low, high) {
+        let pivot = arr[high];
+        let i = low - 1;
+        stepInfoDiv.textContent = `Partitioning with pivot ${pivot} from ${low} to ${high}`;
+        await sleep(1500);
+        for (let j = low; j < high; j++) {
+            highlightElement(j, 'active');
+            stepInfoDiv.textContent = `Comparing ${arr[j]} with pivot ${pivot}`;
+            await sleep(800);
+            if (arr[j] < pivot) {
+                i++;
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+                updateViz(arr);
+                stepInfoDiv.textContent = `Swapped ${arr[i]} and ${arr[j]}: ${arr.join(', ')}`;
+                await sleep(1500);
+            }
+            highlightElement(j, '');
+        }
+        [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+        updateViz(arr);
+        stepInfoDiv.textContent = `Placed pivot ${pivot} at position ${i + 1}: ${arr.join(', ')}`;
+        await sleep(1500);
+        return i + 1;
+    }
+
+    // Heap Sort
+    async function heapSort() {
+        let arr = [...arrayData];
+        let n = arr.length;
+        stepInfoDiv.textContent = 'Building max heap';
+        await sleep(1500);
+        for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+            await heapify(arr, n, i);
+        }
+        stepInfoDiv.textContent = 'Extracting elements from heap';
+        await sleep(1500);
+        for (let i = n - 1; i > 0; i--) {
+            [arr[0], arr[i]] = [arr[i], arr[0]];
+            updateViz(arr);
+            stepInfoDiv.textContent = `Swapped root with last element: ${arr.join(', ')}`;
+            await sleep(1500);
+            await heapify(arr, i, 0);
+        }
+        resultDiv.textContent = 'Sorted!';
+        stepInfoDiv.textContent = 'Heap Sort Complete!';
+    }
+
+    async function heapify(arr, n, i) {
+        let largest = i;
+        let left = 2 * i + 1;
+        let right = 2 * i + 2;
+        if (left < n && arr[left] > arr[largest]) largest = left;
+        if (right < n && arr[right] > arr[largest]) largest = right;
+        if (largest !== i) {
+            [arr[i], arr[largest]] = [arr[largest], arr[i]];
+            updateViz(arr);
+            stepInfoDiv.textContent = `Heapified: swapped ${arr[i]} and ${arr[largest]}: ${arr.join(', ')}`;
+            await sleep(1500);
+            await heapify(arr, n, largest);
+        }
+    }
+
+    // Helper functions
+    function highlightElement(index, className) {
+        const elements = document.querySelectorAll('.viz-element');
+        if (index >= 0 && index < elements.length) {
+            elements[index].classList.remove('active', 'sorted');
+            if (className) elements[index].classList.add(className);
+        }
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function updateViz(arr = arrayData) {
+        vizContainer.innerHTML = '';
+        arr.forEach((val, idx) => {
+            const element = document.createElement('div');
+            element.className = 'viz-element';
+            element.textContent = val;
+            vizContainer.appendChild(element);
+        });
+    }
+
+    function resetSort() {
+        arrayData = [];
+        updateViz();
+        resultDiv.textContent = '';
+        stepInfoDiv.textContent = '';
+    }
+
+    // Comparison Section
+    let compArrayData = [];
+    let compContainer = document.getElementById('comparison-container');
+
+    function startComparison() {
+        const arrayInput = document.getElementById('comp-array-input').value;
+        compArrayData = arrayInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+
+        if (compArrayData.length === 0) {
+            alert('Please enter a valid array.');
+            return;
+        }
+
+        const selectedAlgos = Array.from(document.querySelectorAll('#comparison .checkbox-group input:checked')).map(cb => cb.value);
+
+        if (selectedAlgos.length === 0) {
+            alert('Please select at least one algorithm.');
+            return;
+        }
+
+        compContainer.innerHTML = '';
+        selectedAlgos.forEach(algo => {
+            const item = document.createElement('div');
+            item.className = 'comparison-item';
+            item.innerHTML = `
+                <h3>${algo.charAt(0).toUpperCase() + algo.slice(1)} Sort</h3>
+                <div class="comparison-viz" id="comp-${algo}"></div>
+                <div class="comp-step-info" id="comp-step-${algo}"></div>
+            `;
+            compContainer.appendChild(item);
+            runComparisonSort(algo, [...compArrayData], `comp-${algo}`, `comp-step-${algo}`);
+        });
+    }
+
+    async function runComparisonSort(algo, arr, containerId, stepId) {
+        const container = document.getElementById(containerId);
+        const stepDiv = document.getElementById(stepId);
+        updateCompViz(container, arr);
+        stepDiv.textContent = 'Starting sort...';
+
+        switch (algo) {
+            case 'bubble':
+                await compBubbleSort(arr, container, stepDiv);
+                break;
+            case 'selection':
+                await compSelectionSort(arr, container, stepDiv);
+                break;
+            case 'insertion':
+                await compInsertionSort(arr, container, stepDiv);
+                break;
+            case 'merge':
+                await compMergeSort(arr, container, stepDiv);
+                break;
+            case 'quick':
+                await compQuickSort(arr, container, stepDiv);
+                break;
+            case 'heap':
+                await compHeapSort(arr, container, stepDiv);
+                break;
+        }
+        stepDiv.textContent = `${algo.charAt(0).toUpperCase() + algo.slice(1)} Sort Complete!`;
+    }
+
+    async function compBubbleSort(arr, container, stepDiv) {
+        let n = arr.length;
+        let swapped;
+        for (let i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (let j = 0; j < n - i - 1; j++) {
+                compHighlightElement(container, j, 'active');
+                compHighlightElement(container, j + 1, 'active');
+                stepDiv.textContent = `Comparing ${arr[j]} and ${arr[j + 1]}`;
+                await sleep(1500);
+                if (arr[j] > arr[j + 1]) {
+                    [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+                    swapped = true;
+                    updateCompViz(container, arr);
+                    stepDiv.textContent = `Swapped: ${arr.join(', ')}`;
+                    await sleep(1500);
+                }
+                compHighlightElement(container, j, '');
+                compHighlightElement(container, j + 1, '');
+            }
+            if (!swapped) break;
+            compHighlightElement(container, n - i - 1, 'sorted');
+            stepDiv.textContent = `Pass ${i + 1} done`;
+            await sleep(1500);
+        }
+    }
+
+    async function compSelectionSort(arr, container, stepDiv) {
+        let n = arr.length;
+        for (let i = 0; i < n - 1; i++) {
+            let minIdx = i;
+            compHighlightElement(container, i, 'active');
+            stepDiv.textContent = `Finding min from ${i}`;
+            await sleep(1500);
+            for (let j = i + 1; j < n; j++) {
+                compHighlightElement(container, j, 'active');
+                stepDiv.textContent = `Checking ${arr[j]}`;
+                await sleep(1500);
+                if (arr[j] < arr[minIdx]) {
+                    minIdx = j;
+                    stepDiv.textContent = `New min: ${arr[minIdx]}`;
+                }
+                compHighlightElement(container, j, '');
+            }
+            if (minIdx !== i) {
+                [arr[i], arr[minIdx]] = [arr[minIdx], arr[i]];
+                updateCompViz(container, arr);
+                stepDiv.textContent = `Swapped: ${arr.join(', ')}`;
+                await sleep(1500);
+            }
+            compHighlightElement(container, i, 'sorted');
+            stepDiv.textContent = `Position ${i} sorted`;
+            await sleep(1500);
+        }
+    }
+
+    async function compInsertionSort(arr, container, stepDiv) {
+        let n = arr.length;
+        for (let i = 1; i < n; i++) {
+            let key = arr[i];
+            let j = i - 1;
+            compHighlightElement(container, i, 'active');
+            stepDiv.textContent = `Inserting ${key}`;
+            await sleep(1500);
+            while (j >= 0 && arr[j] > key) {
+                compHighlightElement(container, j, 'active');
+                stepDiv.textContent = `Shifting ${arr[j]}`;
+                arr[j + 1] = arr[j];
+                updateCompViz(container, arr);
+                await sleep(1500);
+                compHighlightElement(container, j, '');
+                j--;
+            }
+            arr[j + 1] = key;
+            updateCompViz(container, arr);
+            stepDiv.textContent = `Inserted: ${arr.join(', ')}`;
+            await sleep(1500);
+            for (let k = 0; k <= i; k++) {
+                compHighlightElement(container, k, 'sorted');
+            }
+        }
+    }
+
+    async function compMerge(arr, left, mid, right, container, stepDiv) {
+        let L = arr.slice(left, mid + 1);
+        let R = arr.slice(mid + 1, right + 1);
+        let i = 0, j = 0, k = left;
+        stepDiv.textContent = `Merging left: ${L.join(', ')} and right: ${R.join(', ')}`;
+        await sleep(1500);
+        while (i < L.length && j < R.length) {
+            compHighlightElement(container, k, 'active');
+            stepDiv.textContent = `Comparing ${L[i]} and ${R[j]}, placing smaller in position ${k}`;
+            await sleep(1500);
+            if (L[i] <= R[j]) {
+                arr[k] = L[i++];
+            } else {
+                arr[k] = R[j++];
+            }
+            updateCompViz(container, arr);
+            compHighlightElement(container, k, 'sorted');
+            k++;
+            await sleep(1500);
+        }
+        while (i < L.length) {
+            arr[k] = L[i++];
+            updateCompViz(container, arr);
+            k++;
+        }
+        while (j < R.length) {
+            arr[k] = R[j++];
+            updateCompViz(container, arr);
+            k++;
+        }
+        stepDiv.textContent = `Merged: ${arr.slice(left, right + 1).join(', ')}`;
+        await sleep(1500);
+    }
+
+async function compQuickSort(arr, container, stepDiv) {
+    await compQuickSortHelper(arr, 0, arr.length - 1, container, stepDiv);
+}
+
+async function compQuickSortHelper(arr, low, high, container, stepDiv) {
+    if (low < high) {
+        let pi = await compPartition(arr, low, high, container, stepDiv);
+        await compQuickSortHelper(arr, low, pi - 1, container, stepDiv);
+        await compQuickSortHelper(arr, pi + 1, high, container, stepDiv);
+    }
+}
+
+async function compPartition(arr, low, high, container, stepDiv) {
+    let pivot = arr[high];
+    let i = low - 1;
+    stepDiv.textContent = `Pivot: ${pivot}`;
+    await sleep(1500);
+    for (let j = low; j < high; j++) {
+        compHighlightElement(container, j, 'active');
+        stepDiv.textContent = `Comparing ${arr[j]} with ${pivot}`;
+        await sleep(1500);
+        if (arr[j] < pivot) {
+            i++;
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+            updateCompViz(container, arr);
+            stepDiv.textContent = `Swapped: ${arr.join(', ')}`;
+            await sleep(1500);
+        }
+        compHighlightElement(container, j, '');
+    }
+    [arr[i + 1], arr[high]] = [arr[high], arr[i + 1]];
+    updateCompViz(container, arr);
+    stepDiv.textContent = `Pivot placed: ${arr.join(', ')}`;
+    await sleep(1500);
+    return i + 1;
+}
+
+async function compHeapSort(arr, container, stepDiv) {
+    let n = arr.length;
+    stepDiv.textContent = 'Building heap';
+    await sleep(1500);
+    for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+        await compHeapify(arr, n, i, container, stepDiv);
+    }
+    stepDiv.textContent = 'Sorting';
+    await sleep(1500);
+    for (let i = n - 1; i > 0; i--) {
+        [arr[0], arr[i]] = [arr[i], arr[0]];
+        updateCompViz(container, arr);
+        stepDiv.textContent = `Root swapped: ${arr.join(', ')}`;
+        await sleep(1500);
+        await compHeapify(arr, i, 0, container, stepDiv);
+    }
+}
+
+async function compHeapify(arr, n, i, container, stepDiv) {
+    let largest = i;
+    let left = 2 * i + 1;
+    let right = 2 * i + 2;
+    if (left < n && arr[left] > arr[largest]) largest = left;
+    if (right < n && arr[right] > arr[largest]) largest = right;
+    if (largest !== i) {
+        [arr[i], arr[largest]] = [arr[largest], arr[i]];
+        updateCompViz(container, arr);
+        stepDiv.textContent = `Heapified: ${arr.join(', ')}`;
+        await sleep(1500);
+        await compHeapify(arr, n, largest, container, stepDiv);
+    }
+}
+
+function compHighlightElement(container, index, className) {
+    const elements = container.querySelectorAll('.comp-element');
+    if (index >= 0 && index < elements.length) {
+        elements[index].classList.remove('active', 'sorted');
+        if (className) elements[index].classList.add(className);
+    }
+}
+
+function updateCompViz(container, arr) {
+    container.innerHTML = '';
+    arr.forEach(val => {
+        const element = document.createElement('div');
+        element.className = 'comp-element';
+        element.textContent = val;
+        container.appendChild(element);
+    });
+}
+
+function resetComparison() {
+    compArrayData = [];
+    compContainer.innerHTML = '';
+}
+
+// Quiz logic
+const questions = [
+    { q: "What is the time complexity of bubble sort?", options: ["O(1)", "O(n)", "O(n²)", "O(n log n)"], correct: 2, exp: "Bubble sort is O(n²) in worst case." },
+    { q: "Which sorting algorithm is stable?", options: ["Quick Sort", "Merge Sort", "Heap Sort", "Selection Sort"], correct: 1, exp: "Merge sort is stable." },
+    { q: "What is in-place sorting?", options: ["Uses extra space", "No extra space", "Only for small arrays", "Only for large arrays"], correct: 1, exp: "In-place means O(1) extra space." },
+    { q: "Which is the fastest for large data?", options: ["Bubble Sort", "Quick Sort", "Insertion Sort", "Selection Sort"], correct: 1, exp: "Quick sort is O(n log n)." },
+    { q: "What does heap sort use?", options: ["Array", "Heap", "Stack", "Queue"], correct: 1, exp: "Heap sort uses a heap data structure." }
+];
+let currentQ = 0;
+
+function loadQuestion() {
+    const q = questions[currentQ];
+    document.getElementById('quiz-container').innerHTML = `
+        <h3>${q.q}</h3>
+        <div class="options">
+            ${q.options.map((opt, i) => `<label class="option"><input type="radio" name="answer" value="${i}"> ${opt}</label>`).join('')}
+        </div>
+        <button class="btn" onclick="checkAnswer()">Check Answer</button>
+        <div class="feedback" id="feedback"></div>
+    `;
+}
+
+function checkAnswer() {
+    const selected = document.querySelector('input[name="answer"]:checked');
+    if (!selected) return;
+    const ans = parseInt(selected.value);
+    const feedback = document.getElementById('feedback');
+    if (ans === questions[currentQ].correct) {
+        feedback.innerHTML = '<span class="correct">✓ Correct! Moving to next question.</span>';
+        setTimeout(() => { currentQ = (currentQ + 1) % questions.length; loadQuestion(); }, 2000);
+    } else {
+        feedback.innerHTML = `<span class="incorrect">✗ Incorrect. ${questions[currentQ].exp} Try again.</span>`;
+    }
+}
+
+// FAQ toggle
+function toggleFAQ(btn) {
+    btn.parentElement.classList.toggle('active');
+}
+
+// Initialize
+loadQuestion();
+updateViz();
+
+/* SCROLL TO TOP */
+
+const scrollBtn = document.getElementById("scrollTopBtn");
+
+scrollBtn.addEventListener("click", () => {
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+});
+    </script>
+</body>
+</html>

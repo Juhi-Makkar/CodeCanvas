@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started with Searching Algorithms - Learn Searching</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+        /* Theme 2.0 - Lighter Dark Theme */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --accent-purple: #8B6CF6;
+            --accent-blue: #4FC3F7;
+            --text-primary: #F1F5F9;
+            --text-secondary: #A1AEB8;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            line-height: 1.6;
+        }
+
+        /* ===================== NAVBAR ===================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+            box-shadow: 0 0 15px rgba(139,108,246,0.4);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 60px;
+            height: 70px;
+            box-sizing: border-box;
+        }
+
+        .navbar .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-purple);
+            letter-spacing: 0.5px;
+        }
+
+        .navbar nav ul {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar nav a:hover {
+            color: var(--accent-blue);
+            background: rgba(139,108,246,0.1);
+        }
+
+        /* ===================== RESPONSIVE NAVBAR ===================== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px 15px;
+            }
+            .navbar nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 10px;
+            }
+            .navbar .logo {
+                font-size: 18px;
+            }
+        }
+
+        /* ---------- SECTION SPACING ---------- */
+        section {
+            min-height: 70vh;
+            padding: 120px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        #language {
+            min-height: auto;
+            padding-bottom: 40px;
+        }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: left;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* ---------- LANGUAGE SELECTOR ---------- */
+        .language-selector {
+            text-align: center;
+            margin-bottom: 40px;
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        }
+
+        .language-selector select {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        /* ---------- SEARCHING INTRO ---------- */
+        .searching-intro {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        }
+
+        .intro-text {
+            flex: 1;
+        }
+
+        .intro-text h3 {
+            color: var(--accent-purple);
+            margin-bottom: 10px;
+        }
+
+        .start-btn {
+            margin-top: 15px;
+            padding: 12px 22px;
+            border: none;
+            background: linear-gradient(135deg,#8B6CF6,#9f7aea);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(139,108,246,0.6);
+        }
+
+        /* Demo boxes */
+        .intro-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .search-box {
+            width: 200px;
+            height: 60px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 0 12px rgba(79,195,247,0.4);
+            position: relative;
+        }
+
+      
+
+        /* ---------- THEORY SECTION ---------- */
+        .theory {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .theory h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .theory h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .theory ul {
+            list-style-type: disc;
+            padding-left: 25px;
+        }
+
+        .theory p {
+            margin-bottom: 15px;
+        }
+
+        /* ---------- SYNTAX SECTION ---------- */
+        .syntax {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .syntax h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .syntax h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .syntax h4 {
+            color: var(--text-secondary);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .syntax pre {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9;
+            margin-bottom: 15px;
+        }
+
+        .syntax code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        /* ---------- ALGORITHM SECTION ---------- */
+        .algorithm {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .algorithm h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .algorithm h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .algorithm ol {
+            padding-left: 25px;
+        }
+
+        .algorithm pre {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #f1f5f9;
+            margin-top: 10px;
+        }
+
+        /* ---------- FLOWCHART SECTION ---------- */
+        .flowchart {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .flowchart h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .flowchart h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .mermaid {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .mermaid svg path {
+            stroke-width: 2.5px !important;
+            filter: drop-shadow(0 0 4px #8b6cf6);
+        }
+
+        /* ---------- TIME COMPLEXITY SECTION ---------- */
+        .complexity {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .complexity h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .complexity table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .complexity th, .complexity td {
+            border: 1px solid var(--accent-purple);
+            padding: 12px;
+            text-align: left;
+        }
+
+        .complexity th {
+            background: var(--accent-purple);
+            color: var(--text-primary);
+        }
+
+        /* ---------- APPLICATIONS SECTION ---------- */
+        .applications {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .applications h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .applications ul {
+            list-style-type: disc;
+            padding-left: 25px;
+        }
+
+        /* ---------- COMMON MISTAKES SECTION ---------- */
+        .mistakes {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .mistakes h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .mistakes ul {
+            list-style-type: disc;
+            padding-left: 25px;
+        }
+
+        /* ---------- QUESTIONS SECTION ---------- */
+        .questions {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(139,108,246,0.35);
+            margin-bottom: 40px;
+        }
+
+        .questions h2 {
+            color: var(--accent-blue);
+            margin-bottom: 20px;
+        }
+
+        .questions h3 {
+            color: var(--accent-purple);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .questions ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .questions li {
+            margin-bottom: 12px;
+        }
+
+        .questions a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        .questions a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+} 
+
+        /* ===================== RESPONSIVE BREAKPOINTS ===================== */
+        @media (max-width: 768px) {
+            section {
+                padding: 140px 15px 40px;
+            }
+            .section-content {
+                padding: 15px;
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 12px;
+                padding: 15px;
+            }
+            .complexity table {
+                font-size: 12px;
+            }
+            .complexity th, .complexity td {
+                padding: 8px;
+            }
+            .mermaid {
+                font-size: 12px;
+            }
+            .searching-intro {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 10px 15px;
+            }
+            .navbar .logo {
+                font-size: 16px;
+            }
+            .navbar nav ul {
+                gap: 8px;
+            }
+            .language-selector select {
+                width: 100%;
+                max-width: 200px;
+            }
+            .syntax pre, .algorithm pre {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">CodeCanvas - Searching</div>
+        <nav>
+            <ul>
+                <li><a href="../pages/search.html">Home</a></li>
+                <li><a href="#language">Language</a></li>
+                <li><a href="#theory">Learn</a></li>
+                <li><a href="#questions">Test</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Language Selector -->
+    <section id="language">
+        <div class="section-content">
+            <div class="language-selector">
+                <h2>Select Programming Language</h2>
+                <p>Choose a language to see searching algorithm implementations in that language. All code snippets will update dynamically.</p>
+                <select id="lang-select">
+                    <option value="c">C</option>
+                    <option value="java">Java</option>
+                    <option value="python">Python</option>
+                    <option value="cpp">C++</option>
+                </select>
+            </div>
+
+            <!-- SEARCHING ALGORITHMS INTRO PANEL -->
+            <div class="searching-intro">
+                <div class="intro-text">
+                    <h3>What are Searching Algorithms?</h3>
+                    <p>
+                        Searching algorithms find the position of a target value within a sorted/unsorted array.
+                        Linear Search works on any array (O(n)), while Binary Search requires sorted arrays (O(log n)).
+                    </p>
+                    <button class="start-btn">Start Visualization →</button>
+                </div>
+
+                <div class="intro-demo">
+                    <div class="search-box">Sorted Array: [1, 3, 5, 7, 9]</div>
+                    <div class="search-box">Target: 7 → Found!</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theory Section -->
+    <section id="theory">
+        <div class="section-content">
+            <div class="theory">
+                <h2><a href="../search/theory.html" style="color: inherit; text-decoration: none;">What are Searching Algorithms?</a></h2>
+                <p>Searching algorithms locate the position of a target value within a collection, such as an array or list. They are fundamental operations in computer science with applications in databases, file systems, and data processing.</p>
+                <p>The choice between Linear Search (O(n)) and Binary Search (O(log n)) depends on whether the data is sorted and performance requirements.</p>
+                <h3>Types of Searching Algorithms</h3>
+                <ul>
+                    <li><strong>Linear Search:</strong> Sequential search through unsorted data (O(n)).</li>
+                    <li><strong>Binary Search:</strong> Divide-and-conquer on sorted data (O(log n)).</li>
+                    <li><strong>Jump Search:</strong> Block-wise search jumping ahead (O(√n)).</li>
+                    <li><strong>Interpolation Search:</strong> Enhanced binary search using interpolation (O(log log n)).</li>
+                    <li><strong>Exponential Search:</strong> Finds range for binary search (O(log n)).</li>
+                </ul>
+                <h3>Key Concepts</h3>
+                <ul>
+                    <li><strong>Sorted vs Unsorted:</strong> Binary search requires sorted data.</li>
+                    <li><strong>Return Values:</strong> Index of found element or -1 (not found).</li>
+                    <li><strong>Time Complexity:</strong> Critical for large datasets.</li>
+                    <li><strong>Space Complexity:</strong> Usually O(1) for iterative implementations.</li>
+                </ul>
+                <h3>Advantages</h3>
+                <ul>
+                    <li>Simple to implement (especially linear search).</li>
+                    <li>Binary search is extremely efficient for large sorted datasets.</li>
+                    <li>No additional data structures needed.</li>
+                </ul>
+                <h3>Limitations</h3>
+                <ul>
+                    <li>Binary search requires sorted data (O(n log n) preprocessing).</li>
+                    <li>Not suitable for frequently changing data.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Syntax Section -->
+    <section id="syntax">
+        <div class="section-content">
+            <div class="syntax">
+                <h2><a href="../search/syntax.html" style="color: inherit; text-decoration: none;">Syntax for Searching Algorithms</a></h2>
+                <p>Below are implementations of common searching algorithms in the selected language.</p>
+                <h3>Linear Search</h3>
+                <h4>Basic Implementation</h4>
+                <pre><code id="linear-basic">int linearSearch(int arr[], int n, int key) {
+    for(int i = 0; i < n; i++)
+        if(arr[i] == key) return i;
+    return -1;
+}  // C</code></pre>
+                
+                <h4>Sentinel Linear Search</h4>
+                <pre><code id="linear-sentinel">int sentinelSearch(int arr[], int n, int key) {
+    arr[n] = key;
+    int i = 0;
+    while(arr[i] != key) i++;
+    return (i < n) ? i : -1;
+}  // C</code></pre>
+
+                <h3>Binary Search</h3>
+                <h4>Iterative</h4>
+                <pre><code id="binary-iter">int binarySearch(int arr[], int n, int key) {
+    int left = 0, right = n-1;
+    while(left <= right) {
+        int mid = left + (right - left) / 2;
+        if(arr[mid] == key) return mid;
+        if(arr[mid] < key) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}  // C</code></pre>
+
+                <h4>Recursive</h4>
+                <pre><code id="binary-rec">int binarySearchRec(int arr[], int left, int right, int key) {
+    if(left > right) return -1;
+    int mid = left + (right - left) / 2;
+    if(arr[mid] == key) return mid;
+    if(arr[mid] > key) return binarySearchRec(arr, left, mid-1, key);
+    return binarySearchRec(arr, mid+1, right, key);
+}  // C</code></pre>
+
+                <h3>Jump Search</h3>
+                <h4>Basic Implementation</h4>
+                <pre><code id="jump-search">int jumpSearch(int arr[], int n, int key) {
+    int step = sqrt(n);
+    int prev = 0;
+    while(arr[prev] < key) {
+        prev = step;
+        step += sqrt(n);
+        if(prev >= n) break;
+    }
+    for(int i = prev; i < n && arr[i] <= key; i++)
+        if(arr[i] == key) return i;
+    return -1;
+}  // C</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Algorithm Section -->
+    <section id="algorithm">
+        <div class="section-content">
+            <div class="algorithm">
+                <h2><a href="../search/algorithm.html" style="color: inherit; text-decoration: none;">Step-by-Step Algorithms</a></h2>
+                <p>Detailed algorithms for the most important searching techniques.</p>
+                
+                <h3>Linear Search Algorithm</h3>
+                <ol>
+                    <li>Start from the first element (index 0).</li>
+                    <li>Compare target with current element.</li>
+                    <li>If match found, return current index.</li>
+                    <li>Move to next element.</li>
+                    <li>Repeat until end of array or match found.</li>
+                    <li>Return -1 if not found.</li>
+                </ol>
+                <pre><code>// Pseudocode
+for i from 0 to n-1:
+    if arr[i] == target:
+        return i
+return -1</code></pre>
+
+                <h3>Binary Search Algorithm (Iterative)</h3>
+                <ol>
+                    <li>Set left = 0, right = n-1.</li>
+                    <li>While left ≤ right:</li>
+                    <li>Calculate mid = left + (right - left) / 2.</li>
+                    <li>If arr[mid] == target, return mid.</li>
+                    <li>If arr[mid] < target, set left = mid + 1.</li>
+                    <li>Else, set right = mid - 1.</li>
+                    <li>Return -1 if loop ends.</li>
+                </ol>
+                <pre><code>// Pseudocode
+left = 0, right = n-1
+while left <= right:
+    mid = left + (right - left) / 2
+    if arr[mid] == target: return mid
+    if arr[mid] < target: left = mid + 1
+    else: right = mid - 1
+return -1</code></pre>
+
+                <h3>Jump Search Algorithm</h3>
+                <ol>
+                    <li>Calculate step = √n.</li>
+                    <li>Jump forward by step size until arr[prev] ≥ target.</li>
+                    <li>Perform linear search in the block [prev, min(n, prev+step)].</li>
+                    <li>Return index if found, else -1.</li>
+                </ol>
+                <pre><code>// Pseudocode
+step = sqrt(n)
+prev = 0
+while arr[prev] < target:
+    prev = step
+    step += sqrt(n)
+    if prev >= n: break
+// Linear search in block
+for i from prev to min(n, prev+step):
+    if arr[i] == target: return i
+return -1</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Flowchart Section -->
+    <section id="flowchart">
+        <div class="section-content">
+            <div class="flowchart">
+                <h2><a href="../search/flowchart.html" style="color: inherit; text-decoration: none;">Flowcharts for Searching Algorithms</a></h2>
+                <p>Visual representations of searching algorithm logic.</p>
+               
+                <h3>Linear Search</h3>
+                <div class="mermaid">
+                    graph TD
+                    A["Start"] --> B["i = 0"]
+                    B --> C{"i < n ?"}
+                    C -->|Yes| D{"arr[i] == key ?"}
+                    D -->|Yes| E["Return i"]
+                    D -->|No| F["i++"]
+                    F --> C
+                    C -->|No| G["Return -1"]
+                </div>
+
+                <h3>Binary Search</h3>
+                <div class="mermaid">
+                    graph TD
+                    A["Start"] --> B["left=0, right=n-1"]
+                    B --> C{"left <= right ?"}
+                    C -->|No| D["Return -1"]
+                    C -->|Yes| E["mid = left+(right-left)/2"]
+                    E --> F{"arr[mid] == key ?"}
+                    F -->|Yes| G["Return mid"]
+                    F -->|No| H{"arr[mid] < key ?"}
+                    H -->|Yes| I["left = mid+1"]
+                    H -->|No| J["right = mid-1"]
+                    I --> C
+                    J --> C
+                </div>
+
+                <h3>Jump Search (Simplified)</h3>
+                <div class="mermaid">
+                    graph TD
+                    A["Start"] --> B["step = √n"]
+                    B --> C{"arr[prev] < key ?"}
+                    C -->|Yes| D["prev += step"]
+                    D --> C
+                    C -->|No| E["Linear search in block"]
+                    E --> F{"Found ?"}
+                    F -->|Yes| G["Return index"]
+                    F -->|No| H["Return -1"]
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Time Complexity Section -->
+    <section id="complexity">
+        <div class="section-content">
+            <div class="complexity">
+                <h2><a href="../search/complexity.html" style="color: inherit; text-decoration: none;">Time & Space Complexity</a></h2>
+                <p>Complexity analysis for different searching algorithms.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Best Case</th>
+                            <th>Average Case</th>
+                            <th>Worst Case</th>
+                            <th>Space</th>
+                            <th>Prerequisites</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Linear Search</td>
+                            <td>O(1)</td>
+                            <td>O(n)</td>
+                            <td>O(n)</td>
+                            <td>O(1)</td>
+                            <td>None</td>
+                        </tr>
+                        <tr>
+                            <td>Binary Search</td>
+                            <td>O(1)</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                            <td>O(1) iterative<br>O(log n) recursive</td>
+                            <td>Sorted array</td>
+                        </tr>
+                        <tr>
+                            <td>Jump Search</td>
+                            <td>O(1)</td>
+                            <td>O(√n)</td>
+                            <td>O(n)</td>
+                            <td>O(1)</td>
+                            <td>Sorted array</td>
+                        </tr>
+                        <tr>
+                            <td>Interpolation Search</td>
+                            <td>O(1)</td>
+                            <td>O(log log n)</td>
+                            <td>O(n)</td>
+                            <td>O(1)</td>
+                            <td>Uniformly distributed</td>
+                        </tr>
+                        <tr>
+                            <td>Exponential Search</td>
+                            <td>O(1)</td>
+                            <td>O(log n)</td>
+                            <td>O(log n)</td>
+                            <td>O(1)</td>
+                            <td>Sorted array</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>Note:</strong> Binary search preprocessing (sorting) costs O(n log n). Choose algorithm based on data characteristics and update frequency.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section id="applications">
+        <div class="section-content">
+            <div class="applications">
+                <h2><a href="../search/applications.html" style="color: inherit; text-decoration: none;">Real-World Applications</a></h2>
+                <p>Searching algorithms power countless systems in modern computing.</p>
+                <ul>
+                    <li><strong>Databases:</strong> SQL queries, index lookups, B-tree searches.</li>
+                    <li><strong>File Systems:</strong> Finding files by name, metadata search.</li>
+                    <li><strong>Search Engines:</strong> Inverted indexes, autocomplete (binary search on sorted results).</li>
+                    <li><strong>Compilers:</strong> Symbol tables, identifier lookup.</li>
+                    <li><strong>Networking:</strong> Routing tables, IP lookup.</li>
+                    <li><strong>Operating Systems:</strong> Process scheduling, memory management.</li>
+                    <li><strong>Games:</strong> Collision detection, AI pathfinding.</li>
+                    <li><strong>E-commerce:</strong> Product search, price filtering.</li>
+                    <li><strong>Machine Learning:</strong> Nearest neighbor search, k-d trees.</li>
+                    <li><strong>Graphics:</strong> Ray tracing, spatial partitioning.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Common Mistakes Section -->
+    <section id="mistakes">
+        <div class="section-content">
+            <div class="mistakes">
+                <h2><a href="../search/mistakes.html" style="color: inherit; text-decoration: none;">Common Mistakes & Best Practices</a></h2>
+                <p>Avoid these pitfalls when implementing searching algorithms.</p>
+                <ul>
+                    <li><strong>Using Binary Search on Unsorted Data:</strong> Always verify array is sorted first.</li>
+                    <li><strong>Integer Overflow in mid:</strong> Use mid = left + (right - left)/2 instead of (left+right)/2.</li>
+                    <li><strong>Infinite Loop in Binary Search:</strong> Ensure left <= right condition.</li>
+                    <li><strong>Missing Edge Cases:</strong> Test empty arrays, single elements, target at boundaries.</li>
+                    <li><strong>Recursive Stack Overflow:</strong> Use iterative binary search for large arrays.</li>
+                    <li><strong>Not Handling Duplicates:</strong> Binary search finds first occurrence; specify requirements.</li>
+                    <li><strong>Forgetting Array Bounds:</strong> Validate indices before access.</li>
+                    <li><strong>Performance Misjudgment:</strong> Linear search better for small arrays (&lt;100 elements).</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+  <!-- Questions Section -->
+<section id="questions">
+    <div class="section-content">
+        <div class="questions">
+            <h2><a href="../search/questions.html" style="color: inherit; text-decoration: none;">Searching Algorithm Practice Problems</a></h2>
+            <p>Master searching through these curated problems from top platforms. Sorted by difficulty with key techniques highlighted.</p>
+            
+            <h3>Easy</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/binary-search/">Binary Search (LeetCode #704)</a> - Iterative & recursive</li>
+                <li><a href="https://leetcode.com/problems/search-insert-position/">Search Insert Position (LeetCode #35)</a> - Find insertion point</li>
+                <li><a href="https://www.geeksforgeeks.org/linear-search/">Linear Search (GfG)</a> - Sequential search basics</li>
+                <li><a href="https://leetcode.com/problems/guess-number-higher-or-lower/">Guess Number (LeetCode #374)</a> - Binary search variant</li>
+                <li><a href="https://leetcode.com/problems/first-bad-version/">First Bad Version (LeetCode #278)</a> - Binary search leftmost</li>
+                <li><a href="https://www.geeksforgeeks.org/find-first-and-last-position-of-an-element-in-a-sorted-array/">First & Last Position (GfG)</a> - Modified binary</li>
+                <li><a href="https://leetcode.com/problems/valid-perfect-square/">Valid Perfect Square (LeetCode #367)</a> - Binary search sqrt</li>
+                <li><a href="https://www.geeksforgeeks.org/search-element-sorted-rotated-array/">Search in Rotated (GfG)</a> - Basic rotation</li>
+                <li><a href="https://leetcode.com/problems/find-smallest-letter-greater-than-target/">Smallest Letter Greater (LeetCode #744)</a> - Circular binary</li>
+                <li><a href="https://www.geeksforgeeks.org/check-sorted-rotated-array/">Check Sorted Rotated (GfG)</a> - Single pass search</li>
+            </ul>
+
+            <h3>Medium</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/search-in-rotated-sorted-array/">Search Rotated Array (LeetCode #33)</a> - Modified binary search</li>
+                <li><a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/">First & Last Position (LeetCode #34)</a> - Two binary searches</li>
+                <li><a href="https://leetcode.com/problems/search-a-2d-matrix/">Search 2D Matrix (LeetCode #74)</a> - 1D transformation</li>
+                <li><a href="https://leetcode.com/problems/find-peak-element/">Find Peak Element (LeetCode #162)</a> - Binary search peaks</li>
+                <li><a href="https://leetcode.com/problems/search-a-2d-matrix-ii/">Search 2D Matrix II (LeetCode #240)</a> - Top-right approach</li>
+                <li><a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/">Min in Rotated (LeetCode #153)</a> - Binary search minimum</li>
+                <li><a href="https://www.geeksforgeeks.org/jump-search/">Jump Search (GfG)</a> - O(√n) block search</li>
+                <li><a href="https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/">Kth Smallest Matrix (LeetCode #378)</a> - Binary search count</li>
+                <li><a href="https://leetcode.com/problems/time-based-key-value-store/">Time Based Key-Value (LeetCode #981)</a> - Binary search timestamps</li>
+                <li><a href="https://leetcode.com/problems/peak-index-in-a-mountain-array/">Peak Index Mountain (LeetCode #852)</a> - Binary search peak</li>
+                <li><a href="https://www.geeksforgeeks.org/interpolation-search/">Interpolation Search (GfG)</a> - Uniform distribution</li>
+                <li><a href="https://leetcode.com/problems/search-in-rotated-sorted-array-ii/">Rotated Array II (LeetCode #81)</a> - Handle duplicates</li>
+            </ul>
+
+            <h3>Hard</h3>
+            <ul>
+                <li><a href="https://leetcode.com/problems/median-of-two-sorted-arrays/">Median Two Sorted (LeetCode #4)</a> - Binary partition</li>
+                <li><a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/">Rotated Min II (LeetCode #154)</a> - Duplicates handling</li>
+                <li><a href="https://leetcode.com/problems/split-array-largest-sum/">Split Array Sum (LeetCode #410)</a> - Binary search answer</li>
+                <li><a href="https://leetcode.com/problems/koko-eating-bananas/">Koko Bananas (LeetCode #875)</a> - Binary search rate</li>
+                <li><a href="https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/">Smallest Divisor (LeetCode #1283)</a> - Binary search divisor</li>
+                <li><a href="https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/">Minimum Days Bouquets (LeetCode #1482)</a> - Binary search days</li>
+                <li><a href="https://leetcode.com/problems/longest-increasing-subsequence/">LIS (LeetCode #300)</a> - Binary search patience</li>
+                <li><a href="https://leetcode.com/problems/russian-doll-envelopes/">Russian Doll (LeetCode #354)</a> - 2D LIS binary</li>
+                <li><a href="https://leetcode.com/problems/assign-cookies/">Assign Cookies (LeetCode #455)</a> - Two pointers + binary</li>
+                <li><a href="https://www.geeksforgeeks.org/find-number-times-binary-search-tree-modified/">Modified BST Search (GfG)</a> - Advanced binary</li>
+            </ul>
+
+            <p><strong>Pro Tip:</strong> Master iterative binary search first. Practice ALL edge cases: empty arrays, duplicates, rotations, boundaries. LeetCode Playgrounds + timed contests = interview ready! 🚀</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../search/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+    <script>
+        // Language selector functionality for searching algorithms
+        document.addEventListener('DOMContentLoaded', function() {
+            const langSelect = document.getElementById('lang-select');
+            const codeBlocks = {
+                'linear-basic': {
+                    c: `int linearSearch(int arr[], int n, int key) {
+    for(int i = 0; i < n; i++)
+        if(arr[i] == key) return i;
+    return -1;
+}`,
+                    java: `int linearSearch(int[] arr, int key) {
+    for(int i = 0; i < arr.length; i++)
+        if(arr[i] == key) return i;
+    return -1;
+}`,
+                    python: `def linear_search(arr, key):
+    for i in range(len(arr)):
+        if arr[i] == key:
+            return i
+    return -1`,
+                    cpp: `int linearSearch(int arr[], int n, int key) {
+    for(int i = 0; i < n; i++)
+        if(arr[i] == key) return i;
+    return -1;
+}`
+                },
+                'linear-sentinel': {
+                    c: `int sentinelSearch(int arr[], int n, int key) {
+    arr[n] = key;
+    int i = 0;
+    while(arr[i] != key) i++;
+    return (i < n) ? i : -1;
+}`,
+                    java: `// Not typically used in Java due to fixed array size`,
+                    python: `def sentinel_search(arr, key):
+    arr.append(key)
+    i = 0
+    while arr[i] != key:
+        i += 1
+    return i if i < len(arr)-1 else -1`,
+                    cpp: `int sentinelSearch(int arr[], int n, int key) {
+    arr[n] = key;
+    int i = 0;
+    while(arr[i] != key) i++;
+    return (i < n) ? i : -1;
+}`
+                },
+                'binary-iter': {
+                    c: `int binarySearch(int arr[], int n, int key) {
+    int left = 0, right = n-1;
+    while(left <= right) {
+        int mid = left + (right - left) / 2;
+        if(arr[mid] == key) return mid;
+        if(arr[mid] < key) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}`,
+                    java: `int binarySearch(int[] arr, int key) {
+    int left = 0, right = arr.length - 1;
+    while(left <= right) {
+        int mid = left + (right - left) / 2;
+        if(arr[mid] == key) return mid;
+        if(arr[mid] < key) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}`,
+                    python: `def binary_search(arr, key):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if arr[mid] == key: return mid
+        elif arr[mid] < key: left = mid + 1
+        else: right = mid - 1
+    return -1`,
+                    cpp: `int binarySearch(int arr[], int n, int key) {
+    int left = 0, right = n-1;
+    while(left <= right) {
+        int mid = left + (right - left) / 2;
+        if(arr[mid] == key) return mid;
+        if(arr[mid] < key) left = mid + 1;
+        else right = mid - 1;
+    }
+    return -1;
+}`
+                },
+                'binary-rec': {
+                    c: `int binarySearchRec(int arr[], int left, int right, int key) {
+    if(left > right) return -1;
+    int mid = left + (right - left) / 2;
+    if(arr[mid] == key) return mid;
+    if(arr[mid] > key) return binarySearchRec(arr, left, mid-1, key);
+    return binarySearchRec(arr, mid+1, right, key);
+}`,
+                    java: `int binarySearchRec(int[] arr, int left, int right, int key) {
+    if(left > right) return -1;
+    int mid = left + (right - left) / 2;
+    if(arr[mid] == key) return mid;
+    if(arr[mid] > key) return binarySearchRec(arr, left, mid-1, key);
+    return binarySearchRec(arr, mid+1, right, key);
+}`,
+                    python: `def binary_search_rec(arr, left, right, key):
+    if left > right:
+        return -1
+    mid = left + (right - left) // 2
+    if arr[mid] == key:
+        return mid
+    if arr[mid] > key:
+        return binary_search_rec(arr, left, mid-1, key)
+    return binary_search_rec(arr, mid+1, right, key)`,
+                    cpp: `int binarySearchRec(int arr[], int left, int right, int key) {
+    if(left > right) return -1;
+    int mid = left + (right - left) / 2;
+    if(arr[mid] == key) return mid;
+    if(arr[mid] > key) return binarySearchRec(arr, left, mid-1, key);
+    return binarySearchRec(arr, mid+1, right, key);
+}`
+                },
+                'jump-search': {
+                    c: `int jumpSearch(int arr[], int n, int key) {
+    int step = sqrt(n);
+    int prev = 0;
+    while(arr[prev] < key) {
+        prev = step;
+        step += sqrt(n);
+        if(prev >= n) break;
+    }
+    for(int i = prev; i < n && arr[i] <= key; i++)
+        if(arr[i] == key) return i;
+    return -1;
+}`,
+                    java: `int jumpSearch(int[] arr, int key) {
+    int n = arr.length;
+    int step = (int)Math.sqrt(n);
+    int prev = 0;
+    while(arr[prev] < key) {
+        prev = step;
+        step += (int)Math.sqrt(n);
+        if(prev >= n) break;
+    }
+    for(int i = prev; i < n && arr[i] <= key; i++)
+        if(arr[i] == key) return i;
+    return -1;
+}`,
+                    python: `import math
+def jump_search(arr, key):
+    n = len(arr)
+    step = math.isqrt(n)
+    prev = 0
+    while arr[prev] < key:
+        prev = step
+        step += math.isqrt(n)
+        if prev >= n:
+            break
+    for i in range(prev, min(step, n)):
+        if arr[i] == key:
+            return i
+    return -1`,
+                    cpp: `int jumpSearch(int arr[], int n, int key) {
+    int step = sqrt(n);
+    int prev = 0;
+    while(arr[prev] < key) {
+        prev = step;
+        step += sqrt(n);
+        if(prev >= n) break;
+    }
+    for(int i = prev; i < n && arr[i] <= key; i++)
+        if(arr[i] == key) return i;
+    return -1;
+}`
+                }
+            };
+
+            if (langSelect) {
+                langSelect.addEventListener('change', function() {
+                    const selectedLang = this.value;
+                    Object.keys(codeBlocks).forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.textContent = codeBlocks[id][selectedLang];
+                        }
+                    });
+                });
+            }
+        });
+        
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: "base",
+            themeVariables: {
+                primaryColor: "#1e1e2f",
+                primaryBorderColor: "#8b6cf6",
+                primaryTextColor: "#ffffff",
+                lineColor: "#a78bfa",
+                secondaryColor: "#2a2a40",
+                tertiaryColor: "#141427",
+                edgeLabelBackground: "#1e1e2f"
+            }
+        });
+    </script>
+</body>
+</html>

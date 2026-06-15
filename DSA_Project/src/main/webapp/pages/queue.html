@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue - Learn Queues</title>
+    <link rel="stylesheet" href="assets/css/style.css"> <!-- Your existing style.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+    <style>
+        /* Embedded theme-specific styles (overrides/additions to style.css) */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+        :root { 
+            --bg-primary: #0A0F24;
+            --bg-secondary: #161B3A;
+            --accent-purple: #7F5AF0;
+            --accent-blue: #38BDF8;
+            --text-primary: #E2E8F0;
+            --text-secondary: #94A3B8;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+/* ===================== NAVBAR (FINAL CLEAN VERSION) ===================== */
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+    box-shadow: 0 0 15px rgba(127,90,240,0.4);
+    z-index: 1000;
+
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* Spacing */
+    padding: 15px 60px;   /* good left-right spacing */
+    height: 70px;
+
+    box-sizing: border-box;
+}
+
+/* Center container effect */
+.navbar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    max-width: 1400px;
+    margin: auto;
+    pointer-events: none;
+}
+
+/* Logo */
+.navbar .logo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-purple);
+    letter-spacing: 0.5px;
+    
+}
+
+/* Navigation list */ 
+.navbar nav ul {
+    list-style: none;
+    display: flex;
+    gap: 35px;      /* space between menu items */
+    margin: 0;
+    padding: 0;
+}
+
+/* Links */
+.navbar nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 12px;   /* bigger clickable area */
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    
+}
+
+/* Hover effect */
+.navbar nav a:hover {
+    color: var(--accent-blue);
+    background: rgba(127,90,240,0.1);
+}
+ 
+/* NAV LOGO CONTAINER */
+
+.nav-logo{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    
+}
+
+/* LOGO IMAGE */
+
+.nav-logo-img{
+    width:82px;
+    height:82px;
+    object-fit:contain;
+    border-radius:50%;
+    filter:drop-shadow(0 0 14px rgba(217,70,239,0.55))brightness(1.08)contrast(1.08);
+    transition:0.3s ease;
+    margin-top:-2px;
+}
+
+/* HOVER EFFECT */
+
+.nav-logo-img:hover{
+    transform:scale(1.05);
+    filter:
+    drop-shadow(0 0 18px rgba(0,217,255,0.65))brightness(1.1)contrast(1.1);
+}
+
+/* TITLE */
+
+.nav-logo h1{
+
+    font-size:32px;
+    font-weight:700;
+    background:
+    linear-gradient(
+    90deg,
+    #b86cff,
+    #00d9ff);
+    -webkit-background-clip:text; 
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===================== RESPONSIVE NAVBAR ===================== */
+
+@media (max-width: 900px) {
+    .navbar {
+        padding: 15px 25px;
+    }
+
+    .navbar nav ul {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        height: auto;
+        padding: 12px 15px;
+    }
+
+    .navbar nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 8px;
+    }
+}
+
+        /* Sections */
+        section {
+            min-height: 70vh;
+            padding: 90px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #home { padding-bottom: 30px; }
+        #working { padding-top: 50px; }
+
+        .section-content {
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Home Section */
+        #home .section-content {
+            display: flex;
+            flex-direction: column;
+            gap: 300px;
+            padding-top: 60px;
+        }
+
+        .home-left {
+            text-align: left;
+            max-width: 550px;
+        }
+
+        .queue-diagram {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .queue-element {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: fade-in 1s ease-out forwards;
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        .queue-element.front::before {
+            content: "FRONT";
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--accent-blue);
+        }
+
+        .queue-element.rear::after {
+            content: "REAR";
+            position: absolute;
+            bottom: -25px;
+            font-size: 12px;
+            color: var(--accent-blue);
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; }
+        }
+        
+        /* ---------- BUTTONS IN HOME ---------- */
+        .home-buttons {
+            display: flex;
+            gap: 20px;        
+            margin-top: 130px; 
+            justify-content: center;
+            transform: translateX(-75px);
+         }
+
+        /* Working Section */
+        .queue-viz {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .viz-element {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.5s;
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        .viz-element.active {
+            box-shadow: 0 0 20px var(--accent-purple);
+        }
+
+        .viz-element.front::before {
+            content: "FRONT";
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--accent-blue);
+        }
+
+        .viz-element.rear::after {
+            content: "REAR";
+            position: absolute;
+            bottom: -25px;
+            font-size: 12px;
+            color: var(--accent-blue);
+        }
+
+        .input-section {
+            margin: 30px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .input-section input {
+            padding: 12px;
+            border: 2px solid var(--accent-purple);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 8px;
+        }
+
+        .btn {
+            background: transparent;
+            border: 2px solid var(--accent-purple);
+            color: var(--text-primary);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 15px var(--accent-purple);
+        }
+
+        .tooltip {
+            position: absolute;
+            top: -40px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 5px 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .viz-element:hover .tooltip {
+            opacity: 1;
+        }
+
+        /* Quiz Section */
+        .quiz-question {
+            background: var(--bg-secondary);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(127,90,240,0.35);
+            margin: 30px 0;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback {
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        .correct { color: var(--success); }
+        .incorrect { color: var(--error); }
+
+        /* FAQ Section */
+        .faq-item {
+            background: var(--bg-secondary);
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 18px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(127,90,240,0.1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 18px;
+            color: var(--text-secondary);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+            padding-bottom: 18px;
+        }
+
+/* ================= FOOTER ================= */
+
+.footer{
+  position:relative;
+  background:linear-gradient(to bottom,#050816,#0B1023);
+  padding:45px 6%;
+  overflow:hidden;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+
+/* GLOW OVERLAY */
+
+.footer-overlay{
+  position:absolute;
+  inset:0;
+  background:  
+  radial-gradient(circle at top left,
+  rgba(168,85,247,0.15),
+  transparent 30%),
+  radial-gradient(circle at bottom right,
+  rgba(0,255,255,0.12),
+  transparent 30%);
+  pointer-events:none;
+}
+
+/* CONTAINER */
+
+.footer-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:30px;
+  position:relative;
+  z-index:2;
+}
+
+/* LOGO */
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  
+}
+
+/* LOGO IMAGE */
+
+.logo-img{
+  width:65px;
+  height:65px;
+  object-fit:contain;
+  border-radius:50%;
+  filter: drop-shadow(0 0 10px rgba(217,70,239,0.45));
+  transition:0.3s ease;
+}
+
+/* HOVER EFFECT */
+
+.logo-img:hover{
+  transform:scale(1.05);
+  filter:drop-shadow(0 0 16px rgba(0,217,255,0.55));
+}
+
+.logo h2{
+  color:white;
+  font-size:30px;
+}
+
+.logo p{
+  color:#aaa;
+}
+
+.brand-text{
+  color:#bbb;
+  line-height:1.8;
+  margin-bottom:25px;
+}
+
+/* SOCIALS */
+
+.socials{
+  display:flex;
+  gap:15px;
+}
+
+.socials a{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.15);
+  transition:0.4s;
+  text-decoration:none;
+  backdrop-filter:blur(10px);
+}
+
+.socials a:hover{
+  transform:translateY(-5px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 40px #d946ef;
+  border-color:#00ffff;
+}
+
+/* FOOTER HEADINGS */
+
+.footer-section h3{
+  color:white;
+  margin-bottom:25px;
+  font-size:22px;
+}
+
+/* LINKS */
+
+.footer-section ul{
+  list-style:none;
+}
+
+.footer-section ul li{
+  margin-bottom:15px;
+  color:#bbb;
+  transition:0.3s;
+  cursor:pointer;
+}
+
+.footer-section ul li a{
+  text-decoration:none;
+  color:#bbb;
+}
+
+.footer-section ul li:hover{
+  color:#00ffff;
+  transform:translateX(8px);
+}
+
+/* ACTIVITY CARD */
+
+.activity-card{
+    width:100%;
+    max-width:320px;
+    padding:28px 24px;
+    border-radius:24px;
+    background:
+    rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    backdrop-filter:blur(10px);
+    box-shadow:
+    0 0 18px rgba(217,70,239,0.12);
+}
+
+/* TITLE */
+
+.activity-card p{
+    color:white;
+    font-size:20px;
+    font-weight:600;
+    text-align:center;
+    margin:0;
+}
+
+/* BARS */
+
+.bars{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:12px;
+    height:120px;
+}
+
+/* EACH BAR */
+
+.bars span{
+    width:18px;
+    border-radius:20px;
+    background:
+    linear-gradient(
+    to top,
+    #00d9ff,
+    #d946ef);
+    animation:bars 1.6s infinite ease-in-out;
+}
+
+/* DIFFERENT HEIGHTS */
+
+.bars span:nth-child(1){height:50px;}
+.bars span:nth-child(2){height:90px;}
+.bars span:nth-child(3){height:70px;}
+.bars span:nth-child(4){height:120px;}
+.bars span:nth-child(5){height:95px;}
+.bars span:nth-child(6){height:75px;}
+.bars span:nth-child(7){height:135px;}
+
+/* BAR ANIMATION */
+
+@keyframes bars{
+
+    0%,100%{
+    transform:scaleY(1);
+    }
+    50%{
+        transform:scaleY(0.75);
+    }
+
+}
+
+/* STATUS */
+
+.status{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    color:#ff4dff;
+    font-size:17px;
+    font-weight:500;
+}
+
+/* DOT */
+
+.dot{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#ff00ff;
+    box-shadow:
+    0 0 12px #ff00ff;
+    animation:pulse 1s infinite;
+}
+
+/* DOT ANIMATION */
+
+@keyframes pulse{
+
+    0%{transform:scale(1);}
+    50%{transform:scale(1.25);}
+    100%{transform:scale(1);}
+}
+
+/* STATS */
+
+.stats-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:25px;
+  margin-top:70px;
+}
+
+.stat-card{
+  padding:20px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  text-align:center;
+  color:white;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.stat-card:hover{
+  transform:translateY(-10px);
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px rgba(168,85,247,0.5);
+}
+
+.stat-card h2{
+  font-size:28px;
+  color:#00ffff;
+}
+
+/* QUOTE */
+
+.quote-section{
+  text-align:center;
+  margin-top:40px;
+  color:white;
+}
+
+.quote-icon{
+  font-size:60px;
+  color:#d946ef;
+  text-shadow:0 0 20px #d946ef;
+}
+
+.quote-section p{
+  font-size:18px;
+  max-width:900px;
+  margin:20px auto;
+  line-height:1.8;
+  color:#ddd;
+}
+
+.quote-section h4{
+  color:#ff66ff;
+}
+
+/* TECH STACK */
+
+.tech-stack{
+  margin-top:70px;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
+.tech-card{
+  padding:12px 18px;
+  border-radius:15px;
+  color:white;
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.4s;
+  backdrop-filter:blur(10px);
+}
+
+.tech-card:hover{
+  transform:translateY(-8px);
+  box-shadow:
+  0 0 20px #00ffff,
+  0 0 30px #d946ef;
+}
+
+/* WAVE */
+
+.wave{
+  width:100%;
+  height:4px;
+  margin-top:80px;
+  background:linear-gradient(
+  90deg,
+  #00ffff,
+  #d946ef,
+  #00ffff);
+  animation:wave 4s linear infinite;
+  background-size:300% 100%;
+  border-radius:10px;
+}
+
+@keyframes wave{
+  0%{
+    background-position:0%;
+  }
+  100%{
+    background-position:300%;
+  }
+}
+
+/* SCROLL BUTTON */
+
+#scrollTopBtn{
+  position:fixed;
+  right:30px;
+  bottom:30px;
+  width:65px;
+  height:65px;
+  border:none;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00ffff,#d946ef);
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+  box-shadow:
+  0 0 25px #00ffff,
+  0 0 40px #d946ef;
+  transition:0.4s;
+}
+
+#scrollTopBtn:hover{
+  transform:scale(1.1);
+}
+
+/* COPYRIGHT */
+
+.copyright{
+  margin-top:50px;
+  padding-top:25px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:15px;
+  color:#aaa;
+  position:relative;
+  z-index:2;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .footer{
+    padding:70px 6%;
+  }
+
+  .quote-section p{
+    font-size:18px;
+  }
+
+  .copyright{
+    flex-direction:column;
+    text-align:center;
+  }
+
+}
+
+         
+
+        /* Responsiveness */
+        @media (min-width: 768px) {
+            #home .section-content {
+                flex-direction: row;
+                align-items: flex-start;
+            }
+            .home-left, .home-right {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .queue-element, .viz-element { width: 60px; height: 60px; }
+            .queue-diagram, .queue-viz { gap: 5px; }
+            .input-section { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="nav-logo">
+
+        <img
+        src="../image/CC_icon.png"
+        alt="CodeCanvas Logo"
+        class="nav-logo-img">
+        <div class="logo">CodeCanvas - Queue</div> </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#working">Working</a></li>
+                <li><a href="#quiz">Quiz</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="section-content">
+            <div class="home-left">
+                <h1>What is a Queue?</h1>
+                <p>
+                    A <b>queue</b> is a linear data structure that follows the First In, First Out (FIFO) principle. Elements are added at the rear and removed from the front.
+                </p>
+                <h3>Key Properties</h3>
+                <ul>
+                    <li>FIFO (First In, First Out)</li>
+                    <li>Operations: Enqueue, Dequeue, Peek</li>
+                    <li>Efficient O(1) operations</li>
+                    <li>Used in scheduling, breadth-first search</li>
+                </ul>
+                <h3>Types of Queues</h3>
+                <ul>
+                    <li>Linear Queue (simple FIFO)</li>
+                    <li>Circular Queue (wraps around)</li>
+                    <li>Priority Queue (elements dequeued by priority)</li>
+                </ul>
+            </div>
+            <div class="home-right">
+                <div class="queue-diagram">
+                    <!-- Example Queue -->
+                    <div class="queue-element front">10</div>
+                    <div class="queue-element">20</div>
+                    <div class="queue-element rear">30</div>
+                </div>
+                <div class="home-buttons">
+    <a href="../GetStarted/queueGS.html" class="btn">Get Started</a>
+    <a href="../queue/questions.html" class="btn">Test</a>
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Working Section -->
+    <section id="working">
+        <div class="section-content">
+            <h1>How Queues Work</h1>
+            <div class="input-section">
+                <input type="number" id="queue-input" placeholder="Enter a number">
+                <button class="btn" onclick="enqueueElement()">Enqueue</button>
+                <button class="btn" onclick="dequeueElement()">Dequeue</button>
+                <button class="btn" onclick="peekElement()">Peek</button>
+                <button class="btn" onclick="isEmpty()">Is Empty?</button>
+                <button class="btn" onclick="resetQueue()">Reset Queue</button>
+            </div>
+            <div class="queue-viz" id="queue-viz">
+                <!-- Dynamic elements will be added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz">
+        <div class="section-content">
+            <h1>Queue Quiz</h1>
+            <div class="quiz-question" id="quiz-container">
+                <!-- Questions loaded via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq">
+        <div class="section-content">
+            <h1>Frequently Asked Questions</h1>
+            <div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is a queue?</button>
+    <div class="faq-answer">
+        A queue is a linear data structure that follows the FIFO (First In, First Out) principle, 
+        where elements are inserted at the rear and removed from the front, similar to a real-life waiting line.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is FIFO?</button>
+    <div class="faq-answer">
+        FIFO stands for First In, First Out, meaning the element that enters the queue first will be removed first. 
+        This behavior is commonly seen in ticket counters or service lines.
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What are the main operations on a queue?</button>
+    <div class="faq-answer">
+        The main operations are:  
+        Enqueue (add an element to the rear),  
+        Dequeue (remove an element from the front),  
+        Peek (view the front element without removing it), and  
+        IsEmpty (check whether the queue is empty).
+    </div>
+</div>
+
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">What is the time complexity of queue operations?</button>
+    <div class="faq-answer">
+        Enqueue, Dequeue, and Peek operations all take O(1) time in an efficiently implemented queue, 
+        making queues very fast for real-time processing.
+    </div>
+</div>
+
+<!-- REPLACED QUESTION -->
+<div class="faq-item">
+    <button class="faq-question" onclick="toggleFAQ(this)">Best source to learn Queue?</button>
+    <div class="faq-answer">
+        You can learn queues from structured tutorials, visual explanations, and coding platforms that provide examples and practice problems.  
+        <b>
+          <a href="https://www.geeksforgeeks.org/dsa/queue-data-structure/" target="_blank" style="color:#38BDF8;">
+            Click here
+          </a>
+        </b>
+        to visit the recommended resource.
+    </div>
+</div>
+
+        </div>
+    </section>
+
+<!-- ========================= -->
+<!-- FUTURISTIC FOOTER START -->
+<!-- ========================= -->
+
+<footer class="footer">
+  <div class="footer-overlay"></div>
+
+  <div class="footer-container">
+
+    <!-- LEFT BRAND SECTION -->
+    <div class="footer-section brand">
+      <div class="logo">
+        <img src="../image/CC_logo.png" alt="CodeCanvas Logo" class="logo-img">
+        <div>
+          <h2>CodeCanvas</h2>
+          <p>Algorithm Visualizer</p>
+        </div>
+      </div>
+
+      <p class="brand-text">
+        A platform to visualize, learn and master computer science algorithms.
+      </p>
+
+      <div class="socials">
+        <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+        <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com" target="_blank"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../pages/array.html">Array</a></li>
+        <li><a href="../pages/stack.html">Stack</a></li>
+        <li><a href="../pages/queue.html">Queue</a></li>
+        <li><a href="../pages/linkedlist.html">LinkedList</a></li>
+        <li><a href="../pages/search.html">Searching</a></li>
+        <li><a href="../pages/sort.html">Sorting</a></li>
+      </ul>
+    </div>
+
+    <!-- ALGORITHMS -->
+    <div class="footer-section">
+      <h3>Algorithms</h3>
+      <ul>
+        <li>Sorting Algorithms</li>
+        <li>Searching Algorithms</li>
+        <li>Graph Algorithms</li>
+        <li>Dynamic Programming</li>
+        <li>Greedy Algorithms</li>
+        <li>Backtracking</li>
+      </ul>
+    </div>
+
+    <!-- LIVE ACTIVITY -->
+    <div class="footer-section activity">
+      <h3>Live Activity</h3>
+
+      <div class="activity-card">
+        <p>Sorting in Progress...</p> 
+
+        <div class="bars">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="status">
+          <div class="dot"></div>
+          Visualizing...
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-container">
+
+    <div class="stat-card">
+      <h2>25+</h2>
+      <p>Algorithms</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>120+</h2>
+      <p>Animations</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>500K+</h2>
+      <p>Executions</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>10K+</h2>
+      <p>Users</p>
+    </div>
+
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-section">
+    <span class="quote-icon">❝</span>
+
+    <p>
+      A good programmer is someone who always looks both ways before crossing a one-way street.
+    </p>
+
+    <h4>— Doug Linder</h4>
+  </div>
+
+  <!-- TECH STACK 
+  <div class="tech-stack">
+
+    <div class="tech-card">HTML5</div>
+    <div class="tech-card">CSS3</div>
+    <div class="tech-card">JavaScript</div>
+    <div class="tech-card">React</div>
+    <div class="tech-card">Canvas API</div>
+
+  </div>  -->
+
+  <!-- SCROLL TOP -->
+  <button id="scrollTopBtn">↑</button>
+
+  <!-- WAVES -->
+  <div class="wave"></div>
+
+  <!-- COPYRIGHT -->
+  <div class="copyright">
+    <p>© 2026 CodeCanvas | Designed & Developed with 💜 by Juhi Makkar</p>
+    <span>Stay curious. Keep coding. Keep learning.</span>
+  </div>
+
+</footer>
+
+    <script>
+        // Queue state
+        let queueData = [];
+        const maxElements = 10;
+        const vizContainer = document.getElementById('queue-viz');
+
+        // Enqueue element
+        function enqueueElement() {
+            const input = document.getElementById('queue-input');
+            const value = parseInt(input.value);
+            if (isNaN(value) || queueData.length >= maxElements) return;
+            queueData.push(value);
+            updateViz();
+            input.value = '';
+        }
+
+        // Dequeue element
+        function dequeueElement() {
+            if (queueData.length === 0) {
+                alert('Queue is empty!');
+                return;
+            }
+            const dequeued = queueData.shift();
+            alert(`Dequeued: ${dequeued}`);
+            updateViz();
+        }
+
+        // Peek element
+        function peekElement() {
+            if (queueData.length === 0) {
+                alert('Queue is empty!');
+                return;
+            }
+            alert(`Front element: ${queueData[0]}`);
+        }
+
+        // Is Empty
+        function isEmpty() {
+            alert(queueData.length === 0 ? 'Queue is empty' : 'Queue is not empty');
+        }
+
+        // Reset queue
+        function resetQueue() {
+            queueData = [];
+            updateViz();
+        }
+
+        // Update visualization
+        function updateViz() {
+            vizContainer.innerHTML = '';
+            queueData.forEach((val, idx) => {
+                const element = document.createElement('div');
+                element.className = 'viz-element';
+                if (idx === 0) element.classList.add('front');
+                if (idx === queueData.length - 1) element.classList.add('rear');
+                element.innerHTML = `${val}<div class="tooltip">Element: ${val}</div>`;
+                vizContainer.appendChild(element);
+                setTimeout(() => element.classList.add('active'), 100 * idx);
+            });
+        }
+
+        // Quiz logic
+        const questions = [
+    { q: "Q1. What does FIFO stand for?", options: ["First In, First Out", "First In, Last Out", "Last In, First Out", "Last In, Last Out"], correct: 0, exp: "FIFO means the first element added is the first removed." },
+    { q: "Q2. Which operation adds an element to a queue?", options: ["Dequeue", "Enqueue", "Peek", "IsEmpty"], correct: 1, exp: "Enqueue adds an element to the rear of the queue." },
+    { q: "Q3. What is the time complexity of enqueue and dequeue?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Queue operations are O(1)." },
+    { q: "Q4. What does peek do in a queue?", options: ["Removes front element", "Adds element", "Views front element", "Checks if empty"], correct: 2, exp: "Peek shows the front element without removing it." },
+    { q: "Q5. Where is a queue commonly used?", options: ["Recursion", "Breadth-first search", "Sorting", "Hashing"], correct: 1, exp: "Queues are used in BFS and scheduling." },
+    { q: "Q6. What is the front of a queue?", options: ["Last element", "First element", "Middle element", "Random element"], correct: 1, exp: "Front is the first element to be dequeued." },
+    { q: "Q7. What is the rear of a queue?", options: ["First element", "Last element", "Middle element", "Null"], correct: 1, exp: "Rear is where new elements are added." },
+    { q: "Q8. Which data structure is used to implement a queue?", options: ["Stack", "Array or Linked List", "Tree", "Graph"], correct: 1, exp: "Queues can be implemented using arrays or linked lists." },
+    { q: "Q9. What happens if you dequeue from an empty queue?", options: ["Adds element", "Underflow error", "Returns null", "Nothing"], correct: 1, exp: "Dequeue on empty queue causes underflow." },
+    { q: "Q10. What is the output of enqueue(5) then dequeue()?", options: ["5", "Error", "Null", "0"], correct: 0, exp: "Dequeue returns the enqueued element." },
+    { q: "Q11. In array implementation, what is the issue with fixed size?", options: ["Slow", "Overflow", "Underflow", "None"], correct: 1, exp: "Fixed arrays can overflow." },
+    { q: "Q12. What is a circular queue?", options: ["Linear", "Wraps around", "Sorted", "Doubly"], correct: 1, exp: "Circular queue reuses space." },
+    { q: "Q13. What is the time complexity of queue operations in linked list?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Enqueue and dequeue are O(1)." },
+    { q: "Q14. Which queue operation checks if empty?", options: ["Enqueue", "Dequeue", "Peek", "IsEmpty"], correct: 3, exp: "IsEmpty returns true if no elements." },
+    { q: "Q15. In Python, what is collections.deque?", options: ["Stack", "Queue", "List", "Dict"], correct: 1, exp: "Deque is a double-ended queue." },
+    { q: "Q16. What is the output of peek() on empty queue?", options: ["Error", "Null", "0", "Front"], correct: 0, exp: "Peek on empty queue is invalid." },
+    { q: "Q17. Which is not a queue operation?", options: ["Enqueue", "Dequeue", "Push", "Peek"], correct: 2, exp: "Push is for stacks." },
+    { q: "Q18. In Java, what is Queue interface?", options: ["List", "Set", "Collection", "Map"], correct: 2, exp: "Queue extends Collection." },
+    { q: "Q19. What is the space complexity of a queue?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Proportional to elements." },
+    { q: "Q20. What is a priority queue?", options: ["FIFO", "Highest priority first", "LIFO", "Random"], correct: 1, exp: "Elements dequeued by priority." },
+    { q: "Q21. In C++, what is std::queue?", options: ["Vector", "List", "Adapter", "Array"], correct: 2, exp: "Queue is a container adapter." },
+    { q: "Q22. What is the output of enqueue(1), enqueue(2), dequeue()?", options: ["1", "2", "Error", "Null"], correct: 0, exp: "Dequeue removes 1." },
+    { q: "Q23. Which application uses queues?", options: ["DFS", "BFS", "Dijkstra", "All"], correct: 1, exp: "BFS uses queues." },
+    { q: "Q24. What is the maximum size of a queue?", options: ["Fixed", "Dynamic", "1", "Infinite"], correct: 1, exp: "Depends on implementation." },
+    { q: "Q25. In JavaScript, what is Array.shift()?", options: ["Enqueue", "Dequeue", "Peek", "Add"], correct: 1, exp: "Shift removes from front." },
+    { q: "Q26. What is the time for reversing a queue?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Use stack or recursion." },
+    { q: "Q27. Which queue is used in CPU scheduling?", options: ["Priority", "Circular", "Simple", "None"], correct: 0, exp: "Priority for processes." },
+    { q: "Q28. What is the output of isEmpty() on new queue?", options: ["False", "True", "Error", "Null"], correct: 1, exp: "New queue is empty." },
+    { q: "Q29. In Python, what is queue.Queue()?", options: ["List", "Thread-safe queue", "Stack", "Dict"], correct: 1, exp: "For multi-threading." },
+    { q: "Q30. What is the front index in array queue?", options: ["0", "Rear", "Variable", "Fixed"], correct: 2, exp: "Changes with dequeue." },
+    { q: "Q31. Which is true for queue overflow?", options: ["Enqueue on full", "Dequeue on empty", "Peek", "IsEmpty"], correct: 0, exp: "Cannot enqueue when full." },
+    { q: "Q32. What is the time complexity of queue traversal?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Visit each element." },
+    { q: "Q33. In C, how to implement queue?", options: ["Struct", "Array", "Both", "None"], correct: 2, exp: "Using struct with array." },
+    { q: "Q34. What is the output of enqueue(10), peek()?", options: ["10", "Removes 10", "Error", "Null"], correct: 0, exp: "Peek shows 10." },
+    { q: "Q35. Which queue is used in printers?", options: ["Stack", "Queue", "List", "Tree"], correct: 1, exp: "Print jobs in order." },
+    { q: "Q36. What is the rear index in circular queue?", options: ["0", "(rear+1)%size", "Front", "Size"], correct: 1, exp: "Wraps around." },
+    { q: "Q37. In Java, what is LinkedList as queue?", options: ["Fast", "Slow", "Error", "None"], correct: 0, exp: "LinkedList implements Queue." },
+    { q: "Q38. What is the output of dequeue() on single element?", options: ["Element", "Empty", "Error", "Null"], correct: 0, exp: "Returns the element." },
+    { q: "Q39. Which is not a queue type?", options: ["Linear", "Circular", "Priority", "Stack"], correct: 3, exp: "Stack is LIFO." },
+    { q: "Q40. What is the space for queue with n elements?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Stores n elements." },
+    { q: "Q41. In Python, what is queue.LifoQueue?", options: ["Queue", "Stack", "Deque", "List"], correct: 1, exp: "LIFO queue is stack." },
+    { q: "Q42. What is the time for queue copy?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Copy each element." },
+    { q: "Q43. Which operation is O(n) in array queue?", options: ["Enqueue", "Dequeue", "Traversal", "Peek"], correct: 2, exp: "Traversal is O(n)." },
+    { q: "Q44. What is the output of enqueue(1), enqueue(2), peek()?", options: ["1", "2", "Error", "Null"], correct: 0, exp: "Peek shows front 1." },
+    { q: "Q45. In C++, what is queue::front()?", options: ["Rear", "Front", "Size", "Empty"], correct: 1, exp: "Returns front element." },
+    { q: "Q46. What is the issue with array queue?", options: ["Dynamic", "Fixed size", "Slow", "None"], correct: 1, exp: "Cannot grow." },
+    { q: "Q47. Which queue is used in breadth-first search?", options: ["Stack", "Queue", "Priority", "Deque"], correct: 1, exp: "BFS uses queue." },
+    { q: "Q48. What is the output of isEmpty() after dequeue all?", options: ["False", "True", "Error", "Null"], correct: 1, exp: "Queue is empty." },
+    { q: "Q49. In JavaScript, what is Array.unshift()?", options: ["Enqueue", "Dequeue", "Add front", "Remove"], correct: 2, exp: "Adds to front." },
+    { q: "Q50. What is the time complexity of priority queue?", options: ["O(1)", "O(log n)", "O(n)", "O(n^2)"], correct: 1, exp: "Insert and delete are O(log n)." },
+    { q: "Q51. What is the front element after enqueue(5), enqueue(10)?", options: ["5", "10", "Error", "Null"], correct: 0, exp: "5 is front." },
+    { q: "Q52. Which is true for circular queue?", options: ["No overflow", "Wraps", "Linear", "None"], correct: 1, exp: "Reuses space." },
+    { q: "Q53. In Python, what is deque.popleft()?", options: ["Enqueue", "Dequeue", "Peek", "Add"], correct: 1, exp: "Removes from left." },
+    { q: "Q54. What is the output of peek() after enqueue(7)?", options: ["7", "Error", "Null", "0"], correct: 0, exp: "Shows 7." },
+    { q: "Q55. Which queue operation is idempotent?", options: ["Enqueue", "Dequeue", "Peek", "IsEmpty"], correct: 2, exp: "Peek doesn't change state." },
+    { q: "Q56. What is the maximum operations in queue?", options: ["1", "2", "3", "4"], correct: 1, exp: "Enqueue and dequeue." },
+    { q: "Q57. In C, what is the data type for queue elements?", options: ["Fixed", "Any", "Int", "Char"], correct: 1, exp: "Can be any type." },
+    { q: "Q58. What is the output of dequeue() on empty?", options: ["Element", "Error", "Null", "0"], correct: 1, exp: "Underflow." },
+    { q: "Q59. Which queue is used in message queues?", options: ["Simple", "Priority", "Circular", "All"], correct: 0, exp: "FIFO for messages." },
+    { q: "Q60. What is the time for queue initialization?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Constant time." },
+    { q: "Q61. In Java, what is Queue.poll()?", options: ["Peek", "Dequeue", "Enqueue", "Size"], correct: 1, exp: "Removes and returns front." },
+    { q: "Q62. What is the output of enqueue(3), dequeue(), peek()?", options: ["3", "Error", "Null", "0"], correct: 2, exp: "Peek on empty is error." },
+    { q: "Q63. Which is not a queue implementation?", options: ["Array", "Linked list", "Stack", "Deque"], correct: 2, exp: "Stack is LIFO." },
+    { q: "Q64. What is the space complexity of circular queue?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Fixed size." },
+    { q: "Q65. In Python, what is queue.qsize()?", options: ["Front", "Size", "Rear", "Empty"], correct: 1, exp: "Returns number of elements." },
+    { q: "Q66. What is the output of enqueue(1), enqueue(2), dequeue(), peek()?", options: ["1", "2", "Error", "Null"], correct: 1, exp: "Peek shows 2." },
+    { q: "Q67. Which queue is used in operating systems?", options: ["Job scheduling", "Stack", "Tree", "Graph"], correct: 0, exp: "Queues for processes." },
+    { q: "Q68. What is the time complexity of queue sort?", options: ["O(1)", "O(n)", "O(n log n)", "O(n^2)"], correct: 1, exp: "Using another structure." },
+    { q: "Q69. In C++, what is queue::empty()?", options: ["True if empty", "Size", "Front", "Rear"], correct: 0, exp: "Returns bool." },
+    { q: "Q70. What is the output of peek() on queue with one element?", options: ["Element", "Removes", "Error", "Null"], correct: 0, exp: "Shows element." },
+    { q: "Q71. Which is true for queue in recursion?", options: ["Used", "Not used", "Sometimes", "Always"], correct: 1, exp: "Stacks are used in recursion." },
+    { q: "Q72. What is the front after dequeue all?", options: ["Last", "Null", "Error", "First"], correct: 2, exp: "No front." },
+    { q: "Q73. In JavaScript, what is queue length?", options: ["array.length", "queue.size", "queue.length", "None"], correct: 0, exp: "If using array." },
+    { q: "Q74. What is the time for queue merge?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Traverse and add." },
+    { q: "Q75. Which queue allows priority?", options: ["Simple", "Priority", "Circular", "Linear"], correct: 1, exp: "Priority queue." },
+    { q: "Q76. What is the output of enqueue(4), dequeue(), enqueue(5), peek()?", options: ["4", "5", "Error", "Null"], correct: 1, exp: "Peek shows 5." },
+    { q: "Q77. In C, what is the struct for queue?", options: ["int front, rear", "Array", "Both", "None"], correct: 2, exp: "Struct with indices." },
+    { q: "Q78. What is the issue with linear queue?", options: ["Wrap", "No reuse", "Slow", "None"], correct: 1, exp: "Cannot reuse space." },
+    { q: "Q79. What is the output of isEmpty() on queue with elements?", options: ["True", "False", "Error", "Null"], correct: 1, exp: "False." },
+    { q: "Q80. Which queue is used in cache?", options: ["LRU", "FIFO", "LIFO", "Random"], correct: 0, exp: "LRU uses queue." },
+    { q: "Q81. What is the time complexity of queue peek?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Direct access." },
+    { q: "Q82. In Python, what is queue.put()?", options: ["Dequeue", "Enqueue", "Peek", "Size"], correct: 1, exp: "Adds element." },
+    { q: "Q83. What is the output of dequeue() twice on two elements?", options: ["First then second", "Error", "Null", "Same"], correct: 0, exp: "Removes in order." },
+    { q: "Q84. Which is not a queue property?", options: ["FIFO", "LIFO", "Ordered", "Dynamic"], correct: 1, exp: "LIFO is stack." },
+    { q: "Q85. What is the space for a queue with n elements?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Queue stores n elements." },
+    { q: "Q86. In Java, what is Queue.offer()?", options: ["Dequeue", "Enqueue", "Peek", "Size"], correct: 1, exp: "Adds element to queue." },
+    { q: "Q87. What is the output of enqueue(6), dequeue(), enqueue(7), dequeue()?", options: ["6,7", "7,6", "Error", "Null"], correct: 0, exp: "Dequeues 6 then 7." },
+    { q: "Q88. Which queue implementation is thread-safe?", options: ["Array", "Linked list", "ConcurrentQueue", "None"], correct: 2, exp: "ConcurrentQueue in .NET." },
+    { q: "Q89. What is the time for queue reversal?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 1, exp: "Use stack to reverse." },
+    { q: "Q90. In C++, what is queue::size()?", options: ["Front", "Number of elements", "Rear", "Capacity"], correct: 1, exp: "Returns size." },
+    { q: "Q91. What is the output of peek() after multiple enqueues?", options: ["Last", "First", "Middle", "Random"], correct: 1, exp: "Shows front element." },
+    { q: "Q92. Which queue is used in event handling?", options: ["Stack", "Queue", "List", "Set"], correct: 1, exp: "Events processed in order." },
+    { q: "Q93. What is the issue with queue in multi-threading?", options: ["Slow", "Synchronization", "Fixed size", "None"], correct: 1, exp: "Need locks for safety." },
+    { q: "Q94. In Python, what is queue.get()?", options: ["Enqueue", "Dequeue", "Peek", "Size"], correct: 1, exp: "Removes and returns element." },
+    { q: "Q95. What is the output of enqueue(8), peek(), dequeue()?", options: ["8", "Removes 8", "Error", "Null"], correct: 0, exp: "Peek shows 8, dequeue removes it." },
+    { q: "Q96. Which is true for priority queue?", options: ["FIFO", "Priority order", "LIFO", "Random"], correct: 1, exp: "Dequeues highest priority." },
+    { q: "Q97. What is the time complexity of queue in array?", options: ["O(1)", "O(n)", "O(log n)", "O(n^2)"], correct: 0, exp: "Enqueue and dequeue are O(1)." },
+    { q: "Q98. In JavaScript, what is queue as array?", options: ["push/pop", "shift/unshift", "Both", "None"], correct: 0, exp: "Push for enqueue, pop for dequeue." },
+    { q: "Q99. What is the output of isEmpty() after enqueue?", options: ["True", "False", "Error", "Null"], correct: 1, exp: "Not empty." },
+    { q: "Q100. Which queue is used in simulation?", options: ["Event queue", "Stack", "Tree", "Graph"], correct: 0, exp: "Events in order." }
+];
+        let currentQ = 0;
+
+        function loadQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('quiz-container').innerHTML = `
+                <h3>${q.q}</h3>
+                <div class="options">
+                    ${q.options.map((opt, i) => `<label class="option"><input type="radio" name="answer" value="${i}"> ${opt}</label>`).join('')}
+                </div>
+                <button class="btn" onclick="checkAnswer()">Check Answer</button>
+                <div class="feedback" id="feedback"></div>
+            `;
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            if (!selected) return;
+            const ans = parseInt(selected.value);
+            const feedback = document.getElementById('feedback');
+            if (ans === questions[currentQ].correct) {
+                feedback.innerHTML = '<span class="correct">✓ Correct! Moving to next question.</span>';
+                setTimeout(() => { currentQ = (currentQ + 1) % questions.length; loadQuestion(); }, 2000);
+            } else {
+                feedback.innerHTML = `<span class="incorrect">✗ Incorrect. ${questions[currentQ].exp} Try again.</span>`;
+            }
+        }
+
+        // FAQ toggle
+        function toggleFAQ(btn) {
+            btn.parentElement.classList.toggle('active');
+        }
+
+        // Initialize
+        loadQuestion();
+        updateViz();
+        
+        /* SCROLL TO TOP */
+
+        const scrollBtn = document.getElementById("scrollTopBtn");
+
+        scrollBtn.addEventListener("click", () => {
+          window.scrollTo({
+            top:0,
+            behavior:"smooth"
+          });
+        });
+    </script>
+</body>
+</html>

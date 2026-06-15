@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Visualizer - Master Data Structures</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           THEME: Modern Dark Educational Platform
+           Colors: #1A1F34, #252A4A, #8B6CF6, #4FC3F7
+        ═════════════════════════════════════════════════════════════ */
+        :root {
+            --bg-primary: #1A1F34;
+            --bg-secondary: #252A4A;
+            --bg-tertiary: #2E3456;
+            --accent-purple: #8B6CF6;
+            --accent-cyan: #4FC3F7;
+            --accent-blue: #3B82F6;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --text-primary: #F8FAFC;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --border-color: rgba(139, 108, 246, 0.3);
+            --glass-bg: rgba(37, 42, 74, 0.8);
+            --glow-purple: rgba(139, 108, 246, 0.4);
+            --glow-cyan: rgba(79, 195, 247, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background Pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(139, 108, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(79, 195, 247, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--bg-primary) 0%, #15192B 100%);
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                linear-gradient(rgba(139, 108, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 108, 246, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           NAVIGATION
+        ═════════════════════════════════════════════════════════════ */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 0.9rem 2rem;
+            background: rgba(26, 31, 52, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .logo-text {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0.4rem;
+            background: var(--bg-secondary);
+            padding: 0.4rem;
+            border-radius: 12px;
+        }
+
+        .nav-tab {
+            padding: 0.65rem 1.25rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: rgba(139, 108, 246, 0.1);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 108, 246, 0.4);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           MAIN CONTAINER & SECTIONS
+        ═════════════════════════════════════════════════════════════ */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem 2rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 8px 30px var(--glow-purple);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           ALGORITHM GRID
+        ═══════════════════════════════════════════════════════════ */
+        .algo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .algo-card {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .algo-card:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px var(--glow-purple);
+        }
+
+        .algo-card.active {
+            border-color: var(--accent-cyan);
+            background: rgba(79, 195, 247, 0.1);
+            box-shadow: 0 0 30px var(--glow-cyan);
+        }
+
+        .algo-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .algo-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .algo-badge {
+            padding: 0.25rem 0.7rem;
+            background: rgba(139, 108, 246, 0.2);
+            color: var(--accent-purple);
+            font-size: 0.7rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .algo-badge.stable { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .algo-badge.unstable { background: rgba(239, 68, 68, 0.2); color: var(--error); }
+        .algo-badge.inplace { background: rgba(79, 195, 247, 0.2); color: var(--accent-cyan); }
+
+        .algo-desc {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           VISUALIZER
+        ═════════════════════════════════════════════════════════════ */
+        .visualizer-container {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1100px) {
+            .visualizer-container { grid-template-columns: 1fr; }
+        }
+
+        .visualizer-main {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            min-height: 400px;
+        }
+
+        .viz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .array-display {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 0.4rem;
+            height: 280px;
+            padding: 1rem;
+        }
+
+        .array-cell {
+            flex: 1;
+            max-width: 50px;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cell-bar {
+            background: linear-gradient(180deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 8px 8px 4px 4px;
+            width: 100%;
+            transition: all 0.5s ease;
+        }
+
+        .cell-value {
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .cell-index {
+            position: absolute;
+            bottom: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .array-cell.comparing .cell-bar {
+            background: linear-gradient(180deg, var(--warning), #D97706);
+            box-shadow: 0 0 20px var(--warning);
+        }
+
+        .array-cell.swapping .cell-bar {
+            background: linear-gradient(180deg, var(--error), #DC2626);
+            animation: shake 0.4s ease-in-out;
+        }
+
+        .array-cell.sorted .cell-bar {
+            background: linear-gradient(180deg, var(--success), #059669);
+            box-shadow: 0 0 20px var(--success);
+        }
+
+        .array-cell.pivot .cell-bar {
+            background: linear-gradient(180deg, var(--accent-purple), #6D28D9);
+            box-shadow: 0 0 25px var(--accent-purple);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           CONTROL PANEL
+        ═════════════════════════════════════════════════════════════ */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .control-group {
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+
+        .control-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .control-value {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-purple);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--glow-purple);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 110px;
+            padding: 0.85rem 1.25rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            color: white;
+            box-shadow: 0 4px 15px rgba(139, 108, 246, 0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 108, 246, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .step-info {
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            padding: 1.25rem;
+            border-left: 4px solid var(--accent-cyan);
+        }
+
+        .step-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .step-message {
+            font-size: 1.05rem;
+            font-weight: 600;
+            min-height: 26px;
+        }
+
+        /* Complexity Grid */
+        .complexity-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .complexity-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+
+        .complexity-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .complexity-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           THEORY & CONTENT SECTIONS
+        ═════════════════════════════════════════════════════════════ */
+        .theory-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .theory-content { grid-template-columns: 1fr; }
+        }
+
+        .theory-section {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 1.75rem;
+        }
+
+        .theory-section h4 {
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .theory-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .theory-section li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .theory-section li:last-child { border-bottom: none; }
+
+        .theory-section li::before {
+            content: '▸';
+            color: var(--accent-purple);
+            font-weight: bold;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           CODE SYNTAX
+        ═════════════════════════════════════════════════════════════ */
+        .code-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .code-tab {
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .code-tab:hover { color: var(--text-primary); }
+
+        .code-tab.active {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: white;
+        }
+
+        .code-block {
+            background: #0D1117;
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            border: 1px solid var(--border-color);
+        }
+
+        .code-keyword { color: #FF7B72; }
+        .code-function { color: #D2A8FF; }
+        .code-string { color: #A5D6FF; }
+        .code-number { color: #79C0FF; }
+        .code-comment { color: #8B949E; font-style: italic; }
+        .code-type { color: #FFA657; }
+
+        /* ═════════════════════════════════════════════════════════════
+           FLOWCHART
+        ═════════════════════════════════════════════════════════════ */
+        .flowchart {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .flow-node {
+            display: inline-block;
+            padding: 0.9rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-purple);
+            border-radius: 10px;
+            margin: 0.4rem;
+            font-weight: 500;
+        }
+
+        .flow-node.start { border-color: var(--success); background: rgba(16,185,129,0.15); }
+        .flow-node.end { border-color: var(--error); background: rgba(239,68,68,0.15); }
+        .flow-node.process { border-color: var(--accent-cyan); background: rgba(79,195,247,0.15); }
+        .flow-node.decision { border-color: var(--warning); background: rgba(245,158,11,0.15); transform: rotate(0deg); border-radius: 0; }
+        .flow-node.decision::before { content: '◇'; margin-right: 0.5rem; color: var(--warning); }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-purple);
+            margin: 0.25rem 0;
+        }
+
+        .flow-line {
+            width: 2px;
+            height: 25px;
+            background: var(--accent-purple);
+            margin: 0 auto;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           GET STARTED / HOME
+        ═════════════════════════════════════════════════════════════ */
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin: 2.5rem 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            padding: 1.75rem;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border-radius: 14px;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-3px);
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(139, 108, 246, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════
+           MODAL
+        ═══════════════════════════════════════════════════════════════ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            max-width: 400px;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-msg {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar { padding: 0.75rem 1rem; }
+            .nav-tabs { display: none; }
+            .hero-title { font-size: 2rem; }
+            .visualizer-main { padding: 1.25rem; }
+            .array-display { height: 220px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="grid-overlay"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-layer-group"></i></div>
+            <span class="logo-text">Algorithm Visualizer</span>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('home')"><i class="fas fa-home"></i> Home</button>
+            <button class="nav-tab" onclick="showSection('visualizer')"><i class="fas fa-play"></i> Visualizer</button>
+            <button class="nav-tab" onclick="showSection('theory')"><i class="fas fa-book"></i> Theory</button>
+            <button class="nav-tab" onclick="showSection('syntax')"><i class="fas fa-code"></i> Syntax</button>
+            <button class="nav-tab" onclick="showSection('flowchart')"><i class="fas fa-project-diagram"></i> Flowchart</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- HOME SECTION -->
+        <section id="home" class="section active">
+            <div class="hero-section">
+                <h1 class="hero-title">Master Algorithms Visually</h1>
+                <p class="hero-subtitle">Learn sorting algorithms through interactive animations, step-by-step explanations, and practical code examples.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Sorting Algorithms</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">Languages</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Interactive</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="showSection('visualizer')" style="font-size: 1.1rem; padding: 1rem 2.5rem;">
+                    <i class="fas fa-rocket"></i> Start Learning
+                </button>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-play-circle"></i></div>
+                        <div class="feature-title">Live Visualization</div>
+                        <div class="feature-desc">Watch algorithms step by step with color-coded animations</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-code"></i></div>
+                        <div class="feature-title">Multi-Language Code</div>
+                        <div class="feature-desc">View implementations in C, C++, Java, Python</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="feature-title">Complexity Analysis</div>
+                        <div class="feature-desc">Understand time & space complexity trade-offs</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISUALIZER SECTION -->
+        <section id="visualizer" class="section">
+            <div class="card">
+                <h2><i class="fas fa-play"></i> Algorithm Visualizer</h2>
+                
+                <!-- Algorithm Selection -->
+                <div class="algo-grid" id="algoGrid"></div>
+
+                <!-- Visualization Area -->
+                <div class="visualizer-container">
+                    <div class="visualizer-main">
+                        <div class="viz-header">
+                            <div class="control-group" style="background: transparent; padding: 0;">
+                                <label style="color: var(--text-secondary); font-weight: 500;">
+                                    Array Size: <span id="sizeValue" class="control-value">8</span>
+                                </label>
+                                <input type="range" id="arraySize" min="4" max="20" value="8">
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-secondary" onclick="generateArray()">
+                                    <i class="fas fa-dice"></i> Random
+                                </button>
+                                <button class="btn btn-primary" id="startBtn" onclick="toggleVisualization()">
+                                    <i class="fas fa-play"></i> Visualize
+                                </button>
+                            </div>
+                        </div>
+                        <div class="array-display" id="arrayDisplay"></div>
+                    </div>
+
+                    <!-- Control Panel -->
+                    <div class="control-panel">
+                        <div class="control-group">
+                            <div class="control-label">
+                                <span>Speed</span>
+                                <span id="speedValue" class="control-value">1x</span>
+                            </div>
+                            <input type="range" id="speedSlider" min="1" max="10" value="5">
+                        </div>
+
+                        <div class="step-info">
+                            <div class="step-title">Current Step</div>
+                            <div class="step-message" id="stepMessage">Ready to visualize</div>
+                        </div>
+
+                        <div class="control-group">
+                            <div class="step-title">Complexity</div>
+                            <div class="complexity-grid" id="complexityDisplay"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- THEORY SECTION -->
+        <section id="theory" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-book"></i></div>
+                    <h2>Algorithm Theory</h2>
+                </div>
+                
+                <div id="theoryContent">
+                    <!-- Dynamic content loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SYNTAX SECTION -->
+        <section id="syntax" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-code"></i></div>
+                    <h2>Code Implementation</h2>
+                </div>
+                
+                <div class="code-tabs" id="codeTabs">
+                    <button class="code-tab active" data-lang="python" onclick="showCode('python')">Python</button>
+                    <button class="code-tab" data-lang="cpp" onclick="showCode('cpp')">C++</button>
+                    <button class="code-tab" data-lang="java" onclick="showCode('java')">Java</button>
+                    <button class="code-tab" data-lang="c" onclick="showCode('c')">C</button>
+                </div>
+                
+                <div class="code-block" id="codeBlock"></div>
+            </div>
+        </section>
+
+        <!-- FLOWCHART SECTION -->
+        <section id="flowchart" class="section">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
+                    <h2>Algorithm Flowchart</h2>
+                </div>
+                
+                <div class="flowchart" id="flowchartContent">
+                    <!-- Dynamic flowchart loaded here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Completion Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-content">
+            <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="modal-title" id="modalTitle">Complete!</div>
+            <div class="modal-msg" id="modalMsg">Algorithm visualization finished</div>
+            <button class="btn btn-primary" onclick="closeModal()">
+                <i class="fas fa-check"></i> Continue
+            </button>
+        </div>
+    </div>
+
+    <script>
+    // ═══════════════════════════════════════════════════════════════
+    // ALGORITHM DATA
+    // ═════════════════════════════════════════════════════════════
+    const algorithms = {
+        bubble: {
+            name: 'Bubble Sort',
+            desc: 'Repeatedly swaps adjacent elements if in wrong order',
+            badges: ['stable', 'inplace'],
+            complexity: { best: 'O(n)', avg: 'O(n²)', worst: 'O(n²)', space: 'O(1)' },
+            flow: ['START', 'Loop i from 0 to n-1', 'Loop j from 0 to n-i-1', 'If arr[j] > arr[j+1]', 'Swap elements', 'END'],
+            python: `<span class="code-keyword">def</span> <span class="code-function">bubble_sort</span>(arr):
+n = <span class="code-keyword">len</span>(arr)
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-keyword">range</span>(n):
+    <span class="code-keyword">for</span> j <span class="code-keyword">in</span> <span class="code-keyword">range</span>(n - i - <span class="code-number">1</span>):
+        <span class="code-keyword">if</span> arr[j] > arr[j + <span class="code-number">1</span>]:
+            arr[j], arr[j + <span class="code-number">1</span>] = arr[j + <span class="code-number">1</span>], arr[j]`,
+            cpp: `<span class="code-keyword">void</span> <span class="code-function">bubbleSort</span>(<span class="code-type">vector</span>&lt;<span class="code-type">int</span>&gt;& arr) {
+<span class="code-type">int</span> n = arr.size();
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i = <span class="code-number">0</span>; i < n; i++) {
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> j = <span class="code-number">0</span>; j < n - i - <span class="code-number">1</span>; j++) {
+        <span class="code-keyword">if</span>(arr[j] > arr[j + <span class="code-number">1</span>]) {
+            <span class="code-function">swap</span>(arr[j], arr[j + <span class="code-number">1</span>]);
+        }
+    }
+}
+}`,
+            java: `<span class="code-keyword">public static</span> <span class="code-type">void</span> <span class="code-function">bubbleSort</span>(<span class="code-type">int</span>[] arr) {
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i = <span class="code-number">0</span>; i < arr.length; i++) {
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> j = <span class="code-number">0</span>; j < arr.length - i - <span class="code-number">1</span>; j++) {
+        <span class="code-keyword">if</span>(arr[j] > arr[j + <span class="code-number">1</span>]) {
+            <span class="code-type">int</span> temp = arr[j];
+            arr[j] = arr[j + <span class="code-number">1</span>];
+            arr[j + <span class="code-number">1</span>] = temp;
+        }
+    }
+}
+}`,
+            c: `<span class="code-keyword">void</span> <span class="code-function">bubbleSort</span>(<span class="code-type">int</span> arr[], <span class="code-type">int</span> n) {
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i = <span class="code-number">0</span>; i < n; i++) {
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> j = <span class="code-number">0</span>; j < n - i - <span class="code-number">1</span>; j++) {
+        <span class="code-keyword">if</span>(arr[j] > arr[j + <span class="code-number">1</span>]) {
+            <span class="code-type">int</span> temp = arr[j];
+            arr[j] = arr[j + <span class="code-number">1</span>];
+            arr[j + <span class="code-number">1</span>] = temp;
+        }
+    }
+}
+}`
+        },
+        selection: {
+            name: 'Selection Sort',
+            desc: 'Finds minimum and places at beginning',
+            badges: ['inplace'],
+            complexity: { best: 'O(n²)', avg: 'O(n²)', worst: 'O(n²)', space: 'O(1)' },
+            flow: ['START', 'Loop i from 0 to n-1', 'Find min in unsorted', 'Place at position i', 'END'],
+            python: `<span class="code-keyword">def</span> <span class="code-function">selection_sort</span>(arr):
+n = <span class="code-keyword">len</span>(arr)
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-keyword">range</span>(n):
+    min_idx = i
+    <span class="code-keyword">for</span> j <span class="code-keyword">in</span> <span class="code-keyword">range</span>(i+<span class="code-number">1</span>, n):
+        <span class="code-keyword">if</span> arr[j] < arr[min_idx]:
+            min_idx = j
+    arr[i], arr[min_idx] = arr[min_idx], arr[i]`,
+            cpp: `<span class="code-keyword">void</span> <span class="code-function">selectionSort</span>(<span class="code-type">vector</span>&lt;<span class="code-type">int</span>&gt;& arr) {
+<span class="code-type">int</span> n = arr.size();
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i=<span class="code-number">0</span>; i&lt;n; i++) {
+    <span class="code-type">int</span> minIdx = i;
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> j=i+<span class="code-number">1</span>; j&lt;n; j++)
+        <span class="code-keyword">if</span>(arr[j] < arr[minIdx]) minIdx = j;
+    <span class="code-function">swap</span>(arr[i], arr[minIdx]);
+}
+}`,
+            java: `<span class="code-keyword">public static</span> <span class="code-type">void</span> <span class="code-function">selectionSort</span>(<span class="code-type">int</span>[] arr) {
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i=<span class="code-number">0</span>; i<arr.length; i++) {
+    <span class="code-type">int</span> minIdx = i;
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> j=i+<span class="code-number">1</span>; j<arr.length; j++)
+        <span class="code-keyword">if</span>(arr[j] < arr[minIdx]) minIdx = j;
+    <span class="code-type">int</span> temp = arr[i];
+    arr[i] = arr[minIdx]; arr[minIdx] = temp;
+}
+}`,
+            c: `<span class="code-keyword">void</span> <span class="code-function">selectionSort</span>(<span class="code-type">int</span> arr[], <span class="code-type">int</span> n) {
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i=<span class="code-number">0</span>; i<n; i++) {
+    <span class="code-type">int</span> minIdx = i;
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> j=i+<span class="code-number">1</span>; j<n; j++)
+        <span class="code-keyword">if</span>(arr[j] < arr[minIdx]) minIdx = j;
+    <span class="code-type">int</span> t=arr[i]; arr[i]=arr[minIdx]; arr[minIdx]=t;
+}
+}`
+        },
+        insertion: {
+            name: 'Insertion Sort',
+            desc: 'Builds sorted array one element at a time',
+            badges: ['stable', 'inplace'],
+            complexity: { best: 'O(n)', avg: 'O(n²)', worst: 'O(n²)', space: 'O(1)' },
+            flow: ['START', 'For i from 1 to n', 'Key = arr[i]', 'j = i-1', 'While j>=0 and arr[j]>key', 'arr[j+1] = arr[j]', 'arr[j+1] = key', 'END'],
+            python: `<span class="code-keyword">def</span> <span class="code-function">insertion_sort</span>(arr):
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-keyword">range</span>(<span class="code-number">1</span>, <span class="code-keyword">len</span>(arr)):
+    key = arr[i]
+    j = i - <span class="code-number">1</span>
+    <span class="code-keyword">while</span> j >= <span class="code-number">0</span> <span class="code-keyword">and</span> arr[j] > key:
+        arr[j + <span class="code-number">1</span>] = arr[j]
+        j -= <span class="code-number">1</span>
+    arr[j + <span class="code-number">1</span>] = key`,
+            cpp: `<span class="code-keyword">void</span> <span class="code-function">insertionSort</span>(<span class="code-type">vector</span>&lt;<span class="code-type">int</span>&gt;& arr) {
+<span class="code-type">int</span> n = arr.size();
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i=<span class="code-number">1</span>; i<n; i++) {
+    <span class="code-type">int</span> key = arr[i], j = i-<span class="code-number">1</span>;
+    <span class="code-keyword">while</span>(j>=<span class="code-number">0</span> && arr[j]>key) {
+        arr[j+<span class="code-number">1</span>] = arr[j--];
+    }
+    arr[j+<span class="code-number">1</span>] = key;
+}
+}`,
+            java: `<span class="code-keyword">public static</span> <span class="code-type">void</span> <span class="code-function">insertionSort</span>(<span class="code-type">int</span>[] arr) {
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i=<span class="code-number">1</span>; i<arr.length; i++) {
+    <span class="code-type">int</span> key = arr[i], j = i-<span class="code-number">1</span>;
+    <span class="code-keyword">while</span>(j>=<span class="code-number">0</span> && arr[j]>key) {
+        arr[j+<span class="code-number">1</span>] = arr[j--];
+    }
+    arr[j+<span class="code-number">1</span>] = key;
+}
+}`,
+            c: `<span class="code-keyword">void</span> <span class="code-function">insertionSort</span>(<span class="code-type">int</span> arr[], <span class="code-type">int</span> n) {
+<span class="code-keyword">for</span>(<span class="code-type">int</span> i=<span class="code-number">1</span>; i<n; i++) {
+    <span class="code-type">int</span> k=arr[i], j=i-<span class="code-number">1</span>;
+    <span class="code-keyword">while</span>(j>=<span class="code-number">0</span> && arr[j]>k) {
+        arr[j+<span class="code-number">1</span>] = arr[j--];
+    }
+    arr[j+<span class="code-number">1</span>] = k;
+}
+}`
+        },
+        quick: {
+            name: 'Quick Sort',
+            desc: 'Partition around pivot, recursively sort',
+            badges: ['inplace'],
+            complexity: { best: 'O(n log n)', avg: 'O(n log n)', worst: 'O(n²)', space: 'O(log n)' },
+            flow: ['START', 'Choose pivot', 'Partition array', 'Recursively sort left', 'Recursively sort right', 'END'],
+            python: `<span class="code-keyword">def</span> <span class="code-function">quick_sort</span>(arr):
+<span class="code-keyword">if len</span>(arr) <= <span class="code-number">1</span>: <span class="code-keyword">return</span> arr
+pivot = arr[<span class="code-keyword">len</span>(arr) // <span class="code-number">2</span>]
+left = [x <span class="code-keyword">for</span> x <span class="code-keyword">in</span> arr <span class="code-keyword">if</span> x < pivot]
+mid = [x <span class="code-keyword">for</span> x <span class="code-keyword">in</span> arr <span class="code-keyword">if</span> x == pivot]
+right = [x <span class="code-keyword">for</span> x <span class="code-keyword">in</span> arr <span class="code-keyword">if</span> x > pivot]
+<span class="code-keyword">return</span> quick_sort(left) + mid + quick_sort(right)`,
+            cpp: `<span class="code-keyword">void</span> <span class="code-function">quickSort</span>(<span class="code-type">vector</span>&lt;<span class="code-type">int</span>&gt;& arr, <span class="code-type">int</span> low, <span class="code-type">int</span> high) {
+<span class="code-keyword">if</span>(low < high) {
+    <span class="code-type">int</span> pivot = arr[high];
+    <span class="code-type">int</span> i = low - <span class="code-number">1</span>;
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> j=low; j<high; j++) {
+        <span class="code-keyword">if</span>(arr[j] <= pivot) {
+            i++;
+            <span class="code-function">swap</span>(arr[i], arr[j]);
+        }
+    }
+    <span class="code-function">swap</span>(arr[i+<span class="code-number">1</span>], arr[high]);
+    <span class="code-type">int</span> pi = i + <span class="code-number">1</span>;
+    <span class="code-function">quickSort</span>(arr, low, pi-<span class="code-number">1</span>);
+    <span class="code-function">quickSort</span>(arr, pi+<span class="code-number">1</span>, high);
+}
+}`,
+            java: `<span class="code-keyword">public static</span> <span class="code-type">void</span> <span class="code-function">quickSort</span>(<span class="code-type">int</span>[] arr, <span class="code-type">int</span> low, <span class="code-type">int</span> high) {
+<span class="code-keyword">if</span>(low < high) {
+    <span class="code-type">int</span> pi = partition(arr, low, high);
+    <span class="code-function">quickSort</span>(arr, low, pi-<span class="code-number">1</span>);
+    <span class="code-function">quickSort</span>(arr, pi+<span class="code-number">1</span>, high);
+}
+}`,
+            c: `<span class="code-keyword">void</span> <span class="code-function">quickSort</span>(<span class="code-type">int</span> arr[], <span class="code-type">int</span> low, <span class="code-type">int</span> high) {
+<span class="code-keyword">if</span>(low < high) {
+    <span class="code-type</span>+<span class="code-number">1</span>]);
+    <span class="code-function">quickSort</span>(arr, pi+<span class="code-number">1</span>, high);
+}
+}`
+        },
+        merge: {
+            name: 'Merge Sort',
+            desc: 'Divide, conquer, and merge sorted halves',
+            badges: ['stable'],
+            complexity: { best: 'O(n log n)', avg: 'O(n log n)', worst: 'O(n log n)', space: 'O(n)' },
+            flow: ['START', 'Divide array in half', 'Recursively sort halves', 'Merge sorted halves', 'END'],
+            python: `<span class="code-keyword">def</span> <span class="code-function">merge_sort</span>(arr):
+<span class="code-keyword">if len</span>(arr) <= <span class="code-number">1</span>: <span class="code-keyword">return</span> arr
+mid = <span class="code-keyword">len</span>(arr) // <span class="code-number">2</span>
+left = merge_sort(arr[:mid])
+right = merge_sort(arr[mid:])
+<span class="code-keyword">return</span> merge(left, right)
+
+<span class="code-keyword">def</span> <span class="code-function">merge</span>(left, right):
+    result = []
+    i = j = <span class="code-number">0</span>
+    <span class="code-keyword">while</span> i < <span class="code-keyword">len</span>(left) <span class="code-keyword">and</span> j < <span class="code-keyword">len</span>(right):
+        <span class="code-keyword">if</span> left[i] <= right[j]:
+            result.append(left[i]); i += <span class="code-number">1</span>
+        <span class="code-keyword">else</span>:
+            result.append(right[j]); j += <span class="code-number">1</span>
+    result.extend(left[i:]); result.extend(right[j:])
+    <span class="code-keyword">return</span> result`,
+            cpp: `<span class="code-keyword">void</span> <span class="code-function">mergeSort</span>(<span class="code-type">vector</span>&lt;<span class="code-type">int</span>&gt;& arr, <span class="code-type">int</span> left, <span class="code-type">int</span> right) {
+<span class="code-keyword">if</span>(left >= right) <span class="code-keyword">return</span>;
+    <span class="code-type">int</span> mid = left + (right - left) / <span class="code-number">2</span>;
+    <span class="code-function">mergeSort</span>(arr, left, mid);
+    <span class="code-function">mergeSort</span>(arr, mid+<span class="code-number">1</span>, right);
+    <span class="code-function">merge</span>(arr, left, mid, right);
+}
+
+<span class="code-keyword">void</span> <span class="code-function">merge</span>(<span class="code-type">vector</span>&lt;<span class="code-type">int</span>&gt;& arr, <span class="code-type">int</span> l, <span class="code-type">int</span> m, <span class="code-type">int</span> r) {
+    <span class="code-type">vector</span>&lt;<span class="code-type">int</span>&gt; temp(r - l + <span class="code-number">1</span>);
+    <span class="code-type">int</span> i=l, j=m+<span class="code-number">1</span>, k=<span class="code-number">0</span>;
+    <span class="code-keyword">while</span>(i<=m && j<=r) temp[k++] = (arr[i]<=arr[j]) ? arr[i++] : arr[j++];
+    <span class="code-keyword">while</span>(i<=m) temp[k++] = arr[i++];
+    <span class="code-keyword">while</span>(j<=r) temp[k++] = arr[j++];
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> x=<span class="code-number">0</span>; x<k; x++) arr[l+x] = temp[x];
+}`,
+            java: `<span class="code-keyword">public static</span> <span class="code-type">void</span> <span class="code-function">mergeSort</span>(<span class="code-type">int</span>[] arr, <span class="code-type">int</span> left, <span class="code-type">int</span> right) {
+<span class="code-keyword">if</span>(left >= right) <span class="code-keyword">return</span>;
+    <span class="code-type">int</span> mid = left + (right - left) / <span class="code-number">2</span>;
+    <span class="code-function">mergeSort</span>(arr, left, mid);
+    <span class="code-function">mergeSort</span>(arr, mid+<span class="code-number">1</span>, right);
+    <span class="code-function">merge</span>(arr, left, mid, right);
+}
+
+<span class="code-keyword">private static</span> <span class="code-type">void</span> <span class="code-function">merge</span>(<span class="code-type">int</span>[] arr, <span class="code-type">int</span> l, <span class="code-type">int</span> m, <span class="code-type">int</span> r) {
+    <span class="code-type">int</span>[] temp = <span class="code-keyword">new</span> <span class="code-type">int</span>[r-l+<span class="code-number">1</span>];
+    <span class="code-type">int</span> i=l, j=m+<span class="code-number">1</span>, k=<span class="code-number">0</span>;
+    <span class="code-keyword">while</span>(i<=m && j<=r) temp[k++] = arr[i]<=arr[j] ? arr[i++] : arr[j++];
+    <span class="code-keyword">while</span>(i<=m) temp[k++] = arr[i++];
+    <span class="code-keyword">while</span>(j<=r) temp[k++] = arr[j++];
+    System.arraycopy(temp, <span class="code-number">0</span>, arr, l, k);
+}`,
+            c: `<span class="code-keyword">void</span> <span class="code-function">mergeSort</span>(<span class="code-type">int</span> arr[], <span class="code-type">int</span> l, <span class="code-type">int</span> r) {
+<span class="code-keyword">if</span>(l >= r) <span class="code-keyword">return</span>;
+    <span class="code-type">int</span> m = l + (r - l) / <span class="code-number">2</span>;
+    <span class="code-function">mergeSort</span>(arr, l, m);
+    <span class="code-function">mergeSort</span>(arr, m+<span class="code-number">1</span>, r);
+    <span class="code-function">merge</span>(arr, l, m, r);
+}
+
+<span class="code-keyword">void</span> <span class="code-function">merge</span>(<span class="code-type">int</span> arr[], <span class="code-type">int</span> l, <span class="code-type">int</span> m, <span class="code-type">int</span> r) {
+    <span class="code-type">int</span> n1 = m - l + <span class="code-number">1</span>, n2 = r - m;
+    <span class="code-type">int</span> L[n1], R[n2];
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> i=<span class="code-number">0</span>; i<n1; i++) L[i] = arr[l+i];
+    <span class="code-keyword">for</span>(<span class="code-type">int</span> j=<span class="code-number">0</span>; j<n2; j++) R[j] = arr[m+<span class="code-number">1</span>+j];
+    <span class="code-type">int</span> i=<span class="code-number">0</span>, j=<span class="code-number">0</span>, k=l;
+    <span class="code-keyword">while</span>(i<n1 && j<n2) arr[k++] = L[i]<=R[j] ? L[i++] : R[j++];
+    <span class="code-keyword">while</span>(i<n1) arr[k++] = L[i++];
+    <span class="code-keyword">while</span>(j<n2) arr[k++] = R[j++];
+}`
+        }
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // STATE
+    // ═══════════════════════════════════════════════════════════════
+    let arrayData = [];
+    let isSorting = false;
+    let currentAlgo = 'bubble';
+    let sortTimeout = null;
+    let currentCodeLang = 'python';
+
+    // ═══════════════════════════════════════════════════════════════
+    // INITIALIZATION
+    // ═══════════════════════════════════════════════════════════════
+    document.addEventListener('DOMContentLoaded', () => {
+        renderAlgoGrid();
+        generateArray();
+        updateComplexityDisplay();
+        loadTheory();
+        loadFlowchart();
+        setupEventListeners();
+    });
+
+    // ═══════════════════════════════════════════════════════════════════
+    // EVENT LISTENERS
+    // ═══════════════════════════════════════════════════════════════════
+function setupEventListeners() {
+    document.getElementById('arraySize').addEventListener('input', (e) => {
+        document.getElementById('sizeValue').textContent = e.target.value;
+        generateArray();
+    });
+
+    document.getElementById('speedSlider').addEventListener('input', (e) => {
+        // Convert slider value (1-10) to delay (500ms to 50ms)
+        // Higher slider = faster speed = lower delay
+        window.sortDelay = 550 - (e.target.value * 50);
+        document.getElementById('speedValue').textContent = e.target.value + 'x';
+    });
+
+    // Initialize delay (medium speed)
+    window.sortDelay = 300;
+}
+
+    // ═══════════════════════════════════════════════════════════════
+    // ALGORITHM GRID
+    // ═══════════════════════════════════════════════════════════════
+    function renderAlgoGrid() {
+        const grid = document.getElementById('algoGrid');
+        grid.innerHTML = '';
+        
+        Object.entries(algorithms).forEach(([key, algo]) => {
+            const card = document.createElement('div');
+            card.className = `algo-card ${key === currentAlgo ? 'active' : ''}`;
+            card.onclick = () => selectAlgorithm(key);
+            
+            const badges = algo.badges.map(b => 
+                `<span class="algo-badge ${b}">${b}</span>`
+            ).join('');
+
+            card.innerHTML = `
+                <div class="algo-card-header">
+                    <span class="algo-title">${algo.name}</span>
+                    ${badges}
+                </div>
+                <p class="algo-desc">${algo.desc}</p>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function selectAlgorithm(key) {
+        if (isSorting) return;
+        currentAlgo = key;
+        renderAlgoGrid();
+        updateComplexityDisplay();
+        loadTheory();
+        loadFlowchart();
+        showCode(currentCodeLang);
+    }
+
+    function updateComplexityDisplay() {
+        const algo = algorithms[currentAlgo];
+        const comp = algo.complexity;
+        document.getElementById('complexityDisplay').innerHTML = `
+            <div class="complexity-item">
+                <div class="complexity-label">Best</div>
+                <div class="complexity-value">${comp.best}</div>
+            </div>
+            <div class="complexity-item">
+                <div class="complexity-label">Average</div>
+                <div class="complexity-value">${comp.avg}</div>
+            </div>
+            <div class="complexity-item">
+                <div class="complexity-label">Worst</div>
+                <div class="complexity-value">${comp.worst}</div>
+            </div>
+        `;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ARRAY VISUALIZATION
+    // ═══════════════════════════════════════════════════════════════
+    function generateArray() {
+        const size = parseInt(document.getElementById('arraySize').value);
+        arrayData = [];
+        
+        for (let i = 0; i < size; i++) {
+            arrayData.push(Math.floor(Math.random() * 80) + 10);
+        }
+        
+        renderArray();
+        document.getElementById('stepMessage').textContent = 'Ready to visualize';
+    }
+
+    function renderArray(indices = {}, states = {}) {
+        const display = document.getElementById('arrayDisplay');
+        display.innerHTML = '';
+        
+        const maxVal = Math.max(...arrayData);
+        
+        arrayData.forEach((val, idx) => {
+            const cell = document.createElement('div');
+            cell.className = 'array-cell';
+            
+            if (indices.comparing?.includes(idx)) cell.classList.add('comparing');
+            if (indices.swapping?.includes(idx)) cell.classList.add('swapping');
+            if (states.sorted?.includes(idx)) cell.classList.add('sorted');
+            if (indices.pivot === idx) cell.classList.add('pivot');
+            
+            const height = (val / maxVal) * 220;
+            
+            cell.innerHTML = `
+                <div class="cell-bar" style="height: ${height}px"></div>
+                <span class="cell-value">${val}</span>
+                <span class="cell-index">${idx}</span>
+            `;
+            
+            display.appendChild(cell);
+        });
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // VISUALIZATION CONTROL
+    // ═══════════════════════════════════════════════════════════════
+    function toggleVisualization() {
+        const btn = document.getElementById('startBtn');
+        
+        if (isSorting) {
+            clearTimeout(sortTimeout);
+            isSorting = false;
+            btn.innerHTML = '<i class="fas fa-play"></i> Visualize';
+            btn.classList.remove('btn-secondary');
+            btn.classList.add('btn-primary');
+            return;
+        }
+        
+        isSorting = true;
+        btn.innerHTML = '<i class="fas fa-stop"></i> Stop';
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-secondary');
+        
+        runSort();
+    }
+
+    async function runSort() {
+        const stepMsg = document.getElementById('stepMessage');
+        
+        switch(currentAlgo) {
+            case 'bubble': await bubbleSort(stepMsg); break;
+            case 'selection': await selectionSort(stepMsg); break;
+            case 'insertion': await insertionSort(stepMsg); break;
+            case 'quick': await quickSort(0, arrayData.length - 1, stepMsg); break;
+            case 'merge': await mergeSort(0, arrayData.length - 1, stepMsg); break;
+        }
+        
+        if (isSorting) {
+            isSorting = false;
+            document.getElementById('startBtn').innerHTML = '<i class="fas fa-play"></i> Visualize';
+            document.getElementById('startBtn').classList.remove('btn-secondary');
+            document.getElementById('startBtn').classList.add('btn-primary');
+            
+            // Mark all as sorted
+            renderArray({}, { sorted: arrayData.map((_, i) => i) });
+            stepMsg.textContent = 'Array sorted!';
+            showModal();
+        }
+    }
+
+    function sleep() {
+        return new Promise(resolve => {
+            sortTimeout = setTimeout(resolve, window.sortDelay);
+        });
+    }
+
+    // In updateStep(), remove the parameter since sleep() now uses the global:
+    async function updateStep(message) {
+        if (!isSorting) return;
+        document.getElementById('stepMessage').textContent = message;
+        await sleep();
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // SORTING ALGORITHMS
+    // ═══════════════════════════════════════════════════════════════
+    async function bubbleSort(stepMsg) {
+        const n = arrayData.length;
+        
+        for (let i = 0; i < n - 1 && isSorting; i++) {
+            for (let j = 0; j < n - i - 1 && isSorting; j++) {
+                renderArray({ comparing: [j, j + 1] });
+                await updateStep(`Comparing arr[${j}]=${arrayData[j]} and arr[${j + 1}]=${arrayData[j + 1]}`);
+                
+                if (arrayData[j] > arrayData[j + 1]) {
+                    renderArray({ swapping: [j, j + 1] });
+                    await updateStep(`Swapping ${arrayData[j]} > ${arrayData[j + 1]}`);
+                    
+                    [arrayData[j], arrayData[j + 1]] = [arrayData[j + 1], arrayData[j]];
+                    renderArray({ swapping: [j, j + 1] });
+                    await updateStep(`Swapped!`);
+                }
+            }
+            renderArray({}, { sorted: [n - 1 - i] });
+        }
+        renderArray({}, { sorted: [0] });
+    }
+
+    async function selectionSort(stepMsg) {
+        const n = arrayData.length;
+        
+        for (let i = 0; i < n - 1 && isSorting; i++) {
+            let minIdx = i;
+            renderArray({ comparing: [i], pivot: minIdx });
+            await updateStep(`Finding minimum from index ${i}`);
+            
+            for (let j = i + 1; j < n && isSorting; j++) {
+                renderArray({ comparing: [j], pivot: minIdx });
+                await updateStep(`Comparing arr[${j}]=${arrayData[j]} with min=${arrayData[minIdx]}`);
+                
+                if (arrayData[j] < arrayData[minIdx]) {
+                    minIdx = j;
+                    renderArray({ pivot: minIdx });
+                    await updateStep(`New minimum found at index ${minIdx}`);
+                }
+            }
+            
+            if (minIdx !== i) {
+                renderArray({ swapping: [i, minIdx] });
+                await updateStep(`Swapping arr[${i}] with min at ${minIdx}`);
+                
+                [arrayData[i], arrayData[minIdx]] = [arrayData[minIdx], arrayData[i]];
+                renderArray({ swapping: [i, minIdx] });
+            }
+            
+            renderArray({}, { sorted: [i] });
+            await updateStep(`Element ${arrayData[i]} is in correct position`);
+        }
+        renderArray({}, { sorted: [n - 1] });
+    }
+
+    async function insertionSort(stepMsg) {
+        const n = arrayData.length;
+        
+        for (let i = 1; i < n && isSorting; i++) {
+            const key = arrayData[i];
+            let j = i - 1;
+            
+            renderArray({ comparing: [i, j] });
+            await updateStep(`Key = ${key}, comparing with arr[${j}]=${arrayData[j]}`);
+            
+            while (j >= 0 && arrayData[j] > key && isSorting) {
+                arrayData[j + 1] = arrayData[j];
+                renderArray({ comparing: [j + 1], swapping: [j] });
+                await updateStep(`Shifting arr[${j}] to position ${j + 1}`);
+                
+                j--;
+                if (j >= 0) {
+                    renderArray({ comparing: [j + 1] });
+                }
+            }
+            
+            arrayData[j + 1] = key;
+            renderArray({}, { sorted: [...Array(i).keys()] });
+            await updateStep(`Inserted ${key} at position ${j + 1}`);
+        }
+        renderArray({}, { sorted: arrayData.map((_, i) => i) });
+    }
+
+    async function quickSort(low, high, stepMsg) {
+        if (isSorting && low < high) {
+            const pi = await partition(low, high, stepMsg);
+            await quickSort(low, pi - 1, stepMsg);
+            await quickSort(pi + 1, high, stepMsg);
+        }
+    }
+
+    async function partition(low, high, stepMsg) {
+        const pivot = arrayData[high];
+        renderArray({ pivot: high });
+        await updateStep(`Pivot = ${pivot}`);
+        
+        let i = low - 1;
+        
+        for (let j = low; j < high && isSorting; j++) {
+            renderArray({ comparing: [j], pivot: high });
+            await updateStep(`Comparing ${arrayData[j]} with pivot ${pivot}`);
+            
+            if (arrayData[j] < pivot) {
+                i++;
+                [arrayData[i], arrayData[j]] = [arrayData[j], arrayData[i]];
+                renderArray({ swapping: [i, j] });
+            }
+        }
+        
+        [arrayData[i + 1], arrayData[high]] = [arrayData[high], arrayData[i + 1]];
+        renderArray({ swapping: [i + 1, high] });
+        await updateStep(`Placed pivot at correct position ${i + 1}`);
+        
+        renderArray({}, { sorted: [i + 1] });
+        return i + 1;
+    }
+
+    async function mergeSort(left, right, stepMsg) {
+        if (left < right && isSorting) {
+            const mid = Math.floor((left + right) / 2);
+            
+            await mergeSort(left, mid, stepMsg);
+            await mergeSort(mid + 1, right, stepMsg);
+            await merge(left, mid, right, stepMsg);
+        }
+    }
+
+    async function merge(left, mid, right, stepMsg) {
+        const n1 = mid - left + 1;
+        const n2 = right - mid;
+        
+        const L = new Array(n1);
+        const R = new Array(n2);
+        
+        for (let i = 0; i < n1; i++) L[i] = arrayData[left + i];
+        for (let j = 0; j < n2; j++) R[j] = arrayData[mid + 1 + j];
+        
+        await updateStep(`Merging subarrays [${left}..${mid}] and [${mid + 1}..${right}]`);
+        
+        let i = 0, j = 0, k = left;
+        
+        while (i < n1 && j < n2 && isSorting) {
+            renderArray({ comparing: [left + i, mid + 1 + j] });
+            
+            if (L[i] <= R[j]) {
+                arrayData[k] = L[i];
+                i++;
+            } else {
+                arrayData[k] = R[j];
+                j++;
+            }
+            k++;
+            await updateStep(`Placing element ${arrayData[k - 1]}`);
+        }
+        
+        while (i < n1 && isSorting) {
+            arrayData[k] = L[i];
+            i++;
+            k++;
+        }
+        
+        while (j < n2 && isSorting) {
+            arrayData[k] = R[j];
+            j++;
+            k++;
+        }
+        
+        renderArray({}, { sorted: arrayData.map((_, idx) => idx).filter(idx => idx >= left && idx <= right) });
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // THEORY CONTENT
+    // ═══════════════════════════════════════════════════════════════
+    function loadTheory() {
+        const theoryData = {
+            bubble: {
+                overview: 'Bubble Sort is the simplest sorting algorithm that works by repeatedly swapping adjacent elements if they are in the wrong order.',
+                characteristics: [
+                    'Time Complexity: O(n²) average and worst case',
+                    'Space Complexity: O(1) - in-place sorting',
+                    'Stable: Yes - maintains relative order of equal elements',
+                    'Adaptive: Can be optimized to O(n) for nearly sorted arrays'
+                ],
+                whenToUse: [
+                    'Small datasets (< 1000 elements)',
+                    'Nearly sorted arrays',
+                    'Memory is constrained',
+                    'Simplicity is preferred over efficiency'
+                ],
+                pros: [
+                    'Simple to understand and implement',
+                    'Stable sorting algorithm',
+                    'In-place with O(1) extra memory',
+                    'Easy to debug'
+                ],
+                cons: [
+                    'Very slow for large datasets',
+                    'Not suitable for large arrays',
+                    'Many swaps can be expensive'
+                ]
+            },
+            selection: {
+                overview: 'Selection Sort divides the array into sorted and unsorted portions, repeatedly finding the minimum element from the unsorted portion and placing it at the beginning.',
+                characteristics: [
+                    'Time Complexity: O(n²) in all cases',
+                    'Space Complexity: O(1) - in-place sorting',
+                    'Stable: No - can change relative order',
+                    'Adaptive: No - same time always'
+                ],
+                whenToUse: [
+                    'Memory is very limited',
+                    'Writing to memory is expensive (like EEPROM)',
+                    'Small lists where simple allocation matters'
+                ],
+                pros: [
+                    'Simple to understand',
+                    'Performs well on small lists',
+                    'Always O(n) swaps (max n-1 swaps)'
+                ],
+                cons: [
+                    'O(n²) time complexity always',
+                    'Not stable',
+                    'Cannot efficiently handle partially sorted'
+                ]
+            },
+            insertion: {
+                overview: 'Insertion Sort builds the sorted array one element at a time by inserting each element into its correct position relative to the already sorted elements.',
+                characteristics: [
+                    'Time Complexity: O(n) best, O(n²) worst',
+                    'Space Complexity: O(1) - in-place sorting',
+                    'Stable: Yes',
+                    'Adaptive: Yes - fast for nearly sorted'
+                ],
+                whenToUse: [
+                    'Small datasets',
+                    'Nearly sorted arrays',
+                    'Online sorting (streaming data)',
+                    'Interactive use (shows progress)'
+                ],
+                pros: [
+                    'Efficient for small/nearly sorted data',
+                    'Stable',
+                    'In-place',
+                    'Simple implementation'
+                ],
+                cons: [
+                    'O(n²) for reverse sorted data',
+                    'Not efficient for large arrays'
+                ]
+            },
+            quick: {
+                overview: 'Quick Sort is a divide-and-conquer algorithm that selects a pivot and partitions the array around it, then recursively sorts the partitions.',
+                characteristics: [
+                    'Time Complexity: O(n log n) best/avg, O(n²) worst',
+                    'Space Complexity: O(log n) for recursion',
+                    'Stable: No',
+                    'Adaptive: No in worst case'
+                ],
+                whenToUse: [
+                    'General purpose sorting',
+                    'Large datasets',
+                    'In-memory sorting',
+                    'When average performance matters'
+                ],
+                pros: [
+                    'Fast average performance',
+                    'In-place sorting',
+                    'Cache-friendly'
+                ],
+                cons: [
+                    'Not stable',
+                    'Worst case O(n²)',
+                    'Recursion depth can be issue'
+                ]
+            },
+            merge: {
+                overview: 'Merge Sort is a stable, divide-and-conquer algorithm that divides the array in half, recursively sorts each half, then merges them back together.',
+                characteristics: [
+                    'Time Complexity: O(n log n) all cases',
+                    'Space Complexity: O(n)',
+                    'Stable: Yes',
+                    'Adaptive: No'
+                ],
+                whenToUse: [
+                    'When stability is required',
+                    'External sorting (files)',
+                    'Linked lists',
+                    'When worst-case guarantee needed'
+                ],
+                pros: [
+                    'Guaranteed O(n log n)',
+                    'Stable',
+                    'Predictable performance'
+                ],
+                cons: [
+                    'O(n) extra space needed',
+                    'Not in-place',
+                    'Slower in practice than QuickSort'
+                ]
+            }
+        };
+
+        const data = theoryData[currentAlgo];
+        document.getElementById('theoryContent').innerHTML = `
+            <div class="theory-content">
+                <div class="theory-section">
+                    <h4><i class="fas fa-info-circle"></i> Overview</h4>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">${data.overview}</p>
+                </div>
+                <div class="theory-section">
+                    <h4><i class="fas fa-cog"></i> Characteristics</h4>
+                    <ul>
+                        ${data.characteristics.map(c => `<li>${c}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="theory-section">
+                    <h4><i class="fas fa-check"></i> When to Use</h4>
+                    <ul>
+                        ${data.whenToUse.map(w => `<li>${w}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="theory-section">
+                    <h4><i class="fas fa-plus"></i> Advantages</h4>
+                    <ul>
+                        ${data.pros.map(p => `<li>${p}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="theory-section">
+                    <h4><i class="fas fa-minus"></i> Disadvantages</h4>
+                    <ul>
+                        ${data.cons.map(c => `<li>${c}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // FLOWCHART
+    // ═══════════════════════════════════════════════════════════════════
+    function loadFlowchart() {
+        const algo = algorithms[currentAlgo];
+        
+        let flowHTML = '';
+        
+        if (currentAlgo === 'bubble') {
+            flowHTML = `
+                <div class="flow-node start">START</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">n = array.length</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">for i = 0 to n-1</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">for j = 0 to n-i-1</div>
+                <div class="flow-line"></div>
+                <div class="flow-node decision">arr[j] > arr[j+1]?</div>
+                <div class="flow-line"></div>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center;">
+                    <div style="text-align: center;">
+                        <span style="color: var(--success);">Yes</span>
+                        <div class="flow-node process" style="margin-top: 0.5rem;">Swap(arr[j], arr[j+1])</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <span style="color: var(--error);">No</span>
+                    </div>
+                </div>
+                <div class="flow-line"></div>
+                <div class="flow-node end">END</div>
+            `;
+        } else if (currentAlgo === 'selection') {
+            flowHTML = `
+                <div class="flow-node start">START</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">for i = 0 to n-1</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">minIdx = i</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">for j = i+1 to n</div>
+                <div class="flow-line"></div>
+                <div class="flow-node decision">arr[j] < arr[minIdx]?</div>
+                <div class="flow-line"></div>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center;">
+                    <div style="text-align: center;">
+                        <span style="color: var(--success);">Yes</span>
+                        <div class="flow-node process" style="margin-top: 0.5rem;">minIdx = j</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <span style="color: var(--error);">No</span>
+                    </div>
+                </div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">Swap(arr[i], arr[minIdx])</div>
+                <div class="flow-line"></div>
+                <div class="flow-node end">END</div>
+            `;
+        } else if (currentAlgo === 'insertion') {
+            flowHTML = `
+                <div class="flow-node start">START</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">for i = 1 to n-1</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">key = arr[i]</div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">j = i - 1</div>
+                <div class="flow-line"></div>
+                <div class="flow-node decision">j >= 0 AND arr[j] > key?</div>
+                <div class="flow-line"></div>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center;">
+                    <div style="text-align: center;">
+                        <span style="color: var(--success);">Yes</span>
+                        <div class="flow-node process" style="margin-top: 0.5rem;">arr[j+1] = arr[j]</div>
+                        <div class="flow-node process">j = j - 1</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <span style="color: var(--error);">No</span>
+                    </div>
+                </div>
+                <div class="flow-line"></div>
+                <div class="flow-node process">arr[j+1] = key</div>
+                <div class="flow-line"></div>
+                <div class="flow-node end">END</div>
+            `;
+        } else if (currentAlgo === 'quick') {
+            flowHTML = `
+                <div class="flow-node start">START QuickSort(arr, low, high)</div>
+                <div class="flow-line"></div>
+                <div class="flow-node decision">low < high?</div>
+                <div class="flow-line"></div>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center;">
+                    <div style="text-align: center;">
+                        <span style="color: var(--success);">Yes</span>
+                        <div class="flow-node process" style="margin-top: 0.5rem;">pivot = Partition(arr, low, high)</div>
+                                                <div class="flow-node process">QuickSort(low, pivot-1)</div>
+                        <div class="flow-node process">QuickSort(pivot+1, high)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <span style="color: var(--error);">No</span>
+                    </div>
+                </div>
+                <div class="flow-line"></div>
+                <div class="flow-node end">END</div>
+            `;
+        } else if (currentAlgo === 'merge') {
+            flowHTML = `
+                <div class="flow-node start">START MergeSort(arr, left, right)</div>
+                <div class="flow-line"></div>
+                <div class="flow-node decision">left < right?</div>
+                <div class="flow-line"></div>
+                <div style="display: flex; justify-content: center; gap: 2rem; align-items: center;">
+                    <div style="text-align: center;">
+                        <span style="color: var(--success);">Yes</span>
+                        <div class="flow-node process" style="margin-top: 0.5rem;">mid = (left + right) / 2</div>
+                        <div class="flow-node process">MergeSort(left, mid)</div>
+                        <div class="flow-node process">MergeSort(mid+1, right)</div>
+                        <div class="flow-node process">Merge(left, mid, right)</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <span style="color: var(--error);">No</span>
+                    </div>
+                </div>
+                <div class="flow-line"></div>
+                <div class="flow-node end">END</div>
+            `;
+        }
+        
+        document.getElementById('flowchartContent').innerHTML = flowHTML;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // CODE DISPLAY
+    // ═══════════════════════════════════════════════════════════════
+    function showCode(lang) {
+        currentCodeLang = lang;
+        
+        document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.lang === lang);
+        });
+        
+        const algo = algorithms[currentAlgo];
+        const code = algo[lang] || algo.python;
+        document.getElementById('codeBlock').innerHTML = code;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // NAVIGATION
+    // ═══════════════════════════════════════════════════════════════
+    function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.remove('active');
+        });
+        document.getElementById(sectionId).classList.add('active');
+        
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        event.target.closest('.nav-tab')?.classList.add('active');
+        
+        // Re-render relevant content
+        if (sectionId === 'syntax') {
+            showCode(currentCodeLang);
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // MODAL
+    // ═══════════════════════════════════════════════════════════════════
+    function showModal() {
+        const algo = algorithms[currentAlgo];
+        document.getElementById('modalTitle').textContent = 'Complete!';
+        document.getElementById('modalMsg').textContent = `${algo.name} has sorted the array successfully!`;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    // Close modal on background click
+    document.getElementById('modal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('modal')) {
+            closeModal();
+        }
+    });
+    </script>
+</body>
+</html>

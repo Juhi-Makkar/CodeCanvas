@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Theory - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --success: #10B981;
+        --error: #EF4444;
+        --warning: #F59E0B;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1000px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .theory-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    h4 {
+        color: var(--accent-purple);
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    ul, ol {
+        list-style-position: inside;
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        padding-left: 10px;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+
+    /* ===================== VISUAL BOXES ===================== */
+    .visual-container {
+        background: #161b33;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 20px 0;
+        overflow-x: auto;
+        border: 1px solid var(--accent-purple);
+    }
+
+    .visual-title {
+        text-align: center;
+        color: var(--accent-blue);
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    /* Array Visual Representation */
+    .array-visual {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .array-cell {
+        min-width: 60px;
+        height: 60px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--text-primary);
+        font-size: 18px;
+        border-radius: 6px;
+        position: relative;
+    }
+
+    .array-cell::after {
+        content: attr(data-index);
+        position: absolute;
+        bottom: -25px;
+        font-size: 12px;
+        color: var(--accent-purple);
+        font-weight: bold;
+    }
+
+    /* Memory Grid */
+    .memory-layout {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    .memory-block {
+        background: rgba(79, 195, 247, 0.15);
+        border: 1px solid var(--accent-blue);
+        padding: 15px;
+        text-align: center;
+        border-radius: 6px;
+        min-width: 100px;
+    }
+
+    .memory-block .addr {
+        font-size: 12px;
+        color: var(--accent-purple);
+    }
+
+    .memory-block .value {
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--text-primary);
+    }
+
+    .arrow-down {
+        text-align: center;
+        font-size: 30px;
+        color: var(--accent-purple);
+        margin: 10px 0;
+    }
+
+    /* Info Box */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid var(--warning);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--success);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .error-box {
+        background: rgba(239, 68, 68, 0.1);
+        border-left: 4px solid var(--error);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    .comparison-table th, .comparison-table td {
+        border: 1px solid var(--accent-purple);
+        padding: 12px;
+        text-align: left;
+    }
+
+    .comparison-table th {
+        background: var(--accent-purple);
+        color: var(--text-primary);
+    }
+
+    .comparison-table tr:nth-child(even) {
+        background: rgba(139,108,246,0.1);
+    }
+
+    /* 2D Array Grid */
+    .matrix-container {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+    }
+
+    .matrix-visual {
+        display: grid;
+        grid-template-columns: repeat(3, 50px);
+        gap: 5px;
+    }
+
+    .matrix-cell {
+        width: 50px;
+        height: 50px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--text-primary);
+        border-radius: 4px;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+    <!-- Navbar -->
+<header class="navbar">
+    <a href="arrayGS.html" class="logo">CodeCanvas - Array</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/arrayGS.html">Back To Array</a></li>
+            <li><a href="../array/theory.html" class="active">Theory</a></li>
+            <li><a href="../array/syntax.html">Syntax</a></li>
+            <li><a href="../array/algorithm.html">Algorithm</a></li>
+            <li><a href="../array/complexity.html">Complexity</a></li>
+            <li><a href="../array/flowchart.html">Flowchart</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="theory">
+    <div class="section-content">
+
+        <!-- Header -->
+        <div class="theory-card">
+            <h2>Arrays - Complete Theory Guide</h2>
+            <p style="font-size: 18px; color: var(--text-primary);">
+                An array is the most fundamental and widely used data structure in computer programming. 
+                It serves as the building block for many other data structures and algorithms.
+            </p>
+        </div>
+
+        <!-- What is Array -->
+        <div class="theory-card" id="what-is-array">
+            <h3>1. What is an Array?</h3>
+            <p>An <strong>Array</strong> is a linear data structure that collects elements of the same data type and stores them in contiguous (adjacent) memory locations.</p>
+            
+            <div class="info-box">
+                <strong>Simple Definition:</strong> An array is like a row of lockers in a school corridor. Each locker has a number (index) and can store one item (element) of the same type.
+            </div>
+
+            <p>For example, if you want to store 5 numbers, instead of creating 5 separate variables (<code>a1, a2, a3, a4, a5</code>), you can simply create one array <code>arr[5]</code> and access each element using its index.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Visual Representation of an Array</div>
+                <div class="array-visual">
+                    <div class="array-cell" data-index="0">10</div>
+                    <div class="array-cell" data-index="1">20</div>
+                    <div class="array-cell" data-index="2">30</div>
+                    <div class="array-cell" data-index="3">40</div>
+                    <div class="array-cell" data-index="4">50</div>
+                </div>
+                <p style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                    Index:    0 &nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp;&nbsp; 3 &nbsp;&nbsp;&nbsp; 4
+                </p>
+            </div>
+        </div>
+
+        <!-- Why Use Arrays -->
+        <div class="theory-card" id="why-use">
+            <h3>2. Why Do We Need Arrays?</h3>
+            <p>Without arrays, managing multiple variables of the same type would be chaotic. Here's why arrays are essential:</p>
+            
+            <ul>
+                <li><strong>Code Reusability:</strong> Instead of writing code for each variable, we can use loops to process all elements.</li>
+                <li><strong>Faster Access:</strong> Any element can be accessed directly in O(1) time using its index.</li>
+                <li><strong>Memory Efficiency:</strong> Arrays store elements in contiguous memory locations, making them cache-friendly.</li>
+                <li><strong>Foundation for Other Data Structures:</strong> Stacks, Queues, Heaps, and Hash Tables are built using arrays.</li>
+                <li><strong>Ease of Implementation:</strong> Simple to understand, implement, and use in algorithms.</li>
+            </ul>
+
+            <div class="visual-container">
+                <div class="visual-title">Without Array vs With Array</div>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Task: Store 5 numbers and print them</th>
+                        <th>Without Array</th>
+                        <th>With Array</th>
+                    </tr>
+                    <tr>
+                        <td>Code</td>
+                        <td>
+                            int a=10, b=20, c=30, d=40, e=50;<br>
+                            printf("%d", a);<br>
+                            printf("%d", b);<br>
+                            ... (repeat 5 times)
+                        </td>
+                        <td>
+                            int arr[5] = {10,20,30,40,50};<br>
+                            for(int i=0; i<5; i++)<br>
+                            &nbsp;&nbsp;printf("%d", arr[i]);
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Characteristics -->
+        <div class="theory-card" id="characteristics">
+            <h3>3. Key Characteristics of Arrays</h3>
+            
+            <ul>
+                <li><strong>Linear Order:</strong> Elements are arranged in a straight line (either row or column).</li>
+                <li><strong>Fixed Size:</strong> In most languages, the size must be declared at the beginning (Static Array).</li>
+                <li><strong>Indexing:</strong> 
+                    <ul>
+                        <li>Indices start from <strong>0</strong> (not 1).</li>
+                        <li>If an array has <strong>n</strong> elements, valid indices are <strong>0 to n-1</strong>.</li>
+                    </ul>
+                </li>
+                <li><strong>Contiguous Memory:</strong> All elements are stored in adjacent memory locations.</li>
+                <li><strong>Homogeneous Elements:</strong> All elements must be of the same data type (e.g., all integers).</li>
+                <li><strong>Random Access:</strong> Any element can be accessed directly without traversing from the beginning.</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>Important:</strong> Arrays have fixed size in languages like C, C++, and Java. If you need a dynamic size, use ArrayList (Java), Vector (C++), or List (Python).
+            </div>
+        </div>
+
+        <!-- Types of Arrays -->
+        <div class="theory-card" id="types">
+            <h3>4. Types of Arrays</h3>
+
+            <h4>Based on Dimensions:</h4>
+            
+            <h4>a) One-Dimensional (1D) Array</h4> 
+            <p>A single row of elements. This is the simplest form of an array where elements are stored in a linear sequence.</p>
+                        <div class="visual-container">
+                <div class="visual-title">1D Array Example</div>
+                <div class="array-visual">
+                    <div class="array-cell" data-index="0">5</div>
+                    <div class="array-cell" data-index="1">10</div>
+                    <div class="array-cell" data-index="2">15</div>
+                    <div class="array-cell" data-index="3">20</div>
+                    <div class="array-cell" data-index="4">25</div>
+                </div>
+                <p style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                    arr[0] &nbsp; arr[1] &nbsp; arr[2] &nbsp; arr[3] &nbsp; arr[4]
+                </p>
+            </div>
+
+            <h4>b) Two-Dimensional (2D) Array</h4>
+            <p>An array of arrays. Elements are arranged in rows and columns (like a matrix or a table).</p>
+            
+            <div class="visual-container">
+                <div class="visual-title">2D Array Example (3×3 Matrix)</div>
+                <div class="matrix-container">
+                    <div>
+                        <p style="text-align: center; color: var(--accent-blue); margin-bottom: 10px;">Logical View</p>
+                        <div class="matrix-visual">
+                            <div class="matrix-cell">1</div>
+                            <div class="matrix-cell">2</div>
+                            <div class="matrix-cell">3</div>
+                            <div class="matrix-cell">4</div>
+                            <div class="matrix-cell">5</div>
+                            <div class="matrix-cell">6</div>
+                            <div class="matrix-cell">7</div>
+                            <div class="matrix-cell">8</div>
+                            <div class="matrix-cell">9</div>
+                        </div>
+                    </div>
+                    <div>
+                        <p style="text-align: center; color: var(--accent-blue); margin-bottom: 10px;">Memory View (Row-Major)</p>
+                        <div class="array-visual">
+                            <div class="array-cell" data-index="0">1</div>
+                            <div class="array-cell" data-index="1">2</div>
+                            <div class="array-cell" data-index="2">3</div>
+                            <div class="array-cell" data-index="3">4</div>
+                            <div class="array-cell" data-index="4">5</div>
+                            <div class="array-cell" data-index="5">6</div>
+                            <div class="array-cell" data-index="6">7</div>
+                            <div class="array-cell" data-index="7">8</div>
+                            <div class="array-cell" data-index="8">9</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>c) Multi-Dimensional Arrays</h4>
+            <p>Arrays with more than two dimensions (3D, 4D, etc.). A 3D array can be visualized as a cube or a box of elements.</p>
+
+            <h4>Based on Size:</h4>
+
+            <h4>a) Static Array (Fixed Size)</h4>
+            <p>The size is fixed at the time of declaration and cannot be changed during runtime.</p>
+            <p><strong>Examples:</strong> Arrays in C, C++, Java (basic arrays)</p>
+
+            <h4>b) Dynamic Array</h4>
+            <p>The size can be changed during runtime. Memory is allocated dynamically.</p>
+            <p><strong>Examples:</strong> ArrayList in Java, Vector in C++, List in Python</p>
+
+            <div class="info-box">
+                <strong>Dynamic Array Advantage:</strong> When a static array becomes full, you cannot add more elements. But a dynamic array automatically resizes itself (usually doubles in size) when it runs out of space.
+            </div>
+        </div>
+
+        <!-- Memory Representation -->
+        <div class="theory-card" id="memory">
+            <h3>5. Memory Representation of Arrays</h3>
+            <p>One of the most important features of arrays is that they store elements in <strong>contiguous (adjacent) memory locations</strong>. This is why arrays provide O(1) random access.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Memory Layout of 1D Array</div>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 20px;">
+                    Array: <strong>arr = [10, 20, 30, 40, 50]</strong>
+                </p>
+                <div class="memory-layout">
+                    <div class="memory-block">
+                        <div class="addr">Address: 1000</div>
+                        <div class="value">arr[0] = 10</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">Address: 1004</div>
+                        <div class="value">arr[1] = 20</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">Address: 1008</div>
+                        <div class="value">arr[2] = 30</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">Address: 1012</div>
+                        <div class="value">arr[3] = 40</div>
+                    </div>
+                    <div class="memory-block">
+                        <div class="addr">Address: 1016</div>
+                        <div class="value">arr[4] = 50</div>
+                    </div>
+                </div>
+                <p style="text-align: center; color: var(--text-secondary); font-size: 14px;">
+                    Note: If each integer takes 4 bytes, the address of arr[i] = Base Address + (i × size of element)
+                </p>
+            </div>
+
+            <h4>Why Contiguous Memory Matters:</h4>
+            <ul>
+                <li><strong>Fast Access:</strong> CPU can calculate any address directly using the formula.</li>
+                <li><strong>Cache Performance:</strong> When CPU accesses one element, it prefetches nearby elements into cache.</li>
+                <li><strong>Predictable Performance:</strong> Access time is always the same regardless of position.</li>
+            </ul>
+
+            <div class="success-box">
+                <strong>Key Formula:</strong><br>
+                Address of arr[i] = Base Address + (i × size of each element in bytes)
+            </div>
+        </div>
+
+        <!-- Basic Operations -->
+        <div class="theory-card" id="operations">
+            <h3>6. Basic Operations on Arrays</h3>
+            <p>There are several fundamental operations that can be performed on arrays:</p>
+
+            <h4>a) Traversal</h4>
+            <p>Visiting each element of the array exactly once. This is the most basic operation.</p>
+
+            <h4>b) Insertion</h4>
+            <p>Adding a new element at a specific position. In static arrays, this requires shifting elements.</p>
+
+            <h4>c) Deletion</h4>
+            <p>Removing an element from a specific position. Requires shifting elements to fill the gap.</p>
+
+            <h4>d) Searching</h4>
+            <p>Finding the position of an element. Can be done using Linear Search or Binary Search (if sorted).</p>
+
+            <h4>e) Updating</h4>
+            <p>Modifying the value of an existing element at a specific index.</p>
+
+            <h4>f) Sorting</h4>
+            <p>Arranging elements in a specific order (ascending or descending).</p>
+
+            <div class="warning-box">
+                <strong>Time Complexity Note:</strong>
+                <ul style="margin-top: 10px; margin-bottom: 0;">
+                    <li>Access: O(1) - Direct via index</li>
+                    <li>Search: O(n) - Linear search</li>
+                    <li>Insertion/Deletion: O(n) - Requires shifting</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Advantages and Disadvantages -->
+        <div class="theory-card" id="pros-cons">
+            <h3>7. Advantages and Disadvantages</h3>
+
+            <h4>Advantages:</h4>
+            <ul>
+                <li><strong>Fast Access:</strong> O(1) time to access any element by index.</li>
+                <li><strong>Simple to Use:</strong> Easy to understand and implement.</li>
+                <li><strong>Cache Friendly:</strong> Contiguous memory improves CPU cache performance.</li>
+                <li><strong>Versatile:</strong> Can be used to implement other data structures.</li>
+                <li><strong>Memory Efficient:</strong> No extra memory overhead for storing elements.</li>
+            </ul>
+
+            <h4>Disadvantages:</h4>
+            <ul>
+                <li><strong>Fixed Size:</strong> Cannot change size at runtime (in static arrays).</li>
+                <li><strong>Costly Insertion/Deletion:</strong> O(n) time due to shifting elements.</li>
+                <li><strong>Wasted Memory:</strong> If array is larger than needed.</li>
+                <li><strong>Contiguous Memory Requirement:</strong> May fail if large contiguous block is not available.</li>
+                <li><strong>Homogeneous:</strong> Can only store elements of the same type.</li>
+            </ul>
+        </div>
+
+        <!-- Applications -->
+        <div class="theory-card" id="applications">
+            <h3>8. Real-World Applications of Arrays</h3>
+            <p>Arrays are used in almost every application. Here are some common use cases:</p>
+
+            <ul>
+                <li><strong>Database Management:</strong> Storing records in tables (2D arrays).</li>
+                <li><strong>Image Processing:</strong> Images are represented as 2D arrays of pixels.</li>
+                <li><strong>Game Development:</strong> Storing game states, player positions, and level data.</li>
+                <li><strong>Scientific Computing:</strong> Matrix operations, simulations, and numerical analysis.</li>
+                <li><strong>Operating Systems:</strong> Process scheduling queues, buffer management.</li>
+                <li><strong>Data Structures:</strong> Implementing Stacks, Queues, Heaps, and Hash Tables.</li>
+                <li><strong>Machine Learning:</strong> Storing feature vectors, weight matrices in neural networks.</li>
+                <li><strong>Compiler Design:</strong> Symbol tables and parsing.</li>
+            </ul>
+        </div>
+
+        <!-- Summary -->
+        <div class="theory-card">
+            <h3>Summary</h3>
+            <p>Arrays are the foundation of data structures. They provide efficient random access but have limitations regarding size and expensive insert/delete operations. Understanding how arrays work in memory is crucial for becoming a better programmer.</p>
+
+            <div class="nav-buttons">
+                <a href="../GetStarted/arrayGS.html" class="nav-btn secondary">← Back to Home</a>
+                <a href="../array/syntax.html" class="nav-btn">Next: Syntax Examples →</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../array/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar-312829326/"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+<!-- Optional JavaScript for Theory Page -->
+<script>
+    // Navbar Active Link Highlighting
+    const currentPage = window.location.pathname.split("/").pop();
+    const navLinks = document.querySelectorAll('.navbar nav a');
+    
+    navLinks.forEach(link => {
+        if(link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+        }
+    });
+
+    // Smooth Scroll for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+</body> </html>

@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Theory - CodeCanvas</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="../image/CC_fav.png">
+
+    <style>
+    /* --- Theme 2.0 Styles --- */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Montserrat:wght@500;600&display=swap');
+
+    :root {
+        --bg-primary: #1A1F34;
+        --bg-secondary: #252A4A;
+        --accent-purple: #8B6CF6;
+        --accent-blue: #4FC3F7;
+        --text-primary: #F1F5F9;
+        --text-secondary: #A1AEB8;
+        --success: #10B981;
+        --error: #EF4444;
+        --warning: #F59E0B;
+        --orange: #F97316;
+    }
+
+    body {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        line-height: 1.7;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(90deg, var(--bg-secondary), var(--bg-primary));
+        box-shadow: 0 0 15px rgba(139,108,246,0.4);
+        z-index: 1000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 60px;
+        height: 70px;
+        box-sizing: border-box;
+    }
+
+    .navbar .logo {
+        font-family: 'Poppins', sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent-purple);
+        text-decoration: none;
+    }
+
+    .navbar nav ul {
+        list-style: none;
+        display: flex;
+        gap: 35px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .navbar nav a {
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar nav a:hover {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.1);
+    }
+
+    .navbar nav a.active {
+        color: var(--accent-blue);
+        background: rgba(139,108,246,0.2);
+    }
+
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+        .navbar { flex-direction: column; height: auto; padding: 10px 15px; }
+        .navbar nav ul { flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+        .navbar .logo { font-size: 18px; }
+    }
+
+    /* ===================== LAYOUT ===================== */
+    section {
+        min-height: 80vh;
+        padding: 120px 20px 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-content {
+        max-width: 1200px;
+        width: 100%;
+        text-align: left;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    /* ===================== CARDS ===================== */
+    .theory-card {
+        background: var(--bg-secondary);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(139,108,246,0.35);
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: var(--accent-purple);
+        margin-bottom: 20px;
+        font-family: 'Poppins', sans-serif;
+        border-bottom: 2px solid var(--accent-purple);
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+
+    h3 {
+        color: var(--accent-blue);
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    h4 {
+        color: var(--accent-purple);
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+
+    ul, ol {
+        list-style-position: inside;
+        color: var(--text-secondary);
+        margin-bottom: 15px;
+        padding-left: 10px;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+
+    /* ===================== VISUAL BOXES ===================== */
+    .visual-container {
+        background: #161b33;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 20px 0;
+        overflow-x: auto;
+        border: 1px solid var(--accent-purple);
+    }
+
+    .visual-title {
+        text-align: center;
+        color: var(--accent-blue);
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    /* Array Visual Representation */
+    .array-visual {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+
+    .array-cell {
+        min-width: 70px;
+        height: 70px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--text-primary);
+        font-size: 18px;
+        border-radius: 6px;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .array-cell::after {
+        content: attr(data-index);
+        position: absolute;
+        bottom: -25px;
+        font-size: 12px;
+        color: var(--accent-purple);
+        font-weight: bold;
+    }
+
+    .array-cell.sorted {
+        border-color: var(--success);
+        background: rgba(16, 185, 129, 0.2);
+    }
+
+    .array-cell.comparing {
+        border-color: var(--orange);
+        background: rgba(249, 115, 22, 0.2);
+    }
+
+    .array-cell.swapped {
+        border-color: var(--error);
+        background: rgba(239, 68, 68, 0.2);
+    }
+
+    /* Memory Grid */
+    .memory-layout {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    .memory-block {
+        background: rgba(79, 195, 247, 0.15);
+        border: 1px solid var(--accent-blue);
+        padding: 15px;
+        text-align: center;
+        border-radius: 6px;
+        min-width: 100px;
+    }
+
+    .memory-block .addr {
+        font-size: 12px;
+        color: var(--accent-purple);
+    }
+
+    .memory-block .value {
+        font-size: 16px;
+        font-weight: bold;
+        color: var(--text-primary);
+    }
+
+    /* Step-by-step Animation */
+    .step-container {
+        background: rgba(139, 108, 246, 0.1);
+        border-left: 4px solid var(--accent-purple);
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .step-number {
+        background: var(--accent-purple);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+
+    /* Info Box */
+    .info-box {
+        background: rgba(79, 195, 247, 0.1);
+        border-left: 4px solid var(--accent-blue);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .warning-box {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 4px solid var(--warning);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .success-box {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid var(--success);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    .error-box {
+        background: rgba(239, 68, 68, 0.1);
+        border-left: 4px solid var(--error);
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+    .comparison-table th, .comparison-table td {
+        border: 1px solid var(--accent-purple);
+        padding: 12px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .comparison-table th {
+        background: var(--accent-purple);
+        color: var(--text-primary);
+    }
+
+    .comparison-table tr:nth-child(even) {
+        background: rgba(139,108,246,0.1);
+    }
+
+    /* Algorithm Category Tags */
+    .algo-category {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin: 2px;
+        text-transform: uppercase;
+    }
+
+    .comparison {
+        background: rgba(245, 158, 11, 0.2);
+        color: var(--warning);
+        border: 1px solid var(--warning);
+    }
+
+    .exchange {
+        background: rgba(239, 68, 68, 0.2);
+        color: var(--error);
+        border: 1px solid var(--error);
+    }
+
+    .selection {
+        background: rgba(16, 185, 129, 0.2);
+        color: var(--success);
+        border: 1px solid var(--success);
+    }
+
+    .insertion {
+        background: rgba(139, 108, 246, 0.2);
+        color: var(--accent-purple);
+        border: 1px solid var(--accent-purple);
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .nav-btn {
+        padding: 12px 25px;
+        background: var(--accent-purple);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+    .nav-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139,108,246,0.4);
+    }
+
+    .nav-btn.secondary {
+        background: var(--bg-secondary);
+        border: 2px solid var(--accent-purple);
+    }
+
+       /* ---------- FOOTER ---------- */
+.gradient-footer{
+    margin-top: 60px;
+    background: #0A0F24;
+    padding-top: 15px;
+}
+
+.footer-top-line{
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #7F5AF0,
+        #38BDF8,
+        #7F5AF0
+    );
+
+    box-shadow:
+        0 0 10px rgba(127,90,240,.8),
+        0 0 20px rgba(56,189,248,.4);
+}
+
+.footer-content{
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 22px 30px;
+}
+
+.footer-brand h3{
+    margin: 0;
+    font-size: 1.6rem;
+    color: #7F5AF0;
+}
+
+.footer-brand p{
+    margin-top: 6px;
+    color: #94A3B8;
+    font-size: .85rem;
+}
+
+.footer-divider{
+    width: 1px;
+    height: 45px;
+    background: rgba(255,255,255,.15);
+}
+
+.footer-links{
+    display: flex;
+    gap: 24px;
+}
+
+.footer-links a{
+    text-decoration: none;
+    color: #38BDF8;
+    transition: .3s;
+}
+
+.footer-links a:hover{
+    color: #7F5AF0;
+}
+
+.footer-socials{
+    display: flex;
+    gap: 15px;
+}
+
+.footer-socials a{
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: white;
+    text-decoration: none;
+
+    border: 1px solid rgba(127,90,240,.4);
+
+    transition: .3s;
+}
+
+.footer-socials a:hover{
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 0 12px rgba(127,90,240,.8);
+}
+
+.footer-copy{
+    text-align: center;
+    color: #94A3B8;
+    font-size: .9rem;
+    padding: 15px 0 20px;
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+    .footer-content{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-divider{
+        display: none;
+    }
+
+    .footer-links{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+</style>
+</head>
+<body>
+
+    <!-- Navbar -->
+<header class="navbar">
+    <a href="sortingGS.html" class="logo">CodeCanvas - Sorting</a>
+    <nav>
+        <ul>
+            <li><a href="../GetStarted/sortGS.html">Back to Sorting</a></li>
+            <li><a href="../sort/theory.html" class="active">Theory</a></li>
+            <li><a href="../sort/syntax.html">Syntax</a></li>
+            <li><a href="../sort/algorithm.html">Algorithm</a></li>
+            <li><a href="../sort/complexity.html">Complexity</a></li>
+            <li><a href="../sort/flowchart.html">Flowchart</a></li>
+            <li><a href="../sort/sorting.html">Sorting</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="theory">
+    <div class="section-content">
+
+        <!-- Header -->
+        <div class="theory-card">
+            <h2>Sorting Algorithms - Complete Theory Guide</h2>
+            <p style="font-size: 18px; color: var(--text-primary);">
+                Sorting algorithms are fundamental to computer science, enabling efficient data organization. 
+                This guide covers all essential sorting algorithms with visual examples and comparisons.
+            </p>
+        </div>
+
+        <!-- What is Sorting -->
+        <div class="theory-card" id="what-is-sorting">
+            <h3>1. What is Sorting?</h3>
+            <p><strong>Sorting</strong> is the process of arranging elements in a list or array in a specific order (ascending or descending). It's one of the most fundamental operations in computer science.</p>
+            
+            <div class="info-box">
+                <strong>Simple Definition:</strong> Sorting is like organizing books on a shelf by title, height, or author name.
+            </div>
+
+            <div class="visual-container">
+                <div class="visual-title">Before vs After Sorting</div>
+                <div style="display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;">
+                    <div>
+                        <p style="text-align: center; color: var(--warning);">Unsorted Array</p>
+                        <div class="array-visual">
+                            <div class="array-cell" data-index="0">64</div>
+                            <div class="array-cell" data-index="1">34</div>
+                            <div class="array-cell" data-index="2">25</div>
+                            <div class="array-cell" data-index="3">12</div>
+                            <div class="array-cell" data-index="4">22</div>
+                            <div class="array-cell" data-index="5">11</div>
+                            <div class="array-cell" data-index="6">90</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 40px; align-self: center;">→</div>
+                    <div>
+                        <p style="text-align: center; color: var(--success);">Sorted Array</p>
+                        <div class="array-visual">
+                            <div class="array-cell sorted" data-index="0">11</div>
+                            <div class="array-cell sorted" data-index="1">12</div>
+                            <div class="array-cell sorted" data-index="2">22</div>
+                            <div class="array-cell sorted" data-index="3">25</div>
+                            <div class="array-cell sorted" data-index="4">34</div>
+                            <div class="array-cell sorted" data-index="5">64</div>
+                            <div class="array-cell sorted" data-index="6">90</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Sorting -->
+        <div class="theory-card" id="why-sorting">
+            <h3>2. Why Do We Need Sorting?</h3>
+            <p>Sorting is essential for efficient data processing:</p>
+            
+            <ul>
+                <li><strong>Search Optimization:</strong> Binary search requires sorted data (O(log n) vs O(n))</li>
+                <li><strong>Data Analysis:</strong> Sorting enables easy statistical analysis and visualization</li>
+                <li><strong>Database Operations:</strong> Indexes rely on sorted data for fast queries</li>
+                <li><strong>Algorithm Prerequisites:</strong> Many algorithms require sorted input</li>
+                <li><strong>User Experience:</strong> Tables, lists, dropdowns need sorted data</li>
+            </ul>
+
+            <div class="success-box">
+                <strong>Real Impact:</strong> Google processes 8.5 billion searches daily. Sorting is crucial for ranking results!
+            </div>
+        </div>
+
+        <!-- Classification -->
+        <div class="theory-card" id="classification">
+            <h3>3. Classification of Sorting Algorithms</h3>
+            
+            <div class="visual-container">
+                <div class="visual-title">Sorting Algorithm Categories</div>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Category</th>
+                        <th>Examples</th>
+                        <th>Characteristics</th>
+                    </tr>
+                    <tr>
+                        <td><span class="algo-category comparison">Comparison-Based</span></td>
+                        <td>QuickSort, MergeSort, BubbleSort</td>
+                        <td>Compare elements using &lt;, &gt;, = operators</td>
+                    </tr>
+                    <tr>
+                        <td><span class="algo-category exchange">Exchange-Based</span></td>
+                        <td>BubbleSort, QuickSort</td>
+                        <td>Swap elements that are out of order</td>
+                    </tr>
+                    <tr>
+                        <td><span class="algo-category selection">Selection-Based</span></td>
+                        <td>Selection Sort</td>
+                        <td>Select minimum/maximum and place in position</td>
+                    </tr>
+                <tr>
+                    <td><span class="algo-category insertion">Insertion-Based</span></td>
+                    <td>Insertion Sort</td>
+                    <td>Insert elements into sorted portion</td>
+                </tr>
+                <tr>
+                    <td><span class="algo-category comparison">Divide & Conquer</span></td>
+                    <td>MergeSort, QuickSort</td>
+                    <td>Divide problem, solve recursively, combine</td>
+                </tr>
+            </table>
+            </div>
+
+            <h4>Stability in Sorting</h4>
+            <div class="info-box">
+                <strong>Stable Sort:</strong> Maintains relative order of equal elements<br>
+                <strong>Unstable Sort:</strong> May change relative order of equal elements
+            </div>
+        </div>
+
+        <!-- Bubble Sort -->
+        <div class="theory-card" id="bubble-sort">
+            <h3>5. Bubble Sort</h3>
+            <p><span class="algo-category exchange">Exchange Sort</span> - Compares adjacent elements and swaps if they're in wrong order. Largest element "bubbles up" to end.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Bubble Sort - Step by Step (Array: [64, 34, 25, 12, 22])</div>
+                
+                <div class="step-container">
+                    <span class="step-number">1</span>
+                    <strong>Pass 1:</strong> Compare 64↔34 (swap), 34↔25 (swap), 25↔12 (swap), 12↔22 (no swap)
+                    <div class="array-visual">
+                        <div class="array-cell swapped" data-index="0">34</div>
+                        <div class="array-cell swapped" data-index="1">25</div>
+                        <div class="array-cell swapped" data-index="2">12</div>
+                        <div class="array-cell" data-index="3">22</div>
+                        <div class="array-cell sorted" data-index="4">64</div>
+                    </div>
+                </div>
+
+                <div class="step-container">
+                    <span class="step-number">2</span>
+                    <strong>Pass 2:</strong> Continue until no more swaps needed
+                    <div class="array-visual">
+                        <div class="array-cell sorted" data-index="0">12</div>
+                        <div class="array-cell sorted" data-index="1">22</div>
+                        <div class="array-cell sorted" data-index="2">25</div>
+                        <div class="array-cell sorted" data-index="3">34</div>
+                        <div class="array-cell sorted" data-index="4">64</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Not Practical:</strong> O(n²) time complexity makes it inefficient for large arrays.
+            </div>
+        </div>
+
+        <!-- Selection Sort -->
+        <div class="theory-card" id="selection-sort">
+            <h3>6. Selection Sort</h3>
+            <p><span class="algo-category selection">Selection Sort</span> - Finds minimum element in unsorted portion and places it at beginning.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Selection Sort Steps</div>
+                <div class="step-container">
+                    <span class="step-number">1</span>
+                    Find min=12, swap with first: [12, 34, 25, 64, 22]
+                </div>
+                <div class="step-container">
+                    <span class="step-number">2</span>
+                    Find min=22, swap with second: [12, 22, 25, 64, 34]
+                </div>
+                <div class="step-container">
+                    <span class="step-number">3</span>
+                    Continue until sorted: [12, 22, 25, 34, 64]
+                </div>
+            </div>
+        </div>
+
+        <!-- Insertion Sort -->
+        <div class="theory-card" id="insertion-sort">
+            <h3>7. Insertion Sort</h3>
+            <p><span class="algo-category insertion">Insertion Sort</span> - Builds sorted portion one element at a time by inserting into correct position.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Insertion Sort Visualization</div>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+                    <div>
+                        <p style="color: var(--success);">Sorted Portion</p>
+                        <div class="array-visual">
+                            <div class="array-cell sorted" data-index="0">12</div>
+                            <div class="array-cell sorted" data-index="1">22</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 30px; align-self: center;">+</div>
+                    <div>
+                        <p style="color: var(--warning);">Insert 25</p>
+                        <div class="array-visual">
+                            <div class="array-cell comparing" data-index="0">25</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 30px; align-self: center;">→</div>
+                    <div>
+                        <p style="color: var(--success);">Result</p>
+                        <div class="array-visual">
+                            <div class="array-cell sorted" data-index="0">12</div>
+                            <div class="array-cell sorted" data-index="1">22</div>
+                            <div class="array-cell sorted" data-index="2">25</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="success-box">
+                <strong>Best for:</strong> Nearly sorted arrays and small datasets (adaptive)
+            </div>
+        </div>
+
+        <!-- Merge Sort -->
+        <div class="theory-card" id="merge-sort">
+            <h3>8. Merge Sort</h3>
+            <p><span class="algo-category comparison">Divide & Conquer</span> - Recursively divides array into halves, sorts them, then merges.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Merge Sort Divide & Conquer</div>
+                <div style="text-align: center; font-size: 24px; margin: 20px 0;">
+                    [64, 34, 25, 12, 22, 11, 90]<br>
+                    ↓ Divide<br>
+                    [64, 34, 25]  [12, 22, 11, 90]<br>
+                    ↓ Recurse<br>
+                    [64] [34] [25]  [12] [22, 11, 90]<br>
+                    ↓ Merge<br>
+                    [34, 64] [25]  [12] [11, 22, 90]<br>
+                    ↑ Continue merging → [11, 12, 22, 25, 34, 64, 90]
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Sort -->
+        <div class="theory-card" id="quick-sort">
+            <h3>9. Quick Sort</h3>
+            <p><span class="algo-category comparison">Divide & Conquer</span> - Chooses pivot, partitions array around pivot, recursively sorts subarrays.</p>
+
+            <div class="visual-container">
+                <div class="visual-title">Quick Sort Partitioning</div>
+                <div class="step-container">
+                    <span class="step-number">1</span>
+                    Pivot=22: [&lt;22: 12] [22] [&gt;22: 64,34,25]
+                </div>
+                <div class="step-container">
+                    <span class="step-number">2</span>
+                    Recurse on left: [12]<br>
+                    Recurse on right: QuickSort([64,34,25])
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Pivot Selection Critical:</strong> Poor pivot → O(n²), Good pivot → O(n log n)
+            </div>
+        </div>
+
+        <!-- Complexity Comparison -->
+        <div class="theory-card" id="complexity">
+            <h3>10. Time & Space Complexity Comparison</h3>
+
+            <div class="visual-container">
+                <div class="visual-title">All Algorithms Compared</div>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Best</th>
+                        <th>Average</th>
+                        <th>Worst</th>
+                        <th>Space</th>
+                        <th>Stable</th>
+                    </tr>
+                    <tr>
+                        <td>Bubble Sort</td>
+                        <td>O(n)</td>
+                        <td>O(n²)</td>
+                        <td>O(n²)</td>
+                        <td>O(1)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Selection Sort</td>
+                        <td>O(n²)</td>
+                        <td>O(n²)</td>
+                        <td>O(n²)</td>
+                        <td>O(1)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td>Insertion Sort</td>
+                        <td>O(n)</td>
+                        <td>O(n²)</td>
+                        <td>O(n²)</td>
+                        <td>O(1)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Merge Sort</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Quick Sort</td>
+                        <td>O(n log n)</td>
+                        <td>O(n log n)</td>
+                        <td>O(n²)</td>
+                        <td>O(log n)</td>
+                        <td>No</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- When to Use What -->
+        <div class="theory-card" id="when-to-use">
+            <h3>11. When to Use Which Algorithm?</h3>
+
+            <div class="visual-container">
+                <table class="comparison-table">
+                    <tr>
+                        <th>Scenario</th>
+                        <th>Recommended</th>
+                        <th>Reason</th>
+                    </tr>
+                    <tr>
+                        <td>n ≤ 50</td>
+                        <td>Insertion Sort</td>
+                        <td>Simple, adaptive, low overhead</td>
+                    </tr>
+                    <tr>
+                        <td>Nearly sorted</td>
+                        <td>Insertion Sort</td>
+                        <td>O(n) best case</td>
+                    </tr>
+                    <tr>
+                        <td>Linked lists</td>
+                        <td>Merge Sort</td>
+                        <td>Stable, O(1) splice</td>
+                    </tr>
+                    <tr>
+                        <td>General purpose</td>
+                        <td>Quick Sort / TimSort</td>
+                        <td>Fast average case</td>
+                    </tr>
+                    <tr>
+                        <td>Guaranteed performance</td>
+                        <td>Merge Sort / Heap Sort</td>
+                        <td>O(n log n) worst case</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Stability & Applications -->
+        <div class="theory-card" id="advanced">
+            <h3>12. Stability & Real-World Applications</h3>
+
+            <h4>Stability Example:</h4>
+            <div class="visual-container">
+                <div class="visual-title">Stable vs Unstable Sort</div>
+                <div style="display: flex; gap: 40px;">
+                    <div>
+                        <p>Input: [("Bob", 80), ("Alice", 90), ("Bob", 90)]</p>
+                        <p><strong>Stable:</strong> [("Alice",90), ("Bob",80), ("Bob",90)]</p>
+                        <p>Maintains relative order of equal keys</p>
+                    </div>
+                    <div>
+                        <p><strong>Unstable:</strong> [("Bob",90), ("Alice",90), ("Bob",80)]</p>
+                        <p>Relative order of equal keys may change</p>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Real-World Applications:</h4>
+            <ul>
+                <li><strong>Databases:</strong> ORDER BY clauses</li>
+                <li><strong>Search Engines:</strong> Ranking algorithms</li>
+                <li><strong>Compilers:</strong> Symbol table management</li>
+                <li><strong>Graphics:</strong> Z-buffering, polygon sorting</li>
+                <li><strong>Networking:</strong> Packet scheduling</li>
+            </ul>
+        </div>
+
+        <!-- Summary -->
+        <div class="theory-card">
+            <h3>Summary</h3>
+            <p>Sorting algorithms range from simple O(n²) quadratic sorts to efficient O(n log n) algorithms. Choose based on:</p>
+            <ul>
+                <li><strong>Input size:</strong> Small → Insertion, Large → Quick/Merge</li>
+                <li><strong>Input characteristics:</strong> Nearly sorted → Insertion</li>
+                <li><strong>Stability needs:</strong> Required → Merge/Insertion</li>
+                <li><strong>Memory constraints:</strong> Limited → Quick/Heap</li>
+            </ul>
+
+            <div class="success-box">
+                <strong>Pro Tip:</strong> Modern languages use hybrid algorithms (TimSort, IntroSort) combining multiple strategies!
+            </div>
+
+            <div class="nav-buttons">
+                <a href="../GetStarted/sortGS.html" class="nav-btn secondary">← Back to Home</a>
+                <a href="../sort/syntax.html" class="nav-btn">Next: Syntax Examples →</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="gradient-footer">
+
+    <div class="footer-top-line"></div>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>CodeCanvas</h3>
+            <p>Learn • Visualize • Master</p>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-links">
+            <a href="../pages/array.html">Home</a>
+            <a href="../index.html">Algorithms</a>
+            <a href="../sort/sorting.html">Visualizer</a>
+            <a href="../sort/questions.html">Test</a>
+            
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-socials">
+            <a href="https://github.com/Juhi-Makkar"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/juhi-makkar"><i class="fab fa-linkedin"></i></a>
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=juhimakkar400@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <p class="footer-copy">
+        © 2026 CodeCanvas. All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- JavaScript -->
+<script>
+    // Navbar Active Link Highlighting
+    const currentPage = window.location.pathname.split("/").pop();
+    const navLinks = document.querySelectorAll('.navbar nav a');
+    
+    navLinks.forEach(link => {
+        if(link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+        }
+    });
+
+    // Smooth Scroll for Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Add hover effects to array cells
+    document.querySelectorAll('.array-cell').forEach(cell => {
+        cell.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        cell.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+</script>
+
+</body>
+</html>

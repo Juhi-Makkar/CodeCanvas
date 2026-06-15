@@ -1,0 +1,119 @@
+<h3>Find Maximum Element in Array</h3>
+<div class="mermaid">
+graph TD
+A["Start"] --> B["max = arr[0], i = 1"]
+B --> C{"i < size ?"}
+C -->|Yes| D{"arr[i] > max ?"}
+D -->|Yes| E["max = arr[i]"]
+D -->|No| F["Continue"]
+E --> G["i++"]
+F --> G
+G --> C
+C -->|No| H["Print max"]
+H --> I["End"]
+</div>
+
+<h3>Find Minimum Element in Array</h3>
+<div class="mermaid">
+graph TD
+A["Start"] --> B["min = arr[0], i = 1"]
+B --> C{"i < size ?"}
+C -->|Yes| D{"arr[i] < min ?"}
+D -->|Yes| E["min = arr[i]"]
+D -->|No| F["Continue"]
+E --> G["i++"]
+F --> G
+G --> C
+C -->|No| H["Print min"]
+H --> I["End"]
+</div>
+
+<h3>Reverse an Array</h3>
+<div class="mermaid">
+graph TD
+A["Start"] --> B["i = 0, j = size-1"]
+B --> C{"i < j ?"}
+C -->|Yes| D["Swap arr[i], arr[j]"]
+D --> E["i++, j--"]
+E --> C
+C -->|No| F["End"]
+</div>
+
+<h3>Sum of Array Elements</h3>
+<div class="mermaid">
+graph TD
+A["Start"] --> B["sum = 0, i = 0"]
+B --> C{"i < size ?"}
+C -->|Yes| D["sum = sum + arr[i]"]
+D --> E["i++"]
+E --> C
+C -->|No| F["Print sum"]
+F --> G["End"]
+</div>
+
+<h3>Binary Search</h3>
+<div class="mermaid">
+graph TD
+A["Start"] --> B["low=0, high=size-1"]
+B --> C{"low <= high ?"}
+C -->|No| D["Return -1"]
+C -->|Yes| E["mid=(low+high)/2"]
+E --> F{"arr[mid]==key ?"}
+F -->|Yes| G["Return mid"]
+F -->|No| H{"key < arr[mid] ?"}
+H -->|Yes| I["high = mid-1"]
+H -->|No| J["low = mid+1"]
+I --> C
+J --> C
+</div>
+
+<h3>Count Occurrences of Key</h3>
+<div class="mermaid">
+graph TD
+A["Start"] --> B["count=0, i=0"]
+B --> C{"i < size ?"}
+C -->|Yes| D{"arr[i]==key ?"}
+D -->|Yes| E["count++"]
+D -->|No| F["Continue"]
+E --> G["i++"]
+F --> G
+G --> C
+C -->|No| H["Print count"]
+H --> I["End"]
+</div>
+
+<h3>Check if Array is Sorted</h3>
+<div class="mermaid">
+graph TD
+A["Start"] --> B["i=0"]
+B --> C{"i < size-1 ?"}
+C -->|Yes| D{"arr[i] > arr[i+1] ?"}
+D -->|Yes| E["Not Sorted"]
+D -->|No| F["i++"]
+F --> C
+C -->|No| G["Sorted"]
+</div>
+
+
+sort.html
+   <!-- Comparison Section 
+    <section id="comparison">
+        <div class="section-content">
+            <h1>Compare Sorting Algorithms</h1>
+            <div class="input-section">
+                <input type="text" id="comp-array-input" placeholder="Enter array (e.g., 5,3,8,1,9)">
+                <button class="btn" onclick="startComparison()">Start Comparison</button>
+                <button class="btn" onclick="resetComparison()">Reset</button>
+            </div>
+            <div class="checkbox-group">
+                <label><input type="checkbox" value="bubble"> Bubble Sort</label>
+                <label><input type="checkbox" value="selection"> Selection Sort</label>
+                <label><input type="checkbox" value="insertion"> Insertion Sort</label>
+                <label><input type="checkbox" value="merge"> Merge Sort</label>
+                <label><input type="checkbox" value="quick"> Quick Sort</label>
+                <label><input type="checkbox" value="heap"> Heap Sort</label>
+            </div>
+            <div class="comparison-container" id="comparison-container">
+            </div>
+        </div>
+    </section>  -->
