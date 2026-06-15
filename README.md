@@ -61,22 +61,22 @@ CodeCanvas helps students understand Data Structures and Algorithms through visu
 
 ### Home Page
 
-![Home Page](screenshots/home.png)<img width="1890" height="911" alt="home" src="https://github.com/user-attachments/assets/a862f432-c0f4-4eba-9ed3-fd001963a0ef" />
+<img width="1890" height="911" alt="home" src="https://github.com/user-attachments/assets/a862f432-c0f4-4eba-9ed3-fd001963a0ef" />
 
 
 ### Array Section
 
-![Array Section](screenshots/array.png)<img width="1891" height="918" alt="array" src="https://github.com/user-attachments/assets/723f092d-cbaa-4905-821b-fad5e250f5ba" />
+<img width="1891" height="918" alt="array" src="https://github.com/user-attachments/assets/723f092d-cbaa-4905-821b-fad5e250f5ba" />
 
 
 ### Stack Section
 
-![Stack Section](screenshots/stack.png)<img width="1891" height="918" alt="stack" src="https://github.com/user-attachments/assets/c1999285-7f0b-4e1c-b80d-9492fcab5631" />
+<img width="1891" height="918" alt="stack" src="https://github.com/user-attachments/assets/c1999285-7f0b-4e1c-b80d-9492fcab5631" />
 
 
 ### Sorting Algorithms
 
-![Sorting Section](screenshots/sorting.png)<img width="1876" height="846" alt="sorting" src="https://github.com/user-attachments/assets/3758e001-cf4c-4de0-9dc6-a0f806738431" />
+<img width="1876" height="846" alt="sorting" src="https://github.com/user-attachments/assets/3758e001-cf4c-4de0-9dc6-a0f806738431" />
 
 
 ---
